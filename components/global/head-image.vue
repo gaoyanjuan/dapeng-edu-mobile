@@ -48,7 +48,7 @@ export default {
   },
   data () {
     return {
-      defaultImg: require('@/assets/images/common/dp_default_headImg.jpg')
+      defaultImg: require('@/assets/icons/common/dp_default_headImg.jpg')
     }
   },
   computed: {
@@ -68,59 +68,13 @@ export default {
       } else {
         return this.defaultImg
       }
-
-      //return this.$url + this.headImg
     },
-    // ...mapGetters('user', ['userInfoGetters'])
   },
   mounted () {
     // 挂载完成后，判断图片是否显示成功，若失败，则替换为默认图片
     this.$refs.headerImg.onerror = () => {
       this.$refs.headerImg.src = this.defaultImg
     }
-  },
-  methods: {
-    // toPersonalCenter () {
-    //   // 使用组件时，若userId传入disable，则禁用跳转
-    //   if (this.userId !== 'disable') {
-    //     if (this.userId === 'available') {
-    //       const routeData = this.$router.resolve({
-    //         path: '/personal-home',
-    //         query: {
-    //           name: this.name,
-    //           userId: this.userInfoGetters.userId
-    //         }
-    //       })
-    //       window.open(routeData.href, '_blank')
-    //     } else if (this.$router.history.current.path === '/personal-home') {
-    //       this.$router.push({
-    //         path: '/personal-home',
-    //         query: {
-    //           name: this.name,
-    //           userId: this.userId
-    //         }
-    //       })
-    //       // 直播间讲师头像不打开新页面
-    //     } else if (this.$route.path.indexOf('secure/course')) {
-    //       this.$router.push({
-    //         path: '/personal-home',
-    //         query: {
-    //           name: this.name,
-    //           userId: this.userId
-    //         }
-    //       })
-    //     } else {
-    //       const routeData = this.$router.resolve({
-    //         path: '/personal-home',
-    //         query: {
-    //           name: this.name,
-    //           userId: this.userId
-    //         }
-    //       })
-    //       window.open(routeData.href, '_blank')
-    //     }
-    //   }
-    // }
   }
 }
 </script>

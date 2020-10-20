@@ -43,7 +43,7 @@ Vue.use(Button)
   .use(SwipeItem)
   .use(Lazyload, {
     // 懒加载默认图片
-    loading: require('@/assets/images/common/photos-bg.png')
+    loading: require('@/assets/icons/common/photos-bg.png')
   })
 
 Vue.prototype.ImagePreview = ImagePreview
