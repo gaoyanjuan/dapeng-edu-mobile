@@ -1,0 +1,160 @@
+<template>
+  <div v-if="works" class="p-details">
+    <!-- Back last page -->
+    <m-navbar :title="title"/>
+
+    <!-- Main Block -->
+    <div class="details-content-wrap">
+      <!-- Gallery -->
+      <m-gallery :photos="works.img" :photoInfo="works.imgInfo"/>
+
+      <div class="details-inner-content-wrap">
+        <!-- Avatar -->
+        <m-avatar
+          avatar-style="width:36px; height:36px;"
+          :user-info="works.user"
+          :submit-time="works.createTime"
+        />
+        
+        <!-- Conetnt -->
+        <div class="inner-content-txt">
+          <m-posts-remark
+            v-if="works.recommendType"
+            :label="works.recommendType"
+            source="detailsPage"
+          />
+          <span class="txt" v-html="$options.filters.formatEmotions(works.content)"></span>
+        </div>
+
+        <!-- classification -->
+        <div class="inner-content-class">
+          <div class="inner-content-class-wrap">
+            <span>作品 {{ works.college ? `·${works.college.name.replace(/学院/, '')}` : '' }}</span>
+          </div>
+        </div>
+
+        <!-- Label -->
+        <div class="inner-content-lab">
+          <m-label label-type="作品" :activityData="works.activity" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Block -->
+    <div class="details-split-line"></div>
+
+    <!-- Footer Block -->
+    <div class="details-footer-wrap" id="report">
+      <m-tabs>
+        <m-tab-item :selected="commentSelected" :count="works.commentCount" name="评论">
+          <m-comment-list />
+        </m-tab-item>
+        <m-tab-item :selected="likeSelected" name="喜欢" :count="works.praisesCount">
+          <m-like-list />
+        </m-tab-item>
+      </m-tabs>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+  name:'Details',
+  data:() => ({
+    title:'作品详情',
+    commentSelected: true,
+    likeSelected: false
+  }),
+  computed:{
+    ...mapGetters({
+      works: 'work/worksDetailsGetters'
+    })
+  },
+  created () {
+    if (this.$route.query.type && this.$route.query.type === 'like') {
+      this.likeSelected = true
+      this.commentSelected = false
+    }
+  },
+  mounted () {
+    // 详情页跳转定位
+    // if (this.$route.fullPath.includes('report')) {
+    //   this.$nextTick(() => {
+    //     const element = document.getElementById('report')
+    //     element.scrollIntoView({
+    //       behavior: 'auto'
+    //     })
+    //   })
+    // }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+
+.details-content-wrap {
+  margin-top: 44px;
+}
+
+.details-split-line {
+  width: 100%;
+  height: 15px;
+  background-color: #F8F8F8;
+}
+
+.details-footer-wrap {
+  padding: 16px;
+}
+
+.details-inner-content-wrap {
+  padding: 16px;
+}
+
+.details-inner-content-wrap .inner-content-txt {
+  margin-top: 16px;
+}
+
+.inner-content-txt .txt {
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #18252C;
+  line-height: 24px;
+}
+
+.inner-content-txt /deep/ .emotion {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+}
+
+.details-inner-content-wrap .inner-content-class {
+  width:intrinsic;
+  width: -moz-max-content;
+  width: -webkit-max-content;
+  margin-top: 12px;
+}
+
+.inner-content-class .inner-content-class-wrap {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: #f7f7f7;
+  border-radius: 12px;
+}
+
+.inner-content-class-wrap span {
+  font-size: 12px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #465156;
+}
+
+.inner-content-lab {
+  width: 100%;
+  position: relative;
+  margin-top: 12px;
+}
+</style>

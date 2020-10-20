@@ -1,0 +1,31 @@
+html,body {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+  box-sizing: border-box;
+  -ms-overflow-style: scrollbar;
+}
+
+.clear-float:after{
+  content:""; 
+  display:block;    
+  height:0;    
+  clear:both;
+  visibility:hidden; 
+}
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+}
+
+.page-enter-active, .page-leave-active {
+  transition: opacity .2s;
+}
+.page-enter, .page-leave-active {
+  opacity: 0;
+}

@@ -1,0 +1,15 @@
+{
+  "apps": {
+    "name": "dapeng5.0",
+    "exec_mode": "cluster_mode",
+    "script": "npm",
+    "args": "start",
+    "cwd": ".",
+    "watch": false,
+    "ignore_watch": ["node_modules", "logs"],
+    "instances": 4,
+    "error_file": "./logs/app-err.log",
+    "out_file": "./logs/app-out.log",
+    "log_date_format": "YYYY-MM-DD HH:mm:ss"
+  }
+}

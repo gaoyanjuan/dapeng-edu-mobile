@@ -1,0 +1,164 @@
+import emotionslist from '@/assets/emotion'
+import Vue from 'vue'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-cn'
+import xss from 'xss'
+const relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime)
+
+// 正则获取表情文字并替换为表情icon
+const formatEmotions = function (_html) {
+  let xssContent = ''
+  if (_html) {
+    xssContent = xss(_html)
+  } else {
+    return xssContent
+  }
+  if (xssContent) {
+    let replaceHtml = xssContent.replace(/\[(.+?)\]/g, function (
+      title,
+      titleStr
+    ) {
+      if (emotionslist[titleStr]) {
+        return (
+          '<img src="' + emotionslist[titleStr] +'"  ' +'alt="' +titleStr +'" class="emotion">'
+        )
+      } else {
+        return title
+      }
+    })
+    replaceHtml = replaceHtml.includes('emotion')
+      ? replaceHtml
+      : replaceHtml.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    return replaceHtml
+  }
+}
+
+/**
+ * 格式化时间的过滤器
+ *
+ * @param {Date} date 时间对象
+ */
+const formatDate = function (date) {
+  // 1. 如果日期不存在，返回 ---
+  // 2. 如果日期是字符串格式的，先转为日期对象
+  // 3. 格式化日期
+
+  if (!date) {
+    return '---'
+  }
+  return dayjs(date).format('YYYY-MM-DD HH:mm:ss') // 使用 dayjs 格式化时间
+}
+
+// 活动时间过滤
+const activitiesDate = function (date) {
+  if (!date) {
+    return '---'
+  }
+  return dayjs(date).format('YYYY/MM/DD') // 使用 dayjs 格式化时间
+}
+
+/** 
+ * 通用时间过滤
+ * 60000 一分钟
+ * 3600000 一小时
+ * 43200000 半天
+ * 86400000 一天
+ * 172800000 两天
+ * 259200000 三天
+ */
+const commonDate = function (data) {
+  const now = new dayjs()
+  const date = new dayjs(data)
+  const nowTimestamp = new dayjs().valueOf()
+  const delta = nowTimestamp - data
+  if (delta < (60000)) {
+    return '刚刚'
+  } else if (delta < 3600000) {
+    return dayjs(delta).format('mm分钟前').replace(/0/, '')
+  } else if (delta < 43200000) {
+    const hour = Math.floor(delta / 3600000)
+    return `${hour}小时前`
+  } else if (now.year() === date.year()) {
+    return dayjs(data).format('MM月DD日 HH:mm')
+  } else if (now.year() > date.year()) {
+    return dayjs(data).format('YYYY年MM月DD日 HH:mm')
+  }
+}
+
+//作业要求时间戳
+const requireData = function (data) {
+  return dayjs(data).format('YYYY年MM月DD日 HH:mm')
+}
+
+//作业要求时间戳移动端
+const requireDataH5 = function (data) {
+  return dayjs(data).format('YYYY-MM-DD HH:mm')
+}
+
+const lecturerCommentDate = function (data) {
+  const now = new dayjs()
+  const date = new dayjs(data)
+  const nowTimestamp = new dayjs().valueOf()
+  const delta = nowTimestamp - data
+  if (delta < (60000)) {
+    return '刚刚'
+  } else if (delta < 3600000) {
+    return dayjs(delta).format('mm分钟前').replace(/0/, '')
+  } else if (delta < 86400000) {
+    const hour = Math.floor(delta / 3600000)
+    return `${hour}小时前`
+  } else if (delta < 172800000) {
+    return dayjs(data).format('昨天 HH:mm')
+  } else if (delta < 259200000) {
+    return dayjs(data).format('前天 HH:mm')
+  } else if (now.year() === date.year()) {
+    return dayjs(data).format('MM月DD日 HH:mm')
+  } else if (now.year() > date.year()) {
+    return dayjs(data).format('YYYY年MM月DD日')
+  }
+}
+
+// 在学习的学生数量，超过一万过滤，显示w
+const studentsCount = function (value) {
+  let num
+  if (value > 9999) {
+    // 大于9999显示x.xx万
+    num = Math.floor(value / 1000) / 10 + 'w'
+  } else {
+    num = value
+  }
+  return num
+}
+/**
+ * 手机号掩码
+ * @param {*} mobile
+ */
+const maskMobile = function (mobile) {
+  if (mobile.length > 5) {
+    return mobile.substr(0, 3) + '******' + mobile.substr(9, 11)
+  } else {
+    return mobile
+  }
+}
+const studyProcess = function (val) {
+  let str = Number(val * 100).toFixed(2)
+  str += '%'
+  return str
+}
+const filter = {
+  formatDate,
+  activitiesDate,
+  commonDate,
+  lecturerCommentDate,
+  studentsCount,
+  maskMobile,
+  studyProcess,
+  requireData,
+  requireDataH5,
+  formatEmotions
+}
+Object.keys(filter).forEach((key) => {
+  Vue.filter(key, filter[key])
+})
+export default filter
