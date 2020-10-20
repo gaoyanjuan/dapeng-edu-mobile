@@ -1,0 +1,108 @@
+/***
+  * navbar 
+*/
+.m-navbar .icon {
+  width: 24px;
+  height: 24px;
+}
+.m-navbar .van-nav-bar__title {
+  font-family:@dp-font-medium;
+  font-weight: 600;
+}
+.van-nav-bar--fixed {
+  width: 375px;
+  left: auto;
+  z-index: 2000;
+}
+
+.van-sticky--fixed {
+  width: 375px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+/**
+**  tabbar
+**/
+.van-tabbar--fixed {
+  width: 375px;
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.van-hairline--top-bottom::after{
+  border-top: 2px solid #F5F5F5;
+}
+
+/**
+  Tabs
+**/
+
+.van-tab {
+  width: 375px;
+  font-size: 14px;
+  font-family: @dp-font-regular;
+  font-weight: 100;
+  color: rgba(53, 54, 55, 1);
+}
+.van-tab--active {
+  font-size: 16px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1);
+  animation: 0.5s appear;
+}
+.van-tabs__line {
+  width: 26px;
+  height: 7px;
+  bottom: 24px;
+  background-color: transparent;
+  background-image: url('~@/assets/images/icon/mobile/nav-bottom-line.png');
+  background-repeat: no-repeat;
+  background-size: 26px 7px;
+}
+
+/**
+  ActionSheet
+**/
+.van-action-sheet{
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// 公用样式
+@dp-width: 1200px;
+@dp-work-width: 780px;
+@dp-min-height: 70vh;
+// Overlay
+@overlay-z-index: 1;
+@overlay-background-color: rgba(0, 0, 0, 0.4);
+
+
+// NavBar
+@nav-bar-height: 44px;
+@nav-bar-background-color: @dp-white;
+@nav-bar-arrow-size: 16px;
+@nav-bar-icon-color: @dp-green;
+@nav-bar-text-color: #18252C;
+@nav-bar-title-font-size: 16px;
+@nav-bar-title-text-color: #18252C;
+@nav-bar-z-index: 2;
+
+// Tabbar
+@tabbar-height: 50px;
+@tabbar-z-index: 5;
+@tabbar-background-color: @dp-white;
+
+// TabbarItem
+@tabbar-item-font-size: 10px;
+@tabbar-item-text-color: #D1D3D5;
+@tabbar-item-active-color: #0CB65B;
+@tabbar-item-line-height: 1;
+@tabbar-item-icon-size: 11px;
+@tabbar-item-margin-bottom: 5px;
+
+// Sticky
+@sticky-z-index: 99;

@@ -1,0 +1,33 @@
+/** 
+  混合（Mixins）
+**/
+
+@jut-cot:justify-content;
+
+.l-flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  @{jut-cot}: space-between;
+}
+
+.l-flex-row-def {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  @{jut-cot}: flex-start;
+}
+
+.l-flex-column {
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  @{jut-cot}: space-between;
+}
+
+.l-flex-column-def {
+  display: flex; 
+  flex-direction: column;
+  align-items: flex-start; 
+  @{jut-cot}: flex-start;
+}

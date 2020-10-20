@@ -1,0 +1,46 @@
+{
+  "name": "dapeng-redux",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "commit": "git-cz",
+    "dev": "cross-env MODE=dev nuxt",
+    "dev-pro": "cross-env MODE=pro nuxt",
+    "build": "cross-env MODE=dev nuxt build",
+    "start": "cross-env MODE=pro nuxt start",
+    "generate": "nuxt generate",
+    "test": "cross-env MODE=test nuxt build && pm2 start",
+    "test:in": "cross-env MODE=internal nuxt build && pm2 start",
+    "test:spa": "cross-env MODE=test nuxt build  --spa"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
+    "@vant/touch-emulator": "^1.2.0",
+    "amfe-flexible": "^2.2.1",
+    "animate.css": "^4.1.1",
+    "core-js": "^3.6.5",
+    "cross-env": "^7.0.2",
+    "dayjs": "^1.8.36",
+    "js-cookie": "^2.2.1",
+    "nuxt": "^2.14.5",
+    "root-font-size": "^1.0.4",
+    "swiper": "^5.4.5",
+    "vant": "^2.10.8",
+    "vue-awesome-swiper": "^4.1.1",
+    "xss": "^1.0.8"
+  },
+  "devDependencies": {
+    "@nuxtjs/style-resources": "^1.0.0",
+    "babel-plugin-import": "^1.13.0",
+    "commitizen": "^4.2.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.1",
+    "postcss-pxtorem": "^5.1.1"
+  }
+}

@@ -1,0 +1,182 @@
+import path from 'path'
+const env = require('./env')
+const global = require('./plugins/global')
+
+export default {
+  target: 'server',
+  env: {
+    global: global,
+    baseUrl: env[process.env.MODE].DP_URL,
+    zhifuUrl: env[process.env.MODE].DP_ZHIFU,
+    mBaseUrl:env[process.env.MODE].DP_M_URL
+  },
+  head: {
+    title: '大鹏教育-高品质的设计师在线教育',
+    meta: [
+      { name: 'renderer', content:'webkit'},
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no', },
+      { keywords: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业'
+      },
+      { property: 'og:title', content: ' 大鹏教育-高品质的设计师在线教育' },
+      { property: 'og:type', content: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
+      { property: 'og:url', content: 'http://newpc.dapengjiaoyu.cn/' },
+      { property: 'og:image', content: 'http://newpc.dapengjiaoyu.cn/dapeng/img/wx-qr.af8e7b1.jpg' },
+      { property: 'og:description', content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业' },
+      { property: 'og:site_name', content: '大鹏教育职业技能培训' }
+    ],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ]
+  },
+
+  loading: '~/components/global/loading.vue',
+  // loading: {
+  //   height: '3px',
+  //   color:'#0CB65B',
+  // },
+
+  css: [
+    'assets/css/dp-reset.css',
+    'assets/css/dp-global.css',
+    'swiper/css/swiper.css'
+  ],
+
+  plugins: [
+    '~/plugins/axios',
+    {
+      src: '~/plugins/root-font-size.js',
+      ssr: false
+    },
+    {
+      src: '~/plugins/amfe-flexble.js',
+      ssr: false
+    },
+    {
+      src: '~/plugins/swiper.js',
+      ssr: false,
+    },
+    {
+      src: '~/plugins/touch-emulator.js',
+      ssr: false,
+    },
+    {
+      src: '~/plugins/vant',
+      ssr: true,
+    },
+    { src: '~/plugins/head-image.js', ssr: true },
+    { src: '~/plugins/filters.js', ssr: true }
+  ],
+
+  components: true,
+
+  buildModules: [],
+
+  modules: [
+    '@nuxtjs/style-resources',
+    '@nuxtjs/axios'
+  ],
+  axios: {
+    proxy: true, // 表示开启代理
+    prefix: '/api', // 表示给请求url加个前缀 /api
+    credentials: true // 表示跨域请求时是否需要使用凭证
+  },
+  proxy: {
+    '/api': {
+      target: env[process.env.MODE].BASE_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api': '/', // 把 /api 替换成 /
+        changeOrigin: true // 表示是否跨域
+      }
+    }
+  },
+  router: {
+    extendRoutes(routes, resolve) {
+      routes.push(
+        {
+          name: 'not-found',
+          path: '/404',
+          component: resolve(__dirname, 'pages/404.vue')
+        },
+        {
+          path: '*',
+          redirect: '/404'
+        },
+      )
+    }
+  },
+  /**
+   * CSS全局变量
+   */
+  styleResources: {
+    less: [
+      // less 变量
+      './assets/less/vars.less',
+      // mixins 函数
+      './assets/less/mixins.less'
+    ]
+  },
+
+  /**
+   * Close Nuxt Telemetry Module
+   * https://github.com/nuxt/telemetry
+   */
+  telemetry: false,
+  /*
+   ** Build configuration
+   ** See https://nuxtjs.org/api/configuration-build/
+   */
+  build: {
+    extend(config, ctx) { },
+    vendor: ['axios'],
+    publicPath: '/dapeng',
+    transpile: [/vant.*?less/],
+    postcss: {
+      plugins: {
+        'postcss-pxtorem': {
+          rootValue: 37.5,
+          propList: ['*']
+        }
+      },
+      preset: {
+        autoprefixer: {
+          overrideBrowserslist: ['Android >= 4.0', 'iOS >= 8']
+        }
+      }
+    },
+    babel: {
+      plugins: [
+        [
+          'import',
+          {
+            libraryName: 'vant',
+            style: (name) => {
+              return `${name}/style/less.js`
+            },
+          },
+          'vant',
+        ],
+      ],
+    },
+    /**
+     *  Reset vant默认主题
+     */
+    loaders: {
+      less: {
+        lessOptions: {
+          javascriptEnabled: true,
+          modifyVars: {
+            hack: `true; @import "${path.join(
+              __dirname,
+              './assets/less/revant.less'
+            )}";`,
+          },
+        },
+      },
+    },
+  }
+}
