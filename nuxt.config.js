@@ -34,11 +34,10 @@ export default {
     ]
   },
 
-  loading: '~/components/global/loading.vue',
-  // loading: {
-  //   height: '3px',
-  //   color:'#0CB65B',
-  // },
+  loading: {
+    height: '3px',
+    color:'#0CB65B',
+  },
 
   css: [
     'assets/css/dp-reset.css',

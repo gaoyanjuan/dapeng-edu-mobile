@@ -11,8 +11,8 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import audio from '@/assets/images/audio-img/mobile/audio.png'
-import audioPlay from '@/assets/images/audio-img/mobile/audio.gif'
+import audio from '@/assets/icons/comment/audio.png'
+import audioPlay from '@/assets/icons/comment/audio.gif'
 export default {
   props: {
     audioType:{

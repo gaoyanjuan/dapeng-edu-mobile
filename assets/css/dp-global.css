@@ -1,28 +1,23 @@
-html,body {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #212529;
-  text-align: left;
-  background-color: #fff;
-  box-sizing: border-box;
-  -ms-overflow-style: scrollbar;
+/**
+  解决 vant组件 imagepreview,
+  swiper 在PC模式不能滑动切换问题 
+**/
+.van-image-preview > img,
+.van-swipe-item > img {
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  cursor: pointer;
 }
 
-.clear-float:after{
-  content:""; 
-  display:block;    
-  height:0;    
-  clear:both;
-  visibility:hidden; 
-}
-@keyframes appear {
-  0% {
-    opacity: 0;
-  }
-}
-
+/**
+  所有页面路由过渡效果
+*/
 .page-enter-active, .page-leave-active {
   transition: opacity .2s;
 }

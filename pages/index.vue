@@ -1,6 +1,6 @@
 <template>
   <section>
-      <m-home />
+    <m-home />
   </section>
 </template>
 
@@ -34,12 +34,3 @@ export default {
   },
 }
 </script>
-
-<style lang="less" scoped>
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-}
-</style>
