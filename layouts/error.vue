@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <m-navbar title="404"/>
-    <van-empty class="empty-image" :image="error" description="你要找的页面走丢了～">
+  <div class="error-page">
+    <m-navbar/>
+    <van-empty class="error-image" :image="error" description="你要找的页面走丢了～">
       <van-button round type="primary" class="bottom-button" to="/">返回广场</van-button>
     </van-empty>
   </div>
@@ -17,10 +17,10 @@ export default {
 </script>
 
 <style lang="less">
-.empty-image {
+.error-page .error-image {
   padding-top: 121px;
 }
-.empty-image .van-empty__image {
+.error-image .van-empty__image {
   width: 240px;
   height: 126px;
 }

@@ -93,21 +93,6 @@ export default {
       }
     }
   },
-  router: {
-    extendRoutes(routes, resolve) {
-      routes.push(
-        {
-          name: 'not-found',
-          path: '/404',
-          component: resolve(__dirname, 'pages/404.vue')
-        },
-        {
-          path: '*',
-          redirect: '/404'
-        },
-      )
-    }
-  },
   /**
    * CSS全局变量
    */
