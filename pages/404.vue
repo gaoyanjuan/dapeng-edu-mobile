@@ -2,7 +2,7 @@
   <div>
     <m-navbar title="404"/>
     <van-empty class="empty-image" :image="error" description="你要找的页面走丢了～">
-      <van-button round type="primary" class="bottom-button" to="/">回首页</van-button>
+      <van-button round type="primary" class="bottom-button" to="/">返回广场</van-button>
     </van-empty>
   </div>
 </template>

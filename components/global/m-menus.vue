@@ -87,26 +87,30 @@ export default {
 
 .swiper {
   & .menus-item {
-    width: 48px;
-    height: 24px;
+    min-width: 28px;
+    max-width: 42px;
+    height: 20px;
     font-size: 14px;
     font-weight: 400;
     color: #a3a8ab;
-    line-height: 24px;
+    line-height: 20px;
     text-align: center;
     font-family: @dp-font-regular;
+    cursor: pointer;
   }
   & .menus-item-active {
-    width: 48px;
-    height: 24px;
+    width: fit-content;
+    padding: 0px 10px;
+    height: 20px;
     font-size: 14px;
     font-weight: 500;
     color: #0cb65b;
-    line-height: 24px;
+    line-height: 20px;
     background: #e6f7ee;
     border-radius: 14px;
     text-align: center;
     font-family: @dp-font-medium;
+    cursor: pointer;
   }
 }
 </style>

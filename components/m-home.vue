@@ -225,6 +225,7 @@ export default {
   color: #A3A8AB;
   line-height: 36px;
   text-align: center;
+  cursor: pointer;
 }
 
 .menus-item-active {
@@ -238,5 +239,6 @@ export default {
   color: #0CB65B;
   line-height: 36px;
   text-align: center;
+  cursor: pointer;
 }
 </style>

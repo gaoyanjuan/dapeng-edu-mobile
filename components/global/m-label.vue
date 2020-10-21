@@ -1,22 +1,14 @@
 <template>
   <div class="m-label">
     <!-- Homework -->
-    <div
-      v-if="labelData"
-      class="label__homework--wrap"
-      @click.stop="toWorkRequirement"
-    >
+    <div v-if="labelData" class="label__homework--wrap" @click.stop="toWorkRequirement">
       <img class="label__homework" :src="homework" alt="homework" />
       <span class="label__homework__txt">{{ labelData.title }}</span>
       <img class="label__homework__enter" :src="enter" alt="enter" />
     </div>
 
     <!-- Topic -->
-    <div 
-      v-if="activityData" 
-      class="label__topic--wrap"
-      @click="toActivityDetails"
-    >
+    <div v-if="activityData" class="label__topic--wrap" @click="toActivityDetails">
       <img class="label__topic" :src="topic" alt="topic" />
       <span class="label__topic__txt">{{ activityData.displayName }}</span>
       <span class="label__topic__bar">|</span>
@@ -83,6 +75,7 @@ export default {
   padding: 4px 8px;
   background: #E6F7EE;
   border-radius: 12px;
+  line-height: 24px;
   cursor: pointer;
   .l-flex-row-def()
 }
@@ -112,24 +105,26 @@ export default {
 
 // Topic
 .m-label .label__topic--wrap {
+  width: fit-content;
   height: 24px;
   padding: 4px 8px;
   background:#FFEFF2;
   border-radius: 12px;
   color: #FF6389;
   font-size: 12px;
+  line-height: 24px;
   cursor: pointer;
-  display: inline-block;
+  .l-flex-row-def()
 }
 
 .label__topic--wrap .label__topic {
   width: 14px;
   height: 14px;
-  margin: 2px 4px 0 0;
-  float: left;
+  margin-right: 4px;
 }
 
 .label__topic--wrap .label__topic__txt {
+  display: block;
   font-size: 12px;
   font-family: @dp-font-regular;
   font-weight: 400;
@@ -137,14 +132,11 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 280px;
-  float: left;
+  max-width: 230px;
 }
 
 .label__topic--wrap .label__topic__bar {
-  margin:0 3px;
-}
-.label__topic--wrap .label__topic__nums {
-  min-width: 15%;
+  margin-right: 4px;
+  margin-left: 4px;
 }
 </style>

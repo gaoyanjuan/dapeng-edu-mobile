@@ -7,13 +7,7 @@
     <m-menus menus-type="type" :menus="menus"/>
 
     <section class="works-wrap">
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        loading-text="正在努力加载"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <m-posts
           v-for="(item, index) in growthListGetters.list"
           :key="index"

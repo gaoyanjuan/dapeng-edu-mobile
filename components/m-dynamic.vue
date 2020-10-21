@@ -7,13 +7,7 @@
     <m-menus menus-type="type" :menus="menus" :automatic="true"/>
 
     <section class="works-wrap">
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        loading-text="正在努力加载"
-        finished-text="没有更多了"
-        @load="onLoad"
-      >
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <template v-if="$route.query.type === 'hot'">
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"

@@ -43,7 +43,7 @@ export default {
 }
 
 .guide-logo {
-  width: 96px;
+  width: max-content;
   height: 33px;
   font-size: 24px;
   font-family: @dp-font-medium;
@@ -63,5 +63,6 @@ export default {
   background-image: url('~@/assets/icons/common/guide-btn-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  cursor: pointer;
 }
 </style>
