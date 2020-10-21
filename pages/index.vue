@@ -16,13 +16,13 @@ export default {
       await store.dispatch('user/appendUserInfo',{ token: route.query.access_token })
     }
   },
-  async asyncData ({route, store}) {
+  async asyncData ({route, store, error}) {
     try {
       if (store.getters['banner/bannerListGetters'].length === 0) {
         await store.dispatch('banner/appendBannerList', { collegeId: 'j5m484vz' })
       }
-    } catch (error) {
-      error({ statusCode: error.data.code, message: error.data.message })
+    } catch (err) {
+      error({ statusCode: err.data.code, message: err.data.message })
     }
   },
   mounted () {

@@ -8,7 +8,7 @@
 import { mapActions } from 'vuex'
 export default {
   name:'activities',
-  async asyncData ({route, store}) {
+  async asyncData ({route, store, error}) {
     if (process.browser) return {
       isServiceload: false
     }
@@ -21,8 +21,8 @@ export default {
       return {
         isServiceload: true
       }
-    } catch (error) {
-      error({ statusCode: error.data.code, message: error.data.message })
+    } catch (err) {
+      error({ statusCode: err.data.code, message: err.data.message })
     }
   },
   created () {

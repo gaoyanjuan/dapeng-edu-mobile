@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-follow />
+    <m-video />
   </div>
 </template>
 

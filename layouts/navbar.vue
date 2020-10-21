@@ -1,6 +1,11 @@
 <template>
-  <div class="app_wrap">
-    <Nuxt />
+  <div>
+    <div class="app_wrap" v-if="$nuxt.isOnline">
+      <Nuxt />
+    </div>
+    <div class="off-line-wrap" v-if="$nuxt.isOffline">
+      掉线了~~
+    </div>
   </div>
 </template>
 
@@ -10,5 +15,12 @@
   min-height: 100vh;
   background: @dp-white;
   box-sizing: border-box;
+}
+
+.off-line-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 45% auto;
 }
 </style>

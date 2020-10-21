@@ -2,19 +2,24 @@
   <div class="app_wrap">
     <!--菜单导航 -->
     <van-tabs v-model="activeName" sticky @click="onMenusClick" @scroll="onScrollEvent">
-      <van-tab name="homework">
+      <van-tab title="关注" name="follow" to="/">
+        <template v-if="$route.name === 'index'">
+          <nuxt-child />
+        </template>
+      </van-tab>
+      <van-tab title="推荐" name="hotlists" to="/hotlists">
+        <template v-if="$route.name === 'index-hotlists'">
+          <nuxt-child />
+        </template>
+      </van-tab>
+      <van-tab title="作业" name="homework">
         <template #title>
           <div class="tab-drop-menus-wrap">
             <span>{{dropMenusName}}</span>
-            <img 
-              class="tab-arrow"
-              v-if="activeName === 'homework'"
-              :src="downMenu ? tabUp : tabDown" 
-              @click.stop="openDropdownMenu"
-            />
+            <img class="tab-arrow" v-if="activeName === 'homework'" :src="showDownMenu ? tabUp : tabDown" @click.stop="openDropdownMenu" />
           </div>
         </template>
-        <template v-if="$route.name === 'index'">
+        <template v-if="$route.name === 'index-homework'">
           <nuxt-child />
         </template>
       </van-tab>
@@ -33,10 +38,25 @@
           <nuxt-child />
         </template>
       </van-tab>
+      <van-tab title="阅读" name="reading" to="/reading">
+        <template v-if="$route.name === 'index-reading'">
+          <nuxt-child />
+        </template>
+      </van-tab>
+      <van-tab title="视频" name="video" to="/video">
+        <template v-if="$route.name === 'index-video'">
+          <nuxt-child />
+        </template>
+      </van-tab>
+      <van-tab title="小视频" name="short-video" to="/short-video">
+        <template v-if="$route.name === 'index-short-video'">
+          <nuxt-child />
+        </template>
+      </van-tab>
     </van-tabs>
 
     <!-- 下拉菜单筛选 -->
-    <div v-show="downMenu">
+    <div v-show="showDownMenu">
       <div class="tab-drop-down-menus" ref="downMenus" :style="scrollTop">
         <div 
           v-for="item in downMenuOptions"
@@ -50,18 +70,17 @@
     </div>
 
     <!-- 遮罩弹层 -->
-    <van-overlay :show="downMenu" @click="downMenu = false" z-index='11'/>
+    <van-overlay :show="showDownMenu" @click="showDownMenu = false" z-index='11'/>
   </div>
 </template>
 
 <script>
-import { log } from 'util'
 export default {
+  name:'M-Home',
   data: () => ({
-    show: false,
-    downMenu: false,
+    showDownMenu: false,
     scrollTop: 'top:88px;',
-    activeName: 'homework',
+    activeName: 'follow',
     dropMenusName: '作业',
     dropMenuValue: '',
     downMenuOptions: [
@@ -79,6 +98,10 @@ export default {
      */
     const to = this.$route
     if (to.name === 'index') {
+      this.activeName = 'follow'
+    } else if (to.name === 'index-hotlists') {
+      this.activeName = 'hotlists'
+    } else if (to.name === 'index-homework') {
       this.activeName = 'homework'
     } else if (to.name === 'index-growth') {
       this.activeName = 'growth'
@@ -86,6 +109,12 @@ export default {
       this.activeName = 'dynamic'
     } else if (to.name === 'index-works') {
       this.activeName = 'works'
+    } else if (to.name === 'index-reading') {
+      this.activeName = 'reading'
+    } else if (to.name === 'index-video') {
+      this.activeName = 'video'
+    } else if (to.name === 'index-short-video') {
+      this.activeName = 'short-video'
     }
 
     /***
@@ -98,20 +127,34 @@ export default {
   methods:{
     /** 打开下拉菜单 */
     openDropdownMenu(){
-      this.downMenu = !this.downMenu
+      this.showDownMenu = !this.showDownMenu
     },
 
-    /** 点击切换导航菜单 */
+    /** 
+     * 点击切换导航菜单 ；
+     * 导航按钮-作业比较特殊；
+     * HTML结构未设置路由跳转；
+     * 而是转为this.$router.replace；
+     * 这样做是避免路由双执行的报错；
+     * 另外，作业下还有按钮筛选；
+     * 也是为了参数缓存；
+    */
     onMenusClick(name, title) {
       if(name === 'homework') {
-        if(this.$route.name === 'index') {
-          this.downMenu = !this.downMenu
+        if(this.$route.name === 'index-homework') {
+          this.showDownMenu = !this.showDownMenu
           return
         }
-        this.$router.replace({ path: '/', query: { ...this.$route.query, courseType: this.dropMenuValue } })
+        this.$router.replace({
+          path: '/homework',
+          query: {
+            ...this.$route.query,
+            courseType: this.dropMenuValue
+          }
+        })
       }
       if(name !== 'homework') {
-        this.downMenu = false
+        this.showDownMenu = false
       }
     },
 
@@ -122,7 +165,7 @@ export default {
         this.dropMenusName = '作业'
       }
       this.dropMenuValue = params.value
-      this.downMenu = !this.downMenu
+      this.showDownMenu = !this.showDownMenu
       if(this.$route.query.courseType === params.value) return
       this.$router.replace({ query: { ...this.$route.query, courseType: params.value } })
     },
@@ -165,7 +208,6 @@ export default {
 
 /deep/ .van-tabs__wrap {
   padding-left: 8px;
-  padding-right: 130px;
   position: relative;
   background-color: @dp-white;
   z-index: 13;
@@ -174,7 +216,6 @@ export default {
 @media (max-width: 330px)  {
   /deep/ .van-tabs__wrap {
     padding-left: 8px;
-    padding-right: 80px;
     position: relative;
     background-color: @dp-white;
     z-index: 13;
