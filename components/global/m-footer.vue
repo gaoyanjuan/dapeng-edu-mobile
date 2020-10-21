@@ -23,10 +23,10 @@
         <img :src="props.active ? activities.active : activities.inactive" />
       </template>
     </van-tabbar-item>
-    <van-tabbar-item name="mine">
-      <span class="tabbar-btn-text-inactive">努力开发中</span>
+    <van-tabbar-item name="mine" to="/mine">
+      <span>我的</span>
       <template #icon="props">
-        <img :src="props.active ? mine.inactive : mine.inactive" />
+        <img :src="props.active ? mine.active : mine.inactive" />
       </template>
     </van-tabbar-item>
   </van-tabbar>
@@ -54,6 +54,7 @@ export default {
       inactive: require('@/assets/icons/tabbar/bar-activity.png'),
     },
     mine: {
+      active: require('@/assets/icons/tabbar/bar-mine-active.png'),
       inactive: require('@/assets/icons/tabbar/bar-mine.png'),
     },
   }),
@@ -74,11 +75,10 @@ export default {
   },
   methods:{
     /***
-     * 返回官网&努力开发中……
-     * 暂不能点击，切换状态保持不变
+     * 返回官网暂不能点击，切换状态保持不变
      */
     onChangeTabs(tab){
-      if(tab === 'home' || tab === 'mine'){
+      if(tab === 'home'){
         this.active = this.$route.name
         if(this.$route.name === 'index') {
           this.active = 'square'
@@ -119,10 +119,6 @@ export default {
 
 .tabbar-btn-text-active {
   color: #0CB65B;
-}
-
-.tabbar-btn-text-inactive {
-  color: #D1D3D5;
 }
 
 </style>

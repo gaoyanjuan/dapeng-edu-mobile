@@ -46,27 +46,13 @@ export default {
   ],
 
   plugins: [
-    '~/plugins/axios',
-    {
-      src: '~/plugins/root-font-size.js',
-      ssr: false
-    },
-    {
-      src: '~/plugins/amfe-flexble.js',
-      ssr: false
-    },
-    {
-      src: '~/plugins/swiper.js',
-      ssr: false,
-    },
-    {
-      src: '~/plugins/touch-emulator.js',
-      ssr: false,
-    },
-    {
-      src: '~/plugins/vant',
-      ssr: true,
-    },
+    { src: '~/plugins/axios'},
+    { src: '~/plugins/vue-inject.js'},
+    { src: '~/plugins/root-font-size.js', ssr: false},
+    { src: '~/plugins/amfe-flexble.js', ssr: false},
+    { src: '~/plugins/swiper.js', ssr: false},
+    { src: '~/plugins/touch-emulator.js', ssr: false},
+    { src: '~/plugins/vant', ssr: true},
     { src: '~/plugins/head-image.js', ssr: true },
     { src: '~/plugins/filters.js', ssr: true }
   ],
@@ -118,6 +104,10 @@ export default {
     extend(config, ctx) { },
     vendor: ['axios'],
     publicPath: '/dapeng',
+    /**
+     * 如果插件位于node_modules并导出模块，
+     * 需要将其添加到transpile构建选项：
+     */
     transpile: [/vant.*?less/],
     postcss: {
       plugins: {
