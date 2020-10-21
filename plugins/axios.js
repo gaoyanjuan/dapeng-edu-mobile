@@ -21,9 +21,7 @@ export default function ({store, redirect, req, route, error, app: { $axios }}) 
     },
     error => {
       if(error.response.status == 409 && error.response.data.code === 404229){
-          // http状态500，请求API找不到，重定向到404页面
-          redirect('/404')
-          return error.response
+        return error.response
       }
       console.log(error.response , '服务端接口错误信息')
       return Promise.reject(error.response)   // 返回接口返回的错误信息
