@@ -4,7 +4,8 @@
       class="swipe-photos"
       :style="photosHei"
       :loop="loop"
-      @change="onPhotosChange"  
+      :stop-propagation="false"
+      @change="onPhotosChange"
     >
       <van-swipe-item v-for="(item, i) in photos" :key="i" @click="openImagePreview(i)">
         <img :src="item" :alt="item" />

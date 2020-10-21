@@ -57,12 +57,11 @@ export default {
       }
     }
     .card-status {
-      background: url('~@/assets/icons/activities/activities-finish.png') no-repeat center center;
       width: 51px;
       height: 19px;
       position: absolute;
       right: 16px;
-      top: 16px;
+      top: 12px;
       line-height: 20px;
       text-align: center;
       font-family: @dp-font-regular;
@@ -70,12 +69,16 @@ export default {
       font-weight: 400;
       color: #FFFFFF;
       border-radius: 6px 0px 0px 6px;
+      background: url('~@/assets/icons/activities/activities-finish.png') no-repeat center center;
+      background-size: 51px 19px;
     }
     .card-status-living {
       background: url('~@/assets/icons/activities/activities-living.png') no-repeat center center;
+      background-size: 51px 19px;
     }
     .card-status-not {
       background: url('~@/assets/icons/activities/activities-not.png') no-repeat center center;
+      background-size: 51px 19px;
     }
     .m-card-bottom {
       margin-top: 8px;
