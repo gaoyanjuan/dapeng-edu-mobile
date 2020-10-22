@@ -44,14 +44,9 @@
     <!-- Footer Block -->
     <div class="requirement-footer-wrap">
       <div class="requirement-footer-title">同学作业</div>
-      <div class="m-requirement-list">
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div class="requirement-footer-title-line"></div>
+      <div class="requirement-footer-title-line"></div>
+      <div class="requirement-footer-list">
+        <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <m-posts
             v-for="(item, idx) in requirementList"
             :key="idx"
@@ -93,8 +88,6 @@ export default {
       'requirementDetailsGetters',
       'requirementListGetters'
     ])
-  },
-  mounted() {
   },
   methods: {
     ...mapActions('homework', [
@@ -152,28 +145,38 @@ export default {
   margin-top: 15px;
 }
 
-.content-info-row {
+.requirement-content-info-wrap .content-info-row {
+  width: 100%;
+  min-height: 22px;
   display: flex;
-  &>:nth-child(1) {
-    width: 80px;
-    white-space:pre;
-    font-size: 16px;
-    font-family: @dp-font-regular;
-    font-weight: 400;
-    color: #A6AEA9;
-    line-height: 22px;
-    display: flex;
-    justify-content: space-between;
-  }
-  &>:nth-child(2) {
-    width: calc(100% - 80px);
-    font-size: 16px;
-    font-family: @dp-font-regular;
-    font-weight: 400;
-    color: #36404A;
-    line-height: 22px;
-    word-break: break-all;
-  }
+  align-items: center;
+}
+
+.requirement-content-info-wrap .content-info-row:not(:first-child) {
+  margin-top: 8px;
+}
+
+.requirement-content-info-wrap .content-info-row >:nth-child(1) {
+  width: 80px;
+  white-space:pre;
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #A6AEA9;
+  line-height: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-start;
+}
+
+.requirement-content-info-wrap .content-info-row >:nth-child(2) {
+  width: calc(100% - 80px);
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #36404A;
+  line-height: 22px;
+  word-break: break-all;
 }
 
 .requirement-content-wrap .requirement-content-example {
@@ -186,7 +189,7 @@ export default {
   justify-content: space-between;
 }
 
-.example-txt > span {
+.requirement-content-example .example-txt > span {
   height: 22px;
   font-size: 16px;
   font-family: @dp-font-regular;
@@ -217,7 +220,8 @@ export default {
   margin: 0 auto;
   background-color: #EDEDED;
 }
-.m-requirement-list {
-  padding-bottom: 100px;
+
+.requirement-footer-wrap .requirement-footer-list {
+  padding-bottom: 45px;
 }
 </style>
