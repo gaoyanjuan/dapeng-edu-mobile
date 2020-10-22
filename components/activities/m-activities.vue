@@ -53,7 +53,7 @@ export default {
 <style lang="less">
 #m-activities {
   .m-activities-list {
-    margin-top: 20px;
+    padding-top: 20px;
     padding-bottom: 100px;
   }
 }

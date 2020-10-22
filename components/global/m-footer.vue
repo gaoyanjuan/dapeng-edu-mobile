@@ -12,11 +12,9 @@
         <img :src="props.active ? square.active : square.inactive" />
       </template>
     </van-tabbar-item>
-    <a :href="mBaseUrl">
-      <div class="submit">
-        <img :src="upload.active" />
-      </div>
-    </a>
+    <div class="submit">
+      <img :src="upload.active" />
+    </div>
     <van-tabbar-item name="activities" to="/activities">
       <span>活动</span>
       <template #icon="props">
@@ -111,6 +109,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   & > img {
     width: 37px;
     height: 37px;

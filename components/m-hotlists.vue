@@ -3,24 +3,43 @@
     <!-- Swiper -->
     <m-swipe />
 
-    <section class="works-wrap">
-
+    <section class="hotlists-wrap">
+      <m-posts
+        v-if="res"
+        squareType="作业"
+        :commentList="res.commentList"
+        :dataType="res.type"
+        :imgInfo="res.imgSmall"
+        :courseType="res.courseType"
+        :user="res.user"
+        :college="res.college"
+        :recommendType="res.recommendType"
+        :task="res.task"
+        :content="res.content"
+        :modifiedTime="res.lastModifiedTime"
+        :listItemData="res"
+        :path="navRoute"
+      >
+      </m-posts>
     </section>
   </div>
 </template>
 
 <script>
+import { workDetails } from '@/data'
 export default {
   name: 'M-Hotlists',
-  data: () => ({}),
-  methods:{}
+  data: () => ({
+    res: workDetails,
+    navRoute:'/details/homework-page-details',
+  })
 }
 </script>
 
 <style lang="less" scoped>
-.works-wrap {
+.hotlists-wrap {
   width: 100%;
-  min-height: calc(100vh - 339px);
+  height: auto;
   padding-bottom: 65px;
   background-color: #f8f8f8;
 }
