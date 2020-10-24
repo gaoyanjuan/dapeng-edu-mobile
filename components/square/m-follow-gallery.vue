@@ -1,22 +1,23 @@
 <template>
   <section class="follow-wrap">
     
+    <!-- 为你推荐 操作 -->
     <div class="fg-nav">
       <h3>为你推荐</h3>
       <nuxt-link class="nav-more" to="/follow" tag="div">
-        <span>更多</span>
-        <img src="@/assets/icons/square/more.png" alt="" />
+        <span>更多</span><img :src="more" alt="" />
       </nuxt-link>
     </div>
 
+    <!-- 为你推荐 滑动区域 -->
     <div class="fg-content">
       <client-only>
         <swiper class="swiper" :options="swiperOptions">
-          <swiper-slide v-for="(item, i) in 7" :key="i">
+          <swiper-slide v-for="(item, i) in list" :key="i">
             <div class="user-card">
               <img class="avatar" :src="avatar" alt="" />
-              <span class="nickname">桃子</span>
-              <span class="btn"></span>
+              <span class="nickname">{{ item.nickname }}</span>
+              <span :class="item.type ? 'btn-unfollow': 'btn-follow'" @click="handleFollow"></span>
             </div>
           </swiper-slide>
           <swiper-slide class="card-more">
@@ -32,13 +33,23 @@
 export default {
   name: 'FollowGallery',
   data: () => ({
-    avatar: require('@/assets/icons/common/avatar.png'),
+    list:[{nickname:'桃子',type: false},
+    {nickname:'桃子',type: true},
+    {nickname:'桃子',type: false},
+    {nickname:'桃子',type: true},
+    {nickname:'桃子',type: false}],
     swiperOptions: {
       slidesPerView: 3.5,
       spaceBetween: 10,
       freeMode: true,
     },
-  })
+    avatar: require('@/assets/icons/common/avatar.png'),
+    more: require('@/assets/icons/square/more.png'),
+  }),
+  methods:{
+    /** 关注事件 */
+    handleFollow() {}
+  }
 }
 </script>
 
@@ -153,10 +164,19 @@ export default {
     color: rgba(24, 37, 44, 1);
     line-height: 20px;
   }
-  & > .btn {
+  /**  未关注 **/
+  & > .btn-follow {
     width: 59px;
     height: 28px;
     background-image: url('~@/assets/icons/posts/posts-follow.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  /** 已关注 */
+  & > .btn-unfollow {
+    width: 59px;
+    height: 28px;
+    background-image: url('~@/assets/icons/square/hotlists-unfollow.png');
     background-repeat: no-repeat;
     background-size: cover;
   }

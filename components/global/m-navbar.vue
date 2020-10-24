@@ -12,6 +12,9 @@
     <template #left>
       <img class="navbar__arrow icon" :src="arrow" alt="arrow" />
     </template>
+    <template v-if="showRightText" #right>
+      <div :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">提交</div>
+    </template>
   </van-nav-bar>
 </template>
 
@@ -31,6 +34,14 @@ export default {
       type: String,
       default: '',
     },
+    showRightText: {
+      type:Boolean,
+      default:false,
+    },
+    submitStatus: {
+      type:Boolean,
+      default:false,
+    }
   },
   data: () => ({
     arrow: require('@/assets/icons/navbar/nav-arrow-back.png'),
@@ -52,8 +63,24 @@ export default {
   line-height: 44px;
 }
 
-.navbar__arrow {
+.m-navbar .navbar__arrow {
   width: 24px;
   height: 24px;
+}
+
+.m-navbar .navbar__submit {
+  width: 60px;
+  height: 28px;
+  background: #9EE2BD;
+  border-radius: 14px;
+  font-size: 12px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 28px;
+}
+
+.m-navbar .btn-active {
+  background: #0CB65B;
 }
 </style>

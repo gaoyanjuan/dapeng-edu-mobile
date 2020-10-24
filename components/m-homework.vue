@@ -22,6 +22,7 @@
             :recommendType="item.recommendType"
             :task="item.task"
             :content="item.content"
+            :isAttention="item.isAttention"
             :modifiedTime="item.lastModifiedTime"
             :listItemData="item"
             :path="navRoute"

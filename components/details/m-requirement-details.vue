@@ -68,6 +68,11 @@
         </van-list>
       </div>
     </div>
+
+    <!-- Footer Button -->
+    <div class="requirement-btn-wrap" @click.stop="handlePublish">
+      <span class="publish">发布作业</span>
+    </div>
   </div>
 </template>
 
@@ -107,7 +112,9 @@ export default {
           this.finished = true
         }
       })
-    }
+    },
+    /** 发布作业 */
+    handlePublish() {}
   }
 }
 </script>
@@ -223,5 +230,34 @@ export default {
 
 .requirement-footer-wrap .requirement-footer-list {
   padding-bottom: 45px;
+}
+
+.requirement-btn-wrap {
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 148px;
+  height: 72px;
+  background-color: transparent;
+  background-image: url('~@/assets/icons/common/requirement-btn-bg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.requirement-btn-wrap .publish {
+  width: 64px;
+  height: 22px;
+  font-size: 16px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 22px;
+  position: relative;
+  top: -3px;
 }
 </style>

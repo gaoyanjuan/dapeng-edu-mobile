@@ -20,6 +20,7 @@
             :college="item.college"
             :content="item.content"
             :listItemData="item"
+            :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/works-page-details"
             squareType="作品"
