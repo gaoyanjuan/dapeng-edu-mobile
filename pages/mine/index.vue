@@ -14,18 +14,18 @@
 
     <!-- 用户数据：“关注、粉丝、推荐、喜欢” -->
     <div class="mine-user-data-wrap">
-      <div class="data-item-column">
+      <nuxt-link tag="div" class="data-item-column" to="/mine/fans?tab=followers">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">关注</span>
-      </div>
-      <div class="data-item-column">
+      </nuxt-link>
+      <nuxt-link tag="div" class="data-item-column" to="/mine/fans?tab=fans">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">粉丝</span>
-      </div>
-      <div class="data-item-column">
+      </nuxt-link>
+      <nuxt-link tag="div" class="data-item-column" to="/mine/recommend">
         <span class="data-item-column-nums">14</span>
         <span class="data-item-column-txt">推荐</span>
-      </div>
+      </nuxt-link>
       <div class="data-item-column" @click="openLovePopup">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">喜欢</span>
@@ -41,7 +41,7 @@
 
       <div class="user-remark-right-side">
         <img class="user-remark-icon" :src="navStar" alt="" />
-        <span class="user-remark-txt">我的喜欢</span>
+        <span class="user-remark-txt">我的收藏</span>
       </div>
     </div>
 
