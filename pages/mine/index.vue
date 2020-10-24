@@ -26,7 +26,7 @@
         <span class="data-item-column-nums">14</span>
         <span class="data-item-column-txt">推荐</span>
       </div>
-      <div class="data-item-column">
+      <div class="data-item-column" @click="openLovePopup">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">喜欢</span>
       </div>
@@ -61,6 +61,9 @@
       <span class="app-txt">下载大鹏教育APP</span>
     </div>
 
+    <!-- 我的喜欢弹层 -->
+    <m-love-popup :show-popup="lovePopup"/>
+
   </div>
 </template>
 
@@ -68,6 +71,7 @@
 export default {
   name:'Mine',
   data: ()=> ({
+    lovePopup: { show: false },
     avatar:require('@/assets/icons/common/avatar.png'),
     navLike: require('@/assets/icons/mine/nav-like.png'),
     navStar: require('@/assets/icons/mine/nav-star.png'),
@@ -81,7 +85,13 @@ export default {
       {txt:'视频',icon: require('@/assets/icons/mine/nav-video.png')},
       {txt:'任务',icon: require('@/assets/icons/mine/nav-task.png')}
     ]
-  })
+  }),
+  methods:{
+    /** 打开我的喜欢弹框 */
+    openLovePopup (){
+      this.lovePopup.show = true
+    }
+  }
 }
 </script>
 
