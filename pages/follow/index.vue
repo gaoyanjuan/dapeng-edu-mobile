@@ -2,18 +2,20 @@
   <section>
     <m-navbar title="推荐关注" />
     <div class="follow__wrap">
-      <div v-for="(item, i) in 7" :key="i" class="follow__row">
-        <div class="follow__cloumn--left">
-          <img class="avatar" :src="avatar" alt="avatar" />
-          <div class="user__wrap">
-            <span class="user__nickname">宋祖儿</span>
-            <span class="user__signature">与其怕失败，不如狠狠地失败一次</span>
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+        <div v-for="(item, i) in list" :key="i" class="follow__row">
+          <div class="follow__cloumn--left">
+            <img class="avatar" :src="avatar" alt="avatar" />
+            <div class="user__wrap">
+              <span class="user__nickname">{{ item.nickname }}</span>
+              <span class="user__signature">{{ item.signature }}</span>
+            </div>
+          </div>
+          <div class="follow__cloumn--right" @click="handleFollow(item)">
+            <img class="follow__btn" :src="item.type ? follow : unfollow" alt="" />
           </div>
         </div>
-        <div class="follow__cloumn--right">
-          <img class="follow__btn" :src="follow" alt="follow" />
-        </div>
-      </div>
+      </van-list>
     </div>
   </section>
 </template>
@@ -23,9 +25,34 @@ export default {
   name: 'Follow',
   layout:'navbar',
   data: () => ({
+    list:[],
+    loading: false,
+    finished: false,
     avatar: require('@/assets/icons/common/avatar.png'),
     follow: require('@/assets/icons/posts/posts-follow.png'),
+    unfollow: require('@/assets/icons/posts/posts-unfollow.png')
   }),
+  methods:{
+    onLoad() {
+      setTimeout(() => {
+        for (let i = 0; i < 20; i++) {
+          this.list.push({
+            nickname:'宋祖儿',
+            signature:'与其怕失败，不如狠狠地失败一次',
+            type: (i % 2 === 0) ? true : false,
+          })
+        }
+        // 加载状态结束
+        this.loading = false
+        // 数据全部加载完成
+        if (this.list.length >= 30) {
+          this.finished = true;
+        }
+      }, 1000)
+    },
+    /** 关注事件 */
+    handleFollow(){}
+  }
 }
 </script>
 

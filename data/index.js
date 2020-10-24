@@ -81,6 +81,52 @@ let workDetails = {
   }
 }
 
+let reading = [
+  {
+    imgList: [
+      "https://image.dapengjiaoyu.cn/2019-12-03/jy9s7vahwt/201912032156331.jpg?x-oss-process=style/400x400lb"
+    ],
+    title: '陪我跨年的恐怕只有学习和心中那一缕对优中那一缕习和心中那一缕对优',
+    content: '陪我跨年的恐怕只有学习陪我跨年的恐怕只有学习陪我跨年的恐怕只有学习和心中那一缕对优中那一缕',
+    label: '阅读·美术',
+    user: {
+      nickname: '望着大寿这'
+    },
+    submitTime: 1603432817132,
+    commentCount: 123,
+    praisesCount: 1000,
+  },
+  {
+    imgList: [
+      "http://image.dapengjiaoyu.cn/2019-12-04/jnxy33nlfr/jnxy33nlfr/1575442449111.jpg?x-oss-process=style/400x400lb",
+      "https://image.dapengjiaoyu.cn/2020/06/4622f1cbe684838ac19e19d36fe22da9.png?x-oss-process=style/400x400lb",
+      "https://image.dapengjiaoyu.cn/2019-12-03/jy9s7vahwt/201912032156331.jpg?x-oss-process=style/400x400lb"
+    ],
+    title: '陪我跨年的恐怕只有学习和心中那一',
+    content: '陪我跨年的恐怕只有学习陪我跨年的恐怕只有学习陪我跨年的恐怕只有学习和心中那一缕对优中那一缕',
+    label: '阅读·美术',
+    user: {
+      nickname: '望着大寿这'
+    },
+    submitTime: 1603432817132,
+    commentCount: 123,
+    praisesCount: 1000
+  },
+  {
+    imgList: [],
+    title: '陪我跨年的恐怕只有学习和心中那一缕对优中那一缕',
+    content: '陪我跨年的恐怕只有学习陪我跨年的恐怕只有学习陪我跨年的恐怕只有学习和心中那一缕对优中那一缕',
+    label: '阅读·美术',
+    user: {
+      nickname: '望着大寿这'
+    },
+    submitTime: 1603432817132,
+    commentCount: 123,
+    praisesCount: 1000
+  }
+]
+
 module.exports = {
-  workDetails
+  workDetails,
+  reading
 }

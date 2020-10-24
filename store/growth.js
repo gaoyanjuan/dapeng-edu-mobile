@@ -57,7 +57,11 @@ export default {
           page: params.page
         }
       })
-      commit('appendGrowthList',  res)
+      const pageInfo = {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+      commit('appendGrowthList',  { data: res.data, pageInfo })
       return res
     }
   },

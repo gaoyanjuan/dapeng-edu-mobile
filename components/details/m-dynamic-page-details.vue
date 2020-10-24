@@ -1,7 +1,7 @@
 <template>
   <div v-if="dynamic" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title"/>
+    <m-navbar :title="title" :attention="dynamic.isAttention"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">

@@ -6,6 +6,9 @@
         avatar-style="width:40px; height:40px;"
         :submit-time="modifiedTime"
         :userInfo="user"
+        :square-type="squareType"
+        :attention="isAttention"
+        v-on:onOpenMenus="onShowMenus"
       />
 
       <!-- content -->
@@ -49,17 +52,30 @@
       <!-- footer -->
       <div class="works__fot">
         <div class="fot__rh--wrap">
+          <!-- 评论 -->
           <div class="fot__rh__commernt--wrap">
             <img class="fot__comment" :src="comment" alt="comment" />
             <span class="fot__nums">{{ listItemData.commentCount | studentsCount }}</span>
           </div>
+          <!-- 喜欢 -->
           <div class="fot__rh__love--wrap">
             <img class="fot__love" :src="love" alt="love" />
             <span class="fot__nums">{{ listItemData.praisesCount | studentsCount }}</span>
           </div>
+          <!-- 收藏 -->
+          <div class="fot__rh__star--wrap">
+            <img class="fot__star" :src="star" alt="star" />
+          </div>
         </div>
       </div>
     </van-skeleton>
+
+    <!-- 菜单弹层 -->
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+      <nuxt-link tag="div" to="/copy-form" class="menus__popup__item">Ta抄作业</nuxt-link>
+      <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
+      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+    </van-popup>
   </div>
 </template>
 
@@ -160,12 +176,19 @@ export default {
     isRequirement: {
       type: Boolean,
       default: false
+    },
+    /**是否关注 */
+    isAttention: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     loading: true,
+    showMenusPopup:false,
     comment: require('@/assets/icons/posts/posts-comment.png'),
-    love: require('@/assets/icons/posts/posts-love.png')
+    love: require('@/assets/icons/posts/posts-love.png'),
+    star: require('@/assets/icons/posts/posts-star.png'),
   }),
   mounted() {
     setTimeout(() => {
@@ -173,6 +196,25 @@ export default {
     }, 500)
   },
   methods: {
+    /** 复制作业号 */
+    handleCopyJobNummer() {
+      /**
+       * vue-clipboard2 Usage
+       * https://www.npmjs.com/package/vue-clipboard2
+       */
+      const identCode = this.listItemData.identificationCode
+      this.$copyText(identCode).then(function (e) {
+        console.log(e.text)
+      }, function(e) {
+        console.log('Can not copy')
+      })
+      this.showMenusPopup = false
+    },
+    /** 打开/关闭菜单 */
+    onShowMenus() {
+      this.showMenusPopup = !this.showMenusPopup
+    },
+    /** 进入详情 */
     toDetail () {
       if (this.listItemData.tagsId) {
         this.$router.push({
@@ -297,7 +339,8 @@ export default {
 }
 
 .fot__rh--wrap .fot__comment,
-.fot__rh--wrap .fot__love {
+.fot__rh--wrap .fot__love,
+.fot__rh--wrap .fot__star {
   width: 24px;
   height: 24px;
 }
@@ -316,17 +359,51 @@ export default {
   align-items: center;
 }
 
-.fot__rh--wrap .fot__rh__commernt--wrap {
+.fot__rh--wrap .fot__rh__commernt--wrap,
+.fot__rh--wrap .fot__rh__love--wrap {
   margin-right: 17px;
   .fot-flex-style()
 }
 
-.fot__rh--wrap .fot__rh__love--wrap {
-  .fot-flex-style()
+.fot__rh--wrap .fot__rh__star--wrap {
+  width: 24px;
+  height: 24px;
 }
 
 .fot__rh--wrap .fot__nums {
   margin-left: 4px;
+}
+
+/** menus-popup */
+.m-works /deep/.van-popup {
+  width: 284px;
+  height: 138px;
+  overflow: hidden;
+}
+
+/deep/.van-popup--center.van-popup--round {
+  border-radius: 8px;
+}
+
+.van-popup .menus__popup__item {
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #18252C;
+  text-align: center;
+  border-bottom: 1px solid #F7F7F7;
+  cursor: pointer;
+}
+
+.van-popup .menus__popup__item:active {
+  background-color:#f2f3f5;
+}
+
+.van-popup .menus-popup__item:last-child{
+  border-bottom:none;
 }
 /** Style End */
 </style>

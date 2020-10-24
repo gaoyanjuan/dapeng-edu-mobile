@@ -46,7 +46,8 @@ export default {
   ],
 
   plugins: [
-    { src: '~/plugins/axios'},
+    { src: '~/plugins/axios' },
+    { src: '~/plugins/clipboard.js'},
     { src: '~/plugins/vue-inject.js'},
     { src: '~/plugins/root-font-size.js', ssr: false},
     { src: '~/plugins/amfe-flexble.js', ssr: false},
@@ -54,7 +55,8 @@ export default {
     { src: '~/plugins/touch-emulator.js', ssr: false},
     { src: '~/plugins/vant', ssr: true},
     { src: '~/plugins/head-image.js', ssr: true },
-    { src: '~/plugins/filters.js', ssr: true }
+    { src: '~/plugins/filters.js', ssr: true },
+    { src: '~/plugins/toast.js', ssr: true},
   ],
 
   components: true,

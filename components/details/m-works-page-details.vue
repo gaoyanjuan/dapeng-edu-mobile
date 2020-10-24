@@ -1,7 +1,7 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title"/>
+    <m-navbar :title="title" :attention="works.isAttention"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">

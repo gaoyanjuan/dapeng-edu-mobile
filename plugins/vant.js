@@ -19,7 +19,10 @@ import {
   Overlay,
   Swipe,
   SwipeItem,
-  Lazyload
+  Lazyload,
+  Field,
+  Grid,
+  GridItem
 } from 'vant'
 
 Vue.use(Button)
@@ -41,6 +44,9 @@ Vue.use(Button)
   .use(Overlay)
   .use(Swipe)
   .use(SwipeItem)
+  .use(Field)
+  .use(Grid)
+  .use(GridItem)
   .use(Lazyload, {
     // 懒加载默认图片
     loading: require('@/assets/icons/common/photos-bg.png')
