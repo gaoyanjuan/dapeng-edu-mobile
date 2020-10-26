@@ -3,7 +3,7 @@
     <!-- Swiper -->
     <m-swipe />
 
-    <section class="hotlists-wrap">
+    <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <m-posts
           v-for="(res, i) in list"
@@ -31,7 +31,7 @@
 <script>
 import { workDetails } from '@/data'
 export default {
-  name: 'M-Hotlists',
+  name: 'M-Recommend',
   data: () => ({
     list: [],
     loading: false,
@@ -57,7 +57,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.hotlists-wrap {
+.recommend-wrap {
   width: 100%;
   min-height: calc(100vh - 300px);
   padding-bottom: 65px;

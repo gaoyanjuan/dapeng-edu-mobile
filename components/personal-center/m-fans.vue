@@ -1,23 +1,34 @@
 <template>
-  <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-    <div v-for="(item, i) in list" :key="i" class="m-avatar">
-      
-      <!-- 左边用户信息 -->
-      <div class="avatar-left-side-wrap">
-        <img class="avatar" :src="avatar" alt="" />
-        <div class="avatar-info-wrap">
-          <span class="info-nickname"> {{ item.nickname }} </span>
-          <span class="info-signature"> {{ item.signature }} </span>
-          <span class="info-date"> {{ item.date | commonDate }} </span>
-        </div>
-      </div>
+  <div class="m-fans-wrap">
+    <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
+      <template v-if="list.length > 0">
+        <div v-for="(item, i) in list" :key="i" class="m-avatar">  
+          <!-- 左边用户信息 -->
+          <div class="avatar-left-side-wrap">
+            <img class="avatar" :src="avatar" alt="" />
+            <div class="avatar-info-wrap">
+              <span class="info-nickname"> {{ item.nickname }} </span>
+              <span class="info-signature"> {{ item.signature }} </span>
+              <span class="info-date"> {{ item.date | commonDate }} </span>
+            </div>
+          </div>
 
-      <!-- 右边关注 -->
-      <div class="avatar-right-side-wrap">
-        <img class="avatar-menus-follow" :src="item.type ? follow : unfollow" @click="handleFollow"/>
-      </div>
-    </div>
-  </van-list>
+          <!-- 右边关注 -->
+          <div class="avatar-right-side-wrap">
+            <img class="avatar-menus-follow" :src="item.type ? follow : unfollow" @click="handleFollow"/>
+          </div>
+        </div>
+      </template>
+
+      <!-- 无数据 -->
+      <template v-if="list.length === 0 && finished">
+        <div class="blank-no-data-wrap">
+          <img class="blank-icon" :src="blank" alt="" />
+          <span class="blank-txt">您还没有粉丝～</span>
+        </div>
+      </template>
+    </van-list>
+  </div>
 </template>
 
 <script>
@@ -27,9 +38,11 @@ export default {
     list:[],
     loading: false,
     finished: false,
+    finishedText:'没有更多了',
     avatar: require('@/assets/icons/common/avatar.png'),
     follow: require('@/assets/icons/posts/posts-follow.png'),
     unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
+    blank: require('@/assets/icons/blank/have-no-fans.png'),
   }),
   methods:{
     onLoad() {
@@ -46,7 +59,12 @@ export default {
         this.loading = false
         // 数据全部加载完成
         if (this.list.length >= 30) {
-          this.finished = true;
+          this.finished = true
+        }
+
+        if (this.list.length === 0) {
+          this.finished = true
+          this.finishedText = ''
         }
       }, 1000)
     },
@@ -57,6 +75,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+.m-fans-wrap {
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 44px);
+}
 
 .m-avatar {
   width: 100%;
@@ -124,5 +148,32 @@ export default {
   width: 59px;
   height: 28px;
   cursor: pointer;
+}
+
+/** 空数据 Style */
+
+.blank-no-data-wrap {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%,-40%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.blank-no-data-wrap .blank-icon {
+  width: 228px;
+  height: 129px;
+}
+
+.blank-no-data-wrap .blank-txt {
+  height: 20px;
+  font-size: 14px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: #8D8E8E;
+  line-height: 20px;
+  margin-top: 12px;
 }
 </style>

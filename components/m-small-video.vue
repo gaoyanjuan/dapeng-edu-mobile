@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'M-Hotlists',
+  name: 'M-Small-Video',
   data: () => ({}),
   methods:{}
 }
@@ -25,3 +25,4 @@ export default {
   background-color: #f8f8f8;
 }
 </style>
+
