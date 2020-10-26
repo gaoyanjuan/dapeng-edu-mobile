@@ -48,7 +48,7 @@
     <!-- 用户数据：“作业、作品导航等……” -->
     <div class="mine-nav-group-wrap">
       <van-grid square :border="false" clickable>
-        <van-grid-item v-for="(item ,i) in navList" :key="i">
+        <van-grid-item v-for="(item ,i) in navList" :key="i" @click="enterPublishPage(item)">
           <img class="nav-icon" :src="item.icon" alt="" />
           <span class="nav-txt"> {{ item.txt }} </span>
         </van-grid-item>
@@ -78,19 +78,26 @@ export default {
     navStar: require('@/assets/icons/mine/nav-star.png'),
     logo: require('@/assets/icons/mine/dapeng-logo.png'),
     navList:[
-      {txt:'作业',icon: require('@/assets/icons/mine/nav-homework.png')},
-      {txt:'作品',icon: require('@/assets/icons/mine/nav-works.png')},
-      {txt:'动态',icon: require('@/assets/icons/mine/nav-dynamic.png')},
-      {txt:'活动',icon: require('@/assets/icons/mine/nav-activity.png')},
-      {txt:'阅读',icon: require('@/assets/icons/mine/nav-reading.png')},
-      {txt:'视频',icon: require('@/assets/icons/mine/nav-video.png')},
-      {txt:'任务',icon: require('@/assets/icons/mine/nav-task.png')}
+      {txt:'作业',name:'homework',icon: require('@/assets/icons/mine/nav-homework.png')},
+      {txt:'作品',name:'works',icon: require('@/assets/icons/mine/nav-works.png')},
+      {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
+      {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
+      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
+      {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
+      {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
     ]
   }),
   methods:{
     /** 打开我的喜欢弹框 */
     openLovePopup (){
       this.lovePopup.show = true
+    },
+    /** 进入发布页面 */
+    enterPublishPage(params) {
+      this.$router.push({
+        path: '/personal-center/personal-publish',
+        query:{ type: params.name}
+      })
     }
   }
 }
