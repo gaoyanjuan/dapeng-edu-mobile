@@ -2,13 +2,13 @@
   <div class="app_wrap">
     <!--菜单导航 -->
     <van-tabs v-model="activeName" sticky @click="onMenusClick" @scroll="onScrollEvent">
-      <van-tab title="关注" name="follow" to="/">
-        <template v-if="$route.name === 'index'">
+      <van-tab title="关注" name="attention" to="/attention">
+        <template v-if="$route.name === 'index-attention'">
           <nuxt-child />
         </template>
       </van-tab>
-      <van-tab title="推荐" name="hotlists" to="/hotlists">
-        <template v-if="$route.name === 'index-hotlists'">
+      <van-tab title="推荐" name="recommend" to="/">
+        <template v-if="$route.name === 'index'">
           <nuxt-child />
         </template>
       </van-tab>
@@ -48,8 +48,8 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <van-tab title="小视频" name="short-video" to="/short-video">
-        <template v-if="$route.name === 'index-short-video'">
+      <van-tab title="小视频" name="small-video" to="/small-video">
+        <template v-if="$route.name === 'index-small-video'">
           <nuxt-child />
         </template>
       </van-tab>
@@ -98,9 +98,9 @@ export default {
      */
     const to = this.$route
     if (to.name === 'index') {
-      this.activeName = 'follow'
-    } else if (to.name === 'index-hotlists') {
-      this.activeName = 'hotlists'
+      this.activeName = 'recommend'
+    } else if (to.name === 'index-attention') {
+      this.activeName = 'attention'
     } else if (to.name === 'index-homework') {
       this.activeName = 'homework'
     } else if (to.name === 'index-growth') {
@@ -113,8 +113,8 @@ export default {
       this.activeName = 'reading'
     } else if (to.name === 'index-video') {
       this.activeName = 'video'
-    } else if (to.name === 'index-short-video') {
-      this.activeName = 'short-video'
+    } else if (to.name === 'index-small-video') {
+      this.activeName = 'small-video'
     }
 
     /***

@@ -14,15 +14,15 @@
 
     <!-- 用户数据：“关注、粉丝、推荐、喜欢” -->
     <div class="mine-user-data-wrap">
-      <nuxt-link tag="div" class="data-item-column" to="/mine/fans?tab=followers">
+      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=attention'">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">关注</span>
       </nuxt-link>
-      <nuxt-link tag="div" class="data-item-column" to="/mine/fans?tab=fans">
+      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=fans'">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">粉丝</span>
       </nuxt-link>
-      <nuxt-link tag="div" class="data-item-column" to="/mine/recommend">
+      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=recommend'">
         <span class="data-item-column-nums">14</span>
         <span class="data-item-column-txt">推荐</span>
       </nuxt-link>
@@ -34,15 +34,15 @@
 
     <!-- 用户数据：“我的喜欢和收藏” -->
     <div class="mine-user-remark-wrap">
-      <div class="user-remark-left-side">
+      <nuxt-link tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
         <img class="user-remark-icon" :src="navLike" alt="" />
         <span class="user-remark-txt">我的喜欢</span>
-      </div>
+      </nuxt-link>
 
-      <div class="user-remark-right-side">
+      <nuxt-link tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
         <img class="user-remark-icon" :src="navStar" alt="" />
         <span class="user-remark-txt">我的收藏</span>
-      </div>
+      </nuxt-link>
     </div>
 
     <!-- 用户数据：“作业、作品导航等……” -->
@@ -72,6 +72,7 @@ export default {
   name:'Mine',
   data: ()=> ({
     lovePopup: { show: false },
+    userRoute:'/personal-center/personal-user',
     avatar:require('@/assets/icons/common/avatar.png'),
     navLike: require('@/assets/icons/mine/nav-like.png'),
     navStar: require('@/assets/icons/mine/nav-star.png'),

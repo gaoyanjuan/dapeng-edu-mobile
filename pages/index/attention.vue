@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-hotlists />
+    <m-follow />
   </div>
 </template>
 

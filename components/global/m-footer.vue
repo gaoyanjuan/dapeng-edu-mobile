@@ -21,7 +21,7 @@
         <img :src="props.active ? activities.active : activities.inactive" />
       </template>
     </van-tabbar-item>
-    <van-tabbar-item name="mine" to="/mine">
+    <van-tabbar-item name="personal-center" to="/personal-center">
       <span>我的</span>
       <template #icon="props">
         <img :src="props.active ? mine.active : mine.inactive" />
@@ -67,8 +67,8 @@ export default {
       this.active = 'home'
     } else if (to.name === 'activities') {
       this.active = 'activities'
-    } else if (to.name === 'mine') {
-      this.active = 'mine'
+    } else if (to.name === 'personal-center') {
+      this.active = 'personal-center'
     }
   },
   methods:{
