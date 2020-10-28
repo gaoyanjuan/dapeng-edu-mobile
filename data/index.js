@@ -126,7 +126,17 @@ let reading = [
   }
 ]
 
+let smallVideo = [
+  {imgUrl: "https://testimage.dapengjiaoyu.cn/2020-10-16/k3xrmn2yoo/k3xrmn2yoo/1602832123996.jpg?x-oss-process=style/400x400lb"},
+  {imgUrl: "https://testimage.dapengjiaoyu.cn/2020-10-12/kfkrc2lxpr/kfkrc2lxpr/1602470457362.jpg?x-oss-process=style/400x400lb"},
+  {imgUrl: "https://image.dapengjiaoyu.cn/2019/12/542de1c27dce29e6b340f31a13310bb4.png?x-oss-process=style/400x400lb"},
+  {imgUrl: "https://testimage.dapengjiaoyu.cn/2020-10-16/k3xrmn2yoo/k3xrmn2yoo/1602832124216.jpg?x-oss-process=style/400x400lb"},
+  {imgUrl: "https://testimage.dapengjiaoyu.cn/2020-10-16/k3xrmn2yoo/k3xrmn2yoo/1602832124356.jpg?x-oss-process=style/400x400lb"},
+  {imgUrl: "https://image.dapengjiaoyu.cn/2019/12/4100bd1d264a6dc306579547d8d48f02.png?x-oss-process=style/400x400lb"},
+]
+
 module.exports = {
   workDetails,
-  reading
+  reading,
+  smallVideo
 }

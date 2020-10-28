@@ -21,7 +21,6 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/homework-page-details',
     blank: require('@/assets/icons/blank/have-no-homework.png')
   }),
   methods:{

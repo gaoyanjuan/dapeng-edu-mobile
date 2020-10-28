@@ -31,6 +31,13 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {
+        hid: 'player',
+        type: 'text/javascript',
+        src: '//player.polyv.net/script/player.js'
+      }
     ]
   },
 
@@ -56,7 +63,7 @@ export default {
     { src: '~/plugins/vant', ssr: true},
     { src: '~/plugins/head-image.js', ssr: true },
     { src: '~/plugins/filters.js', ssr: true },
-    { src: '~/plugins/toast.js', ssr: true},
+    { src: '~/plugins/toast.js', ssr: true },
   ],
 
   components: true,

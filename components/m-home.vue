@@ -16,7 +16,7 @@
         <template #title>
           <div class="tab-drop-menus-wrap">
             <span>{{dropMenusName}}</span>
-            <img class="tab-arrow" v-if="activeName === 'homework'" :src="showDownMenu ? tabUp : tabDown" @click.stop="openDropdownMenu" />
+            <img class="tab-arrow" v-if="activeName === 'homework'" :src="showHomeworkMenu ? tabUp : tabDown" @click.stop="openHomeworkMenu" />
           </div>
         </template>
         <template v-if="$route.name === 'index-homework'">
@@ -48,21 +48,46 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <van-tab title="小视频" name="small-video" to="/small-video">
+      <van-tab title="小视频" name="small-video">
+        <template #title>
+          <div class="tab-drop-menus-wrap">
+            <span>小视频</span>
+            <img class="tab-arrow" v-if="activeName === 'small-video'" :src="showVideoMenu ? tabUp : tabDown" @click.stop="openVideoMenu" />
+          </div>
+        </template>
         <template v-if="$route.name === 'index-small-video'">
+          <nuxt-child />
+        </template>
+      </van-tab>
+      <van-tab title="兼职任务" name="part-time-task" to="/part-time-task">
+        <template v-if="$route.name === 'index-part-time-task'">
           <nuxt-child />
         </template>
       </van-tab>
     </van-tabs>
 
-    <!-- 下拉菜单筛选 -->
-    <div v-show="showDownMenu">
-      <div class="tab-drop-down-menus" ref="downMenus" :style="scrollTop">
+    <!-- 作业栏目-下拉菜单筛选 -->
+    <div v-show="showHomeworkMenu">
+      <div class="tab-drop-down-menus" :style="scrollTop">
         <div 
-          v-for="item in downMenuOptions"
+          v-for="item in homeworkDownMenus"
           :key="item.value"
-          :class="dropMenuValue === item.value ? 'menus-item-active' : 'menus-item'"
-          @click.stop="onChangeDropMenus(item)"
+          :class="homeworkMenuValue === item.value ? 'menus-item-active' : 'menus-item'"
+          @click.stop="onChangeHomeworkMenus(item)"
+        >
+          {{item.text}}
+        </div>
+      </div>
+    </div>
+
+    <!-- 小视频栏目-下拉菜单筛选 -->
+    <div v-show="showVideoMenu">
+      <div class="tab-drop-down-menus" :style="scrollTop">
+        <div 
+          v-for="item in videoDownMenus"
+          :key="item.value"
+          :class="videoMenuValue === item.value ? 'menus-item-active' : 'menus-item'"
+          @click.stop="onChangeVideoMenus(item)"
         >
           {{item.text}}
         </div>
@@ -70,7 +95,11 @@
     </div>
 
     <!-- 遮罩弹层 -->
-    <van-overlay :show="showDownMenu" @click="showDownMenu = false" z-index='11'/>
+    <van-overlay
+      :show="showHomeworkMenu || showVideoMenu"
+      @click="showHomeworkMenu = false;showVideoMenu = false"
+      z-index='11'
+    />
   </div>
 </template>
 
@@ -78,16 +107,24 @@
 export default {
   name:'M-Home',
   data: () => ({
-    showDownMenu: false,
+    activeName: 'recommend',
     scrollTop: 'top:88px;',
-    activeName: 'follow',
+    showHomeworkMenu: false,
+    showVideoMenu: false,
     dropMenusName: '作业',
-    dropMenuValue: '',
-    downMenuOptions: [
+    homeworkMenuValue: '',
+    videoMenuValue: '',
+    homeworkDownMenus: [
       { text: '全部', value: '' },
       { text: '体验课', value: 'TEST' },
       { text: '正式课', value: 'VIP' },
       { text: '亲子课', value: 'CHILD' },
+    ],
+    videoDownMenus: [
+      { text: '全部', value: '' },
+      { text: '作业', value: 'HOMEWORK' },
+      { text: '作品', value: 'WORKS' },
+      { text: '动态', value: 'DYNAMIC' },
     ],
     tabUp: require('@/assets/icons/navbar/nav-arrow-up.png'),
     tabDown: require('@/assets/icons/navbar/nav-arrow-down.png'),
@@ -115,6 +152,8 @@ export default {
       this.activeName = 'video'
     } else if (to.name === 'index-small-video') {
       this.activeName = 'small-video'
+    } else if (to.name === 'index-part-time-task') {
+      this.activeName = 'part-time-task'
     }
 
     /***
@@ -125,47 +164,81 @@ export default {
     }
   },
   methods:{
-    /** 打开下拉菜单 */
-    openDropdownMenu(){
-      this.showDownMenu = !this.showDownMenu
+    /** 打开作业下拉菜单 */
+    openHomeworkMenu(){
+      this.showHomeworkMenu = !this.showHomeworkMenu
+    },
+
+     /** 打开小视频下拉菜单 */
+    openVideoMenu(){
+      this.showVideoMenu = !this.showVideoMenu
     },
 
     /** 
      * 点击切换导航菜单 ；
-     * 导航按钮-作业比较特殊；
+     * 导航按钮-作业和小视频比较特殊；
      * HTML结构未设置路由跳转；
      * 而是转为this.$router.replace；
      * 这样做是避免路由双执行的报错；
-     * 另外，作业下还有按钮筛选；
+     * 另外，作业和小视频下还有按钮筛选；
      * 也是为了参数缓存；
     */
     onMenusClick(name, title) {
-      if(name === 'homework') {
-        if(this.$route.name === 'index-homework') {
-          this.showDownMenu = !this.showDownMenu
+      
+      if(name === 'small-video') {
+
+        if(this.$route.name === 'index-small-video') {
+          this.showVideoMenu = !this.showVideoMenu
           return
         }
+
+        this.$router.replace({
+          path: '/small-video',
+          query: {
+            ...this.$route.query,
+            courseType: this.videoMenuValue
+          }
+        })
+      }
+
+      if(name === 'homework') {
+
+        if(this.$route.name === 'index-homework') {
+          this.showHomeworkMenu = !this.showHomeworkMenu
+          return
+        }
+
         this.$router.replace({
           path: '/homework',
           query: {
             ...this.$route.query,
-            courseType: this.dropMenuValue
+            courseType: this.homeworkMenuValue
           }
         })
       }
-      if(name !== 'homework') {
-        this.showDownMenu = false
+
+      if(name !== 'homework' || name !== 'small-video') {
+        this.showHomeworkMenu = false
+        this.showVideoMenu = false
       }
     },
 
-    /** 监听切换下拉菜单事件 */
-    onChangeDropMenus(params) {
+    /** 监听作业切换下拉菜单事件 */
+    onChangeHomeworkMenus(params) {
       this.dropMenusName = params.text
       if(params.text === '全部') {
         this.dropMenusName = '作业'
       }
-      this.dropMenuValue = params.value
-      this.showDownMenu = !this.showDownMenu
+      this.homeworkMenuValue = params.value
+      this.showHomeworkMenu = !this.showHomeworkMenu
+      if(this.$route.query.courseType === params.value) return
+      this.$router.replace({ query: { ...this.$route.query, courseType: params.value } })
+    },
+
+    /** 监听小视频切换下拉菜单事件 */
+    onChangeVideoMenus(params) {
+      this.videoMenuValue = params.value
+      this.showVideoMenu = !this.showVideoMenu
       if(this.$route.query.courseType === params.value) return
       this.$router.replace({ query: { ...this.$route.query, courseType: params.value } })
     },
@@ -181,16 +254,26 @@ export default {
 
     /***下拉菜单选择定位 */
     setDownMenusPosition(to) {
-      this.downMenuOptions.forEach(element => {
-        if (element.value === to.query.courseType) {
-          this.dropMenuValue = element.value
-          if(element.text === '全部') {
-            this.dropMenusName = '作业'
-          } else {
-            this.dropMenusName = element.text
+      if(to.name === 'index-small-video') {
+        this.videoDownMenus.forEach(element => {
+          if (element.value === to.query.courseType) {
+            this.videoMenuValue = element.value
           }
-        }
-      })
+        })
+      }
+
+      if(to.name === 'index-homework') {
+        this.homeworkDownMenus.forEach(element => {
+          if (element.value === to.query.courseType) {
+            this.homeworkMenuValue = element.value
+            if(element.text === '全部') {
+              this.dropMenusName = '作业'
+            } else {
+              this.dropMenusName = element.text
+            }
+          }
+        })
+      }
     },
   }
 }
