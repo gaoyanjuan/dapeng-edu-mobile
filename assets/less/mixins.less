@@ -2,6 +2,10 @@
   混合（Mixins）
 **/
 
+@regular:@dp-font-regular;
+@medium:@dp-font-medium;
+@semibold:@dp-font-semibold;
+
 @jut-cot:justify-content;
 
 .l-flex-row {
@@ -31,3 +35,24 @@
   align-items: flex-start; 
   @{jut-cot}: flex-start;
 }
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-with-two-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.text-ellipsis-with-three-line {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+

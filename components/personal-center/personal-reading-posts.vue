@@ -12,10 +12,9 @@ export default {
     list: [],
     loading: false,
     finished: false,
-    navRoute:'/details/homework-page-details',
   }),
   methods:{
-     onLoad() {
+    onLoad() {
       setTimeout(() => {
         for (let i = 0; i < reading.length; i++) {
           this.list.push(reading[i])

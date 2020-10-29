@@ -1,50 +1,53 @@
 <template>
   <div v-if="item" class="m-reading">
-    <div class="reading-posts-card">
 
-      <!-- Header Block -->
-      <template v-if="item.imgList.length === 1">
-        <nuxt-link tag="div" class="reading-header-row" to="/details/reading-page-details">
-          <img class="posts-cover" :src="item.imgList[0]" alt="" />
-          <div class="posts-right-side-wrap">
-            <span class="posts-title">{{ item.title }}</span>
-            <span class="posts-content">{{ item.content }}</span>
+    <van-skeleton title :row="6" :loading="loading">
+      <div class="reading-posts-card">
+
+        <!-- Header Block -->
+        <template v-if="item.imgList.length === 1">
+          <nuxt-link tag="div" class="reading-header-row" to="/details/reading-page-details">
+            <img class="posts-cover" :src="item.imgList[0]" alt="" />
+            <div class="posts-right-side-wrap">
+              <span class="posts-title">{{ item.title }}</span>
+              <span class="posts-content">{{ item.content }}</span>
+            </div>
+          </nuxt-link>
+        </template>
+
+        <template v-else>
+          <nuxt-link tag="div" class="reading-header-row-more" to="/details/reading-page-details">
+            <div class="posts-title"> {{ item.title }} </div>
+            <div class="posts-content"> {{ item.content }} </div>
+            <div class="posts-photos-wrap" v-if="item.imgList">
+              <img class="posts-photo" v-for="(ele, j) in item.imgList" :key="j" :src="ele" alt="" />
+            </div>
+          </nuxt-link>
+        </template>
+
+        <!-- Body Block -->
+        <div class="reading-body-row">
+          <div class="posts-label"> {{ item.label }} </div>
+          <div class="posts-author"> {{ item.user.nickname }} </div>
+          <div class="posts-date"> {{ item.submitTime | commonDate }} </div>
+        </div>
+
+        <!-- Footer Block -->
+        <div class="reading-footer-row">
+          <div class="posts-commernt-wrap">
+            <img class="posts-comment" :src="comment" alt="comment" />
+            <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
           </div>
-        </nuxt-link>
-      </template>
-
-      <template v-else>
-        <nuxt-link tag="div" class="reading-header-row-more" to="/details/reading-page-details">
-          <div class="posts-title"> {{ item.title }} </div>
-          <div class="posts-content"> {{ item.content }} </div>
-          <div class="posts-photos-wrap" v-if="item.imgList">
-            <img class="posts-photo" v-for="(ele, j) in item.imgList" :key="j" :src="ele" alt="" />
+          <div class="posts-love-wrap">
+            <img class="posts-love" :src="love" alt="love" />
+            <span class="posts-nums">{{ item.praisesCount | studentsCount }}</span>
           </div>
-        </nuxt-link>
-      </template>
-
-      <!-- Body Block -->
-      <div class="reading-body-row">
-        <div class="posts-label"> {{ item.label }} </div>
-        <div class="posts-author"> {{ item.user.nickname }} </div>
-        <div class="posts-date"> {{ item.submitTime | commonDate }} </div>
-      </div>
-
-      <!-- Footer Block -->
-      <div class="reading-footer-row">
-        <div class="posts-commernt-wrap">
-          <img class="posts-comment" :src="comment" alt="comment" />
-          <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
-        </div>
-        <div class="posts-love-wrap">
-          <img class="posts-love" :src="love" alt="love" />
-          <span class="posts-nums">{{ item.praisesCount | studentsCount }}</span>
-        </div>
-        <div class="posts-star-wrap">
-          <img class="posts-star" :src="star" alt="star" />
+          <div class="posts-star-wrap">
+            <img class="posts-star" :src="star" alt="star" />
+          </div>
         </div>
       </div>
-    </div>
+    </van-skeleton>
   </div>
 </template>
 
@@ -61,14 +64,24 @@ export default {
     }
   },
   data:() => ({
+    loading: true,
     comment: require('@/assets/icons/posts/posts-comment.png'),
     love: require('@/assets/icons/posts/posts-love.png'),
     star: require('@/assets/icons/posts/posts-star.png'),
-  })
+  }),
+  mounted(){
+    setTimeout(() => {
+      this.loading = false
+    }, 500)
+  }
 }
 </script>
 
 <style lang="less" scoped>
+
+.van-skeleton {
+  padding-top: 20px;
+}
 
 .m-reading:not(:first-child) {
   margin-top: 12px;
