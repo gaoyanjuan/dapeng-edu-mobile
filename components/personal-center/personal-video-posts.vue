@@ -1,6 +1,14 @@
 <template>
-  <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-    <m-video-posts v-for="(item, i) in list" :key="i" :item="item"/>
+  <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
+    <template v-if="list.length">
+      <m-video-posts v-for="(item, i) in list" :key="i" :item="item"/>
+    </template>
+    <template v-if="!list.length && finished">
+      <div class="posts-blank-wrap">
+        <img class="blank-icon" :src="blank" alt="" />
+        <span class="blank-txt">暂无内容～</span>
+      </div>
+    </template>
   </van-list>
 </template>
 
@@ -11,6 +19,8 @@ export default {
     list: [],
     loading: false,
     finished: false,
+    finishedText:'没有更多了',
+    blank: require('@/assets/icons/blank/have-no-video.png')
   }),
   methods:{
     onLoad() {
@@ -24,6 +34,10 @@ export default {
         if (this.list.length >= 5) {
           this.finished = true
         }
+        if (this.list.length === 0) {
+          this.finished = true
+          this.finishedText = ''
+        }
       }, 1000)
     }
   }
@@ -33,5 +47,28 @@ export default {
 <style lang="less" scoped>
 /deep/.video-posts-wrap:not(:first-child) {
   border-top: 12px solid #F7FAF8;
+}
+
+.posts-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.posts-blank-wrap .blank-icon {
+  width: 240px;
+  height: 126px;
+}
+
+.posts-blank-wrap .blank-txt {
+  margin-top: 12px;
+  font-size: 14px;
+  font-family: @semibold;
+  font-weight: 600;
+  color: #8D8E8E;
 }
 </style>
