@@ -12,11 +12,9 @@
     <template #left>
       <img class="navbar__arrow icon" :src="arrow" alt="arrow" />
     </template>
-    <template v-if="showRightText" #right>
-      <div :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">提交</div>
-    </template>
-    <template v-if="showRightMenu" #right>
-      <img class="navbar__menu icon" :src="navMenu" alt="menu" @click="onOpenMenus" />
+    <template #right>
+      <div v-if="showRightText" :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">提交</div>
+      <img v-if="showRightMenu" class="navbar__menu icon" :src="navMenu" alt="menu" @click="onOpenMenus" />
     </template>
   </van-nav-bar>
 </template>
