@@ -13,7 +13,12 @@
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
       <img class="avatar-menus-follow" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
+      <img class="avatar-menus-good" v-if="isGood" :src="goodImg" alt="优" />
+      <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" />
       <img v-if="squareType === '作业'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
+    </div>
+    <div class="doubt-content" v-if="doubtContentShow">
+      此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
     </div>
   </section>
 </template>
@@ -54,6 +59,11 @@ export default {
     follow: require('@/assets/icons/posts/posts-follow.png'),
     unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
     more: require('@/assets/icons/posts/posts-more.png'),
+    goodImg: require('@/assets/icons/posts/posts-good.png'),
+    doubtImg: require('@/assets/icons/posts/posts-doubt.png'),
+    doubtContentShow: false,
+    isDoubt: false,
+    isGood: false
   }),
   methods:{
     /**关注事件 */
@@ -62,6 +72,10 @@ export default {
     onOpenMenus() {
       this.$emit('onOpenMenus')
     },
+    // 打开标疑弹框
+    showDoubt() {
+      this.doubtContentShow = !this.doubtContentShow
+    }
   }
 }
 </script>
@@ -69,6 +83,7 @@ export default {
 <style lang="less" scoped>
 
 .m-avatar {
+  position: relative;
   width: 100%;
   height: 40px;
   .l-flex-row();
@@ -125,5 +140,31 @@ export default {
   height: 15px;
   margin-left: 12px;
   cursor: pointer;
+}
+.avatar-right-side-wrap .avatar-menus-good {
+  width: 38px;
+  height: 38px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.avatar-right-side-wrap .avatar-menus-doubt {
+  width: 44px;
+  height: 25px;
+  margin-left: 12px;
+  cursor: pointer;
+}
+.doubt-content {
+  position: absolute;
+  top: 36px;
+  right: 15px;
+  z-index: 10;
+  width: 214px;
+  height: 68px;
+  padding: 16px 10px 18px 10px;
+  background: #D8D8D8;
+  border-radius: 4px;
+  color: #36404A;
+  font-size: 12px;
+  
 }
 </style>

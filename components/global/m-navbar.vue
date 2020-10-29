@@ -15,6 +15,9 @@
     <template v-if="showRightText" #right>
       <div :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">提交</div>
     </template>
+    <template v-if="showRightMenu" #right>
+      <img class="navbar__menu icon" :src="navMenu" alt="menu" @click="onOpenMenus" />
+    </template>
   </van-nav-bar>
 </template>
 
@@ -41,10 +44,15 @@ export default {
     submitStatus: {
       type:Boolean,
       default:false,
+    },
+    showRightMenu: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     arrow: require('@/assets/icons/navbar/nav-arrow-back.png'),
+    navMenu: require('@/assets/icons/navbar/nav-menus.png')
   }),
   methods: {
     onClickLeft() {
@@ -52,6 +60,9 @@ export default {
     },
     onClickRight() {
       this.$emit('onClickRight')
+    },
+    onOpenMenus() {
+      this.$emit('onOpenMenus')
     },
   },
 }
@@ -64,6 +75,10 @@ export default {
 }
 
 .m-navbar .navbar__arrow {
+  width: 24px;
+  height: 24px;
+}
+.m-navbar .navbar__menu {
   width: 24px;
   height: 24px;
 }

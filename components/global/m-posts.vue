@@ -76,6 +76,12 @@
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
+    <!-- 菜单弹层 -->
+    <van-popup round overlay-class="menus__popup">
+      <nuxt-link v-if="squareType === '作业'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+      <div class="menus__popup__item" @click="deleteItem">删除</div>
+      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+    </van-popup>
   </div>
 </template>
 
@@ -233,6 +239,10 @@ export default {
           }
         })
       }
+    },
+    // 删除
+    deleteItem() {
+
     }
   }
 }

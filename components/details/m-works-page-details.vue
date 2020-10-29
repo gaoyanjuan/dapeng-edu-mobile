@@ -1,7 +1,7 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="works.isAttention"/>
+    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">
@@ -54,6 +54,11 @@
         </m-tab-item>
       </m-tabs>
     </div>
+    <!-- 菜单弹层 -->
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+      <div class="menus__popup__item" @click="deleteWork">删除</div>
+      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+    </van-popup>
   </div>
 </template>
 
@@ -64,7 +69,8 @@ export default {
   data:() => ({
     title:'作品详情',
     commentSelected: true,
-    likeSelected: false
+    likeSelected: false,
+    showMenusPopup: false
   }),
   computed:{
     ...mapGetters({
@@ -87,6 +93,16 @@ export default {
     //     })
     //   })
     // }
+  },
+  methods: {
+    /** 打开/关闭菜单 */
+    onShowMenus() {
+      this.showMenusPopup = !this.showMenusPopup
+    },
+    // 删除作品
+    deleteWork() {
+      
+    }
   }
 }
 </script>
@@ -156,5 +172,36 @@ export default {
   width: 100%;
   position: relative;
   margin-top: 12px;
+}
+/** menus-popup */
+.p-details /deep/.van-popup {
+  width: 284px;
+  height: 138px;
+  overflow: hidden;
+}
+
+/deep/.van-popup--center.van-popup--round {
+  border-radius: 8px;
+}
+
+.van-popup .menus__popup__item {
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #18252C;
+  text-align: center;
+  border-bottom: 1px solid #F7F7F7;
+  cursor: pointer;
+}
+
+.van-popup .menus__popup__item:active {
+  background-color:#f2f3f5;
+}
+
+.van-popup .menus-popup__item:last-child{
+  border-bottom:none;
 }
 </style>
