@@ -5,6 +5,7 @@
         <div v-for="(item, i) in list" :key="i" class="m-avatar">  
           <!-- 左边用户信息 -->
           <div class="avatar-left-side-wrap">
+            <div class="red-dot"></div>
             <img class="avatar" :src="avatar" alt="" />
             <div class="avatar-info-wrap">
               <span class="info-nickname"> {{ item.nickname }} </span>
@@ -92,6 +93,16 @@ export default {
 
 .m-avatar .avatar-left-side-wrap {
   .l-flex-row();
+}
+
+.avatar-left-side-wrap .red-dot {
+  width: 6px;
+  height: 6px;
+  margin-top: 16px;
+  margin-right: 5px;
+  background: #FE4646;
+  border-radius: 50%;
+  align-self: flex-start;
 }
 
 .avatar-left-side-wrap .avatar {
