@@ -6,7 +6,7 @@
     <!-- Main Block -->
     <div class="details-content-wrap">
       <!-- Gallery -->
-      <m-gallery :photos="dynamic.img" :photoInfo="dynamic.imgInfo"/>
+      <m-gallery :photos="dynamic.img" :photoInfo="dynamic.imgInfo" :item="dynamic"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->

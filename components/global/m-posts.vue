@@ -15,7 +15,7 @@
       <div class="works__cot">
         <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(content)"></div>
         <div v-if="imgInfo" class="work__row__photos--group">
-          <div @click="toDetail"><m-photos :photos="imgInfo" /></div>
+          <m-photos :photos="imgInfo" @openImagePreview="openImagePreview"></m-photos>
           <m-posts-remark v-if="recommendType" :label="recommendType" source="listPage"/>
         </div>
       </div>
@@ -53,35 +53,44 @@
       <div class="works__fot">
         <div class="fot__rh--wrap">
           <!-- 评论 -->
-          <div class="fot__rh__commernt--wrap">
+          <div class="fot__rh__commernt--wrap" @click="openComment">
             <img class="fot__comment" :src="comment" alt="comment" />
             <span class="fot__nums">{{ listItemData.commentCount | studentsCount }}</span>
           </div>
           <!-- 喜欢 -->
-          <div class="fot__rh__love--wrap">
+          <div class="fot__rh__love--wrap" @click="onLove">
             <img class="fot__love" :src="love" alt="love" />
             <span class="fot__nums">{{ listItemData.praisesCount | studentsCount }}</span>
           </div>
           <!-- 收藏 -->
-          <div class="fot__rh__star--wrap">
+          <div class="fot__rh__star--wrap" @click="onCollect">
             <img class="fot__star" :src="star" alt="star" />
           </div>
         </div>
       </div>
     </van-skeleton>
 
-    <!-- 菜单弹层 -->
+    <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
       <nuxt-link tag="div" to="/copy-form" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
-    <!-- 菜单弹层 -->
+
+    <!-- 顶部Navbar  菜单弹层 -->
     <van-popup round overlay-class="menus__popup">
       <nuxt-link v-if="squareType === '作业'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
+
+    <!--Image preview -->
+    <m-image-preview
+      :image-preview="imagePreview"
+      @openComment="openComment"
+      @onLove="onLove"
+      @onCollect="onCollect"
+    />
   </div>
 </template>
 
@@ -192,6 +201,14 @@ export default {
   data: () => ({
     loading: true,
     showMenusPopup:false,
+    // 图片预览
+    imagePreview: {
+      show: false,
+      images: [],
+      startPosition: 1,
+      commentNums:0,
+      loveNums:0
+    },
     comment: require('@/assets/icons/posts/posts-comment.png'),
     love: require('@/assets/icons/posts/posts-love.png'),
     star: require('@/assets/icons/posts/posts-star.png'),
@@ -216,9 +233,33 @@ export default {
       })
       this.showMenusPopup = false
     },
+    /**
+     * 打开图片预览
+     * @iamges:图片列表
+     * @index：当前图片索引
+     */
+    openImagePreview(index) {
+      this.imagePreview.images = this.imgInfo
+      this.imagePreview.startPosition = index
+      this.imagePreview.loveNums = this.listItemData.praisesCount
+      this.imagePreview.commentNums = this.listItemData.commentCount
+      this.imagePreview.show = true
+    },
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
+    },
+     // 评论操作
+    openComment() {
+      console.log('comment')
+    },
+    // 收藏
+    onCollect() {
+      console.log('collect')
+    },
+    //喜欢操作
+    onLove() {
+      console.log('love')
     },
     /** 进入详情 */
     toDetail () {

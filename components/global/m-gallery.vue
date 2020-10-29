@@ -16,6 +16,14 @@
         </div>
       </template>
     </van-swipe>
+
+    <!--Image preview -->
+    <m-image-preview
+      :image-preview="imagePreview"
+      @openComment="openComment"
+      @onLove="onLove"
+      @onCollect="onCollect"
+    />
   </div>
 </template>
 
@@ -31,27 +39,57 @@ export default {
     photoInfo:{
       type: Array,
       default:[]
+    },
+    /** 其它数据 */
+    item:{
+      type: Object,
+      default:{}
     }
   },
   data: () => ({
     current: 0,
     loop:false,
     photosHei:'height:300px;',
+    // 图片预览
+    imagePreview: {
+      show: false,
+      images: [],
+      startPosition: 1,
+      commentNums:0,
+      loveNums:0
+    },
   }),
   mounted() {
     this.calcuSwiperWrap()
   },
   methods: {
+    // 评论操作
+    openComment() {
+      console.log('comment')
+    },
+    // 收藏
+    onCollect() {
+      console.log('collect')
+    },
+    //喜欢操作
+    onLove() {
+      console.log('love')
+    },
     // 监听图片切换
     onPhotosChange(index) {
       this.current = index
     },
-    // 图片预览
+    /**
+     * 打开图片预览
+     * @iamges:图片列表
+     * @index：当前图片索引
+     */
     openImagePreview(index) {
-      this.ImagePreview({
-        images: this.handleFilterImage(),
-        startPosition: index,
-      })
+      this.imagePreview.images = this.handleFilterImage()
+      this.imagePreview.startPosition = index
+      this.imagePreview.loveNums = this.item.praisesCount
+      this.imagePreview.commentNums = this.item.commentCount
+      this.imagePreview.show = true
     },
     // 图片提取器
     handleFilterImage() {
