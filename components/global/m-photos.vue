@@ -2,7 +2,7 @@
   <div v-if="photos">
     <!-- Just one -->
     <div v-if="photos.length === 1" class="works-photos-wrap-one">
-      <img class="basic-pic photos-one" v-lazy="photos[0]" alt="" />
+      <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
     </div>
 
     <!-- Two photos -->
@@ -13,106 +13,107 @@
         v-lazy="item"
         :alt="item"
         :key="i"
+        @click="openImagePre(i)"
       />
     </div>
 
     <!-- There photos -->
     <div v-if="photos.length === 3" class="works-photos-wrap-three">
-      <img class="basic-pic photos-one" v-lazy="photos[0]" alt="" />
+      <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)" />
       <div class="photos-right-side-wrap">
-        <img class="basic-pic photos-two" v-lazy="photos[1]" alt="" />
-        <img class="basic-pic photos-three" v-lazy="photos[2]" alt="" />
+        <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)" />
+        <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
       </div>
     </div>
 
     <!-- Four photos -->
     <div v-if="photos.length === 4" class="works-photos-wrap-four">
-      <img class="basic-pic photos-one" v-lazy="photos[0]" alt=""/>
+      <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
       <div class="photos-bottom-side-wrap">
-        <img class="basic-pic photos-two" v-lazy="photos[1]" alt=""/>
-        <img class="basic-pic photos-three" v-lazy="photos[2]" alt="" />
-        <img class="basic-pic photos-four" v-lazy="photos[3]" alt=""/>
+        <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)"/>
+        <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
+        <img class="basic-pic photos-four" v-lazy="photos[3]" @click="openImagePre(3)"/>
       </div>
     </div>
 
     <!-- Five photos -->
     <div v-if="photos.length === 5" class="works-photos-wrap-five">
       <div class="photos-top-side-wrap">
-        <img class="basic-pic photos-one" v-lazy="photos[0]" alt="" />
-        <img class="basic-pic photos-two" v-lazy="photos[1]" alt="" />
+        <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
+        <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)"/>
       </div>
       <div class="photos-bottom-side-wrap">
-        <img class="basic-pic photos-three" v-lazy="photos[2]" alt=""/>
-        <img class="basic-pic photos-four" v-lazy="photos[3]" alt="" />
-        <img class="basic-pic photos-five" v-lazy="photos[4]" alt="" />
+        <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
+        <img class="basic-pic photos-four" v-lazy="photos[3]" @click="openImagePre(3)"/>
+        <img class="basic-pic photos-five" v-lazy="photos[4]" @click="openImagePre(4)"/>
       </div>
     </div>
 
     <!-- Six photos -->
     <div v-if="photos.length === 6" class="works-photos-wrap-six">
       <div class="photos-top-side-wrap">
-        <img class="basic-pic photos-one" v-lazy="photos[0]" alt=""/>
+        <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
         <div class="photos-right-side-wrap">
-          <img class="basic-pic photos-two" v-lazy="photos[1]" alt=""/>
-          <img class="basic-pic photos-three" v-lazy="photos[2]" alt=""/>
+          <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)"/>
+          <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
         </div>
       </div>
       <div class="photos-bottom-side-wrap">
-        <img class="basic-pic photos-four" v-lazy="photos[3]" alt=""/>
-        <img class="basic-pic photos-five" v-lazy="photos[4]" alt="" />
-        <img class="basic-pic photos-six" v-lazy="photos[5]" alt="" />
+        <img class="basic-pic photos-four" v-lazy="photos[3]" @click="openImagePre(3)"/>
+        <img class="basic-pic photos-five" v-lazy="photos[4]" @click="openImagePre(4)"/>
+        <img class="basic-pic photos-six" v-lazy="photos[5]" @click="openImagePre(5)"/>
       </div>
     </div>
 
     <!-- Seven photos -->
     <div v-if="photos.length === 7" class="works-photos-wrap-seven">
-      <img class="basic-pic photos-one" v-lazy="photos[0]" alt=""/>
+      <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
       <div class="photos-middle-side-wrap">
-        <img class="basic-pic photos-two" v-lazy="photos[1]" alt=""/>
-        <img class="basic-pic photos-three" v-lazy="photos[2]" alt=""/>
-        <img class="basic-pic photos-four" v-lazy="photos[3]" alt=""/>
+        <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)"/>
+        <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
+        <img class="basic-pic photos-four" v-lazy="photos[3]" @click="openImagePre(3)"/>
       </div>
       <div class="photos-bottom-side-wrap">
-        <img class="basic-pic photos-five" v-lazy="photos[4]" alt="" />
-        <img class="basic-pic photos-six" v-lazy="photos[5]" alt=""/>
-        <img class="basic-pic photos-seven" v-lazy="photos[6]" alt="" />
+        <img class="basic-pic photos-five" v-lazy="photos[4]" @click="openImagePre(4)"/>
+        <img class="basic-pic photos-six" v-lazy="photos[5]" @click="openImagePre(5)"/>
+        <img class="basic-pic photos-seven" v-lazy="photos[6]" @click="openImagePre(6)"/>
       </div>
     </div>
 
     <!-- Eight photos -->
     <div v-if="photos.length === 8" class="works-photos-wrap-eight">
       <div class="photos-top-side-wrap">
-        <img class="basic-pic photos-one" v-lazy="photos[0]" alt=""/>
-        <img class="basic-pic photos-two" v-lazy="photos[1]" alt=""/>
+        <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
+        <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)"/>
       </div>
       <div class="photos-middle-side-wrap">
-        <img class="basic-pic photos-three" v-lazy="photos[2]" alt="" />
-        <img class="basic-pic photos-four" v-lazy="photos[3]" alt=""/>
-        <img class="basic-pic photos-five" v-lazy="photos[4]" alt=""/>
+        <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
+        <img class="basic-pic photos-four" v-lazy="photos[3]" @click="openImagePre(3)"/>
+        <img class="basic-pic photos-five" v-lazy="photos[4]" @click="openImagePre(4)"/>
       </div>
       <div class="photos-bottom-side-wrap">
-        <img class="basic-pic photos-six" v-lazy="photos[5]" alt="" />
-        <img class="basic-pic photos-seven" v-lazy="photos[6]" alt="" />
-        <img class="basic-pic photos-eight" v-lazy="photos[7]" alt="" />
+        <img class="basic-pic photos-six" v-lazy="photos[5]" @click="openImagePre(5)"/>
+        <img class="basic-pic photos-seven" v-lazy="photos[6]" @click="openImagePre(6)"/>
+        <img class="basic-pic photos-eight" v-lazy="photos[7]" @click="openImagePre(7)"/>
       </div>
     </div>
 
     <!-- Nine photos -->
     <div v-if="photos.length === 9" class="works-photos-wrap-nine">
       <div class="photos-top-side-wrap">
-        <img class="basic-pic photos-one" v-lazy="photos[0]" alt="" />
-        <img class="basic-pic photos-two" v-lazy="photos[1]" alt="" />
-        <img class="basic-pic photos-three" v-lazy="photos[2]" alt="" />
+        <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>
+        <img class="basic-pic photos-two" v-lazy="photos[1]" @click="openImagePre(1)"/>
+        <img class="basic-pic photos-three" v-lazy="photos[2]" @click="openImagePre(2)"/>
       </div>
       <div class="photos-middle-side-wrap">
-        <img class="basic-pic photos-four" v-lazy="photos[3]" alt="" />
-        <img class="basic-pic photos-five" v-lazy="photos[4]" alt="" />
-        <img class="basic-pic photos-six" v-lazy="photos[5]" alt="" />
+        <img class="basic-pic photos-four" v-lazy="photos[3]" @click="openImagePre(3)"/>
+        <img class="basic-pic photos-five" v-lazy="photos[4]" @click="openImagePre(4)"/>
+        <img class="basic-pic photos-six" v-lazy="photos[5]" @click="openImagePre(5)"/>
       </div>
       <div class="photos-bottom-side-wrap">
-        <img class="basic-pic photos-seven" v-lazy="photos[6]" alt="" />
-        <img class="basic-pic photos-eight" v-lazy="photos[7]" alt="" />
-        <img class="basic-pic photos-nine" v-lazy="photos[8]" alt="" />
+        <img class="basic-pic photos-seven" v-lazy="photos[6]" @click="openImagePre(6)"/>
+        <img class="basic-pic photos-eight" v-lazy="photos[7]" @click="openImagePre(7)"/>
+        <img class="basic-pic photos-nine" v-lazy="photos[8]" @click="openImagePre(8)"/>
       </div>
     </div>
   </div>
@@ -128,19 +129,8 @@ export default {
   },
   methods:{
     /** 图片预览 */
-    openImagePreview(i) {
-      this.ImagePreview({
-        images: this.handleFilterImage(),
-        startPosition: parseInt(i),
-      })
-    },
-    // 图片提取器
-    handleFilterImage() {
-      let gallery = []
-      this.photos.forEach(function(item){
-        gallery.push(item)
-      })
-      return gallery
+    openImagePre (index) {
+      this.$emit('openImagePreview', index)
     },
     // 返回图片样式类
     handleClassMethod(i){

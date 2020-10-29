@@ -6,7 +6,7 @@
     <!-- Main Block -->
     <div class="details-content-wrap">
       <!-- Gallery -->
-      <m-gallery :photos="growth.content.img" :photoInfo="growth.content.imgJson"/>
+      <m-gallery :photos="growth.img" :photoInfo="growth.imgJson" :item="growth"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -18,7 +18,7 @@
         
         <!-- Conetnt -->
         <div class="inner-content-txt">
-          <span class="txt" v-html="$options.filters.formatEmotions(growth.content.text)"></span>
+          <span class="txt" v-html="$options.filters.formatEmotions(growth.text)"></span>
         </div>
 
         <!-- classification -->
@@ -78,26 +78,13 @@ export default {
       this.commentSelected = false
     }
   },
-  mounted () {
-    // 详情页跳转定位
-    // if (this.$route.fullPath.includes('report')) {
-    //   this.$nextTick(() => {
-    //     const element = document.getElementById('report')
-    //     element.scrollIntoView({
-    //       behavior: 'auto'
-    //     })
-    //   })
-    // }
-  },
   methods: {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
     // 删除成长
-    deleteGrowth() {
-      
-    }
+    deleteGrowth() {}
   }
 }
 </script>

@@ -4,7 +4,7 @@ module.exports = {
     DP_URL: 'https://pc-dev.dapengjiaoyu.cn',
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',
-    BASE_URL:'http://ag.kong.dapeng.lan/pc-move'
+    BASE_URL:'http://ag.kong.dapeng.lan/pcmove'
   },
   test: {
     MODE: 'test',

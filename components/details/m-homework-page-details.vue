@@ -6,7 +6,7 @@
     <!-- Main Block -->
     <div class="details-content-wrap">
       <!-- Gallery -->
-      <m-gallery :photos="homework.img" :photoInfo="homework.imgInfo"/>
+      <m-gallery :photos="homework.img" :photoInfo="homework.imgInfo" :item="homework"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -86,26 +86,13 @@ export default {
       this.commentSelected = false
     }
   },
-  mounted () {
-    // 详情页跳转定位
-    // if (this.$route.fullPath.includes('report')) {
-    //   this.$nextTick(() => {
-    //     const element = document.getElementById('report')
-    //     element.scrollIntoView({
-    //       behavior: 'auto'
-    //     })
-    //   })
-    // }
-  },
   methods: {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
     // 删除作业
-    deleteHomeWork() {
-      
-    }
+    deleteHomeWork() {}
   }
 }
 </script>
