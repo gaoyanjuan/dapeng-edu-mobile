@@ -53,7 +53,7 @@ export default {
         if (this.list.length >= 5) {
           this.finished = true
         }
-         if (this.list.length === 0) {
+        if (this.list.length === 0) {
           this.finished = true
           this.finishedText = ''
         }
