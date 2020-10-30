@@ -1,42 +1,69 @@
 <template>
-  <van-tabbar v-model="active" z-index="10" @change="onChangeTabs">
-    <van-tabbar-item name="home">
-      <a :href="mBaseUrl"><span class="tabbar-btn-text-active">返回官网</span></a>
-      <template #icon="props">
-        <a :href="mBaseUrl"><img :src="props.active ? home.active : home.active" /></a>
-      </template>
-    </van-tabbar-item>
-    <van-tabbar-item name="square" to="/">
-      <span>广场</span>
-      <template #icon="props">
-        <img :src="props.active ? square.active : square.inactive" />
-      </template>
-    </van-tabbar-item>
-    <div class="submit">
-      <img :src="upload.active" />
-    </div>
-    <van-tabbar-item name="activities" to="/activities">
-      <span>活动</span>
-      <template #icon="props">
-        <img :src="props.active ? activities.active : activities.inactive" />
-      </template>
-    </van-tabbar-item>
-    <van-tabbar-item name="personal-center" to="/personal-center">
-      <span>我的</span>
-      <template #icon="props">
-        <img :src="props.active ? mine.active : mine.inactive" />
-      </template>
-    </van-tabbar-item>
-  </van-tabbar>
+  <div>
+    <!-- 底部菜单 -->
+    <van-tabbar v-model="active" z-index="10" @change="onChangeTabs">
+      <van-tabbar-item name="home">
+        <a :href="mBaseUrl"><span class="tabbar-btn-text-active">返回官网</span></a>
+        <template #icon="props">
+          <a :href="mBaseUrl"><img :src="props.active ? home.active : home.active" /></a>
+        </template>
+      </van-tabbar-item>
+      <van-tabbar-item name="square" to="/">
+        <span>广场</span>
+        <template #icon="props">
+          <img :src="props.active ? square.active : square.inactive" />
+        </template>
+      </van-tabbar-item>
+      <div class="submit" @click="showPublishMenus">
+        <img :src="upload.active" />
+      </div>
+      <van-tabbar-item name="activities" to="/activities">
+        <span>活动</span>
+        <template #icon="props">
+          <img :src="props.active ? activities.active : activities.inactive" />
+        </template>
+      </van-tabbar-item>
+      <van-tabbar-item name="personal-center" to="/personal-center">
+        <span>我的</span>
+        <template #icon="props">
+          <img :src="props.active ? mine.active : mine.inactive" />
+        </template>
+      </van-tabbar-item>
+    </van-tabbar>
+
+    <!-- 底部 发布菜单 -->
+    <van-overlay :show="show" z-index="2005" :duration="0">
+      <div class="menus-wrapper" @click.stop>
+        <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
+        <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
+          <img class="menus-icon" :src="publish.trial" alt="trial"/>
+          <span class="menus-txt">体验课作业提交</span>
+        </div>
+        <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
+          <img class="menus-icon" :src="publish.formal" alt="formal"/>
+          <span class="menus-txt">正式课作业提交</span>
+        </div>
+        <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
+          <img class="menus-icon" :src="publish.works" alt="works"/>
+          <span class="menus-txt">作品发布</span>
+        </div>
+        <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
+          <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
+          <span class="menus-txt">生活动态</span>
+        </div>
+      </div>
+    </van-overlay>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'Footer',
   data: () => ({
+    show: false,
+    active: 'square',
     baseUrl: process.env.baseUrl,
     mBaseUrl : process.env.mBaseUrl,
-    active: 'square',
     home: {
       active: require('@/assets/icons/tabbar/bar-home.png'),
     },
@@ -55,6 +82,13 @@ export default {
       active: require('@/assets/icons/tabbar/bar-mine-active.png'),
       inactive: require('@/assets/icons/tabbar/bar-mine.png'),
     },
+    publish: {
+      close: require('@/assets/icons/tabbar/bar-close.png'),
+      trial: require('@/assets/icons/tabbar/bar-trial-lessons.png'),
+      formal: require('@/assets/icons/tabbar/bar-formal-lessons.png'),
+      works: require('@/assets/icons/tabbar/bar-pub-works.png'),
+      dynamic: require('@/assets/icons/tabbar/bar-pub-dynamic.png'),
+    }
   }),
   mounted() {
     /**
@@ -72,9 +106,11 @@ export default {
     }
   },
   methods:{
-    /***
-     * 返回官网暂不能点击，切换状态保持不变
-     */
+    /** 显示发布菜单 */
+    showPublishMenus() {
+      this.show = true
+    },
+    /***  * 返回官网暂不能点击，切换状态保持不变 */
     onChangeTabs(tab){
       if(tab === 'home'){
         this.active = this.$route.name
@@ -119,5 +155,86 @@ export default {
 .tabbar-btn-text-active {
   color: #0CB65B;
 }
+
+/deep/ .van-overlay {
+  width: 375px;
+  height: 100vh;
+  background: #FFFFFF;
+  opacity: 0.84;
+  filter: blur(0px);
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menus-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+
+  .menus-close {
+    width: 37px;
+    height: 37px;
+    position: absolute;
+    bottom: 8px;
+    z-index: 2006;
+    cursor: pointer;
+  }
+
+  .menus-cloumn {
+    width: 60px;
+    height: 102px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+  }
+
+  .cloumn-trial {
+    bottom: 227px;
+    left: 86px;
+    animation-duration: 0.8s;
+  }
+
+  .cloumn-formal {
+    bottom: 227px;
+    right: 86px;
+    animation-duration: 1.2s;
+  }
+
+  .cloumn-works {
+    bottom: 110px;
+    left: 86px;
+    animation-duration: 1s;
+  }
+
+  .cloumn-dynamic {
+    bottom: 110px;
+    right: 86px;
+    animation-duration: 1.4s;
+  }
+
+  .menus-icon,
+  .menus-icon {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+  }
+
+  .menus-txt {
+    width: 48px;
+    height: 34px;
+    font-size: 12px;
+    font-family: @regular;
+    font-weight: 400;
+    color: #1A3743;
+    line-height: 17px;
+    text-align: center;
+    margin-top: 8px;
+  }
+}
+
 
 </style>
