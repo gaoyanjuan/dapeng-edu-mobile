@@ -159,9 +159,6 @@ export default {
 /deep/ .van-overlay {
   width: 375px;
   height: 100vh;
-  background: #FFFFFF;
-  opacity: 0.84;
-  filter: blur(0px);
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
@@ -173,6 +170,9 @@ export default {
   justify-content: center;
   height: 100%;
   position: relative;
+  background: rgba(255, 255, 255, 0.84);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
 
   .menus-close {
     width: 37px;

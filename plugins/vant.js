@@ -12,7 +12,6 @@ import {
   Tab,
   Tabs,
   Uploader,
-  Area,
   ImagePreview,
   Toast,
   Sticky,
@@ -22,7 +21,8 @@ import {
   Lazyload,
   Field,
   Grid,
-  GridItem
+  GridItem,
+  Dialog
 } from 'vant'
 
 Vue.use(Button)
@@ -37,7 +37,6 @@ Vue.use(Button)
   .use(Tab)
   .use(Tabs)
   .use(Uploader)
-  .use(Area)
   .use(ImagePreview)
   .use(Toast)
   .use(Sticky)
@@ -47,6 +46,7 @@ Vue.use(Button)
   .use(Field)
   .use(Grid)
   .use(GridItem)
+  .use(Dialog)
   .use(Lazyload, {
     // 懒加载默认图片
     loading: require('@/assets/icons/common/photos-bg.png')
