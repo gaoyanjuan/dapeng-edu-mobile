@@ -1,6 +1,6 @@
 <template>
   <div class="app-submit-wrap">
-    <van-popup v-model="appPopParams.show" round class="app-pop">
+    <van-popup v-model="appPopParams.show" round class="app-pop" get-container=".app_wrap">
       <div class="app-img-wrap">
         <img :src="appImg" alt="APP" />
       </div>
@@ -52,8 +52,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.app-submit-wrap {
-  .app-pop {
+.app-pop {
     width: 260px;
     height: 260px;
     display: flex;
@@ -94,5 +93,4 @@ export default {
       color: #adadad;
     }
   }
-}
 </style>
