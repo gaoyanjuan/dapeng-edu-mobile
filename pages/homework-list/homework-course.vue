@@ -1,8 +1,8 @@
 <template>
   <div class="formal-homework-page">
-    <m-navbar title="提交正式课作业" />
+    <m-navbar :title="navTitle" />
     <div class="content-wrap">
-      <section class="college-wrap">
+      <section v-if="courseType === 'VIP'" class="college-wrap">
         <div
           :class="
             index === collegeIndex
@@ -11,7 +11,7 @@
           "
           v-for="(item, index) in workCollegesGetters"
           :key="index"
-          @click="collegeChange(index)"
+          @click="collegeChange(index, item)"
         >
           {{ item.name }}
         </div>
@@ -25,12 +25,26 @@
             @load="onLoad"
           >
             <template v-if="list.length">
-              <homework-course v-for="(item, index) in list" :key="index"></homework-course>
+              <nuxt-link
+                tag="div"
+                :to="'/homework-list/homework-select?courseType=' + courseType"
+              >
+                <homework-course
+                  v-for="(item, index) in list"
+                  :key="index"
+                ></homework-course>
+              </nuxt-link>
             </template>
             <template v-if="!list.length && finished">
               <div class="homework-blank-wrap">
                 <img class="blank-img" :src="blank" alt="空白" />
-                <span class="blank-txt">该学院列表暂无课程～</span>
+                <span class="blank-txt">
+                  {{
+                    courseType === 'TEST'
+                      ? '暂无课程～'
+                      : '该学院列表暂无课程～'
+                  }}
+                </span>
               </div>
             </template>
           </van-list>
@@ -40,50 +54,61 @@
   </div>
 </template>
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex'
 export default {
-  name: "Formal-Homework",
-  layout: "navbar",
+  name: 'Formal-Homework',
+  layout: 'navbar',
   data() {
     return {
       collegeIndex: 0,
-      blank: require("@/assets/icons/blank/have-no-course.png"),
+      blank: require('@/assets/icons/blank/have-no-course.png'),
       list: [1],
       loading: false,
       finished: false,
-      finishedText: '没有更多了'
-    };
+      finishedText: '没有更多了',
+      courseType: 'TEST',
+      navTitle: '提交体验课作业'
+    }
   },
   async asyncData({ route, store, error }) {
     if (process.browser)
       return {
         isServiceload: false
-      };
+      }
     try {
-      if (store.getters["colleges/workCollegesGetters"].length === 1) {
-        await store.dispatch("colleges/appendColleges", {
-          collegeType: "SQUARE_WORK"
-        });
+      if (store.getters['colleges/workCollegesGetters'].length === 1) {
+        await store.dispatch('colleges/appendColleges', {
+          collegeType: 'SQUARE_WORK'
+        })
       }
       return {
         isServiceload: true
-      };
+      }
     } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message });
+      error({ statusCode: err.data.code, message: err.data.message })
     }
   },
   created() {
+    if (this.$route.query.courseType) {
+      this.courseType = this.$route.query.courseType
+    }
+    if (this.courseType === 'TEST') {
+      this.navTitle = '提交体验课作业'
+    } else {
+      this.navTitle = '提交正式课作业'
+    }
     if (process.browser && !this.isServiceload) {
-      if (this.$store.getters["colleges/workCollegesGetters"].length === 1) {
-        this.$store.dispatch("colleges/appendColleges", {
-          collegeType: "SQUARE_WORK"
-        });
+      if (this.$store.getters['colleges/workCollegesGetters'].length === 1) {
+        this.$store.dispatch('colleges/appendColleges', {
+          collegeType: 'SQUARE_WORK'
+        })
       }
     }
   },
   methods: {
-    collegeChange(index) {
-      this.collegeIndex = index;
+    collegeChange(index, item) {
+      this.collegeIndex = index
+      console.log(item)
     },
     onLoad() {
       setTimeout(() => {
@@ -104,9 +129,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters("colleges", ["workCollegesGetters"])
+    ...mapGetters('colleges', ['workCollegesGetters'])
   }
-};
+}
 </script>
 <style lang="less" scoped>
 .formal-homework-page {
@@ -142,6 +167,10 @@ export default {
       margin-top: 20px;
     }
     .homework-blank-wrap {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       display: flex;
       flex-direction: column;
       align-items: center;

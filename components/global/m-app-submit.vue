@@ -2,14 +2,14 @@
   <div class="app-submit-wrap">
     <van-popup v-model="appPopParams.show" round class="app-pop">
       <div class="app-img-wrap">
-        <img :src="appImg" alt="APP">
+        <img :src="appImg" alt="APP" />
       </div>
       <div class="app-tips">网页版暂不支持发布小视频</div>
       <div class="app-tips">同学可以前往APP端发布哟~</div>
       <div class="app-submit-button" @click="openAppEvent">去APP发布</div>
       <div class="app-cancel-button" @click="cancelToApp">取消</div>
     </van-popup>
-  </div>  
+  </div>
 </template>
 <script>
 import { appSource } from '@/utils/device-type'
@@ -17,7 +17,7 @@ export default {
   props: {
     appPopParams: {
       type: Object,
-      default: ()=>{
+      default: () => {
         show: false
       }
     }
@@ -31,7 +31,7 @@ export default {
     cancelToApp() {
       this.appPopParams.show = false
     },
-    openAppEvent(){
+    openAppEvent() {
       const device = appSource()
       if (device.type === 'ios') {
         location.href = 'https://enroll.dapengjiaoyu.com'
@@ -46,6 +46,7 @@ export default {
           location.href = 'https://enroll.dapengjiaoyu.com'
         }, 1500)
       }
+      this.appPopParams.show = false
     }
   }
 }
@@ -70,7 +71,7 @@ export default {
     .app-tips {
       font-size: 14px;
       font-weight: 600;
-      color: #363D35;
+      color: #363d35;
       line-height: 24px;
     }
     .app-submit-button {
@@ -84,12 +85,13 @@ export default {
       font-size: 14px;
       color: #fff;
       font-weight: 500;
-      background: url('~@/assets/icons/homework/app-button-homework.png') no-repeat center center;
+      background: url('~@/assets/icons/homework/app-button-homework.png')
+        no-repeat center center;
       background-size: 100%;
     }
     .app-cancel-button {
       font-size: 12px;
-      color: #ADADAD;
+      color: #adadad;
     }
   }
 }

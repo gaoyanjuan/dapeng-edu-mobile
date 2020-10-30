@@ -6,24 +6,26 @@
     <div class="course-info-wrap">
       <div class="course-title">
         <div class="video-homework-warp">
-          <img :src="videoHomework" alt="视频作业">
+          <img :src="videoHomework" alt="视频作业" />
         </div>
         <div class="course-name">影楼设计行业实战课影楼设计行业实战课</div>
       </div>
-      <div class="teach-time">授课时间：2020.06.08  10:00</div>
+      <div class="teach-time">授课时间：2020.06.08 10:00</div>
       <div class="teacher-name">
         授课老师：付付老师
       </div>
     </div>
     <div class="submit-button-group">
-      <div v-if="!submit" class="submit-button" @click="submitHomework">交作业</div>
+      <div v-if="!submit" class="submit-button" @click="submitHomework">
+        交作业
+      </div>
       <div v-else class="has-submit-button">
-        <img :src="hasSubmitImg" alt="">
+        <img :src="hasSubmitImg" alt="" />
       </div>
     </div>
     <!-- 去app发布弹窗 -->
     <m-app-submit :appPopParams="appPopParams"></m-app-submit>
-  </div>  
+  </div>
 </template>
 <script>
 export default {
@@ -49,7 +51,7 @@ export default {
 .course-chapter-wrap {
   display: flex;
   padding: 16px 0;
-  border-bottom: 1px solid #EEEEEE;
+  border-bottom: 1px solid #eeeeee;
   .course-img-wrap {
     width: 70px;
     height: 70px;
@@ -80,17 +82,17 @@ export default {
         color: #383640;
         font-weight: 600;
         margin-left: 3px;
-        .text-ellipsis()
+        .text-ellipsis();
       }
     }
     .teach-time {
       margin: 4px 0;
       font-size: 14px;
-      color: #75737E;
+      color: #75737e;
     }
     .teacher-name {
       font-size: 14px;
-      color: #75737E;
+      color: #75737e;
     }
   }
   .submit-button-group {
@@ -104,7 +106,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #0CB65B;
+      background: #0cb65b;
       border-radius: 4px;
       font-size: 12px;
       color: #fff;
