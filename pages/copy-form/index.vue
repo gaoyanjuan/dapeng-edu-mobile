@@ -33,11 +33,13 @@
           <van-uploader 
             v-model="fileList"
             :max-count="4"
+            :deletable="false"
             :max-size="2 * 1024 * 1024"
+            :preview-full-image="false"
             :after-read="onUploadAfterRead"
             :before-read="onUploadBeforeRead"
             @oversize="onOversize"
-            @delete="onDelete"
+            @click-preview="onClickPreview"
           >
             <div class="upload-area"></div>
           </van-uploader>
@@ -58,6 +60,9 @@
         <p>将第一时间在通知消息中反馈，或咨询大鹏客服QQ:706559568</p>
       </footer>
     </div>
+
+    <!-- 图片预览 -->
+    <m-upload-image-preview :image-preview="imagePreview" @onDelete="onDelete"/>
   </div>
 </template>
 
@@ -80,6 +85,12 @@ export default {
     totalImgSize: 0,
     // 上传上限
     maxImgLimit: 1024 * 1024 * 9,
+    // 图片预览
+    imagePreview: {
+      show: false,
+      images: [],
+      startPosition: 1,
+    },
   }),
   watch: {
     content(x, o) {
@@ -91,6 +102,7 @@ export default {
     }
   },
   methods:{
+
     /** 提交 */
     onSubmitHandle(){
       if (!this.submitStatus) return false
@@ -99,6 +111,7 @@ export default {
         this.$router.push('/')
       }, 2500)
     },
+
     /** 文件上传至服务器 */
     onUploadAfterRead(file) {
       const _this = this
@@ -117,6 +130,7 @@ export default {
         }, 1000)
       }
     },
+
     /** 上传前置处理 */
     onUploadBeforeRead(file) {
       // 图片类型校验
@@ -134,6 +148,7 @@ export default {
       }
       return true
     },
+
     /**
      * 监听上传文件大小
      * 自动过滤2M以上的图片
@@ -143,8 +158,32 @@ export default {
         console.log('请上传2M以内的图片')
       }
     },
+
+    /**
+   * 打开图片预览
+   * @iamges:图片列表
+   * @index：当前图片索引
+   */
+    onClickPreview(file,detail) {
+      this.imagePreview.images = this.pickImages()
+      this.imagePreview.startPosition = detail.index
+      this.imagePreview.show = true
+    },
+
+    // 图片提取器
+    pickImages() {
+      let gallery = []
+      this.fileList.forEach(function(item){
+        gallery.push(item.content)
+      })
+      return gallery
+    },
+    
     /** 删除文件预览时触发 */
-    onDelete() {},
+    onDelete(index) {
+      this.fileList.splice(index, 1)
+      this.imagePreview.show = false
+    },
   }
 }
 </script>
