@@ -58,7 +58,6 @@ export default {
         color: #383640;
         font-weight: 600;
         margin-left: 4px;
-        line-height: 12px;
         .text-ellipsis();
       }
     }
