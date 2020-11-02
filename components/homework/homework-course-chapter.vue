@@ -83,6 +83,7 @@ export default {
         color: #383640;
         font-weight: 600;
         margin-left: 3px;
+        font-family: @dp-font-medium;
         .text-ellipsis();
       }
     }
@@ -90,10 +91,12 @@ export default {
       margin: 4px 0;
       font-size: 14px;
       color: #75737e;
+      font-family: @dp-font-regular;
     }
     .teacher-name {
       font-size: 14px;
       color: #75737e;
+      font-family: @dp-font-regular;
     }
   }
   .submit-button-group {
@@ -111,6 +114,7 @@ export default {
       border-radius: 4px;
       font-size: 12px;
       color: #fff;
+      font-family: @dp-font-regular;
     }
     .has-submit-button {
       img {

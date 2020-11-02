@@ -155,6 +155,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      font-family: @dp-font-regular;
     }
     .college-item-active {
       background: #0cb65b;

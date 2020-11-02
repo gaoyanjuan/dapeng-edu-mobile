@@ -51,6 +51,7 @@ export default {
         font-size: 12px;
         font-weight: 500;
         color: #0cb65b;
+        font-family: @dp-font-medium;
       }
       .course-name {
         max-width: 160px;
@@ -58,6 +59,7 @@ export default {
         color: #383640;
         font-weight: 600;
         margin-left: 4px;
+        font-family: @dp-font-medium;
         .text-ellipsis();
       }
     }
@@ -66,10 +68,12 @@ export default {
       margin-bottom: 15px;
       font-size: 13px;
       color: #75737e;
+      font-family: @dp-font-regular;
     }
     .student-homework-num {
       font-size: 13px;
       color: #75737e;
+      font-family: @dp-font-regular;
       .success-num {
         color: #00b93b;
       }

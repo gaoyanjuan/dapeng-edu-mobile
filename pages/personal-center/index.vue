@@ -163,6 +163,7 @@ export default {
   & .not-login-wrap {
     font-size: 24px;
     color: #747C80;
+    font-family: @dp-font-regular;
   }
   & .user-code {
     max-width: 200px;
