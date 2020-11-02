@@ -4,11 +4,13 @@
     <!-- 顶部用户登录信息  -->
     <div class="mine-header-wrap">
       <div class="header-left-side">
-        <img class="header-avatar" :src="avatar" alt="avatar" />
+        <img v-if="isLogin" class="header-avatar" :src="avatar" alt="avatar" />
+        <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" />
       </div>
       <div class="header-right-side">
-        <span class="user-nickname">三班王晓丽</span>
-        <span class="user-code">学籍号：2020070388886</span>
+        <span v-if="isLogin" class="user-nickname">三班王晓丽</span>
+        <span v-else class="not-login-wrap">登陆/注册</span>
+        <span v-if="hasStudent" class="user-code">学籍号：2020070388886</span>
       </div>
     </div>
 
@@ -74,6 +76,7 @@ export default {
     lovePopup: { show: false },
     userRoute:'/personal-center/personal-user',
     avatar:require('@/assets/icons/common/avatar.png'),
+    notLoginAvatar: require('@/assets/icons/mine/not-login.png'),
     navLike: require('@/assets/icons/mine/nav-like.png'),
     navStar: require('@/assets/icons/mine/nav-star.png'),
     logo: require('@/assets/icons/mine/dapeng-logo.png'),
@@ -85,7 +88,9 @@ export default {
       {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
       {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
-    ]
+    ],
+    hasStudent: false,
+    isLogin: false
   }),
   methods:{
     /** 打开我的喜欢弹框 */
@@ -139,6 +144,7 @@ export default {
     object-fit: cover;
     border-radius: 50%;
   }
+
 }
 
 .mine-header-wrap .header-right-side {
@@ -154,7 +160,10 @@ export default {
     color: #36404A;
     line-height: 33px;
   }
-
+  & .not-login-wrap {
+    font-size: 24px;
+    color: #747C80;
+  }
   & .user-code {
     max-width: 200px;
     height: 20px;
