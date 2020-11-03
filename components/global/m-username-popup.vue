@@ -5,19 +5,12 @@
       <div class="popup-body-input">
         <input type="text" v-model.trim="username" @input="changeInput()" placeholder="请输入用户名" />
       </div>
-      <div :class="submitStatus ? 'popup-footer btn-active':'popup-footer btn'" @click="submit">提交</div>
+      <div :class="submitStatus ? 'popup-footer btn-active':'popup-footer btn'" @click.stop="onSubmit">提交</div>
     </div>
   </van-popup>
 </template>
 
 <script>
-/**
- * 
- * 使用方式
- * <!-- 完善用户名 -->
- * <m-username-popup :show-popup="usernamePop"/>
- * usernamePop:{ show: false },
- */
 export default {
   name:'Username-Popup',
   props:{
@@ -31,8 +24,32 @@ export default {
     submitStatus:false
   }),
   methods:{
-    submit() {
-      if(this.submitStatus) {}
+    onSubmit() {
+      if(this.submitStatus) {
+        let res = true
+
+        // 用户名是否已被占用
+        if(this.username === '昵称') {
+          this.$toast('用户名已被使用，换一个试试吧！')
+          res = false
+        }
+
+        // 不能以dp开头
+        let startLetters = (this.username.substring(0,2) === 'dp')
+        // 用户名需为2-12位中英文
+        let nameCount = (this.username.length < 2 || this.username.length > 12)
+        // 无特殊符号
+        let isSymbol = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>《》/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？ ]")
+        // 无数字
+        let isNums = new RegExp("[0-9]")
+        
+        if(startLetters || nameCount || isSymbol.test(this.username) || isNums.test(this.username)) {
+          this.$toast('用户名需为2-12位中、英文，不\n能包含数字或特殊符号，注意不要\n以dp开头哦~')
+          res = false
+        }
+
+        if(res) {this.$emit('submit')}
+      }
     },
     /** 监听Input  */
     changeInput() {

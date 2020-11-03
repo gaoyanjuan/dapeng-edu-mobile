@@ -70,8 +70,8 @@
     </div>
 
     <!-- Footer Button -->
-    <div class="requirement-btn-wrap" @click.stop="handlePublish">
-      <span class="publish">发布作业</span>
+    <div class="requirement-btn-wrap">
+      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" to="/submit?type=TEST" />
     </div>
   </div>
 </template>
@@ -86,6 +86,7 @@ export default {
       requirementList: [],
       loading: false,
       finished: false,
+      submit: require('@/assets/icons/common/requirement-submit.png')
     }
   },
   computed: {
@@ -113,8 +114,6 @@ export default {
         }
       })
     },
-    /** 发布作业 */
-    handlePublish() {}
   }
 }
 </script>
@@ -234,30 +233,15 @@ export default {
 
 .requirement-btn-wrap {
   position: fixed;
-  bottom: 26px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 148px;
-  height: 72px;
-  background-color: transparent;
-  background-image: url('~@/assets/icons/common/requirement-btn-bg.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  right: 21px;
+  bottom: 41px;
+  width: 46px;
+  height: 46px;
   cursor: pointer;
 }
 
 .requirement-btn-wrap .publish {
-  width: 64px;
-  height: 22px;
-  font-size: 16px;
-  font-family: @dp-font-semibold;
-  font-weight: 600;
-  color: #FFFFFF;
-  line-height: 22px;
-  position: relative;
-  top: -3px;
+  width: 46px;
+  height: 46px;
 }
 </style>
