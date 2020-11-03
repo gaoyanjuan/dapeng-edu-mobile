@@ -1,15 +1,15 @@
 <template>
   <div class="homework-select-page">
-    <m-navbar title="UI设计行业试学精品课" />
+    <m-navbar :title="navTitle" />
     <van-tabs
       v-model="active"
       sticky
-      :offset-top="44"
       @click="onTabsClick"
       animated
       v-if="courseType === 'VIP'"
       :swipe-threshold="3"
       :ellipsis="false"
+      offset-top="1.17rem"
     >
       <van-tab v-for="(item, index) in stageList" :key="index" >
         <template #title>
@@ -60,14 +60,16 @@ export default {
       finished: false,
       finishedText: '没有更多了',
       active: 0,
-      recommendImg: require('@/assets/icons/homework/video-homework.png'),
-      courseType: 'TEST'
+      recommendImg: require('@/assets/icons/homework/recommend-homework.png'),
+      courseType: 'TEST',
+      navTitle: ''
     }
   },
   created() {
     if (this.$route.query.courseType) {
       this.courseType = this.$route.query.courseType
     }
+    this.navTitle = '这里是动态标题'
   },
   methods: {
     onLoad() {
@@ -104,10 +106,10 @@ export default {
     }
     .recommend-image {
     position: absolute;
-    right: 5px;
+    right: 2px;
     top: 0px;
-    width: 28px;
-    height: 19px;
+    width: 36px;
+    height: 27px;
   }
   }
   /deep/.van-tabs {
@@ -135,6 +137,12 @@ export default {
     background: #0cb65b;
     border-radius: 2px;
     background-image: none;
+  }
+  /deep/.van-tabs__wrap {
+    height: 48px;
+  }
+  /deep/.van-tab {
+    padding-top: 8px;
   }
 }
 </style>
