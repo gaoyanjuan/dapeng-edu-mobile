@@ -208,6 +208,13 @@ export default {
   margin-top: 21px;
 }
 
+.complaint-desc-row .label::after {
+  content: '*';
+  color: #F7534F;
+  font-size: 20px;
+  margin-left: 4px;
+}
+
 .complaint-desc-row .rich-input {
   margin-top: 12px;
   padding-bottom: 12px;
