@@ -35,13 +35,13 @@
     <van-overlay :show="show" z-index="2005" :duration="0">
       <div class="menus-wrapper" @click.stop>
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
-        <nuxt-link tag="div" to="/homework-list/homework-course?courseType=TEST" >
+        <nuxt-link tag="div" to="/homework-list?courseType=TEST" >
           <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.trial" alt="trial"/>
             <span class="menus-txt">体验课作业提交</span>
           </div>
         </nuxt-link>
-        <nuxt-link tag="div" to="/homework-list/homework-course?courseType=VIP" >
+        <nuxt-link tag="div" to="/homework-list?courseType=VIP" >
           <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.formal" alt="formal"/>
             <span class="menus-txt">正式课作业提交</span>
