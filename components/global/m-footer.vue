@@ -36,25 +36,29 @@
       <div class="menus-wrapper" @click.stop>
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
         <nuxt-link tag="div" to="/homework-list/homework-course?courseType=TEST" >
-        <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
-          <img class="menus-icon" :src="publish.trial" alt="trial"/>
-          <span class="menus-txt">体验课作业提交</span>
-        </div>
+          <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
+            <img class="menus-icon" :src="publish.trial" alt="trial"/>
+            <span class="menus-txt">体验课作业提交</span>
+          </div>
         </nuxt-link>
         <nuxt-link tag="div" to="/homework-list/homework-course?courseType=VIP" >
-        <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
-          <img class="menus-icon" :src="publish.formal" alt="formal"/>
-          <span class="menus-txt">正式课作业提交</span>
-        </div>
+          <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
+            <img class="menus-icon" :src="publish.formal" alt="formal"/>
+            <span class="menus-txt">正式课作业提交</span>
+          </div>
         </nuxt-link>
-        <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
-          <img class="menus-icon" :src="publish.works" alt="works"/>
-          <span class="menus-txt">作品发布</span>
-        </div>
-        <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
-          <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
-          <span class="menus-txt">生活动态</span>
-        </div>
+        <nuxt-link tag="div" to="/submit?type=WORKS" >
+          <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
+            <img class="menus-icon" :src="publish.works" alt="works"/>
+            <span class="menus-txt">作品发布</span>
+          </div>
+        </nuxt-link>
+        <nuxt-link tag="div" to="/submit?type=LIFE" >
+          <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
+            <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
+            <span class="menus-txt">生活动态</span>
+          </div>
+        </nuxt-link>
       </div>
     </van-overlay>
   </div>

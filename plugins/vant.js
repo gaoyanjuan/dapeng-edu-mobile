@@ -53,3 +53,7 @@ Vue.use(Button)
   })
 
 Vue.prototype.ImagePreview = ImagePreview
+
+/** 重置Vant 配置 */
+
+Toast.setDefaultOptions({ position: 'bottom'})

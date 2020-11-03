@@ -13,7 +13,7 @@
       <img class="navbar__arrow icon" :src="arrow" alt="arrow" />
     </template>
     <template #right>
-      <div v-if="showRightText" :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">提交</div>
+      <div v-if="showRightText" :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">{{ rightText }}</div>
       <img v-if="showRightMenu" class="navbar__menu icon" :src="navMenu" alt="menu" @click="onOpenMenus" />
     </template>
   </van-nav-bar>
@@ -33,7 +33,7 @@ export default {
     },
     rightText: {
       type: String,
-      default: '',
+      default: '提交',
     },
     showRightText: {
       type:Boolean,
