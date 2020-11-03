@@ -72,6 +72,7 @@ export default {
       font-weight: 600;
       color: #363d35;
       line-height: 24px;
+      font-family: @dp-font-semibold;
     }
     .app-submit-button {
       margin-top: 8px;
@@ -87,10 +88,12 @@ export default {
       background: url('~@/assets/icons/homework/app-button-homework.png')
         no-repeat center center;
       background-size: 100%;
+      font-family: @dp-font-medium;
     }
     .app-cancel-button {
       font-size: 12px;
       color: #adadad;
+      font-family: @dp-font-regular;
     }
   }
 </style>
