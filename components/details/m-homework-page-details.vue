@@ -56,12 +56,25 @@
         </m-tab-item>
       </m-tabs>
     </div>
+
+    <!-- 底部评论框 -->
+    <div class="details-footer-comment-wrap">
+      <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
+      <img class="footer-icon-like" :src="like" alt="like" @click="onLikeEvent"/>
+      <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
+      <img class="footer-icon-collect" :src="collect" alt="collect" @click="onCollectEvent"/>
+    </div>
+
     <!-- 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
       <nuxt-link tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
       <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
+
+    <!-- 评论框弹层 -->
+    <m-comment-popup :comment="commentPop" @sendComment="sendComment"/>
+
   </div>
 </template>
 
@@ -73,7 +86,11 @@ export default {
     title:'作业详情',
     likeSelected: false,
     commentSelected: true,
-    showMenusPopup: false
+    showMenusPopup: false,
+    commentPop: { show: false },
+    comment: require('@/assets/icons/posts/posts-comment.png'),
+    like: require('@/assets/icons/posts/posts-love.png'),
+    collect: require('@/assets/icons/posts/posts-star.png'),
   }),
   computed:{
     ...mapGetters({
@@ -91,8 +108,23 @@ export default {
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
+
+    // 打开评论弹窗
+    openComment() {
+      this.commentPop.show = true
+    },
+
     // 删除作业
-    deleteHomeWork() {}
+    deleteHomeWork() {},
+
+    // 喜欢事件
+    onLikeEvent() { console.log('like') },
+
+    // 收藏事件
+    onCollectEvent() { console.log('collect') },
+
+    // 评论发送
+    sendComment() { console.log('发送成功') }
   }
 }
 </script>
@@ -110,7 +142,7 @@ export default {
 }
 
 .details-footer-wrap {
-  padding: 16px;
+  padding: 16px 16px 45px;
 }
 
 .details-inner-content-wrap {
@@ -123,7 +155,7 @@ export default {
 
 .inner-content-txt .txt {
   font-size: 16px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #18252C;
   line-height: 24px;
@@ -153,7 +185,7 @@ export default {
 
 .inner-content-class-wrap span {
   font-size: 12px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #465156;
 }
@@ -163,6 +195,57 @@ export default {
   position: relative;
   margin-top: 12px;
 }
+
+/** footer comment */
+.details-footer-comment-wrap {
+  width: 375px;
+  height: 41px;
+
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+
+  background-color: @dp-white;
+  background-image: url('~@/assets/icons/comment/footer-comment-bg.png');
+  background-repeat: no-repeat;
+  background-size: 375px 41px;
+  background-position: center;
+
+  .footer-icon-like,
+  .footer-icon-comment,
+  .footer-icon-collect {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+  
+  .footer-icon-like,
+  .footer-icon-comment {
+    margin-right: 20px;
+  }
+}
+
+.details-footer-comment-wrap .footer-input {
+  width: 215px;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 18px;
+  margin-right: 16px;
+  background: #F7F7F7;
+  border-radius: 18px;
+  font-size: 12px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #A6AEA9;
+  cursor: pointer;
+}
+
 /** menus-popup */
 .p-details /deep/.van-popup {
   width: 284px;
@@ -179,7 +262,7 @@ export default {
   height: 46px;
   line-height: 46px;
   font-size: 16px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #18252C;
   text-align: center;

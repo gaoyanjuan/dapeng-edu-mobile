@@ -18,7 +18,7 @@
         
         <!-- Conetnt -->
         <div class="inner-content-txt">
-          <span class="txt" v-html="$options.filters.formatEmotions(growth.text)"></span>
+          <span class="txt" v-html="$options.filters.formatEmotions(growth.content)"></span>
         </div>
 
         <!-- classification -->
