@@ -5,7 +5,7 @@
     </div>
     <div class="course-info-wrap">
       <div class="course-title">
-        <div class="video-homework-warp">
+        <div v-if="isVideo" class="video-homework-warp">
           <img :src="videoHomework" alt="视频作业" />
         </div>
         <div class="course-name">影楼设计行业实战课影楼设计行业实战课</div>
@@ -29,6 +29,12 @@
 </template>
 <script>
 export default {
+  props: {
+    isVideo: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       blank: require('@/assets/icons/square/video-posts-cover.png'),
@@ -42,7 +48,16 @@ export default {
   },
   methods: {
     submitHomework() {
-      this.appPopParams.show = true
+      if(this.isVideo) {
+        this.appPopParams.show = true
+        return false
+      }
+      this.$router.push({
+        path: '/requirement',
+        query: {
+          taskId: '88bbad60c07146c696a0b1ae0aa6f885'
+        }
+      })
     }
   }
 }
