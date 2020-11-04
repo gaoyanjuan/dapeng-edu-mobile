@@ -17,9 +17,14 @@
             :autosize="{ maxHeight: 138, minHeight: 138}" 
             type="textarea"
             maxlength="200"
-            show-word-limit
             placeholder="提供更多信息有助于投诉被快速处理"
           />
+        </div>
+        <!-- 字数限制 -->
+        <div class="show-word-limit">
+          <span :class="this.content.length >=200 ? 'warning-num':''">
+            {{ this.content.length }} 
+          </span>
         </div>
       </section>
 
@@ -54,10 +59,10 @@
         </div>
       </section>
 
-      <!-- 联系电话  -->
+      <!-- 底部说明文字  -->
       <footer class="footer-row">
-        <p>您的投诉将在7天内处理，请勿重复提交，处理结果</p> 
-        <p>将第一时间在通知消息中反馈，或咨询大鹏客服QQ:706559568</p>
+        <p>您的投诉将在7天内处理，请勿重复提交，</p> 
+        <p>处理结果将在第一时间在通知消息中反馈，或直接联系在线客服。</p>
       </footer>
     </div>
 
@@ -197,6 +202,9 @@ export default {
 }
 
 /*** 投诉描述 Style */
+.complaint-desc-row {
+  border-bottom: 1px solid #EBEFEA;
+}
 .complaint-desc-row .label {
   width: auto;
   height: 20px;
@@ -218,7 +226,6 @@ export default {
 .complaint-desc-row .rich-input {
   margin-top: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #EBEFEA;
 }
 
 .complaint-desc-row .rich-input {
@@ -257,7 +264,21 @@ export default {
     color: #18252C;
   }
 }
+.complaint-desc-row .show-word-limit {
+  width: 100%;
+  font-family: @regular;
+  font-weight: 400;
+  text-align: right;
+  margin-bottom: 12px;
+  & span {
+    font-size: 14px;
+    color: #D1D3D5;
+  }
 
+  & span.warning-num {
+    color: #F7534F;
+  }
+}
 /** 图片证据 */
 .photos-evidence-row .label-wrap{
   margin-top:18px;
@@ -370,4 +391,5 @@ export default {
   color: #A3A8AB;
   line-height: 16px;
 }
+
 </style>
