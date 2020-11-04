@@ -2,25 +2,25 @@
   <div class="p-copy-form">
     <!-- Navbar -->
     <m-navbar
-      :title="onCalcTitle()"
+      :title="navTitle"
       :show-right-text="true"
       :submit-status="submitStatus"
-      :right-text="onCalcRightText()"
+      :right-text="rightText"
       v-on:onClickRight="onSubmitConfirm"
     />
 
     <div class="container">
       <!-- 作业描述 -->
       <section class="homework-desc-row">
-        <div v-if="onCalcShowTitle()" class="title">作业标题·作业标题</div>
+        <div v-if="showTitle" class="title">作业标题·作业标题</div>
 
         <!-- 富文本 -->
         <div class="rich-input">
           <van-field v-model.trim="content"
             :autosize="autosize"
             type="textarea"
-            :maxlength="onCalcMaxCount()"
-            :placeholder="onCalcPlaceholder()"
+            :maxlength="maxCount"
+            :placeholder="placeholder"
             @input="onChangeInput"
           />
         </div>
@@ -137,7 +137,7 @@ export default {
       startPosition: 1,
     },
     // 默认选择的学院
-    collegeIndex:0,
+    collegeIndex: null,
     // 学院列表
     collegeList:[
       {name:'设计'},{name:'美术'},{name:'国画'},{name:'书法'},
@@ -147,18 +147,50 @@ export default {
     label:require('@/assets/icons/submit/college-label.png'),
   }),
   watch: {
-    content(x, o) {
-      if (x.length !== 0) {
-        this.submitStatus = this.fileList.length !== 0
-      } else {
-        this.submitStatus = false
+    /**
+     * 【作品、动态、体验课、正式课发布】
+     * 四个发布对应四个提交规则，以下监听，分别针对不同的规则
+     * ***************************************************
+     * 作品发布：文字选填、学院和图片必选，针对操作，监听底部唤起显示与隐藏
+     * 动态发布：文字选填，图片必选，针对操作，监听底部唤起显示与隐藏
+     * 体验课与正式课，无底部唤起APP,文字和图片必选
+     */
+    content(n, o) {
+
+      if(this.submitType === 'LIFE' || this.submitType === 'WORKS') {
+        if(n.length) { this.openAppPop.show = false }
+        if(!n.length && !this.fileList.length) { this.openAppPop.show = true }
+      }
+
+      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
+        if (n.length) { this.submitStatus = this.fileList.length !== 0}
+        if (!n.length) { this.submitStatus = false }
       }
     },
-    fileList(x, o) {
-      if (x.length !== 0) {
-        this.submitStatus = this.content.length !== 0
-      } else {
-        this.submitStatus = false
+
+    fileList(n, o) {
+
+      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
+        if (n.length) { this.submitStatus = this.content.length !== 0 }
+      } 
+      
+      if(this.submitType === 'WORKS' || this.submitType === 'LIFE') {
+        if (n.length && this.submitType === 'WORKS') { this.submitStatus = this.collegeIndex !== null }
+        if (n.length && this.submitType === 'LIFE') { this.submitStatus = true }
+        if (n.length) { this.openAppPop.show = false }
+        if (!n.length && !this.content.length) { this.openAppPop.show = true }
+      }
+      
+      if (!n.length) { this.submitStatus = false }
+    },
+
+    collegeIndex(n, o) {
+      if(this.submitType === 'WORKS') {
+        if( n !== null) {
+          this.submitStatus = this.fileList.length !== 0
+        } else {
+          this.submitStatus = false
+        }
       }
     }
   },
@@ -166,6 +198,60 @@ export default {
     // 当前发布类型
     submitType: function () {
       return this.$route.query.type
+    },
+
+    // 导航 右侧按钮文字
+    rightText: function () {
+      if(this.submitType === 'LIFE' || this.submitType === 'WORKS') {
+        return '发布'
+      } else {
+        return '提交'
+      }
+    },
+
+    // 内容字符数
+    maxCount: function() {
+      if(this.submitType === 'LIFE' || this.submitType === 'WORKS') {
+        return 200
+      } else {
+        return 60
+      }
+    },
+
+    // Placeholder
+    placeholder: function() {
+      if(this.submitType === 'LIFE' || this.submitType === 'WORKS') {
+        return '说一说你的想法吧，有助于获得更高的关注度'
+      } else {
+        return '说说你的作业思路吧~'
+      }
+    },
+
+    // 是否展示标题
+    showTitle: function() {
+      if(this.submitType === 'LIFE' || this.submitType === 'WORKS') {
+        return false
+      } else {
+        return true
+      }
+    },
+
+    // 导航栏
+    navTitle: function () {
+      switch (this.submitType) {
+        case 'TEST':
+          return '提交体验课作业'
+          break;
+        case 'VIP':
+          return '提交正式课作业'
+          break;
+        case 'WORKS':
+          return '作品发布'
+          break;
+        case 'LIFE':
+          return '发布动态'
+          break;
+      }
     }
   },
   mounted(){
@@ -320,64 +406,6 @@ export default {
       this.totalImgSize -= spliceImgSize
       this.fileList.splice(index, 1)
       this.imagePreview.show = false
-    },
-
-    /** 根据URL参数，决定显示Title */
-    onCalcTitle() {
-      switch (this.$route.query.type) {
-        case 'TEST':
-          return '提交体验课作业'
-          break;
-        case 'VIP':
-          return '提交正式课作业'
-          break;
-        case 'WORKS':
-          return '作品发布'
-          break;
-        case 'LIFE':
-          return '发布动态'
-          break;
-      }
-    },
-
-    /** 根据URL参数，决定显示右侧按钮文字 */
-    onCalcRightText() {
-      const type = this.$route.query.type
-      if(type === 'LIFE' || type === 'WORKS') {
-        return '发布'
-      } else {
-        return '提交'
-      }
-    },
-
-    /** 根据URL参数，决定Placeholder */
-    onCalcPlaceholder() {
-      const type = this.$route.query.type
-      if(type === 'LIFE' || type === 'WORKS') {
-        return '说一说你的想法吧，有助于获得更高的关注度'
-      } else {
-        return '说说你的作业思路吧~'
-      }
-    },
-
-    /** 根据URL参数，决定是否展示标题 */
-    onCalcShowTitle() {
-      const type = this.$route.query.type
-      if(type === 'LIFE' || type === 'WORKS') {
-        return false
-      } else {
-        return true
-      }
-    },
-
-    /** 计算内容字符数 */
-    onCalcMaxCount() {
-      const type = this.$route.query.type
-      if(type === 'LIFE' || type === 'WORKS') {
-        return 200
-      } else {
-        return 60
-      }
     },
 
     /** 监听字数 */
