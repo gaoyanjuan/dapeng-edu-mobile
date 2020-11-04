@@ -50,8 +50,14 @@ export default {
     submitHomework() {
       if(this.isVideo) {
         this.appPopParams.show = true
+        return false
       }
-      
+      this.$router.push({
+        path: '/requirement',
+        query: {
+          taskId: '88bbad60c07146c696a0b1ae0aa6f885'
+        }
+      })
     }
   }
 }
