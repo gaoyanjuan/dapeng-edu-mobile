@@ -21,7 +21,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    blank: require('@/assets/icons/blank/have-no-love.png')
+    blank: require('@/assets/icons/blank/have-no-reading.png')
   }),
   methods:{
     onLoad() {
