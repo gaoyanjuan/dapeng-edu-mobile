@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-follow />
-  </div>
+  <m-follow />
 </template>
 
 <script>

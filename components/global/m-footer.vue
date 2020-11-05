@@ -1,28 +1,38 @@
 <template>
   <div>
     <!-- 底部菜单 -->
-    <van-tabbar v-model="active" z-index="10" @change="onChangeTabs">
-      <van-tabbar-item name="home">
-        <a :href="mBaseUrl"><span class="tabbar-btn-text-active">返回官网</span></a>
+    <van-tabbar v-model="active" z-index="10">
+
+      <!-- 返回官网 -->
+      <van-tabbar-item name="home" :url="mBaseUrl">
+        <span class="tabbar-btn-text-active">返回官网</span>
         <template #icon="props">
-          <a :href="mBaseUrl"><img :src="props.active ? home.active : home.active" /></a>
+          <img :src="props.active ? home.active : home.active" />
         </template>
       </van-tabbar-item>
-      <van-tabbar-item name="square" to="/">
+
+      <!-- 广场 -->
+      <van-tabbar-item name="square" :to="calcRoute">
         <span>广场</span>
         <template #icon="props">
           <img :src="props.active ? square.active : square.inactive" />
         </template>
       </van-tabbar-item>
+
+      <!-- 发布 -->
       <div class="submit" @click="showPublishMenus">
         <img :src="upload.active" />
       </div>
+
+      <!-- 活动 -->
       <van-tabbar-item name="activities" to="/activities">
         <span>活动</span>
         <template #icon="props">
           <img :src="props.active ? activities.active : activities.inactive" />
         </template>
       </van-tabbar-item>
+
+      <!-- 我的 -->
       <van-tabbar-item name="personal-center" to="/personal-center">
         <span>我的</span>
         <template #icon="props">
@@ -35,30 +45,39 @@
     <van-overlay :show="show" z-index="2005" :duration="0">
       <div class="menus-wrapper" @click.stop>
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
+        
+        <!-- 体验课作业提交 -->
         <nuxt-link tag="div" to="/homework-list?courseType=TEST" >
           <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.trial" alt="trial"/>
             <span class="menus-txt">体验课作业提交</span>
           </div>
         </nuxt-link>
+
+        <!-- 正式课作业提交 -->
         <nuxt-link tag="div" to="/homework-list?courseType=VIP" >
           <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.formal" alt="formal"/>
             <span class="menus-txt">正式课作业提交</span>
           </div>
         </nuxt-link>
+
+        <!-- 作品发布 -->
         <nuxt-link tag="div" to="/submit?type=WORKS" >
           <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.works" alt="works"/>
             <span class="menus-txt">作品发布</span>
           </div>
         </nuxt-link>
+
+        <!-- 生活动态 -->
         <nuxt-link tag="div" to="/submit?type=LIFE" >
           <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
             <span class="menus-txt">生活动态</span>
           </div>
         </nuxt-link>
+
       </div>
     </van-overlay>
   </div>
@@ -70,7 +89,6 @@ export default {
   data: () => ({
     show: false,
     active: 'square',
-    baseUrl: process.env.baseUrl,
     mBaseUrl : process.env.mBaseUrl,
     home: {
       active: require('@/assets/icons/tabbar/bar-home.png'),
@@ -98,6 +116,21 @@ export default {
       dynamic: require('@/assets/icons/tabbar/bar-pub-dynamic.png'),
     }
   }),
+  computed:{
+    /**
+     * 计算并赋值路由
+     * 非广场区列表，默认返回‘/’
+     * 已在广场区列表模块，不能点击广场
+     */
+    calcRoute() {
+      const route = this.$route.name
+      if(route.indexOf('index') > -1) {
+        return ''
+      } else {
+        return '/'
+      }
+    }
+  },
   mounted() {
     /**
      * 路由定位
@@ -114,18 +147,9 @@ export default {
     }
   },
   methods:{
-    /** 显示发布菜单 */
+    // 显示发布菜单
     showPublishMenus() {
       this.show = true
-    },
-    /***  * 返回官网暂不能点击，切换状态保持不变 */
-    onChangeTabs(tab){
-      if(tab === 'home'){
-        this.active = this.$route.name
-        if(this.$route.name === 'index') {
-          this.active = 'square'
-        }
-      }
     }
   }
 }

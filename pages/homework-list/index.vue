@@ -4,11 +4,7 @@
     <div class="content-wrap">
       <section v-if="courseType === 'VIP'" class="college-wrap">
         <div
-          :class="
-            index === collegeIndex
-              ? 'college-item college-item-active'
-              : 'college-item'
-          "
+          :class="index === collegeIndex ? 'college-item college-item-active':'college-item'"
           v-for="(item, index) in workCollegesGetters"
           :key="index"
           @click="collegeChange(index, item)"
@@ -16,38 +12,27 @@
           {{ item.name }}
         </div>
       </section>
+
       <section class="homework-wrap">
         <div class="homework-list-wrap">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="finishedText"
-            @load="onLoad"
-          >
+          <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
+            
             <template v-if="list.length">
-              <nuxt-link
-                tag="div"
-                :to="'/homework-list/homework-select?courseType=' + courseType"
-              >
-                <homework-course
-                  v-for="(item, index) in list"
-                  :key="index"
-                ></homework-course>
+              <nuxt-link tag="div" :to="'/homework-list/homework-select?courseType=' + courseType">
+                <homework-course v-for="(item, index) in list" :key="index"></homework-course>
               </nuxt-link>
             </template>
+
             <template v-if="!list.length && finished">
               <div class="homework-blank-wrap">
                 <img class="blank-img" :src="blank" alt="空白" />
                 <span class="blank-txt">
-                  {{
-                    courseType === 'TEST'
-                      ? '暂无课程～'
-                      : '该学院列表暂无课程～'
-                  }}
+                  {{courseType === 'TEST' ? '暂无课程～' : '该学院列表暂无课程～' }}
                 </span>
               </div>
             </template>
           </van-list>
+          
         </div>
       </section>
     </div>
@@ -60,14 +45,14 @@ export default {
   layout: 'navbar',
   data() {
     return {
-      collegeIndex: 0,
-      blank: require('@/assets/icons/blank/have-no-course.png'),
-      list: [1],
+      list: [],
       loading: false,
       finished: false,
       finishedText: '没有更多了',
       courseType: 'TEST',
-      navTitle: '提交体验课作业'
+      navTitle: '提交体验课作业',
+      collegeIndex: 0,
+      blank: require('@/assets/icons/blank/have-no-course.png'),
     }
   },
   async asyncData({ route, store, error }) {
@@ -112,13 +97,13 @@ export default {
     },
     onLoad() {
       setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 6; i++) {
           this.list.push(i)
         }
         // 加载状态结束
         this.loading = false
         // 数据全部加载完成
-        if (this.list.length >= 5) {
+        if (this.list.length >= 15) {
           this.finished = true
         }
         if (this.list.length === 0) {

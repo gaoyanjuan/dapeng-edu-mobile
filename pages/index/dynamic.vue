@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-dynamic />
-  </div>
+  <m-dynamic />
 </template>
 
 <script>

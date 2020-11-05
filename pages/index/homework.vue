@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-homework />
-  </div>
+  <m-homework />
 </template>
 
 <script>

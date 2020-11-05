@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-works />
-  </div>
+  <m-works />
 </template>
 
 <script>
