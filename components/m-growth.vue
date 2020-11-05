@@ -29,7 +29,7 @@
           :imgInfo="item.imgSmall"
           :user="item.user"
           :activity="item.activityBaseDto"
-          :content="item.text"
+          :content="item.content"
           :listItemData="item"
           :isAttention="item.isAttention"
           :modifiedTime="item.createTime"
