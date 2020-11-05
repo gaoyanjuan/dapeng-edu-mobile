@@ -108,13 +108,17 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 13px 8px;
     overflow: hidden;
 
     > input {
-      width: 215px;
-      height: 35px;
+      width: 214px;
+      height: 30px;
+      padding: 5px 3px;
       border: none;
+      font-size: 14px;
+      color: #363D35;
+      font-family: @medium;
+      font-weight: 500;
     }
 
     .input-placeholder {
