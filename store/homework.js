@@ -48,7 +48,7 @@ export default {
     // 查询作业要求详情
     appendRequirementDetails(state, payload) {
       state.requirementDetails = payload.data
-      state.requirementDetails.coverImgSamll = state.requirementDetails.coverImgSamll.split(",").shift()
+      state.requirementDetails.coverImgSamll = state.requirementDetails.coverImg[0]
     },
     // 作业要求下作业任务列表
     appendRequirementList(state, payload) {
