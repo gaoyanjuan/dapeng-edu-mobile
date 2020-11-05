@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-part-time-task />
-  </div>
+  <m-part-time-task />
 </template>
 
 <script>

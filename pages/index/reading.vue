@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-reading />
-  </div>
+  <m-reading />
 </template>
 
 <script>

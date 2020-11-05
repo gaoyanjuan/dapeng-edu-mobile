@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-small-video />
-  </div>
+  <m-small-video />
 </template>
 
 <script>
