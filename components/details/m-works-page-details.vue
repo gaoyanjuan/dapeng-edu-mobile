@@ -49,7 +49,7 @@
         <m-tab-item :selected="commentSelected" :count="works.commentCount" name="评论">
           <m-comment-list />
         </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="works.praisesCount">
+        <m-tab-item :selected="likeSelected" name="喜欢" :count="works.praiseCount">
           <m-like-list />
         </m-tab-item>
       </m-tabs>

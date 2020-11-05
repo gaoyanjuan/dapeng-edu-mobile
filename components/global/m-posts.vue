@@ -269,7 +269,7 @@ export default {
           query: {
             id: this.listItemData.id,
             tagsId: this.listItemData.tagsId,
-            topicType: this.listItemData.type,
+            topicType: this.listItemData.topicType,
           }
         })
       } else {

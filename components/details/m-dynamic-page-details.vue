@@ -47,7 +47,7 @@
         <m-tab-item selected="true" name="评论" :count="dynamic.commentCount">
           <m-comment-list />
         </m-tab-item>
-        <m-tab-item name="喜欢" :count="dynamic.praisesCount">
+        <m-tab-item name="喜欢" :count="dynamic.praiseCount">
           <m-like-list />
         </m-tab-item>
       </m-tabs>
@@ -201,7 +201,6 @@ export default {
   position: relative;
   margin-top: 12px;
 }
-
 
 /** footer comment */
 .details-footer-comment-wrap {

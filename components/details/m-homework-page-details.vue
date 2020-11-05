@@ -51,7 +51,7 @@
             :courseType="homework.courseType"
           />
         </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="homework.praisesCount">
+        <m-tab-item :selected="likeSelected" name="喜欢" :count="homework.praiseCount">
           <m-like-list />
         </m-tab-item>
       </m-tabs>
