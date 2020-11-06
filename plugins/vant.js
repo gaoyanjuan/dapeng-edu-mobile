@@ -22,7 +22,8 @@ import {
   Field,
   Grid,
   GridItem,
-  Dialog
+  Dialog,
+  Checkbox
 } from 'vant'
 
 Vue.use(Button)
@@ -47,6 +48,7 @@ Vue.use(Button)
   .use(Grid)
   .use(GridItem)
   .use(Dialog)
+  .use(Checkbox)
   .use(Lazyload, {
     // 懒加载默认图片
     loading: require('@/assets/icons/common/photos-bg.png')
