@@ -13,6 +13,7 @@
         <publish-dynamic />
       </template>
       <template v-if="$route.query.type === 'growth'">
+        <!-- 这里是活动 -->
         <publish-growth />
       </template>
       <template v-if="$route.query.type === 'reading'">
