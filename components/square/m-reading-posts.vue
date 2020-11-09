@@ -5,12 +5,12 @@
       <div class="reading-posts-card">
 
         <!-- Header Block -->
-        <template v-if="item.imgList.length === 1">
+        <template v-if="item.coverImgSmall.length === 1">
           <nuxt-link tag="div" class="reading-header-row" to="/details/reading-page-details">
-            <img class="posts-cover" :src="item.imgList[0]" alt="" />
+            <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
             <div class="posts-right-side-wrap">
               <span class="posts-title">{{ item.title }}</span>
-              <span class="posts-content">{{ item.content }}</span>
+              <span class="posts-content">{{ content }}</span>
             </div>
           </nuxt-link>
         </template>
@@ -18,18 +18,18 @@
         <template v-else>
           <nuxt-link tag="div" class="reading-header-row-more" to="/details/reading-page-details">
             <div class="posts-title"> {{ item.title }} </div>
-            <div class="posts-content"> {{ item.content }} </div>
-            <div class="posts-photos-wrap" v-if="item.imgList">
-              <img class="posts-photo" v-for="(ele, j) in item.imgList" :key="j" :src="ele" alt="" />
+            <div class="posts-content"> {{ content }} </div>
+            <div class="posts-photos-wrap" v-if="item.coverImgSmall">
+              <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
             </div>
           </nuxt-link>
         </template>
 
         <!-- Body Block -->
         <div class="reading-body-row">
-          <div class="posts-label"> {{ item.label }} </div>
+          <div class="posts-label">阅读 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}</div>
           <div class="posts-author"> {{ item.user.nickname }} </div>
-          <div class="posts-date"> {{ item.submitTime | commonDate }} </div>
+          <div class="posts-date"> {{ item.createTime | commonDate }} </div>
         </div>
 
         <!-- Footer Block -->
@@ -40,7 +40,7 @@
           </div>
           <div class="posts-love-wrap">
             <img class="posts-love" :src="love" alt="love" />
-            <span class="posts-nums">{{ item.praisesCount | studentsCount }}</span>
+            <span class="posts-nums">{{ item.praiseCount | studentsCount }}</span>
           </div>
           <div class="posts-star-wrap">
             <img class="posts-star" :src="star" alt="star" />
@@ -69,6 +69,11 @@ export default {
     love: require('@/assets/icons/posts/posts-love.png'),
     star: require('@/assets/icons/posts/posts-star.png'),
   }),
+  computed:{
+    content() {
+      return this.item.content.replace(/<[^>]+>/g, "").replace(/&nbsp;/gi, '')
+    }
+  },
   mounted(){
     setTimeout(() => {
       this.loading = false

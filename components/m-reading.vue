@@ -4,44 +4,71 @@
     <m-swipe />
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" :menus="menus" />
+    <m-menus menus-type="college" :menus="readingCollegesGetters" />
 
     <section class="works-wrap">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <m-reading-posts v-for="(item, i) in list" :key="i" :item="item" />
+      <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
+        <template v-if="readingListGetters.list.length">
+          <m-reading-posts v-for="(item, i) in readingListGetters.list" :key="i" :item="item" />
+        </template>
       </van-list>
     </section>
   </div>
 </template>
 
 <script>
-import { reading } from '@/data'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Reading',
   data: () => ({
     list: [],
     loading: false,
     finished: false,
-    menus:[{id:'', name: '全部'},
-    {id:'sheji',name:'设计'},
-    {id:'meishu',name:'美术'},
-    {id:'guohua',name:'国画'},
-    {id:'shufa',name:'书法'},
-    {id:'video',name:'短视频'},
-    {id:'shouban',name:'手办'},
-    {id:'linmo',name:'临摹'}]
+    finishedTxt: '没有更多了',
   }),
-  methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < reading.length; i++) {
-          this.list.push(reading[i])
-        }
-        // 加载状态结束
+  computed:{
+    ...mapGetters('colleges', [
+      'readingCollegesGetters'
+    ]),
+    ...mapGetters('reading', [
+      'readingListGetters'
+    ])
+  },
+  watch: {
+    'readingListGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
+        this.finished = false
+      } else if (newVal === 'over') {
         this.finished = true
-      }, 1000)
+      }
+    },
+    'readingListGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
+      }
+    }
+  },
+  methods:{
+    ...mapActions('reading', [
+      'appendReadingList'
+    ]),
+    onLoad() {
+      if (this.readingListGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.readingListGetters.status === 'loading') return false
+      const newPage = this.readingListGetters.pageInfo.pages + 1
+      this.appendReadingList({
+        categoryIds: this.$route.query.college,
+        page: newPage
+      })
     }
   }
 }
