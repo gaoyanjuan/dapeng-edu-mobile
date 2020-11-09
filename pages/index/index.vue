@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-recommend />
-  </div>
+  <m-recommend />
 </template>
 
 <script>

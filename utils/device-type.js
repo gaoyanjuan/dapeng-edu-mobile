@@ -44,9 +44,13 @@ export function deviceType(UA) {
 export function appSource(params) {
   const u = navigator.userAgent
   const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
-  if (isiOS) {
-    return { type:'ios'}
-  } else {
-    return { type:'andriod'}
+  if (isMobile(u)) {
+    if (isiOS) {
+      return { type: 'ios' }
+    } else {
+      return { type: 'andriod' }
+    }
+  } else { 
+    return { type: 'pc' }
   }
 }

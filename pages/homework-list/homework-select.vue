@@ -1,50 +1,29 @@
 <template>
   <div class="homework-select-page">
     <m-navbar :title="navTitle" />
-    <van-tabs
-      v-model="active"
-      sticky
-      @click="onTabsClick"
-      animated
-      v-if="courseType === 'VIP'"
-      :swipe-threshold="3"
-      :ellipsis="false"
-    >
+
+    <van-tabs  v-if="courseType === 'VIP'" v-model="active" sticky @click="onTabsClick" animated :swipe-threshold="3" :ellipsis="false">
       <van-tab v-for="(item, index) in stageList" :key="index" >
+        
         <template #title>
-         <div class="van-title-wrap">
-            <div class="van-title-content">20182222</div>
-            <img class="recommend-image" :src="recommendImg" />
-         </div>
+          <div class="van-title-wrap">
+              <div class="van-title-content">20182222</div>
+              <img class="recommend-image" :src="recommendImg" />
+          </div>
         </template>
+
         <section class="homework-info-wrap" :style="{ paddingTop: `2.34rem` }">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="finishedText"
-            @load="onLoad"
-          >
-            <homework-course-chapter
-              v-for="(item, index) in list"
-              :key="index"
-              :isVideo="index % 2 === 0"
-            ></homework-course-chapter>
+          <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
+            <homework-course-chapter v-for="(item, index) in list" :key="index" :isVideo="index % 2 === 0"></homework-course-chapter>
           </van-list>
         </section>
+
       </van-tab>
     </van-tabs>
+
     <section class="homework-info-wrap" v-if="courseType === 'TEST'" :style="{ paddingTop: `1.17rem` }" >
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        :finished-text="finishedText"
-        @load="onLoad"
-      >
-        <homework-course-chapter
-          v-for="(item, index) in list"
-          :key="index"
-          :isVideo="index % 2 === 0"
-        ></homework-course-chapter>
+      <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
+        <homework-course-chapter v-for="(item, index) in list" :key="index" :isVideo="index % 2 === 0"></homework-course-chapter>
       </van-list>
     </section>
   </div>
@@ -75,13 +54,13 @@ export default {
   methods: {
     onLoad() {
       setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 6; i++) {
           this.list.push(i)
         }
         // 加载状态结束
         this.loading = false
         // 数据全部加载完成
-        if (this.list.length >= 10) {
+        if (this.list.length >= 15) {
           this.finished = true
         }
         if (this.list.length === 0) {

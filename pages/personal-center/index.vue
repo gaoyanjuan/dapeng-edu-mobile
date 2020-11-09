@@ -62,7 +62,7 @@
     </div>
 
     <!-- APP 引导下载 -->
-    <div class="mine-app-download-wrap">
+    <div class="mine-app-download-wrap" @click="openAppEvent">
       <img class="app-logo" :src="logo" alt="" />
       <span class="app-txt">下载大鹏教育APP</span>
     </div>
@@ -75,6 +75,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { appSource } from '@/utils/device-type'
 
 export default {
   name:'Mine',
@@ -93,7 +94,7 @@ export default {
       {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
       {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
       {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
-      {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
+      // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
     ],
     hasStudent: false,
     isLogin: false
@@ -107,16 +108,42 @@ export default {
       this.$router.push('/login')
     },
     /** 打开我的喜欢弹框 */
+    // 打开我的喜欢弹框
     openLovePopup (){
       this.lovePopup.show = true
     },
-    /** 进入发布页面 */
+
+    // 进入发布页面
     enterPublishPage(params) {
       this.$router.push({
         path: '/personal-center/personal-publish',
         query:{ type: params.name}
       })
-    }
+    },
+
+     /// 唤起APP
+    openAppEvent () {
+      const device = appSource()
+      if (device.type === 'ios') {
+        location.href = 'https://enroll.dapengjiaoyu.com'
+      }
+
+      if (device.type === 'andriod') {
+        this.callAndroid()
+      }
+    },
+
+    // 唤起安卓客户端
+    callAndroid() {
+      let ifr = document.createElement('iframe')
+      ifr.src = 'dpedu://com.app.zhijin'
+      ifr.style.display = 'none'
+      document.body.appendChild(ifr)
+      // 等待一段时间后，无反应则URL跳转
+      setTimeout(() => {
+        location.href = 'https://enroll.dapengjiaoyu.com'
+      }, 1500)
+    },
   }
 }
 </script>

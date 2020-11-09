@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <m-growth />
-  </div>
+  <m-growth />
 </template>
 
 <script>
