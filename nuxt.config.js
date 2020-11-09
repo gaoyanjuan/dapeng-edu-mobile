@@ -4,6 +4,10 @@ const global = require('./plugins/global')
 
 export default {
   target: 'server',
+  server: {
+    port: env[process.env.MODE].PORT,
+    host: env[process.env.MODE].HOST
+  },
   env: {
     global: global,
     baseUrl: env[process.env.MODE].DP_URL,

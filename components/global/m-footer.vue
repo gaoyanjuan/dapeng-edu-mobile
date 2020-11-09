@@ -1,5 +1,5 @@
 <template>
-  <div class="footer-wrap">
+  <div>
     <!-- 底部菜单 -->
     <van-tabbar v-model="active" z-index="10">
 
