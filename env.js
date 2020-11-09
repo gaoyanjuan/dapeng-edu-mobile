@@ -4,7 +4,9 @@ module.exports = {
     DP_URL: 'https://pc-dev.dapengjiaoyu.cn',
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',
-    BASE_URL:'http://ag.kong.dapeng.lan/pcmove'
+    BASE_URL: 'http://ag.kong.dapeng.lan/pcmove',
+    DP_AUTH_URL: 'http://passport.dapeng.lan',
+    REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan'
   },
   test: {
     MODE: 'test',

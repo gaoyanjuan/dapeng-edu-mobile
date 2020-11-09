@@ -8,7 +8,8 @@ export default {
     global: global,
     baseUrl: env[process.env.MODE].DP_URL,
     zhifuUrl: env[process.env.MODE].DP_ZHIFU,
-    mBaseUrl:env[process.env.MODE].DP_M_URL
+    mBaseUrl:env[process.env.MODE].DP_M_URL,
+    authUrl: env[process.env.MODE].DP_AUTH_URL
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
@@ -60,6 +61,7 @@ export default {
     { src: '~/plugins/amfe-flexble.js', ssr: false},
     { src: '~/plugins/swiper.js', ssr: false},
     { src: '~/plugins/touch-emulator.js', ssr: false},
+    { src: '~/plugins/validate-system-hostname', ssr: false },
     { src: '~/plugins/vant', ssr: true},
     { src: '~/plugins/head-image.js', ssr: true },
     { src: '~/plugins/filters.js', ssr: true },
@@ -81,13 +83,27 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
+    '/api/token/get_token': {
+      target: env[process.env.MODE].DP_AUTH_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/token/get_token': '/oauth/token',
+        changeOrigin: true
+      }
+    },
+    '/api/token/refresh_token': {
+      target: env[process.env.MODE].REFRESH_TOKEN_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/token/refresh_token': '/auth/oauth/token',
+        changeOrigin: true
+      }
+    },
     '/api': {
       target: env[process.env.MODE].BASE_URL, // 目标接口域名
       pathRewrite: {
         '^/api': '/', // 把 /api 替换成 /
         changeOrigin: true // 表示是否跨域
       }
-    }
+    },
   },
   /**
    * CSS全局变量

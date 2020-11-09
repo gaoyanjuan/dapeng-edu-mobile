@@ -1,4 +1,5 @@
-import Cookies from 'js-cookie'
+import { get_cookie } from '@/utils/cookie-tool';
+import jwt_decode from "jwt-decode";
 
 export default {
   state: () => {
@@ -6,18 +7,13 @@ export default {
   },
   mutations: {},
   actions: {
-    nuxtServerInit({commit, state}, {req}) {
-      function cookieToJson() {
-        let cookieArr =req.headers.cookie.split(";");
-        let obj = {} 
-        cookieArr.forEach((i) => {
-            let arr = i.split("=");
-            obj[arr[0]] =arr[1];
-        });
-        return obj
-      }
-      if (req.headers.cookie && (cookieToJson().token)) {
-        commit('user/appendUserInfo', JSON.parse(decodeURIComponent(cookieToJson().token)));
+    nuxtServerInit({commit}, {req}) {
+      //获取服务端cookie
+      const access_token = get_cookie(req.headers.cookie, 'access_token')
+      if (access_token) {
+        commit('user/appendUserInfo', jwt_decode(access_token).origin.users[0]);
+      } else {
+        commit('user/appendUserInfo', null);
       }
     },
   },

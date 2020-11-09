@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="footer-wrap">
     <!-- 底部菜单 -->
     <van-tabbar v-model="active" z-index="10" @change="onChangeTabs">
       <van-tabbar-item name="home">
