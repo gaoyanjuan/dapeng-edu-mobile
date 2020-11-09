@@ -4,12 +4,16 @@
     <!-- 顶部用户登录信息  -->
     <div class="mine-header-wrap">
       <div class="header-left-side">
-        <img v-if="isLogin" class="header-avatar" :src="avatar" alt="avatar" />
+        <img v-if="userInfoGetters" class="header-avatar" :src="avatar" alt="avatar" />
         <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" />
       </div>
       <div class="header-right-side">
-        <span v-if="isLogin" class="user-nickname">三班王晓丽</span>
-        <span v-else class="not-login-wrap">登陆/注册</span>
+        <span v-if="userInfoGetters" class="user-nickname">三班王晓丽</span>
+        <p class="not-login-wrap" v-else>
+          <span @click="toLogin">登陆</span>
+          <span>/</span>
+          <span>注册</span>
+        </p>
         <span v-if="hasStudent" class="user-code">学籍号：2020070388886</span>
       </div>
     </div>
@@ -70,7 +74,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { appSource } from '@/utils/device-type'
+
 export default {
   name:'Mine',
   data: ()=> ({
@@ -93,7 +99,15 @@ export default {
     hasStudent: false,
     isLogin: false
   }),
+  computed:{
+    ...mapGetters('user',['userInfoGetters'])
+  },
   methods:{
+    // 跳转登录页
+    toLogin () {
+      this.$router.push('/login')
+    },
+    /** 打开我的喜欢弹框 */
     // 打开我的喜欢弹框
     openLovePopup (){
       this.lovePopup.show = true

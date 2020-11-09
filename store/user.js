@@ -16,14 +16,7 @@ export const mutations = {
 export const actions = {
    /** * 查询Banner 列表 */
   async appendUserInfo ({ commit }, params) {
-    const res = await this.$axios.get('/users/token', {
-      params: {
-        ...params
-      }
-    })
-    // Cookies.set('token','bbr')
-    commit('appendUserInfo', res.data)
-    return res.data
+    commit('appendUserInfo', params)
   },
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="$nuxt.isOnline">
-      <m-guide/>
+      <m-guide />
       <div class="app_wrap">
         <Nuxt />
       </div>
@@ -12,6 +12,21 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      showNav: true,
+      showFooter: true
+    }
+  },
+  mounted () {
+  },
+  methods: {
+  }
+}
+</script>
 
 <style lang="less" scoped>
 .app_wrap {
