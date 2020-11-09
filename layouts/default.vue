@@ -13,21 +13,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  data () {
-    return {
-      showNav: true,
-      showFooter: true
-    }
-  },
-  mounted () {
-  },
-  methods: {
-  }
-}
-</script>
-
 <style lang="less" scoped>
 .app_wrap {
   width: 100%;
