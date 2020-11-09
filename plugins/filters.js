@@ -146,6 +146,15 @@ const studyProcess = function (val) {
   str += '%'
   return str
 }
+
+// 学院为空的情况下过滤
+const filterCollageName = function (college) {
+  if (!college) {
+    return ''
+  }
+  return college.name.replace(/学院/, '')
+}
+
 const filter = {
   formatDate,
   activitiesDate,
@@ -156,7 +165,8 @@ const filter = {
   studyProcess,
   requireData,
   requireDataH5,
-  formatEmotions
+  formatEmotions,
+  filterCollageName
 }
 Object.keys(filter).forEach((key) => {
   Vue.filter(key, filter[key])

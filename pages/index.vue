@@ -39,11 +39,11 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <van-tab title="阅读" name="reading" to="/reading">
+      <!-- <van-tab title="阅读" name="reading" to="/reading">
         <template v-if="$route.name === 'index-reading'">
           <nuxt-child />
         </template>
-      </van-tab>
+      </van-tab> -->
       <van-tab title="视频" name="video" to="/video">
         <template v-if="$route.name === 'index-video'">
           <nuxt-child />
@@ -168,13 +168,14 @@ export default {
       this.activeName = 'dynamic'
     } else if (to.name === 'index-works') {
       this.activeName = 'works'
-    } else if (to.name === 'index-reading') {
-      this.activeName = 'reading'
     } else if (to.name === 'index-video') {
       this.activeName = 'video'
     } else if (to.name === 'index-small-video') {
       this.activeName = 'small-video'
-    } 
+    }
+    // else if (to.name === 'index-reading') {
+    //   this.activeName = 'reading'
+    // } 
     // else if (to.name === 'index-part-time-task') {
     //   this.activeName = 'part-time-task'
     // }
