@@ -17,6 +17,7 @@ export const state = () => ({
       }
     },
   },
+  studentCode: null
 })
 
 export const mutations = {
@@ -39,6 +40,9 @@ export const mutations = {
       state.userFollow.status = 'load'
     }
   },
+  appendStudentCode(state, payload) { 
+    state.studentCode = payload.data.studentSatusId
+  }
 }
 
 export const actions = {
@@ -51,10 +55,10 @@ export const actions = {
     const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
     return data
   },
-  // 获取用户信息
-  async getUserDetail (state, params) {
+  // 获取用户信息【主要是获取学籍号】
+  async getUserDetail({ commit }, params) {
     const data = await this.$axios.get(`/old/users/details`)
-    return data
+    commit('appendStudentCode', data)
   },
   // 获取用户互动数据
   async appendUserTrends ({ commit }, params) {
@@ -96,4 +100,7 @@ export const getters = {
   userFollowGetters(state) {
     return state.userFollow
   },
+  studentCodeGetters (state) {
+    return state.studentCode
+  }
 }
