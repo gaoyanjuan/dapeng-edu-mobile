@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-followers',
   data: () => ({
@@ -29,6 +30,12 @@ export default {
     unfollow: require('@/assets/icons/posts/posts-unfollow.png')
   }),
   methods:{
+    ...mapActions('user', [
+      'appendUserFollow'
+    ]),
+    ...mapMutations('user', [
+      'clearUserFollow'
+    ]),
     onLoad() {
       setTimeout(() => {
         for (let i = 0; i < 20; i++) {
@@ -48,7 +55,12 @@ export default {
     },
     /** 关注事件 */
     handleFollow(){}
-  }
+  },
+  computed: {
+    ...mapGetters('user', [
+      'userFollowGetters'
+    ])
+  },
 }
 </script>
 

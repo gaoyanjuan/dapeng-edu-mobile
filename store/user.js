@@ -1,6 +1,22 @@
 export const state = () => ({
   accessToken: null,
-  userInfo: null
+  userInfo: null,
+  userTrends: {
+    followCount: 0,
+    fansCount: 0,
+    recommendCount: 0,
+    likeCount: 0,
+    userFollow: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+  },
 })
 
 export const mutations = {
@@ -10,6 +26,18 @@ export const mutations = {
   },
   appendUserInfo (state, payload) {
     state.userInfo = payload
+  },
+  appendUserTrends (state, payload) {
+    state.userTrends = payload.data
+  },
+  appendUserFollow (state, payload) {
+    state.userFollow.list = payload.data
+    state.userFollow.pageInfo = payload.pageInfo
+    if (payload.data.length < state.userFollow.pageInfo.size) {
+      state.userFollow.status = 'over'
+    } else {
+      state.userFollow.status = 'load'
+    }
   },
 }
 
@@ -28,6 +56,31 @@ export const actions = {
     const data = await this.$axios.get(`/old/users/details`)
     return data
   },
+  // 获取用户互动数据
+  async appendUserTrends ({ commit }, params) {
+    const res = await this.$axios.get('/users/trends', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserTrends', res)
+    return res
+  },
+  // 用户关注列表
+  async appendUserFollow ({ commit }, params) {
+    const res = await this.$axios.get('/users/follows', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserFollow', res)
+    return res
+  },
+  clearUserFollow (state) {
+    state.userFollow.list = []
+    state.userFollow.pageInfo.pages = 1
+    state.userFollow.status = 'loading'
+  },
 }
 
 export const getters = {
@@ -36,5 +89,11 @@ export const getters = {
   },
   userInfoGetters (state) {
     return state.userInfo
+  },
+  userTrendsGetters (state) {
+    return state.userTrends
+  },
+  userFollowGetters(state) {
+    return state.userFollow
   },
 }
