@@ -5,6 +5,7 @@ module.exports = {
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',
     BASE_URL: 'http://ag.kong.dapeng.lan/pcmove',
+    OLD_BASE_URL: 'http://192.168.1.62/pc/api', //oldpc接口
     DP_AUTH_URL: 'http://passport.dapeng.lan',
     REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan',
     PORT: 3000,

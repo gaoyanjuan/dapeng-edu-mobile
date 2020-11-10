@@ -101,6 +101,13 @@ export default {
         changeOrigin: true
       }
     },
+    '/api/old': {
+      target: env[process.env.MODE].OLD_BASE_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/old': '/',
+        changeOrigin: true
+      }
+    },
     '/api': {
       target: env[process.env.MODE].BASE_URL, // 目标接口域名
       pathRewrite: {
