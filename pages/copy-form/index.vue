@@ -72,6 +72,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Client from '@/utils/client'
+import { randomFileName } from '@/utils/util'
+import { formatSlashDate } from '@/plugins/filters'
+
 export default {
   name:'CopyForm',
   layout:'navbar',
@@ -82,6 +87,8 @@ export default {
     contactNumber:'',
     // 图片上传列表
     fileList: [],
+    // 处理后的图片
+    imageInfo: [],
     // 可提交状态
     submitStatus: false,
     // 上传状态
@@ -98,8 +105,8 @@ export default {
     },
   }),
   watch: {
-    content(x, o) {
-      if (x.trim().length !== 0) {
+    content(n, o) {
+      if (n.trim().length !== 0) {
         this.submitStatus = true
       } else {
         this.submitStatus = false
@@ -107,51 +114,132 @@ export default {
     }
   },
   methods:{
+    ...mapActions({
+      // 获取图片上传授权
+      getMySTS: 'publish/getMySTS',
+      // 投诉抄袭作业
+      complaint: 'homework/appendComplaint'
+    }),
 
     /** 提交 */
     onSubmitHandle(){
       if (!this.submitStatus) return false
-      this.$myToast('提交成功我们将第一时间处理')
-      setTimeout(() => {
-        this.$router.push('/')
-      }, 2500)
+      if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) return false
+      this.complaint({
+        imgInfo: this.imageInfo,
+        taskId: this.$route.query.taskId,
+        complainPhone: this.contactNumber,
+        reason: this.content,
+        respondentId: this.$route.query.id
+      }).then((res) => {
+        if(res.status === 201) {
+          this.$myToast('提交成功我们将第一时间处理')
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 1500)
+        }
+      }).catch((err) => {
+        console.log(err)
+      })
     },
 
     /** 文件上传至服务器 */
-    onUploadAfterRead(file) {
+    async onUploadAfterRead(file) {
+      
       const _this = this
       file.status = 'uploading'
       file.message = '上传中...'
       this.uploadStatus = false
+
+      const res = await this.getMySTS()
+      const { accessKeyId, accessKeySecret, securityToken } = res.data
+      const ossConfig = {
+        accessKeyId: accessKeyId,
+        accessKeySecret: accessKeySecret,
+        stsToken: securityToken
+      }
+
+      const date = formatSlashDate(new Date())
+      const random = randomFileName(8)
+      const fileName = date + '/' + random + '.' + file.file.name.split('.').pop()
+
       const render = new FileReader()
       render.readAsDataURL(file.file)
       render.onload = (event) => {
-        const formData = new FormData()
-        formData.append('content', file.file)
-        setTimeout(() => {
-          file.status = 'done'
-          file.message = '上传成功'
+        const client = Client(ossConfig)
+        client.put(fileName, file.file).then(({ res }) => {
+          if (res.statusCode === 200) {
+            const url = _this.replaceUrls(res)
+            file.status = 'done'
+            file.message = '上传成功'
+            _this.uploadStatus = true
+            _this.handleMakeImage(file, url)
+          }
+        }).catch(error => {
+          file.status = 'failed'
+          file.message = '上传失败'
           _this.uploadStatus = true
-        }, 1000)
+        })
       }
+    },
+
+    // 创造图片对象 */
+    handleMakeImage(e, url) {
+      const _this = this
+      const img = window.URL.createObjectURL(e.file)
+      const imgObj = new Image()
+      const filename = e.file.name.split('.').shift()
+      const exp = e.file.type.replace(/image\//, '')
+      imgObj.onload = () => {
+        _this.imageInfo.push({
+          filename: `${filename}.${exp}`,
+          size: e.file.size,
+          height: imgObj.height,
+          width: imgObj.width,
+          url: url
+        })
+      }
+      imgObj.src = img
+    },
+
+    /** 替换图片路径 */
+    replaceUrls(res) {
+      return res.requestUrls[0].replace(/http:\/\/dapeng-test-image.oss-cn-beijing.aliyuncs.com/,process.env.ossUrl) 
     },
 
     /** 上传前置处理 */
     onUploadBeforeRead(file) {
-      // 图片类型校验
-      const allowImgType = ['image/jpeg', 'image/png', 'image/gif']
-      if (!allowImgType.includes(file.type)) {
-        console.log('上传图片仅支持jpg/png/gif格式图片')
-        return false
-      }
-      // 图片大小限制
-      if (this.totalImgSize + file.size > this.maxImgLimit) {
-        console.log('上传总大小超过限制')
-        return false
-      } else {
-        this.totalImgSize += file.size
-      }
-      return true
+      return new Promise((resolve, reject) => {
+        // 图片类型校验
+        const allowImgType = ['image/jpeg', 'image/png', 'image/gif']
+        if (!allowImgType.includes(file.type)) {
+          this.$toast('上传图片仅支持jpg/png/gif格式图片')
+          reject()
+        }
+
+        // 图片大小限制
+        if (this.totalImgSize + file.size > this.maxImgLimit) {
+          this.$toast('图片超过9M，上传失败！')
+          reject()
+        }
+
+        // 图片长度与长宽乘积限制在4096
+        const img = window.URL.createObjectURL(file)
+        const imgObj = new Image()
+        imgObj.onload = () => {
+          if(imgObj.width >= 4096 || imgObj.height >= 4096) {
+            this.$toast('图片长度超过4096，上传失败！')
+            reject()
+          } else if ((imgObj.width * imgObj.height) > (4096 * 4096)) {
+            this.$toast('图片超过4096*4096，上传失败！')
+            reject()
+          } else {
+            this.totalImgSize += file.size
+            resolve()
+          }
+        }
+        imgObj.src = img
+      })
     },
 
     /**
@@ -160,7 +248,7 @@ export default {
      */
     onOversize(data) {
       if (data.file.size > 2 * 1024 * 1024) {
-        console.log('请上传2M以内的图片')
+        this.$toast('请上传2M以内的图片')
       }
     },
 
@@ -186,7 +274,11 @@ export default {
     
     /** 删除文件预览时触发 */
     onDelete(index) {
+      const spliceImgSize = this.fileList[index].file.size
+      // 更新图片文件总大小
+      this.totalImgSize -= spliceImgSize
       this.fileList.splice(index, 1)
+      this.imageInfo.splice(index, 1)
       this.imagePreview.show = false
     },
   }
