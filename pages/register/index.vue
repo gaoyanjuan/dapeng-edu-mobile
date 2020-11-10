@@ -10,7 +10,7 @@
       <!-- Phone Number Blcok -->
       <div class="register-account-row">
         <img class="account-icon" :src="account" alt="account" />
-        <input v-model.trim="phoneNumber" class="account-phone-number" type="text" placeholder="请输入手机号" />
+        <input v-model.trim="mobile" class="account-phone-number" type="text" placeholder="请输入手机号" />
       </div>
 
       <!-- Auth Code Blcok -->
@@ -22,7 +22,7 @@
         </div>
 
         <div :class="authStatus ? 'get-code btn-active':'get-code btn-disable'" @click="getAuthCode">
-          {{ timer ? '('+ count +')秒后获取':'获取验证码'}}
+          {{ timer ? '('+ count +')秒后获取':'获取验证码' }}
         </div>
 
       </div>
@@ -31,7 +31,8 @@
       <div v-if="warning.show" class="register-warning-row"> {{ warning.content }} </div>
       
       <!-- Register Button Blcok -->
-      <div class="register-button-row" @click="onRegister">快速注册</div>
+      <div v-if="registerAble" class="register-button-row" @click="onRegister">快速注册</div>
+      <div v-else class="register-button-row" @click="toLogin">去登录</div>
 
       <!-- Resister Footer Protocol -->
       <div class="register-footer-protocol">
@@ -43,18 +44,19 @@
       </div>
 
     </div>
-
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name:'Register',
   layout:'navbar',
   data:() => ({
     checked: true,
     // 手机号
-    phoneNumber:'',
+    mobile:'',
     // 验证码
     authCode:'',
     // 验证码状态
@@ -64,13 +66,20 @@ export default {
     // 计时器
     timer:null,
     // 警告消息
-    warning: { show:false, content:''},
+    warning: { show:false, content:'' },
+    // 判断用户是否自注册
+    registerAble: true,
     account: require('@/assets/icons/register/account.png'),
     safety: require('@/assets/icons/register/safety.png'),
   }),
+  mounted () {
+    this.getUserDetail().then((res) => {
+      console.log(res)
+    })
+  },
   watch:{
-    phoneNumber(n, o) {
-      if (!new RegExp(/^1[3456789]\d{9}$/).test(n)) {
+    mobile(n, o) {
+      if (!new RegExp(/^1[3-9][0-9]\d{8}$/).test(n)) {
         this.authStatus = false
       } else {
         this.authStatus = true
@@ -96,17 +105,21 @@ export default {
     }
   },
   methods:{
+    ...mapActions('user', [
+      'checkRegisterAble',
+      'getUserDetail'
+    ]),
     // 快速注册
     onRegister() {
 
-      const reg = /^1[3456789]\d{9}$/
-      if(!reg.test(this.phoneNumber)) { 
+      const reg = /^1[3-9][0-9]\d{8}$/
+      if(!reg.test(this.mobile)) {
         this.warning.show = true
         this.warning.content = '请输入正确的手机号'
         return
       }
 
-      if(!this.authCode.length) { 
+      if(!this.authCode.length) {
         this.warning.show = true
         this.warning.content = '请输入验证码'
         return
@@ -125,9 +138,39 @@ export default {
     },
 
     // 获取验证吗码
-    getAuthCode() {
+    async getAuthCode() {
       if(!this.authStatus) return
 
+      if(this.timer) return
+
+      // 验证用户是否可以自注册
+      const { data } = await this.checkRegisterAble({mobile: this.mobile})
+      if (data.verifyStatus) {
+        const params = {
+          mobile: this.mobile,
+          codeType: 'REGISTER_CODE'
+        }
+        // 检查是否需要将注册按钮变换为登录按钮
+        this.registerAble = true
+        const res = await this.sendCode(params)
+        if (res.status === 200 && !this.timer) {
+          this.countDown()
+        } else {
+          this.errorMsg = res.data.message ? res.data.message : ''
+          this.codeDisabled = false
+        }
+      } else {
+        this.registerAble = false
+        if (data.accountType === 'MOBILE') {
+          const newMobile = validateMobileCode(data.account)
+          this.errorMsg = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
+        } else if (data.accountType === 'DPACCOUNT') {
+          this.errorMsg = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
+        }
+      }
+    },
+
+    countDown() {
       const TIME_COUNT = 60
       if (!this.timer) {
         this.count = TIME_COUNT
@@ -155,8 +198,6 @@ export default {
       const href = "https://h5-static.dapengjiaoyu.cn/h5-protocol/#/yszc?platform=wap&entrance=common"
       window.open(href,'_blank')
     },
-
-
   }
 }
 </script>
@@ -309,7 +350,7 @@ export default {
   margin-top: 16px;
 
   .protocol-txt {
-    font-size: 13px;
+    font-size: 12px;
     font-family: @medium;
     font-weight: 500;
     color: #707070;
@@ -317,7 +358,7 @@ export default {
   }
 
   .protocol-link {
-    font-size: 13px;
+    font-size: 12px;
     font-family: @medium;
     font-weight: 500;
     color: #00B93B;
