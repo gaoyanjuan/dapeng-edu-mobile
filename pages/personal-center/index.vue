@@ -4,15 +4,14 @@
     <!-- 顶部用户登录信息  -->
     <div class="mine-header-wrap">
       <div class="header-left-side">
-        <img v-if="userInfoGetters" class="header-avatar" :src="avatar" alt="avatar" />
+        <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" />
         <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" />
       </div>
+      
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname">三班王晓丽</span>
-        <p class="not-login-wrap" v-else>
-          <span @click="toLogin">登陆</span>
-          <span>/</span>
-          <span>注册</span>
+        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName }} </span>
+        <p v-else class="not-login-wrap">
+          <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
         </p>
         <span v-if="hasStudent" class="user-code">学籍号：2020070388886</span>
       </div>
@@ -24,14 +23,17 @@
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">关注</span>
       </nuxt-link>
+
       <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=fans'">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">粉丝</span>
       </nuxt-link>
+
       <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=recommend'">
         <span class="data-item-column-nums">14</span>
         <span class="data-item-column-txt">推荐</span>
       </nuxt-link>
+
       <div class="data-item-column" @click="openLovePopup">
         <span class="data-item-column-nums">123</span>
         <span class="data-item-column-txt">喜欢</span>
@@ -107,7 +109,7 @@ export default {
     toLogin () {
       this.$router.push('/login')
     },
-    /** 打开我的喜欢弹框 */
+
     // 打开我的喜欢弹框
     openLovePopup (){
       this.lovePopup.show = true
@@ -204,6 +206,7 @@ export default {
     font-size: 24px;
     color: #747C80;
     font-family: @dp-font-regular;
+    cursor: pointer;
   }
   & .user-code {
     max-width: 200px;
