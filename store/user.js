@@ -13,7 +13,7 @@ export const mutations = {
     state.userInfo = payload
   },
   appendStudentCode(state, payload) { 
-    state.studentCode = payload
+    state.studentCode = payload.data.studentSatusId
   }
 }
 
@@ -27,10 +27,10 @@ export const actions = {
     const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
     return data
   },
-  // 获取用户信息
-  async getUserDetail (state, params) {
+  // 获取用户信息【主要是获取学籍号】
+  async getUserDetail({ commit }, params) {
     const data = await this.$axios.get(`/old/users/details`)
-    return data
+    commit('appendStudentCode', data)
   },
 }
 
