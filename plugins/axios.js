@@ -47,7 +47,6 @@ export default function ({store, redirect, req, route, error, app: { $axios }}) 
             Cookie.remove('access_token')
             Cookie.remove('refresh_token')
           } else {
-            console.log('isRefreshing', isRefreshing)
             isRefreshing = true
             return refreshToken(store).then(res => {
               Cookie.set('access_token', res.data.access_token)

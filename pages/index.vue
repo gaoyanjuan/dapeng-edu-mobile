@@ -44,11 +44,11 @@
           <nuxt-child />
         </template>
       </van-tab> -->
-      <van-tab title="视频" name="video" to="/video">
+      <!-- <van-tab title="视频" name="video" to="/video">
         <template v-if="$route.name === 'index-video'">
           <nuxt-child />
         </template>
-      </van-tab>
+      </van-tab> -->
       <van-tab title="小视频" name="small-video">
         <template #title>
           <div class="tab-drop-menus-wrap">
@@ -131,23 +131,17 @@ export default {
     tabUp: require('@/assets/icons/navbar/nav-arrow-up.png'),
     tabDown: require('@/assets/icons/navbar/nav-arrow-down.png'),
   }),
-  computed:{
-    ...mapGetters('user', ['userInfoGetters']),
-  },
-
-  async fetch({ app, route, axios, store}) {
-    if(route.query.access_token) {
-      await store.dispatch('user/appendUserInfo',{ token: route.query.access_token })
-    }
-  },
 
   async asyncData ({route, store, error}) {
     try {
       if (store.getters['banner/bannerListGetters'].length === 0) {
         await store.dispatch('banner/appendBannerList', { collegeId: 'j5m484vz' })
       }
+      if (store.getters['user/userInfoGetters']) {
+        await store.dispatch('user/getUserDetail')
+      }
     } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
+      console.log(err)
     }
   },
 
@@ -168,11 +162,12 @@ export default {
       this.activeName = 'dynamic'
     } else if (to.name === 'index-works') {
       this.activeName = 'works'
-    } else if (to.name === 'index-video') {
-      this.activeName = 'video'
     } else if (to.name === 'index-small-video') {
       this.activeName = 'small-video'
     }
+    // else if (to.name === 'index-video') {
+    //   this.activeName = 'video'
+    // } 
     // else if (to.name === 'index-reading') {
     //   this.activeName = 'reading'
     // } 
@@ -185,13 +180,6 @@ export default {
      */
     if (to.query.courseType) {
       this.setDownMenusPosition(to)
-    }
-
-    // cookie 存储
-    const Cookie = process.browser ? require('js-cookie') : undefined
-    if(this.userInfoGetters && this.$route.query.access_token) {
-      Cookie.set('token', JSON.stringify(this.userInfoGetters))
-      this.$router.replace('/')
     }
   },
   

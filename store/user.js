@@ -1,6 +1,7 @@
 export const state = () => ({
   accessToken: null,
-  userInfo: null
+  userInfo: null,
+  studentCode: null
 })
 
 export const mutations = {
@@ -11,6 +12,9 @@ export const mutations = {
   appendUserInfo (state, payload) {
     state.userInfo = payload
   },
+  appendStudentCode(state, payload) { 
+    state.studentCode = payload.data.studentSatusId
+  }
 }
 
 export const actions = {
@@ -23,10 +27,10 @@ export const actions = {
     const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
     return data
   },
-  // 获取用户信息
-  async getUserDetail (state, params) {
+  // 获取用户信息【主要是获取学籍号】
+  async getUserDetail({ commit }, params) {
     const data = await this.$axios.get(`/old/users/details`)
-    return data
+    commit('appendStudentCode', data)
   },
 }
 
@@ -36,5 +40,8 @@ export const getters = {
   },
   userInfoGetters (state) {
     return state.userInfo
+  },
+  studentCodeGetters (state) {
+    return state.studentCode
   },
 }

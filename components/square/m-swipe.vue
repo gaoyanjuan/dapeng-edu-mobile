@@ -24,7 +24,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-  name: 'Swipe',
+  name: 'M-Swipe',
   data: () => ({
     pagination: '1',
     swiperOptions: {

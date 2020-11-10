@@ -13,7 +13,7 @@
         <p v-else class="not-login-wrap">
           <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
         </p>
-        <span v-if="hasStudent" class="user-code">学籍号：2020070388886</span>
+        <span v-if="studentCodeGetters" class="user-code">学籍号：{{ studentCodeGetters }}</span>
       </div>
     </div>
 
@@ -69,6 +69,9 @@
       <span class="app-txt">下载大鹏教育APP</span>
     </div>
 
+    <!-- 退出登录 -->
+    <div class="mine-app-logout-wrap" @click="onLogoutEvent">退出登录</div>
+
     <!-- 我的喜欢弹层 -->
     <m-love-popup :show-popup="lovePopup"/>
 
@@ -76,6 +79,7 @@
 </template>
 
 <script>
+import Cookie from 'js-cookie'
 import { mapGetters } from 'vuex'
 import { appSource } from '@/utils/device-type'
 
@@ -97,12 +101,13 @@ export default {
       {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
       {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
-    ],
-    hasStudent: false,
-    isLogin: false
+    ]
   }),
   computed:{
-    ...mapGetters('user',['userInfoGetters'])
+    ...mapGetters('user',[
+      'userInfoGetters',
+      'studentCodeGetters'
+    ])
   },
   methods:{
     // 跳转登录页
@@ -121,6 +126,14 @@ export default {
         path: '/personal-center/personal-publish',
         query:{ type: params.name}
       })
+    },
+
+    // 退出登录
+    onLogoutEvent() {
+      Cookie.remove('access_token')
+      Cookie.remove('refresh_token')
+      const redirectUrl = `${location.protocol}//${location.host}`
+      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
 
      /// 唤起APP
@@ -154,7 +167,7 @@ export default {
 .mine {
   width: 100%;
   padding: 16px;
-  min-height: calc(100vh - 94px);
+  min-height: calc(100vh - 90px);
   background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F1 100%);
 }
 
@@ -201,6 +214,7 @@ export default {
     font-weight: 600;
     color: #36404A;
     line-height: 33px;
+    .text-ellipsis()
   }
   & .not-login-wrap {
     font-size: 24px;
@@ -356,4 +370,22 @@ export default {
     margin-left: 6px;
   }
 }
+
+.mine-app-logout-wrap {
+  width: 343px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 6px;
+  margin-top: 12px;
+
+  font-size: 12px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #A3A8AB;
+  text-align: center;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+}
+
 </style>
