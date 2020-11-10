@@ -2,13 +2,14 @@
   <van-popup v-model="showPopup.show" round>
     <div class="popup-warp">
       <div class="popup-head-photo"></div>
-      <div class="popup-body-nums">累计获得了2341266个赞</div>
+      <div class="popup-body-nums">累计获得了{{userTrendsGetters.likeCount}}个赞</div>
       <div class="popup-footer-btn" @click="showPopup.show = false">知道啦</div>
     </div>
   </van-popup>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:'M-Love-Popup',
   props:{
@@ -16,6 +17,9 @@ export default {
       type: Object,
       default: {}
     }
+  },
+  computed:{
+    ...mapGetters('user',['userTrendsGetters'])
   },
 }
 </script>

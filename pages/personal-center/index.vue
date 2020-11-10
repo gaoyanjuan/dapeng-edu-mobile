@@ -19,38 +19,38 @@
 
     <!-- 用户数据：“关注、粉丝、推荐、喜欢” -->
     <div class="mine-user-data-wrap">
-      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=attention'">
-        <span class="data-item-column-nums">123</span>
+      <div class="data-item-column" @click="toAttention">
+        <span class="data-item-column-nums">{{ userTrendsGetters.followCount | studentsCount }}</span>
         <span class="data-item-column-txt">关注</span>
-      </nuxt-link>
+      </div>
 
-      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=fans'">
-        <span class="data-item-column-nums">123</span>
+      <div class="data-item-column" @click="toFans">
+        <span class="data-item-column-nums">{{ userTrendsGetters.fansCount | studentsCount }}</span>
         <span class="data-item-column-txt">粉丝</span>
-      </nuxt-link>
+      </div>
 
-      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=recommend'">
-        <span class="data-item-column-nums">14</span>
+      <div tag="div" class="data-item-column" :to="userRoute + '?type=recommend'">
+        <span class="data-item-column-nums">{{ userTrendsGetters.recommendCount | studentsCount }}</span>
         <span class="data-item-column-txt">推荐</span>
-      </nuxt-link>
+      </div>
 
       <div class="data-item-column" @click="openLovePopup">
-        <span class="data-item-column-nums">123</span>
+        <span class="data-item-column-nums">{{ userTrendsGetters.likeCount | studentsCount }}</span>
         <span class="data-item-column-txt">喜欢</span>
       </div>
     </div>
 
     <!-- 用户数据：“我的喜欢和收藏” -->
     <div class="mine-user-remark-wrap">
-      <nuxt-link tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
+      <div tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
         <img class="user-remark-icon" :src="navLike" alt="" />
         <span class="user-remark-txt">我的喜欢</span>
-      </nuxt-link>
+      </div>
 
-      <nuxt-link tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
+      <div tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
         <img class="user-remark-icon" :src="navStar" alt="" />
         <span class="user-remark-txt">我的收藏</span>
-      </nuxt-link>
+      </div>
     </div>
 
     <!-- 用户数据：“作业、作品导航等……” -->
@@ -79,8 +79,8 @@
 </template>
 
 <script>
+import { mapGetters,mapActions } from 'vuex'
 import Cookie from 'js-cookie'
-import { mapGetters } from 'vuex'
 import { appSource } from '@/utils/device-type'
 
 export default {
@@ -98,18 +98,28 @@ export default {
       {txt:'作品',name:'works',icon: require('@/assets/icons/mine/nav-works.png')},
       {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
       {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
-      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
-      {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
+      // {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
+      // {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
     ]
   }),
+  mounted() {
+    if(this.userInfoGetters && this.userInfoGetters.userId ) {
+      this.appendUserTrends({ userId: this.userInfoGetters.userId })
+    }
+    
+  },
   computed:{
     ...mapGetters('user',[
       'userInfoGetters',
-      'studentCodeGetters'
+      'studentCodeGetters',
+      'userTrendsGetters'
     ])
   },
   methods:{
+    ...mapActions('user', [
+      'appendUserTrends'
+    ]),
     // 跳转登录页
     toLogin () {
       this.$router.push('/login')
@@ -158,6 +168,23 @@ export default {
       setTimeout(() => {
         location.href = 'https://enroll.dapengjiaoyu.com'
       }, 1500)
+    },
+    toAttention() {
+        this.$router.push({
+          path: '/personal-center/personal-user',
+          query: {
+            userId: this.userInfoGetters.userId
+          }
+        })
+    },
+    toFans() {
+        this.$router.push({
+          path: '/personal-center/personal-user',
+          query: {
+            type: 'fans',
+            userId: this.userInfoGetters.userId
+          }
+        })
     },
   }
 }
