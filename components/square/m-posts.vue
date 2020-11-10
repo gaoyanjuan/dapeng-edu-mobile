@@ -72,7 +72,7 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link tag="div" to="/copy-form" class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link tag="div" :to='`/copy-form?taskId=${task.taskId}&id=${user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
