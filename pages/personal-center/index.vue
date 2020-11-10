@@ -9,7 +9,7 @@
       </div>
       
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName }}发低俗开发广东省开发公司 </span>
+        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName }} </span>
         <p v-else class="not-login-wrap">
           <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
         </p>
