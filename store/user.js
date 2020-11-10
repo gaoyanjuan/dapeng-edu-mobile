@@ -6,18 +6,28 @@ export const state = () => ({
     fansCount: 0,
     recommendCount: 0,
     likeCount: 0,
-    userFollow: {
-      list: [],
-      status: 'loading',
-      pageInfo: {
-        count: 0,
-        number: 0,
-        pages: 1,
-        size: process.env.global.pageSize
-      }
-    },
   },
-  studentCode: null
+  studentCode: null,
+  userFollow: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  userFans: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
 })
 
 export const mutations = {
@@ -32,7 +42,10 @@ export const mutations = {
     state.userTrends = payload.data
   },
   appendUserFollow (state, payload) {
-    state.userFollow.list = payload.data
+    state.userFollow.list = state.userFollow.list.concat(payload.data)
+    state.userFollow.list.forEach((item)=>{
+      item.isAttention = true
+    })
     state.userFollow.pageInfo = payload.pageInfo
     if (payload.data.length < state.userFollow.pageInfo.size) {
       state.userFollow.status = 'over'
@@ -42,7 +55,34 @@ export const mutations = {
   },
   appendStudentCode(state, payload) { 
     state.studentCode = payload.data.studentSatusId
-  }
+  },
+  clearUserFollow (state) {
+    state.userFollow.list = []
+    state.userFollow.pageInfo.pages = 1
+    state.userFollow.status = 'loading'
+  },
+  setUserFollowStatus(state, payload) {
+    let data = payload.data
+    if(data === 'userFollow') {
+      state.userFollow.list[payload.index].isAttention = payload.flag
+    }else if(data === 'userFans') {
+      state.userFans.list[payload.index].isAttention = payload.flag
+    }
+  },
+  appendUserFans (state, payload) {
+    state.userFans.list = state.userFans.list.concat(payload.data)
+    state.userFans.pageInfo = payload.pageInfo
+    if (payload.data.length < state.userFans.pageInfo.size) {
+      state.userFans.status = 'over'
+    } else {
+      state.userFans.status = 'load'
+    }
+  },
+  clearUserFans (state) {
+    state.userFans.list = []
+    state.userFans.pageInfo.pages = 1
+    state.userFans.status = 'loading'
+  },
 }
 
 export const actions = {
@@ -80,10 +120,25 @@ export const actions = {
     commit('appendUserFollow', res)
     return res
   },
-  clearUserFollow (state) {
-    state.userFollow.list = []
-    state.userFollow.pageInfo.pages = 1
-    state.userFollow.status = 'loading'
+  // 关注
+  async followingUser (store, params) {
+    const res = await this.$axios.post(`/following/${params.id}`)
+    return res
+  },
+  // 取消关注
+  async cancelFollowingUser (store, params) {
+    const res = await this.$axios.delete(`/following/${params.id}`)
+    return res
+  },
+  // 用户粉丝列表
+  async appendUserFans ({ commit }, params) {
+    const res = await this.$axios.get('/users/fans', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserFans', res)
+    return res
   },
 }
 
@@ -97,10 +152,13 @@ export const getters = {
   userTrendsGetters (state) {
     return state.userTrends
   },
+  studentCodeGetters (state) {
+    return state.studentCode
+  },
   userFollowGetters(state) {
     return state.userFollow
   },
-  studentCodeGetters (state) {
-    return state.studentCode
-  }
+  userFansGetters(state) {
+    return state.userFans
+  },
 }

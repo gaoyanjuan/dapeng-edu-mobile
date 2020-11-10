@@ -98,13 +98,16 @@ export default {
       {txt:'作品',name:'works',icon: require('@/assets/icons/mine/nav-works.png')},
       {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
       {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
-      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
-      {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
+      // {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
+      // {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
     ]
   }),
-  created() {
-    this.appendUserTrends({ userId: this.userInfoGetters.userId })
+  mounted() {
+    if(this.userInfoGetters && this.userInfoGetters.userId ) {
+      this.appendUserTrends({ userId: this.userInfoGetters.userId })
+    }
+    
   },
   computed:{
     ...mapGetters('user',[
