@@ -102,7 +102,13 @@ export default {
     isLogin: false
   }),
   computed:{
-    ...mapGetters('user',['userInfoGetters'])
+    ...mapGetters('user',[
+      'userInfoGetters',
+      'studentCodeGetters'
+    ])
+  },
+  mounted() {
+    console.log(this.studentCodeGetters)
   },
   methods:{
     // 跳转登录页

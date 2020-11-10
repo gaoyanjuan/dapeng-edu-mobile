@@ -146,8 +146,12 @@ export default {
       if (store.getters['banner/bannerListGetters'].length === 0) {
         await store.dispatch('banner/appendBannerList', { collegeId: 'j5m484vz' })
       }
+      if (store.getters['user/userInfoGetters'] !== null) {
+        await store.dispatch('user/queryStudentCode')
+      }
     } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
+      console.log(err)
+      // error({ statusCode: err.data.code, message: err.data.message })
     }
   },
 
