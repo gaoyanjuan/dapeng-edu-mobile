@@ -70,7 +70,7 @@
     </div>
 
     <!-- 退出登录 -->
-    <div class="mine-app-logout-wrap" @click="onLogoutEvent">退出登录</div>
+    <div v-if="userInfoGetters" class="mine-app-logout-wrap" @click="onLogoutEvent">退出登录</div>
 
     <!-- 我的喜欢弹层 -->
     <m-love-popup :show-popup="lovePopup"/>
