@@ -14,9 +14,19 @@ export const mutations = {
 }
 
 export const actions = {
-   /** * 查询Banner 列表 */
+  // 查询用户信息
   async appendUserInfo ({ commit }, params) {
     commit('appendUserInfo', params)
+  },
+  // 检查用户是否可以注册
+  async checkRegisterAble (state, params) {
+    const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
+    return data
+  },
+  // 获取用户信息
+  async getUserDetail (state, params) {
+    const data = await this.$axios.get(`/old/users/details`)
+    return data
   },
 }
 

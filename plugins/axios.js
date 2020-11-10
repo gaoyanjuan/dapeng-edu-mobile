@@ -1,5 +1,6 @@
 import Cookie from 'js-cookie'
 import { getcookiesInServer } from '@/utils/cookie-tool'
+import Vue from 'vue'
 
 export default function ({store, redirect, req, route, error, app: { $axios }}) {
   $axios.interceptors.request.use(config => {
@@ -37,26 +38,29 @@ export default function ({store, redirect, req, route, error, app: { $axios }}) 
       return response
     },
     error => {
-      if (!isRefreshing) {
-        if (error.response.data.state === 1001) {
-          Vue.prototype.$exit({
-            content: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码'
-          })
-          Cookie.remove('access_token')
-          Cookie.remove('refresh_token')
-        } else {
-          isRefreshing = true
-          return refreshToken(store).then(res => {
-            Cookie.set('access_token', res.data.access_token)
-            Cookie.set('refresh_token', res.data.refresh_token)
-            // 已经刷新了token，将所有队列中的请求进行重试
-            requests.forEach(cb => cb(res.data.access_token))
-            requests = []
-            return $axios(error.config)
-          }).catch(res => {
-          }).finally(() => {
-            isRefreshing = false
-          })
+      if (error.response.status == 401) {
+        if (!isRefreshing) {
+          if (error.response.data.state === 1001) {
+            Vue.prototype.$exit({
+              content: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码'
+            })
+            Cookie.remove('access_token')
+            Cookie.remove('refresh_token')
+          } else {
+            console.log('isRefreshing', isRefreshing)
+            isRefreshing = true
+            return refreshToken(store).then(res => {
+              Cookie.set('access_token', res.data.access_token)
+              Cookie.set('refresh_token', res.data.refresh_token)
+              // 已经刷新了token，将所有队列中的请求进行重试
+              requests.forEach(cb => cb(res.data.access_token))
+              requests = []
+              return $axios(error.config)
+            }).catch(res => {
+            }).finally(() => {
+              isRefreshing = false
+            })
+          }
         }
       } else if (error.response.status == 409 && error.response.data.code === 404229){
         return error.response
