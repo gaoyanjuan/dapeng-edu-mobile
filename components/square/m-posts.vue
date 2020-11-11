@@ -74,7 +74,7 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to="`/copy-form?taskId=${listItemData.task ? listItemData.task.taskId : '' }&id=${listItemData.user.userId ? listItemData.user: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -135,6 +135,9 @@ export default {
           user: {
             nickname: '佚名',
             avatar: ''
+          },
+          task: {
+            taskId: ''
           }
         }
       }
