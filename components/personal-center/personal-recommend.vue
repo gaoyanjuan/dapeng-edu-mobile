@@ -38,13 +38,11 @@
 </template>
 
 <script>
-import { workDetails } from '@/data'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Recommend',
   layout:'navbar',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     navRoute:'/details/homework-page-details',
@@ -96,7 +94,7 @@ export default {
       
       if (this.userHomesRecommendGetters.status === 'loading') return false
       const newPage = this.userHomesRecommendGetters.pageInfo.number + 1
-      this.appendUserFollow({
+      this.appendUserHomesRecommend({
         userId: this.$route.query.userId,
         page: newPage,
         size: 10
