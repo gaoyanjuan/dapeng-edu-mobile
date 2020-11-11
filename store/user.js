@@ -28,6 +28,16 @@ export const state = () => ({
       size: process.env.global.pageSize
     }
   },
+  userHomesRecommend: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
 })
 
 export const mutations = {
@@ -82,6 +92,20 @@ export const mutations = {
     state.userFans.list = []
     state.userFans.pageInfo.pages = 1
     state.userFans.status = 'loading'
+  },
+  appendUserHomesRecommend (state, payload) {
+    state.userHomesRecommend.list = state.userHomesRecommend.list.concat(payload.data)
+    state.userHomesRecommend.pageInfo = payload.pageInfo
+    if (payload.data.length < state.userHomesRecommend.pageInfo.size) {
+      state.userHomesRecommend.status = 'over'
+    } else {
+      state.userHomesRecommend.status = 'load'
+    }
+  },
+  clearUserHomesRecommend (state) {
+    state.userHomesRecommend.list = []
+    state.userHomesRecommend.pageInfo.pages = 1
+    state.userHomesRecommend.status = 'loading'
   },
 }
 
@@ -140,6 +164,16 @@ export const actions = {
     commit('appendUserFans', res)
     return res
   },
+  // 用户推荐作业列表
+  async appendUserHomesRecommend ({ commit }, params) {
+    const res = await this.$axios.get('users/homes/recommend', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserHomesRecommend', res)
+    return res
+  },
 }
 
 export const getters = {
@@ -160,5 +194,8 @@ export const getters = {
   },
   userFansGetters(state) {
     return state.userFans
+  },
+  userHomesRecommendGetters(state) {
+    return state.userHomesRecommend
   },
 }

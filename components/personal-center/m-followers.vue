@@ -38,6 +38,7 @@ export default {
     unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
     finishedText: '没有更多了',
     dpUserId: process.env.global.dpUserId,
+    blank: require('@/assets/icons/blank/have-no-fans.png'),
   }),
   mounted() {
     if(!this.userFollowGetters.list.length) {
