@@ -79,8 +79,8 @@
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup round overlay-class="menus__popup">
-      <nuxt-link v-if="squareType === '作业'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup">
+      <nuxt-link v-if="pageName === 'myHomework'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -197,6 +197,10 @@ export default {
     isAttention: {
       type: Boolean,
       default: false
+    },
+    pageName: {
+      type: String,
+      default: ''
     }
   },
   data: () => ({
@@ -215,6 +219,7 @@ export default {
     star: require('@/assets/icons/posts/posts-star.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
+    showPublishMenusPopup: false
   }),
   mounted() {
     setTimeout(() => {
@@ -250,6 +255,10 @@ export default {
     },
     /** 打开/关闭菜单 */
     onShowMenus() {
+      if(this.pageName.indexOf('my')!== -1) {
+        this.showPublishMenusPopup = !this.showPublishMenusPopup
+        return
+      }
       this.showMenusPopup = !this.showMenusPopup
     },
      // 评论操作

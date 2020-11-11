@@ -38,6 +38,16 @@ export const state = () => ({
       size: process.env.global.pageSize
     }
   },
+  publishHomework: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
 })
 
 export const mutations = {
@@ -107,6 +117,20 @@ export const mutations = {
     state.userHomesRecommend.pageInfo.pages = 1
     state.userHomesRecommend.status = 'loading'
   },
+  appendPublishHomework(state, payload) {
+    state.publishHomework.list = state.publishHomework.list.concat(payload.data)
+    state.publishHomework.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishHomework.pageInfo.size) {
+      state.publishHomework.status = 'over'
+    } else {
+      state.publishHomework.status = 'load'
+    }
+  },
+  clearPublishHomework (state) {
+    state.publishHomework.list = []
+    state.publishHomework.pageInfo.pages = 1
+    state.publishHomework.status = 'loading'
+  },
 }
 
 export const actions = {
@@ -174,6 +198,16 @@ export const actions = {
     commit('appendUserHomesRecommend', res)
     return res
   },
+  // 用户的发布作业列表
+  async appendPublishHomework ({ commit }, params) {
+    const res = await this.$axios.get('/users/homes', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishHomework', res)
+    return res
+  },
 }
 
 export const getters = {
@@ -197,5 +231,8 @@ export const getters = {
   },
   userHomesRecommendGetters(state) {
     return state.userHomesRecommend
+  },
+  publishHomeworkGetters(state) {
+    return state.publishHomework
   },
 }

@@ -94,7 +94,7 @@ export default {
       }
       
       if (this.userHomesRecommendGetters.status === 'loading') return false
-      const newPage = this.userHomesRecommendGetters.pageInfo.pages + 1
+      const newPage = this.userHomesRecommendGetters.pageInfo.number + 1
       this.appendUserFollow({
         userId: this.$route.query.userId,
         page: newPage,

@@ -78,7 +78,7 @@ export default {
       }
       
       if (this.userFansGetters.status === 'loading') return false
-      const newPage = this.userFansGetters.pageInfo.pages + 1
+      const newPage = this.userFansGetters.pageInfo.number + 1
       this.appendUserFans({
         userId: this.$route.query.userId,
         page: newPage,

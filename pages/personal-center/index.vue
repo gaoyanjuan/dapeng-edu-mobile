@@ -134,7 +134,11 @@ export default {
     enterPublishPage(params) {
       this.$router.push({
         path: '/personal-center/personal-publish',
-        query:{ type: params.name}
+        query:{ 
+          type: params.name,
+          userId: this.userInfoGetters.userId
+          
+        }
       })
     },
 
