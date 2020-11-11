@@ -5,34 +5,34 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :submit-time="modifiedTime"
-        :userInfo="user"
+        :userInfo="listItemData.user"
         :square-type="squareType"
-        :attention="isAttention"
+        :attention="listItemData.isAttention"
         v-on:onOpenMenus="onShowMenus"
       />
 
       <!-- content -->
       <div class="works__cot">
-        <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(content)"></div>
+        <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
         <div class="work__row__photos--group">
-          <m-photos v-if="imgInfo" :photos="imgInfo" @openImagePreview="openImagePreview"></m-photos>
+          <m-photos v-if="imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
           <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'"></m-homework-video>
-          <m-posts-remark v-if="recommendType" :label="recommendType" source="listPage"/>
+          <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
         </div>
       </div>
 
       <!-- classification -->
       <div class="works__class" @click="toDetail">
-        <m-posts-class :remark="college ? `${squareType}·${college.name.replace(/学院/, '')}` : `${squareType}`" />
+        <m-posts-class :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`" />
       </div>
 
       <!-- Label -->
       <div class="works__lab">
         <m-label
-          v-if="task || activity"
-          :labelData="task"
-          :activityData="activity"
-          :isRequirement="isRequirement"
+          v-if="listItemData.task || listItemData.activity"
+          :labelData="listItemData.task"
+          :activityData="listItemData.activity"
+          :isRequirement="listItemData.isRequirement"
         />
       </div>
 
@@ -60,8 +60,9 @@
           </div>
           <!-- 喜欢 -->
           <div class="fot__rh__love--wrap" @click="onLove">
-            <img class="fot__love" :src="listItemData.isPraise ? unLove : love" alt="love" />
-            <span class="fot__nums">{{ (listItemData.praisesCount) || (listItemData.praiseCount) | studentsCount }}</span>
+            <img class="fot__love" v-if="isPraise" :src="love" alt="love" />
+            <img class="fot__love" v-else :src="unlove" alt="unlove" />
+            <span class="fot__nums">{{ praiseCount | studentsCount }}</span>
           </div>
           <!-- 收藏 -->
           <div class="fot__rh__star--wrap" @click="onCollect">
@@ -96,6 +97,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'WorksCard',
   props:{
@@ -107,37 +109,13 @@ export default {
       type: String,
       default: ''
     },
-    activity: {
-      type: Object,
-      default: () => {
-        return null
-      }
-    },
-    college: {
-      type: Object,
-      default: () => {
-        return null
-      }
-    },
-    squareType: {
+    propSquareType: {
       type: String,
       default: '作业'
     },
-    activity: {
-      type: Object,
-      default: () => {
-        return null
-      }
-    },
-    college: {
-      type: Object,
-      default: () => {
-        return null
-      }
-    },
     modifiedTime: {
       type: Number,
-      default: 0
+      dafault: 0
     },
     commentList: {
       type: Object,
@@ -145,58 +123,21 @@ export default {
         return null
       }
     },
-    dataType: {
-      type: String,
-      default: ''
-    },
     courseType: {
       type: String,
       default: ''
     },
-    imgInfo: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    user: {
-      type: Object,
-      default: () => {
-        return {
-          nickname: '佚名',
-          avatar: ''
-        }
-      }
-    },
-    recommendType: {
-      type: String,
-      default: ''
-    },
-    task: {
-      type: Object,
-      default: () => {
-        return null
-      }
-    },
-    content: {
-      type: String,
-      default: ''
-    },
-    listItemData:{
+    listItemData: {
       type: Object,
       require: true,
       default: function () {
-        return null
+        return {
+          user: {
+            nickname: '佚名',
+            avatar: ''
+          }
+        }
       }
-    },
-    isRequirement: {
-      type: Boolean,
-      default: false
-    },
-    /**是否关注 */
-    isAttention: {
-      type: Boolean,
-      default: false
     }
   },
   data: () => ({
@@ -206,6 +147,8 @@ export default {
     imagePreview: {
       show: false,
       images: [],
+      isPraise: false,
+      praiseCount: 0,
       startPosition: 1,
       commentNums:0,
       loveNums:0
@@ -216,12 +159,44 @@ export default {
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
+  computed: {
+    squareType () {
+      if (this.propSquareType === 'WORKS') {
+        return '作品'
+      } else if (this.propSquareType === 'HOMEWORK') {
+        return '作业'
+      } else if (this.propSquareType === 'LIFE') {
+        return '生活'
+      } else if (this.propSquareType === 'ACTIVITY_POST') {
+        return '成长'
+      }
+    },
+    typePath () {
+      if (this.propSquareType === 'WORKS') {
+        return '/details/works-page-details'
+      } else if (this.propSquareType === 'HOMEWORK') {
+        return '/details/homework-page-details'
+      } else if (this.propSquareType === 'LIFE') {
+        return '/details/dynamic-page-details'
+      } else if (this.propSquareType === 'ACTIVITY_POST') {
+        return '/details/growth-page-details'
+      }
+    }
+  },
+  created () {
+    this.praiseCount = this.listItemData.praiseCount
+    this.isPraise = this.listItemData.isPraise
+  },
   mounted() {
     setTimeout(() => {
       this.loading = false
     }, 500)
   },
   methods: {
+    ...mapActions({
+      queryLike: 'comment/queryLike',
+      queryUnLike: 'comment/queryUnLike'
+    }),
     /** 复制作业号 */
     handleCopyJobNummer() {
       /**
@@ -242,11 +217,19 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
-      this.imagePreview.images = this.imgInfo
+      this.imagePreview.images = this.handleFilterImage(this.listItemData.imgInfo)
       this.imagePreview.startPosition = index
       this.imagePreview.loveNums = this.listItemData.praisesCount
       this.imagePreview.commentNums = this.listItemData.commentCount
       this.imagePreview.show = true
+    },
+    // 图片提取器
+    handleFilterImage(images) {
+      let gallery = []
+      images.forEach((item) => {
+        gallery.push(item.url)
+      })
+      return gallery
     },
     /** 打开/关闭菜单 */
     onShowMenus() {
@@ -262,26 +245,72 @@ export default {
     },
     //喜欢操作
     onLove() {
-      console.log('love')
+      console.log(this.isPraise)
+      console.log(this.praiseCount)
+      if (this.isPraise) {
+        console.log('取消点赞')
+        this.isPraise = false
+        this.praiseCount -= 1
+        this.queryUnLike({
+          id: this.listItemData.id,
+          type: this.propSquareType
+        }).catch(() => {
+          this.isPraise = true
+          this.praiseCount += 1
+        })
+      } else {
+        console.log('点赞')
+        this.isPraise = true
+        this.praiseCount += 1
+        this.queryLike({
+          id: this.listItemData.id,
+          type: this.propSquareType,
+          createdId: this.listItemData.user.userId,
+          contentType: this.listItemData.type
+        }).catch(() => {
+          this.isPraise = false
+          this.praiseCount -= 1
+        })
+      }
     },
     /** 进入详情 */
     toDetail () {
-      if (this.listItemData.tagsId) {
-        this.$router.push({
-          path: this.path,
-          query: {
-            id: this.listItemData.id,
-            tagsId: this.listItemData.tagsId,
-            topicType: this.listItemData.topicType,
-          }
-        })
+      if (this.propSquareType) {
+        if (this.listItemData.tagsId) {
+          this.$router.push({
+            path: this.typePath,
+            query: {
+              id: this.listItemData.id,
+              tagsId: this.listItemData.tagsId,
+              topicType: this.listItemData.topicType,
+            }
+          })
+        } else {
+          this.$router.push({
+            path: this.typePath,
+            query: {
+              id: this.listItemData.id,
+            }
+          })
+        }
       } else {
-        this.$router.push({
-          path: this.path,
-          query: {
-            id: this.listItemData.id,
-          }
-        })
+        if (this.listItemData.tagsId) {
+          this.$router.push({
+            path: this.path,
+            query: {
+              id: this.listItemData.id,
+              tagsId: this.listItemData.tagsId,
+              topicType: this.listItemData.topicType,
+            }
+          })
+        } else {
+          this.$router.push({
+            path: this.path,
+            query: {
+              id: this.listItemData.id,
+            }
+          })
+        }
       }
     },
     // 删除

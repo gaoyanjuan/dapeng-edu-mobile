@@ -23,7 +23,7 @@
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/works-page-details"
-            squareType="作品"
+            propSquareType="WORKS"
           />
         </template>
         <template v-if="!workListGetters.list.length && finished">
