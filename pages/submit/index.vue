@@ -358,17 +358,6 @@ export default {
       })
     },
 
-    /** 计算图片单边长度 */
-    calcImgLength(file) {
-      return new Promise((resolve, reject) => {
-        let img = new Image()
-        img.onload = function () {
-          resolve({ width:img.width, height:img.height})
-        }
-        img.src = file
-      })
-    },
-
     /**
      * 监听上传文件大小
      * 自动过滤9M以上的图片

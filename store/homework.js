@@ -103,7 +103,13 @@ export default {
       })
       commit('appendRequirementList', res)
       return res
-    }
+    },
+
+    // 抄作业投诉
+    async appendComplaint(state, params) {
+      const res = await this.$axios.post(`/homes/${params.taskId}/plagiarism`, params)
+      return res
+    },
   },
   getters: {
     homeworkListGetters(state) {
