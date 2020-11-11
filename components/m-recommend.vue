@@ -5,52 +5,86 @@
 
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <m-posts
-          v-for="(res, i) in list"
-          :key="i"
-          squareType="作业"
-          :commentList="res.commentList"
-          :dataType="res.type"
-          :imgInfo="res.imgSmall"
-          :courseType="res.courseType"
-          :user="res.user"
-          :college="res.college"
-          :recommendType="res.recommendType"
-          :task="res.task"
-          :content="res.content"
-          :isAttention="res.isAttention"
-          :modifiedTime="res.lastModifiedTime"
-          :listItemData="res"
-          :path="navRoute"
-        />
+        <template v-if="recommendListGetters.list.length">
+          <div v-for="(res, i) in recommendListGetters.list" :key="i">
+            <m-posts
+              v-if="res.recommendTopic.type === 'TEXT'"
+              :propSquareType="res.hotType"
+              :courseType="res.courseType"
+              :modifiedTime="res.recommendTopic.createTime"
+              :listItemData="res.recommendTopic"
+            />
+            <m-video-posts
+              v-if="res.recommendTopic.type === 'VIDEO'"
+              :propSquareType="res.hotType"
+              :courseType="res.courseType"
+              :modifiedTime="res.recommendTopic.createTime"
+              :listItemData="res.recommendTopic"
+            />
+          </div>
+        </template>
+        <template v-if="!recommendListGetters.list.length && finished">
+          <div class="works-blank-wrap">
+            <img class="blank-img" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </template>
       </van-list>
     </section>
   </div>
 </template>
 
 <script>
-import { workDetails } from '@/data'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Recommend',
-  data: () => ({
-    list: [],
-    loading: false,
-    finished: false,
-    navRoute:'/details/homework-page-details',
-  }),
-  methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(workDetails)
-        }
-        // 加载状态结束
+  data () {
+    return {
+      list: [],
+      loading: false,
+      finished: false,
+      navRoute:'/details/homework-page-details'
+    }
+  },
+  computed: {
+    ...mapGetters('recommend', [
+      'recommendListGetters'
+    ])
+  },
+  watch: {
+    'recommendListGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
-          this.finished = true
-        }
-      }, 1000)
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'recommendListGetters.list': function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
+      }
+    }
+  },
+  methods:{
+    ...mapActions('recommend', [
+      'appendRecommendList'
+    ]),
+    onLoad () {
+      if (this.recommendListGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.recommendListGetters.status === 'loading') return false
+      const newPage = this.recommendListGetters.pageInfo.pages + 1
+      this.appendRecommendList({
+        page: newPage
+      })
     }
   }
 }

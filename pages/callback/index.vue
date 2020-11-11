@@ -1,12 +1,5 @@
 <template>
-  <div class="wrap">
-    <div class="loading">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  </div>
+  <div class="loading"></div>
 </template>
 
 <script>
@@ -32,7 +25,6 @@ export default {
     Cookie.set('refresh_token', data.refresh_token)
     const redirectUrl = decodeURIComponent(localStorage.getItem('redirect_url'))
     if (redirectUrl.includes('redirect')) {
-      // console.log(redirectUrl)
       window.top.location = redirectUrl.split('redirect=')[1]
     } else {
       window.top.location = `${this.validateSystemHostName().host}`
@@ -42,49 +34,37 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  .wrap {
-    height: 506px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.loading {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  background: url("~@/assets/icons/loading.svg") center center no-repeat #fff;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 50px 80px;
+  animation: load 1.04s ease infinite;
+  -webkit-animation: load 1.04s ease infinite;
+}
+
+@keyframes load {
+  0%{
+    opacity: 1;
   }
-  .loading {
-    width: 100px;
-    height: 16px;
+  100%{
+    opacity: 0;
   }
-  .loading span {
-    display: inline-block;
-    width: 15px;
-    height: 100%;
-    margin-right: 5px;
-    border-radius: 50%;
-    background: lightgreen;
-    -webkit-animation: load 1.04s ease infinite;
+}
+
+@-webkit-keyframes load {
+  0%{
+    opacity: 1;
   }
-  .loading span:last-child {
-    margin-right: 0px;
+  100%{
+    opacity: 0;
   }
-  @-webkit-keyframes load {
-    0%{
-      opacity: 1;
-    }
-    100%{
-      opacity: 0;
-    }
-  }
-  .loading span:nth-child(1){
-    -webkit-animation-delay:0.13s;
-  }
-  .loading span:nth-child(2){
-    -webkit-animation-delay:0.26s;
-  }
-  .loading span:nth-child(3){
-    -webkit-animation-delay:0.39s;
-  }
-  .loading span:nth-child(4){
-    -webkit-animation-delay:0.52s;
-  }
-  .loading span:nth-child(5){
-    -webkit-animation-delay:0.65s;
-  }
+}
 </style>

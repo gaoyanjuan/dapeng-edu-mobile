@@ -21,7 +21,7 @@
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/dynamic-page-details"
-            squareType="动态"
+            propSquareType="LIFE"
           />
         </template>
         <template v-else-if="$route.query.type === 'new'">
@@ -37,7 +37,7 @@
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/dynamic-page-details"
-            squareType="动态"
+            propSquareType="LIFE"
           />
         </template>
         <template v-else>
@@ -53,7 +53,7 @@
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/dynamic-page-details"
-            squareType="动态"
+            propSquareType="LIFE"
           />
         </template>
       </van-list>

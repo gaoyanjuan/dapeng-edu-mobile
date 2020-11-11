@@ -21,20 +21,21 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
     "@vant/touch-emulator": "^1.2.0",
+    "ali-oss": "^6.11.2",
     "amfe-flexible": "^2.2.1",
     "animate.css": "^4.1.1",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
     "dayjs": "^1.8.36",
     "js-cookie": "^2.2.1",
+    "jwt-decode": "^3.0.0",
     "nuxt": "^2.14.5",
     "root-font-size": "^1.0.4",
     "swiper": "^5.4.5",
     "vant": "^2.10.8",
     "vue-awesome-swiper": "^4.1.1",
     "vue-clipboard2": "^0.3.1",
-    "xss": "^1.0.8",
-    "jwt-decode": "^3.0.0"
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.0.0",

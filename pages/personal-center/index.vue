@@ -13,44 +13,44 @@
         <p v-else class="not-login-wrap">
           <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
         </p>
-        <span v-if="hasStudent" class="user-code">学籍号：2020070388886</span>
+        <span v-if="studentCodeGetters" class="user-code">学籍号：{{ studentCodeGetters }}</span>
       </div>
     </div>
 
     <!-- 用户数据：“关注、粉丝、推荐、喜欢” -->
     <div class="mine-user-data-wrap">
-      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=attention'">
-        <span class="data-item-column-nums">123</span>
+      <div class="data-item-column" @click="toAttention">
+        <span class="data-item-column-nums">{{ userTrendsGetters.followCount | studentsCount }}</span>
         <span class="data-item-column-txt">关注</span>
-      </nuxt-link>
+      </div>
 
-      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=fans'">
-        <span class="data-item-column-nums">123</span>
+      <div class="data-item-column" @click="toFans">
+        <span class="data-item-column-nums">{{ userTrendsGetters.fansCount | studentsCount }}</span>
         <span class="data-item-column-txt">粉丝</span>
-      </nuxt-link>
+      </div>
 
-      <nuxt-link tag="div" class="data-item-column" :to="userRoute + '?type=recommend'">
-        <span class="data-item-column-nums">14</span>
+      <div class="data-item-column" @click="toRecommend">
+        <span class="data-item-column-nums">{{ userTrendsGetters.recommendCount | studentsCount }}</span>
         <span class="data-item-column-txt">推荐</span>
-      </nuxt-link>
+      </div>
 
       <div class="data-item-column" @click="openLovePopup">
-        <span class="data-item-column-nums">123</span>
+        <span class="data-item-column-nums">{{ userTrendsGetters.likeCount | studentsCount }}</span>
         <span class="data-item-column-txt">喜欢</span>
       </div>
     </div>
 
     <!-- 用户数据：“我的喜欢和收藏” -->
     <div class="mine-user-remark-wrap">
-      <nuxt-link tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
+      <div tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
         <img class="user-remark-icon" :src="navLike" alt="" />
         <span class="user-remark-txt">我的喜欢</span>
-      </nuxt-link>
+      </div>
 
-      <nuxt-link tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
+      <div tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
         <img class="user-remark-icon" :src="navStar" alt="" />
         <span class="user-remark-txt">我的收藏</span>
-      </nuxt-link>
+      </div>
     </div>
 
     <!-- 用户数据：“作业、作品导航等……” -->
@@ -69,6 +69,9 @@
       <span class="app-txt">下载大鹏教育APP</span>
     </div>
 
+    <!-- 退出登录 -->
+    <div v-if="userInfoGetters" class="mine-app-logout-wrap" @click="onLogoutEvent">退出登录</div>
+
     <!-- 我的喜欢弹层 -->
     <m-love-popup :show-popup="lovePopup"/>
 
@@ -76,7 +79,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters,mapActions } from 'vuex'
+import Cookie from 'js-cookie'
 import { appSource } from '@/utils/device-type'
 
 export default {
@@ -94,17 +98,28 @@ export default {
       {txt:'作品',name:'works',icon: require('@/assets/icons/mine/nav-works.png')},
       {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
       {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
-      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
-      {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
+      // {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
+      // {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
-    ],
-    hasStudent: false,
-    isLogin: false
+    ]
   }),
+  mounted() {
+    if(this.userInfoGetters && this.userInfoGetters.userId ) {
+      this.appendUserTrends({ userId: this.userInfoGetters.userId })
+    }
+    
+  },
   computed:{
-    ...mapGetters('user',['userInfoGetters'])
+    ...mapGetters('user',[
+      'userInfoGetters',
+      'studentCodeGetters',
+      'userTrendsGetters'
+    ])
   },
   methods:{
+    ...mapActions('user', [
+      'appendUserTrends'
+    ]),
     // 跳转登录页
     toLogin () {
       this.$router.push('/login')
@@ -121,6 +136,14 @@ export default {
         path: '/personal-center/personal-publish',
         query:{ type: params.name}
       })
+    },
+
+    // 退出登录
+    onLogoutEvent() {
+      Cookie.remove('access_token')
+      Cookie.remove('refresh_token')
+      const redirectUrl = `${location.protocol}//${location.host}`
+      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
 
      /// 唤起APP
@@ -146,6 +169,32 @@ export default {
         location.href = 'https://enroll.dapengjiaoyu.com'
       }, 1500)
     },
+    toAttention() {
+        this.$router.push({
+          path: '/personal-center/personal-user',
+          query: {
+            userId: this.userInfoGetters.userId
+          }
+        })
+    },
+    toFans() {
+        this.$router.push({
+          path: '/personal-center/personal-user',
+          query: {
+            type: 'fans',
+            userId: this.userInfoGetters.userId
+          }
+        })
+    },
+    toRecommend() {
+      this.$router.push({
+          path: '/personal-center/personal-user',
+          query: {
+            type: 'recommend',
+            userId: this.userInfoGetters.userId
+          }
+        })
+    }
   }
 }
 </script>
@@ -154,7 +203,7 @@ export default {
 .mine {
   width: 100%;
   padding: 16px;
-  min-height: calc(100vh - 94px);
+  min-height: calc(100vh - 90px);
   background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F1 100%);
 }
 
@@ -201,6 +250,7 @@ export default {
     font-weight: 600;
     color: #36404A;
     line-height: 33px;
+    .text-ellipsis()
   }
   & .not-login-wrap {
     font-size: 24px;
@@ -306,7 +356,8 @@ export default {
 
 .mine-nav-group-wrap {
   width: 343px;
-  min-height: 154px;
+  // min-height: 154px;
+  min-height: 77px;
   background: #FFFFFF;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
   border-radius: 6px;
@@ -356,4 +407,22 @@ export default {
     margin-left: 6px;
   }
 }
+
+.mine-app-logout-wrap {
+  width: 343px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 6px;
+  margin-top: 12px;
+
+  font-size: 12px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #A3A8AB;
+  text-align: center;
+  background: #FFFFFF;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+}
+
 </style>

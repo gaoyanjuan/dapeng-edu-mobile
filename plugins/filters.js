@@ -155,6 +155,13 @@ const filterCollageName = function (college) {
   return college.name.replace(/学院/, '')
 }
 
+export function formatSlashDate(date) {
+  if (!date) {
+    return '---'
+  }
+  return dayjs(date).format('YYYY/MM') // 使用 dayjs 格式化时间
+}
+
 const filter = {
   formatDate,
   activitiesDate,
@@ -166,7 +173,8 @@ const filter = {
   requireData,
   requireDataH5,
   formatEmotions,
-  filterCollageName
+  filterCollageName,
+  formatSlashDate
 }
 Object.keys(filter).forEach((key) => {
   Vue.filter(key, filter[key])

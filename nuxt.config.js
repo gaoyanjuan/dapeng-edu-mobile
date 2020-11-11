@@ -13,7 +13,8 @@ export default {
     baseUrl: env[process.env.MODE].DP_URL,
     zhifuUrl: env[process.env.MODE].DP_ZHIFU,
     mBaseUrl:env[process.env.MODE].DP_M_URL,
-    authUrl: env[process.env.MODE].DP_AUTH_URL
+    authUrl: env[process.env.MODE].DP_AUTH_URL,
+    ossUrl:env[process.env.MODE].OSS_URL
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
@@ -51,7 +52,8 @@ export default {
 
   loading: {
     height: '3px',
-    color:'#0CB65B',
+    color: '#0CB65B',
+    failedColor:'#0CB65B'
   },
 
   css: [

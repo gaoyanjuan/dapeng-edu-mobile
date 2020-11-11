@@ -2,7 +2,44 @@ import qs from 'querystring'
 
 export const state = () => ({
   accessToken: null,
-  userInfo: null
+  userInfo: null,
+  userTrends: {
+    followCount: 0,
+    fansCount: 0,
+    recommendCount: 0,
+    likeCount: 0,
+  },
+  studentCode: null,
+  userFollow: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  userFans: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  userHomesRecommend: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
 })
 
 export const mutations = {
@@ -12,6 +49,65 @@ export const mutations = {
   },
   appendUserInfo (state, payload) {
     state.userInfo = payload
+  },
+  appendUserTrends (state, payload) {
+    state.userTrends = payload.data
+  },
+  appendUserFollow (state, payload) {
+    state.userFollow.list = state.userFollow.list.concat(payload.data)
+    state.userFollow.list.forEach((item)=>{
+      item.isAttention = true
+    })
+    state.userFollow.pageInfo = payload.pageInfo
+    if (payload.data.length < state.userFollow.pageInfo.size) {
+      state.userFollow.status = 'over'
+    } else {
+      state.userFollow.status = 'load'
+    }
+  },
+  appendStudentCode(state, payload) { 
+    state.studentCode = payload.data.studentSatusId
+  },
+  clearUserFollow (state) {
+    state.userFollow.list = []
+    state.userFollow.pageInfo.pages = 1
+    state.userFollow.status = 'loading'
+  },
+  setUserFollowStatus(state, payload) {
+    let data = payload.data
+    if(data === 'userFollow') {
+      state.userFollow.list[payload.index].isAttention = payload.flag
+    }else if(data === 'userFans') {
+      state.userFans.list[payload.index].isAttention = payload.flag
+    }
+  },
+  appendUserFans (state, payload) {
+    state.userFans.list = state.userFans.list.concat(payload.data)
+    state.userFans.pageInfo = payload.pageInfo
+    if (payload.data.length < state.userFans.pageInfo.size) {
+      state.userFans.status = 'over'
+    } else {
+      state.userFans.status = 'load'
+    }
+  },
+  clearUserFans (state) {
+    state.userFans.list = []
+    state.userFans.pageInfo.pages = 1
+    state.userFans.status = 'loading'
+  },
+  appendUserHomesRecommend (state, payload) {
+    state.userHomesRecommend.list = state.userHomesRecommend.list.concat(payload.data)
+    state.userHomesRecommend.pageInfo = payload.pageInfo
+    if (payload.data.length < state.userHomesRecommend.pageInfo.size) {
+      state.userHomesRecommend.status = 'over'
+    } else {
+      state.userHomesRecommend.status = 'load'
+    }
+  },
+  clearUserHomesRecommend (state) {
+    state.userHomesRecommend.list = []
+    state.userHomesRecommend.pageInfo.pages = 1
+    state.userHomesRecommend.status = 'loading'
   },
 }
 
@@ -25,10 +121,60 @@ export const actions = {
     const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
     return data
   },
-  // 获取用户信息
-  async getUserDetail (state, params) {
+  // 获取用户信息【主要是获取学籍号】
+  async getUserDetail({ commit }, params) {
     const data = await this.$axios.get(`/old/users/details`)
-    return data
+    commit('appendStudentCode', data)
+  },
+  // 获取用户互动数据
+  async appendUserTrends ({ commit }, params) {
+    const res = await this.$axios.get('/users/trends', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserTrends', res)
+    return res
+  },
+  // 用户关注列表
+  async appendUserFollow ({ commit }, params) {
+    const res = await this.$axios.get('/users/follows', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserFollow', res)
+    return res
+  },
+  // 关注
+  async followingUser (store, params) {
+    const res = await this.$axios.post(`/following/${params.id}`)
+    return res
+  },
+  // 取消关注
+  async cancelFollowingUser (store, params) {
+    const res = await this.$axios.delete(`/following/${params.id}`)
+    return res
+  },
+  // 用户粉丝列表
+  async appendUserFans ({ commit }, params) {
+    const res = await this.$axios.get('/users/fans', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserFans', res)
+    return res
+  },
+  // 用户推荐作业列表
+  async appendUserHomesRecommend ({ commit }, params) {
+    const res = await this.$axios.get('users/homes/recommend', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendUserHomesRecommend', res)
+    return res
   },
   // 发送验证码
   async sendCode (state, params) {
@@ -53,5 +199,20 @@ export const getters = {
   },
   userInfoGetters (state) {
     return state.userInfo
+  },
+  userTrendsGetters (state) {
+    return state.userTrends
+  },
+  studentCodeGetters (state) {
+    return state.studentCode
+  },
+  userFollowGetters(state) {
+    return state.userFollow
+  },
+  userFansGetters(state) {
+    return state.userFans
+  },
+  userHomesRecommendGetters(state) {
+    return state.userHomesRecommend
   },
 }

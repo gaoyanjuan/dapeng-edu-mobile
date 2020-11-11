@@ -93,7 +93,6 @@ export default {
   methods: {
     collegeChange(index, item) {
       this.collegeIndex = index
-      console.log(item)
     },
     onLoad() {
       setTimeout(() => {
