@@ -85,6 +85,14 @@ export default {
     }
   },
   actions: {
+    async queryUnLike ({ commit }, params) {
+      const res = this.$axios.delete('/likes', params)
+      return res.data
+    },
+    async queryLike ({ commit }, params) {
+      const res = this.$axios.post('/likes', params)
+      return res.data
+    },
     async queryCommentList ({ commit }, params) {
       commit('changeCommentListStatus', { status: 'loading', params })
       const res = await this.$axios.get(`/common/comments`, {

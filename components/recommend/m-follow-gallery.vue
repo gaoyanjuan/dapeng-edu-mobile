@@ -13,11 +13,11 @@
     <div class="fg-content">
       <client-only>
         <swiper class="swiper" :options="swiperOptions">
-          <swiper-slide v-for="(item, i) in list" :key="i">
+          <swiper-slide v-for="(item, i) in popularUsersGetters" :key="i">
             <div class="user-card">
-              <img class="avatar" :src="avatar" alt="" />
+              <img class="avatar" :src="item.avatar" alt="" />
               <span class="nickname">{{ item.nickname }}</span>
-              <span :class="item.type ? 'btn-unfollow': 'btn-follow'" @click="handleFollow"></span>
+              <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow"></span>
             </div>
           </swiper-slide>
           <swiper-slide class="card-more">
@@ -30,14 +30,10 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'FollowGallery',
   data: () => ({
-    list:[{nickname:'桃子',type: false},
-    {nickname:'桃子',type: true},
-    {nickname:'桃子',type: false},
-    {nickname:'桃子',type: true},
-    {nickname:'桃子',type: false}],
     swiperOptions: {
       slidesPerView: 3.5,
       spaceBetween: 10,
@@ -46,6 +42,11 @@ export default {
     avatar: require('@/assets/icons/common/avatar.png'),
     more: require('@/assets/icons/square/more.png'),
   }),
+  computed: {
+    ...mapGetters({
+      popularUsersGetters: 'attention/popularUsersGetters',
+    })
+  },
   methods:{
     /** 关注事件 */
     handleFollow() {}
@@ -156,7 +157,10 @@ export default {
     object-fit: cover;
   }
   & > .nickname {
-    width: auto;
+    width: 80px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow:ellipsis;
     height: 20px;
     font-size: 14px;
     font-family: @dp-font-medium;
