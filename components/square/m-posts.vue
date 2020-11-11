@@ -74,14 +74,14 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="squareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
     <van-popup round overlay-class="menus__popup">
-      <nuxt-link v-if="squareType === 'HOMEWORK'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
