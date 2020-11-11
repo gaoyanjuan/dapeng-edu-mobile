@@ -91,6 +91,8 @@ export default {
     imageInfo: [],
     // 可提交状态
     submitStatus: false,
+    // 提交作业安全锁
+    submitLock: true,
     // 上传状态
     uploadStatus: true,
     // 图片总大小
@@ -111,7 +113,7 @@ export default {
       } else {
         this.submitStatus = false
       }
-    }
+    },
   },
   methods:{
     ...mapActions({
@@ -124,7 +126,11 @@ export default {
     /** 提交 */
     onSubmitHandle(){
       if (!this.submitStatus) return false
-      if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) return false
+
+      if (!this.submitLock) return false
+
+      this.submitLock = false
+      // if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) return false
       this.complaint({
         imgInfo: this.imageInfo,
         taskId: this.$route.query.taskId,
@@ -133,6 +139,7 @@ export default {
         respondentId: this.$route.query.id
       }).then((res) => {
         if(res.status === 201) {
+          this.submitLock = true
           this.$myToast('提交成功我们将第一时间处理')
           setTimeout(() => {
             this.$router.push('/')
