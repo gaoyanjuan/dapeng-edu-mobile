@@ -42,7 +42,10 @@ export default {
         hid: 'player',
         type: 'text/javascript',
         src: '//player.polyv.net/script/player.js'
-      }
+      },
+      {
+        src: 'http://pv.sohu.com/cityjson?ie=utf-8'
+      },
     ]
   },
 

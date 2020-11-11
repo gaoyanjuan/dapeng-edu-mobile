@@ -10,13 +10,13 @@
       <!-- Password Blcok -->
       <div class="register-password-row">
         <img class="password-icon" :src="passIcon" alt="password" />
-        <input v-model.trim="password" class="password-input" type="text" placeholder="新密码（英文+数字，6-18位）" />
+        <input v-model.trim="password" class="password-input" type="password" placeholder="新密码（英文+数字，6-18位）" />
       </div>
 
       <!-- Confirm Password Blcok -->
       <div class="register-confirm-password-row">
         <img class="safety-icon" :src="safety" alt="safety-icon" />
-        <input v-model.trim="confirmPassword" class="confirm-password" type="text" placeholder="确认密码" />
+        <input v-model.trim="confirmPassword" class="confirm-password" type="password" placeholder="确认密码" />
       </div>
 
       <!-- Warning Block -->
@@ -40,6 +40,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Cookie from 'js-cookie'
+
 export default {
   name:'Affirm-Password',
   layout:'navbar',
@@ -53,6 +56,8 @@ export default {
     warning: { show:false, content:''},
     passIcon: require('@/assets/icons/register/password.png'),
     safety: require('@/assets/icons/register/safety.png'),
+    mobile: '',
+    cip: ''
   }),
   watch:{
     password(n, o) {
@@ -80,7 +85,14 @@ export default {
       }
     }
   },
-  methods:{
+  mounted() {
+    this.mobile = this.$route.query.mobile
+    this.cip = returnCitySN['cip']
+  },
+  methods: {
+    ...mapActions('user', [
+      'userRegister'
+    ]),
     // 快速注册
     onFinished() {
       if(!this.password.length) { 
@@ -101,8 +113,25 @@ export default {
         return
       }
 
-      // 完成注册
-      this.$router.push('/')
+      // 请求注册
+      const data = {
+        mobile: this.mobile,
+        password: this.password,
+        registerIp: this.cip
+      }
+      this.userRegister(data)
+        .then((res) => {
+          if (res.status === 200) {
+            Cookie.set('access_token', res.data.access_token)
+            Cookie.set('refresh_token', res.data.refresh_token)
+            localStorage.setItem('login_time', new Date().getTime())
+            // 完成注册
+            this.$router.push('/')
+          } else {
+            this.warning.content = res.data.message
+            this.warning.show = true
+          }
+        })
     },
 
     // 协议
@@ -115,8 +144,7 @@ export default {
     onTopolicy() {
       const href = "https://h5-static.dapengjiaoyu.cn/h5-protocol/#/yszc?platform=wap&entrance=common"
       window.open(href,'_blank')
-    },
-
+    }
 
   }
 }
@@ -243,7 +271,7 @@ export default {
   margin-top: 16px;
 
   .protocol-txt {
-    font-size: 13px;
+    font-size: 12px;
     font-family: @medium;
     font-weight: 500;
     color: #707070;
@@ -251,7 +279,7 @@ export default {
   }
 
   .protocol-link {
-    font-size: 13px;
+    font-size: 12px;
     font-family: @medium;
     font-weight: 500;
     color: #00B93B;

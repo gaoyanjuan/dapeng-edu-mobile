@@ -1,3 +1,5 @@
+import qs from 'querystring'
+
 export const state = () => ({
   accessToken: null,
   userInfo: null

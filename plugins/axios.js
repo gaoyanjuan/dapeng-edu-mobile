@@ -2,6 +2,7 @@ import Cookie from 'js-cookie'
 import { getcookiesInServer } from '@/utils/cookie-tool'
 import Vue from 'vue'
 
+
 export default function ({store, redirect, req, route, error, app: { $axios }}) {
   $axios.interceptors.request.use(config => {
     if (config.url.startsWith('/token')) {
@@ -63,6 +64,8 @@ export default function ({store, redirect, req, route, error, app: { $axios }}) 
           }
         }
       } else if (error.response.status == 409 && error.response.data.code === 404229){
+        return error.response
+      } else if (error.response.status == 409) {
         return error.response
       }
       console.log(error.response , '服务端接口错误信息')

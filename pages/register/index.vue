@@ -83,7 +83,6 @@ export default {
       this.registerAble = true
       this.warning.show = false
       this.warning.content = ''
-      console.log(this.authStatus)
     },
     authCode(n, o) {
       if (!n.length) {
@@ -106,7 +105,8 @@ export default {
     ...mapActions('user', [
       'checkRegisterAble',
       'getUserDetail',
-      'sendCode'
+      'sendCode',
+      'checkCode'
     ]),
     // 快速注册
     onRegister() {
@@ -130,10 +130,27 @@ export default {
         return
       }
 
-      // 注册逻辑************
-      this.$router.push({
-        path:'/register/affirm-password',
-      })
+      // 对比验证码
+      const params = {
+        mobile: this.mobile,
+        codeType: 'REGISTER_CODE',
+        code: this.authCode
+      }
+      this.checkCode(params)
+        .then((res) => {
+          if (res.status === 200) {
+            // 注册逻辑************
+            this.$router.push({
+              path: '/register/affirm-password',
+              query: {
+                mobile: this.mobile
+              }
+            })
+          } else {
+            this.warning.content = res.data.message ? res.data.message : ''
+            this.warning.show = true
+          }
+        })
     },
 
     // 获取验证吗码
@@ -201,7 +218,7 @@ export default {
     },
 
     toLogin() {
-      console.log('tologin')
+      this.$router.push('/login')
     }
   }
 }
