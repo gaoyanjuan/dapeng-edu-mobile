@@ -360,7 +360,8 @@ export default {
 
 .mine-nav-group-wrap {
   width: 343px;
-  min-height: 154px;
+  // min-height: 154px;
+  min-height: 77px;
   background: #FFFFFF;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
   border-radius: 6px;

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { workDetails } from '@/data'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Follow',
   data: () => ({
@@ -45,20 +45,14 @@ export default {
     finished: false,
     navRoute:'/details/homework-page-details',
   }),
+  computed: {
+    ...mapGetters('attention', [
+      'popularUsersGetters',
+      'attentionListGetters'
+    ])
+  },
   methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(workDetails)
-        }
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
-          this.finished = true
-        }
-      }, 1000)
-    }
+     onLoad () {}
   }
 }
 </script>
