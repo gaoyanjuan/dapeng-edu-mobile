@@ -29,7 +29,7 @@
         <span class="data-item-column-txt">粉丝</span>
       </div>
 
-      <div tag="div" class="data-item-column" :to="userRoute + '?type=recommend'">
+      <div class="data-item-column" @click="toRecommend">
         <span class="data-item-column-nums">{{ userTrendsGetters.recommendCount | studentsCount }}</span>
         <span class="data-item-column-txt">推荐</span>
       </div>
@@ -186,6 +186,15 @@ export default {
           }
         })
     },
+    toRecommend() {
+      this.$router.push({
+          path: '/personal-center/personal-user',
+          query: {
+            type: 'recommend',
+            userId: this.userInfoGetters.userId
+          }
+        })
+    }
   }
 }
 </script>

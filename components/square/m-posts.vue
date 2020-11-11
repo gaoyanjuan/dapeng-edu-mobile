@@ -59,12 +59,12 @@
           </div>
           <!-- 喜欢 -->
           <div class="fot__rh__love--wrap" @click="onLove">
-            <img class="fot__love" :src="love" alt="love" />
-            <span class="fot__nums">{{ listItemData.praisesCount | studentsCount }}</span>
+            <img class="fot__love" :src="listItemData.isPraise ? unLove : love" alt="love" />
+            <span class="fot__nums">{{ (listItemData.praisesCount) || (listItemData.praiseCount) | studentsCount }}</span>
           </div>
           <!-- 收藏 -->
           <div class="fot__rh__star--wrap" @click="onCollect">
-            <img class="fot__star" :src="star" alt="star" />
+            <img class="fot__star" :src="listItemData.isCollection ? unStar : star" alt="star" />
           </div>
         </div>
       </div>
@@ -212,8 +212,11 @@ export default {
     comment: require('@/assets/icons/posts/posts-comment.png'),
     love: require('@/assets/icons/posts/posts-love.png'),
     star: require('@/assets/icons/posts/posts-star.png'),
+    unLove: require('@/assets/icons/posts/posts-unlove.png'),
+    unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
   mounted() {
+    console.log(this.listItemData)
     setTimeout(() => {
       this.loading = false
     }, 500)
