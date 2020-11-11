@@ -28,7 +28,7 @@
       </div>
 
       <!-- Warning Block -->
-      <div v-if="warning.show" class="register-warning-row"> {{ warning.content }} </div>
+      <div v-if="warning.show" class="register-warning-row" v-html="warning.content"></div>
       
       <!-- Register Button Blcok -->
       <div v-if="registerAble" class="register-button-row" @click="onRegister">快速注册</div>
@@ -72,20 +72,18 @@ export default {
     account: require('@/assets/icons/register/account.png'),
     safety: require('@/assets/icons/register/safety.png'),
   }),
-  mounted () {
-    this.getUserDetail().then((res) => {
-      console.log(res)
-    })
-  },
+  mounted () {},
   watch:{
     mobile(n, o) {
       if (!new RegExp(/^1[3-9][0-9]\d{8}$/).test(n)) {
         this.authStatus = false
       } else {
         this.authStatus = true
-        this.warning.show = false
-        this.warning.content = ''
       }
+      this.registerAble = true
+      this.warning.show = false
+      this.warning.content = ''
+      console.log(this.authStatus)
     },
     authCode(n, o) {
       if (!n.length) {
@@ -107,7 +105,8 @@ export default {
   methods:{
     ...mapActions('user', [
       'checkRegisterAble',
-      'getUserDetail'
+      'getUserDetail',
+      'sendCode'
     ]),
     // 快速注册
     onRegister() {
@@ -144,7 +143,7 @@ export default {
       if(this.timer) return
 
       // 验证用户是否可以自注册
-      const { data } = await this.checkRegisterAble({mobile: this.mobile})
+      const { data } = await this.checkRegisterAble({account: this.mobile})
       if (data.verifyStatus) {
         const params = {
           mobile: this.mobile,
@@ -156,17 +155,19 @@ export default {
         if (res.status === 200 && !this.timer) {
           this.countDown()
         } else {
-          this.errorMsg = res.data.message ? res.data.message : ''
-          this.codeDisabled = false
+          this.warning.content = res.data.message ? res.data.message : ''
+          this.warning.show = true
         }
       } else {
         this.registerAble = false
+
         if (data.accountType === 'MOBILE') {
           const newMobile = validateMobileCode(data.account)
-          this.errorMsg = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
+          this.warning.content = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
         } else if (data.accountType === 'DPACCOUNT') {
-          this.errorMsg = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
+          this.warning.content = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
         }
+        this.warning.show = true
       }
     },
 
@@ -198,6 +199,10 @@ export default {
       const href = "https://h5-static.dapengjiaoyu.cn/h5-protocol/#/yszc?platform=wap&entrance=common"
       window.open(href,'_blank')
     },
+
+    toLogin() {
+      console.log('tologin')
+    }
   }
 }
 </script>

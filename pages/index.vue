@@ -70,7 +70,7 @@
     <!-- 作业栏目-下拉菜单筛选 -->
     <div v-show="showHomeworkMenu">
       <div class="tab-drop-down-menus" :style="scrollTop">
-        <div 
+        <div
           v-for="item in homeworkDownMenus"
           :key="item.value"
           :class="homeworkMenuValue === item.value ? 'menus-item-active' : 'menus-item'"
@@ -84,7 +84,7 @@
     <!-- 小视频栏目-下拉菜单筛选 -->
     <div v-show="showVideoMenu">
       <div class="tab-drop-down-menus" :style="scrollTop">
-        <div 
+        <div
           v-for="item in videoDownMenus"
           :key="item.value"
           :class="videoMenuValue === item.value ? 'menus-item-active' : 'menus-item'"
@@ -175,7 +175,7 @@ export default {
     }
     // else if (to.name === 'index-reading') {
     //   this.activeName = 'reading'
-    // } 
+    // }
     // else if (to.name === 'index-part-time-task') {
     //   this.activeName = 'part-time-task'
     // }
@@ -194,7 +194,7 @@ export default {
       this.$router.replace('/')
     }
   },
-  
+
   methods:{
     /** 打开作业下拉菜单 */
     openHomeworkMenu(){
@@ -206,7 +206,7 @@ export default {
       this.showVideoMenu = !this.showVideoMenu
     },
 
-    /** 
+    /**
      * 点击切换导航菜单 ；
      * 导航按钮-作业和小视频比较特殊；
      * HTML结构未设置路由跳转；
@@ -216,7 +216,7 @@ export default {
      * 也是为了参数缓存；
     */
     onMenusClick(name, title) {
-      
+
       if(name === 'small-video') {
 
         if(this.$route.name === 'index-small-video') {

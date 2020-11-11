@@ -28,6 +28,21 @@ export const actions = {
     const data = await this.$axios.get(`/old/users/details`)
     return data
   },
+  // 发送验证码
+  async sendCode (state, params) {
+    const res = await this.$axios.get(`/old/sms/send-code?${qs.stringify(params)}`)
+    return res
+  },
+  // 对比验证码
+  async checkCode (state, params) {
+    const res = await this.$axios.get(`/old/sms/check-code?${qs.stringify(params)}`)
+    return res
+  },
+  // 注册用户
+  async userRegister (state, params) {
+    const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)
+    return res
+  },
 }
 
 export const getters = {
