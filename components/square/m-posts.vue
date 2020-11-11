@@ -15,7 +15,7 @@
       <div class="works__cot">
         <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
         <div class="work__row__photos--group">
-          <m-photos v-if="imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
+          <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
           <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'"></m-homework-video>
           <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
         </div>
@@ -60,8 +60,8 @@
           </div>
           <!-- 喜欢 -->
           <div class="fot__rh__love--wrap" @click="onLove">
-            <img class="fot__love" v-if="isPraise" :src="love" alt="love" />
-            <img class="fot__love" v-else :src="unlove" alt="unlove" />
+            <img class="fot__love" v-if="isPraise" :src="unLove" alt="love" />
+            <img class="fot__love" v-else :src="love" alt="unlove" />
             <span class="fot__nums">{{ praiseCount | studentsCount }}</span>
           </div>
           <!-- 收藏 -->
@@ -74,14 +74,14 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="squareType === '作业'" tag="div" :to='`/copy-form?taskId=${task.taskId}&id=${user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link v-if="squareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="pageName === 'myHomework'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+    <van-popup round overlay-class="menus__popup">
+      <nuxt-link v-if="squareType === 'HOMEWORK'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -143,12 +143,12 @@ export default {
   data: () => ({
     loading: true,
     showMenusPopup:false,
+    isPraise: false,
+    praiseCount: 0,
     // 图片预览
     imagePreview: {
       show: false,
       images: [],
-      isPraise: false,
-      praiseCount: 0,
       startPosition: 1,
       commentNums:0,
       loveNums:0
@@ -250,10 +250,7 @@ export default {
     },
     //喜欢操作
     onLove() {
-      console.log(this.isPraise)
-      console.log(this.praiseCount)
       if (this.isPraise) {
-        console.log('取消点赞')
         this.isPraise = false
         this.praiseCount -= 1
         this.queryUnLike({
@@ -264,7 +261,6 @@ export default {
           this.praiseCount += 1
         })
       } else {
-        console.log('点赞')
         this.isPraise = true
         this.praiseCount += 1
         this.queryLike({
