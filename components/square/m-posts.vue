@@ -14,8 +14,9 @@
       <!-- content -->
       <div class="works__cot">
         <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(content)"></div>
-        <div v-if="imgInfo" class="work__row__photos--group">
-          <m-photos :photos="imgInfo" @openImagePreview="openImagePreview"></m-photos>
+        <div class="work__row__photos--group">
+          <m-photos v-if="imgInfo" :photos="imgInfo" @openImagePreview="openImagePreview"></m-photos>
+          <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'"></m-homework-video>
           <m-posts-remark v-if="recommendType" :label="recommendType" source="listPage"/>
         </div>
       </div>
@@ -216,7 +217,6 @@ export default {
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
   mounted() {
-    console.log(this.listItemData)
     setTimeout(() => {
       this.loading = false
     }, 500)
