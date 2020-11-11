@@ -89,19 +89,33 @@ export default {
     handleFollow(item, index){
       console.log(item, index)
       if(item.isAttention) {
-        this.cancelFollowingUser({ id: item.userId })
         this.setUserFollowStatus({
           index: index,
           flag: false,
           data: 'userFans'
         })
+        this.cancelFollowingUser({ id: item.userId }).catch(()=>{
+          this.setUserFollowStatus({
+          index: index,
+          flag: true,
+          data: 'userFans'
+        })
+        })
+        
       }else {
-        this.followingUser({ id: item.userId })
          this.setUserFollowStatus({
           index: index,
           flag: true,
           data: 'userFans'
         })
+        this.followingUser({ id: item.userId }).catch(()=>{
+          this.setUserFollowStatus({
+          index: index,
+          flag: false,
+          data: 'userFans'
+        })
+        })
+        
       }
     }
   },

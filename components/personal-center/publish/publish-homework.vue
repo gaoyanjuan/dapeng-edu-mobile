@@ -4,10 +4,8 @@
       <m-posts
         v-for="(res, index) in publishHomeworkGetters.list"
         :key="index"
-        squareType="作业"
         :commentList="res.comments"
         :dataType="res.type"
-        :imgInfo="res.imgSmall"
         :courseType="res.courseType"
         :user="res.user"
         :college="res.college"
@@ -19,6 +17,8 @@
         :listItemData="res"
         :path="navRoute"
         :pageName="pageName"
+        propSquareType="HOMEWORK"
+        :propIndex="index"
       />
     </template>
     <template v-if="!publishHomeworkGetters.list.length && finished">
@@ -35,7 +35,6 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Homework',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedText:'没有更多了',
@@ -96,8 +95,7 @@ export default {
   },
    computed: {
     ...mapGetters('user', [
-      'publishHomeworkGetters',
-      'userInfoGetters'
+      'publishHomeworkGetters'
     ])
   },
   destroyed () {

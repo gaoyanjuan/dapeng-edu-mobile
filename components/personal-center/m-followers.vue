@@ -104,19 +104,33 @@ export default {
     /** 关注事件 */
     handleFollow(item, index){
       if(item.isAttention) {
-        this.cancelFollowingUser({ id: item.userId })
         this.setUserFollowStatus({
           index: index,
           flag: false,
           data: 'userFollow'
         })
+        this.cancelFollowingUser({ id: item.userId }).catch(()=>{
+          this.setUserFollowStatus({
+          index: index,
+          flag: true,
+          data: 'userFollow'
+          })
+        })
+        
       }else {
-        this.followingUser({ id: item.userId })
-         this.setUserFollowStatus({
+        this.setUserFollowStatus({
           index: index,
           flag: true,
           data: 'userFollow'
         })
+        this.followingUser({ id: item.userId }).catch(()=>{
+          this.setUserFollowStatus({
+          index: index,
+          flag: false,
+          data: 'userFollow'
+          })
+        })
+        
       }
       
     }

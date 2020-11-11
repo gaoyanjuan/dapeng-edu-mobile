@@ -8,10 +8,8 @@
         <m-posts
           v-for="(res, index) in userHomesRecommendGetters.list"
           :key="index"
-          squareType="作业"
           :commentList="res.comments"
           :dataType="res.type"
-          :imgInfo="res.imgSmall"
           :courseType="res.courseType"
           :user="res.user"
           :college="res.college"
@@ -22,6 +20,9 @@
           :modifiedTime="res.lastModifiedTime"
           :listItemData="res"
           :path="navRoute"
+          propSquareType="HOMEWORK"
+          pageName="myRecommend"
+          :propIndex="index"
         />
         </template>
          <!-- 无数据 -->

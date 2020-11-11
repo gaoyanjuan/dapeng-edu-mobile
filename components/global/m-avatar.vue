@@ -12,10 +12,15 @@
 
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
-      <img class="avatar-menus-follow" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
-      <img class="avatar-menus-good" v-if="isGood" :src="goodImg" alt="优" />
-      <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" />
-      <img v-if="squareType === '作业'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
+      <img class="avatar-menus-follow" v-if="userInfo.userId !== userInfoGetters.userId && userInfo.userId !== dpUserId" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
+      <template v-if="userInfo.userId === userInfoGetters.userId && listItemData.approvedLevel !== '0'">
+        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
+        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
+        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
+        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
+      </template>
+      <!-- <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" /> -->
+      <img v-if="squareType === '作业' && pageName !== 'myRecommend' && listItemData.approvedLevel === '0'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
@@ -24,6 +29,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:'Avatar',
   props:{
@@ -53,17 +59,32 @@ export default {
     attention: {
       type: Boolean,
       default: false
-    }
+    },
+    pageName: {
+      type: String,
+      default: ''
+    },
+    listItemData: {
+      type: Object,
+      require: true,
+      default: function () {
+        return {
+          user: {
+            nickname: '佚名',
+            avatar: ''
+          }
+        }
+      }
+    },
   },
   data: () => ({
     follow: require('@/assets/icons/posts/posts-follow.png'),
     unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
     more: require('@/assets/icons/posts/posts-more.png'),
-    goodImg: require('@/assets/icons/posts/posts-good.png'),
     doubtImg: require('@/assets/icons/posts/posts-doubt.png'),
     doubtContentShow: false,
     isDoubt: false,
-    isGood: false
+    dpUserId: process.env.global.dpUserId,
   }),
   methods:{
     /**关注事件 */
@@ -76,7 +97,12 @@ export default {
     showDoubt() {
       this.doubtContentShow = !this.doubtContentShow
     }
-  }
+  },
+  computed:{
+    ...mapGetters('user',[
+      'userInfoGetters',
+    ])
+  },
 }
 </script>
 
@@ -141,7 +167,7 @@ export default {
   margin-left: 12px;
   cursor: pointer;
 }
-.avatar-right-side-wrap .avatar-menus-good {
+.avatar-right-side-wrap .avatar-menus-score {
   width: 38px;
   height: 38px;
   margin-left: 12px;

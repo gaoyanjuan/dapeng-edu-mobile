@@ -48,6 +48,16 @@ export const state = () => ({
       size: process.env.global.pageSize
     }
   },
+  publishWorks: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
 })
 
 export const mutations = {
@@ -131,6 +141,20 @@ export const mutations = {
     state.publishHomework.pageInfo.pages = 1
     state.publishHomework.status = 'loading'
   },
+  appendPublishWorks(state, payload) {
+    state.publishWorks.list = state.publishWorks.list.concat(payload.data)
+    state.publishWorks.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishWorks.pageInfo.size) {
+      state.publishWorks.status = 'over'
+    } else {
+      state.publishWorks.status = 'load'
+    }
+  },
+  clearPublishWorks (state) {
+    state.publishWorks.list = []
+    state.publishWorks.pageInfo.pages = 1
+    state.publishWorks.status = 'loading'
+  },
 }
 
 export const actions = {
@@ -208,6 +232,26 @@ export const actions = {
     commit('appendPublishHomework', res)
     return res
   },
+  // 删除作业
+  async deleteHomework ({ commit }, params) {
+    const res = await this.$axios.delete(`/homes/${params.id}`)
+    return res
+  },
+  // 用户的发布作品列表
+  async appendPublishWorks ({ commit }, params) {
+    const res = await this.$axios.get('/users/works', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishWorks', res)
+    return res
+  },
+  // 删除作品
+  async deleteWorks ({ commit }, params) {
+    const res = await this.$axios.delete(`/works/${params.id}`)
+    return res
+  },
 }
 
 export const getters = {
@@ -234,5 +278,8 @@ export const getters = {
   },
   publishHomeworkGetters(state) {
     return state.publishHomework
+  },
+  publishWorksGetters(state) {
+    return state.publishWorks
   },
 }
