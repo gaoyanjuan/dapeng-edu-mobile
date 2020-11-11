@@ -204,10 +204,13 @@ export default {
       queryLike: 'comment/queryLike',
       queryUnLike: 'comment/queryUnLike',
       deleteHomework: 'user/deleteHomework',
-      appendPublishHomework: 'user/appendPublishHomework'
+      appendPublishHomework: 'user/appendPublishHomework',
+      deleteWorks: 'user/deleteWorks',
+      appendPublishWorks: 'user/appendPublishWorks'
     }),
     ...mapMutations('user', [
-      'clearPublishHomework'
+      'clearPublishHomework',
+      'clearPublishWorks'
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
@@ -338,6 +341,18 @@ export default {
             size: 10
           })
         })
+      }else if(this.propSquareType === 'WORKS') {
+        this.deleteWorks({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishWorks()
+          this.appendPublishWorks({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
+        
       }
     },
     // 编辑作业
@@ -494,7 +509,7 @@ export default {
 /** menus-popup */
 .m-works /deep/.van-popup {
   width: 284px;
-  height: 138px;
+  // height: 138px;
   overflow: hidden;
 }
 

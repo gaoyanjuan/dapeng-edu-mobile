@@ -20,7 +20,7 @@
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
       <!-- <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" /> -->
-      <img v-if="squareType === '作业' && pageName !== 'myRecommend' && listItemData.approvedLevel === '0'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
+      <img v-if="(squareType === '作业' && pageName !== 'myRecommend') || (pageName === 'myHomework' && listItemData.approvedLevel === '0') || pageName === 'myWork'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568

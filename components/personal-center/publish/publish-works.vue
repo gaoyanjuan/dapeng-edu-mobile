@@ -4,16 +4,14 @@
       <m-posts
         v-for="(res, index) in publishWorksGetters.list"
         :key="index"
-        :commentList="res.comment"
         :dataType="res.type"
         :courseType="res.courseType"
         :user="res.user"
+        :activity="res.activity"
         :college="res.college"
-        :recommendType="res.recommendType"
-        :task="res.task"
         :content="res.content"
         :isAttention="res.isAttention"
-        :modifiedTime="res.lastModifiedTime"
+        :modifiedTime="res.createTime"
         :listItemData="res"
         :path="navRoute"
         :pageName="pageName"
@@ -38,7 +36,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/homework-page-details',
+    navRoute:'/details/works-page-details',
     blank: require('@/assets/icons/blank/have-no-works.png'),
     pageName: 'myWork'
   }),
