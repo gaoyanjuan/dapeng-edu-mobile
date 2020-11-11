@@ -14,8 +14,9 @@
       <!-- content -->
       <div class="works__cot">
         <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
-        <div v-if="listItemData.imgSmall" class="work__row__photos--group">
-          <m-photos :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
+        <div class="work__row__photos--group">
+          <m-photos v-if="imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
+          <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'"></m-homework-video>
           <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
         </div>
       </div>
@@ -65,7 +66,7 @@
           </div>
           <!-- 收藏 -->
           <div class="fot__rh__star--wrap" @click="onCollect">
-            <img class="fot__star" :src="star" alt="star" />
+            <img class="fot__star" :src="listItemData.isCollection ? unStar : star" alt="star" />
           </div>
         </div>
       </div>
@@ -73,7 +74,7 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link tag="div" to="/copy-form" class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link tag="div" :to='`/copy-form?taskId=${task.taskId}&id=${user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -153,9 +154,10 @@ export default {
       loveNums:0
     },
     comment: require('@/assets/icons/posts/posts-comment.png'),
-    unlove: require('@/assets/icons/posts/posts-love.png'),
-    love: require('@/assets/icons/posts/posts-unlove.png'),
-    star: require('@/assets/icons/posts/posts-star.png')
+    love: require('@/assets/icons/posts/posts-love.png'),
+    star: require('@/assets/icons/posts/posts-star.png'),
+    unLove: require('@/assets/icons/posts/posts-unlove.png'),
+    unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
   computed: {
     squareType () {

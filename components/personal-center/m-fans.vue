@@ -1,28 +1,30 @@
 <template>
   <div class="m-fans-wrap">
     <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-      <template v-if="list.length > 0">
-        <div v-for="(item, i) in list" :key="i" class="m-avatar">  
+      <template v-if="userFansGetters.list.length > 0">
+        <template  v-for="(item, index) in userFansGetters.list" >
+        <div :key="index" v-if="item.userId" class="m-avatar">  
           <!-- 左边用户信息 -->
           <div class="avatar-left-side-wrap">
-            <div class="red-dot"></div>
-            <img class="avatar" :src="avatar" alt="" />
+            <div v-if="item.redDot" class="red-dot"></div>
+            <img class="avatar" :src="item.avatar || avatar" alt="" />
             <div class="avatar-info-wrap">
               <span class="info-nickname"> {{ item.nickname }} </span>
-              <span class="info-signature"> {{ item.signature }} </span>
-              <span class="info-date"> {{ item.date | commonDate }} </span>
+              <span class="info-signature"> {{ item.introduction || '这个人很懒,什么都没有写~'}} </span>
+              <span class="info-date"> {{ item.createTime | commonDate }} </span>
             </div>
           </div>
 
           <!-- 右边关注 -->
           <div class="avatar-right-side-wrap">
-            <img class="avatar-menus-follow" :src="item.type ? follow : unfollow" @click="handleFollow"/>
+            <img class="avatar-menus-follow" :src="item.isAttention ? unfollow : follow" @click="handleFollow(item, index)"/>
           </div>
         </div>
+        </template>
       </template>
 
       <!-- 无数据 -->
-      <template v-if="list.length === 0 && finished">
+      <template v-if="userFansGetters.list.length === 0 && finished">
         <div class="blank-no-data-wrap">
           <img class="blank-icon" :src="blank" alt="" />
           <span class="blank-txt">您还没有粉丝～</span>
@@ -33,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'Fans',
   data: () => ({
@@ -45,33 +48,91 @@ export default {
     unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
     blank: require('@/assets/icons/blank/have-no-fans.png'),
   }),
+  mounted() {
+    if(!this.userFansGetters.list.length) {
+      this.finishedText = ''
+    }
+    if (this.userFansGetters.list.length === 0) {
+        this.appendUserFans({
+          userId: this.$route.query.userId,
+          page: 1,
+          size: 20
+        })
+      }
+    console.log(this.userFollowGetters)
+  },
   methods:{
+    ...mapActions('user', [
+      'appendUserFans',
+      'followingUser',
+      'cancelFollowingUser'
+    ]),
+    ...mapMutations('user', [
+      'clearUserFans',
+      'setUserFollowStatus'
+    ]),
     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 20; i++) {
-          this.list.push({
-            nickname:'宋祖儿',
-            signature:'好设计是不唐突的',
-            date: 1603533623139,
-            type: (i % 2 === 0) ? true : false,
-          })
-        }
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 30) {
-          this.finished = true
-        }
-
-        if (this.list.length === 0) {
-          this.finished = true
-          this.finishedText = ''
-        }
-      }, 1000)
+      if (this.userFansGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      
+      if (this.userFansGetters.status === 'loading') return false
+      const newPage = this.userFansGetters.pageInfo.pages + 1
+      this.appendUserFans({
+        userId: this.$route.query.userId,
+        page: newPage,
+        size: 20
+      })
     },
     /** 关注事件 */
-    handleFollow(){}
-  }
+    handleFollow(item, index){
+      console.log(item, index)
+      if(item.isAttention) {
+        this.cancelFollowingUser({ id: item.userId })
+        this.setUserFollowStatus({
+          index: index,
+          flag: false,
+          data: 'userFans'
+        })
+      }else {
+        this.followingUser({ id: item.userId })
+         this.setUserFollowStatus({
+          index: index,
+          flag: true,
+          data: 'userFans'
+        })
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('user', [
+      'userFansGetters'
+    ])
+  },
+  watch: {
+    'userFansGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'userFansGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    }
+  },
+  destroyed() {
+    this.clearUserFans()
+  },
 }
 </script>
 
