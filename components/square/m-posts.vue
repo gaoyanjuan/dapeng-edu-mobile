@@ -245,8 +245,6 @@ export default {
     },
     //喜欢操作
     onLove() {
-      console.log(this.isPraise)
-      console.log(this.praiseCount)
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
