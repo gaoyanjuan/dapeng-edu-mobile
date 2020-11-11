@@ -12,7 +12,7 @@
           <m-posts
             v-for="(item, index) in homeworkListGetters.list"
             :key="index"
-            propSquareType="JOB"
+            propSquareType="HOMEWORK"
             :commentList="item.commentList"
             :dataType="item.type"
             :imgInfo="item.imgSmall"

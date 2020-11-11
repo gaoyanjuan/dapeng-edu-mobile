@@ -160,6 +160,8 @@ export default {
     width: 80px;
     text-align: center;
     overflow: hidden;
+    white-space:nowrap;
+    overflow:hidden;
     text-overflow:ellipsis;
     height: 20px;
     font-size: 14px;
