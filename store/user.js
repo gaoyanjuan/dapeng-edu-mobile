@@ -58,6 +58,26 @@ export const state = () => ({
       size: process.env.global.pageSize
     }
   },
+  publishDynamic: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  publishGrowth: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
 })
 
 export const mutations = {
@@ -154,6 +174,34 @@ export const mutations = {
     state.publishWorks.list = []
     state.publishWorks.pageInfo.pages = 1
     state.publishWorks.status = 'loading'
+  },
+  appendPublishDynamic(state, payload) {
+    state.publishDynamic.list = state.publishDynamic.list.concat(payload.data)
+    state.publishDynamic.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishDynamic.pageInfo.size) {
+      state.publishDynamic.status = 'over'
+    } else {
+      state.publishDynamic.status = 'load'
+    }
+  },
+  clearPublishDynamic (state) {
+    state.publishDynamic.list = []
+    state.publishDynamic.pageInfo.pages = 1
+    state.publishDynamic.status = 'loading'
+  },
+  appendPublishGrowth(state, payload) {
+    state.publishGrowth.list = state.publishGrowth.list.concat(payload.data)
+    state.publishGrowth.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishGrowth.pageInfo.size) {
+      state.publishGrowth.status = 'over'
+    } else {
+      state.publishGrowth.status = 'load'
+    }
+  },
+  clearPublishGrowth (state) {
+    state.publishGrowth.list = []
+    state.publishGrowth.pageInfo.pages = 1
+    state.publishGrowth.status = 'loading'
   },
 }
 
@@ -252,6 +300,36 @@ export const actions = {
     const res = await this.$axios.delete(`/works/${params.id}`)
     return res
   },
+  // 用户的发布动态列表
+  async appendPublishDynamic ({ commit }, params) {
+    const res = await this.$axios.get('/users/dynamics', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishDynamic', res)
+    return res
+  },
+  // 删除动态
+  async deleteDynamics ({ commit }, params) {
+    const res = await this.$axios.delete(`/dynamics/${params.id}`)
+    return res
+  },
+  // 用户的活动帖子列表
+  async appendPublishGrowth ({ commit }, params) {
+    const res = await this.$axios.get('users/posts', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishGrowth', res)
+    return res
+  },
+  // 删除活动帖子
+  async deletePosts ({ commit }, params) {
+    const res = await this.$axios.delete(`/posts/${params.id}`)
+    return res
+  },
 }
 
 export const getters = {
@@ -281,5 +359,11 @@ export const getters = {
   },
   publishWorksGetters(state) {
     return state.publishWorks
+  },
+  publishDynamicGetters(state) {
+    return state.publishDynamic
+  },
+  publishGrowthGetters(state) {
+    return state.publishGrowth
   },
 }

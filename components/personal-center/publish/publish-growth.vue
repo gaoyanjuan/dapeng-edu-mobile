@@ -1,26 +1,25 @@
 <template class="growth-wrap">
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="list.length">
+    <template v-if="publishGrowthGetters.list.length">
       <m-posts
-        v-for="(res, i) in list"
-        :key="i"
-        squareType="作业"
-        :commentList="res.commentList"
+        v-for="(res, index) in publishGrowthGetters.list"
+        :key="index"
         :dataType="res.type"
-        :imgInfo="res.imgSmall"
         :courseType="res.courseType"
         :user="res.user"
         :college="res.college"
         :recommendType="res.recommendType"
-        :task="res.task"
         :content="res.content"
         :isAttention="res.isAttention"
-        :modifiedTime="res.lastModifiedTime"
+        :modifiedTime="res.createTime"
         :listItemData="res"
         :path="navRoute"
+         :pageName="pageName"
+        propSquareType="ACTIVITY_POST"
+        :propIndex="index"
       />
     </template>
-    <template v-if="!list.length && finished">
+    <template v-if="!publishGrowthGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
         <span class="txt">暂无内容</span>
@@ -30,36 +29,76 @@
 </template>
 
 <script>
-import { workDetails } from '@/data'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Growth',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/homework-page-details',
-    blank: require('@/assets/icons/blank/have-no-growth.png')
+    navRoute:'/details/growth-page-details',
+    blank: require('@/assets/icons/blank/have-no-growth.png'),
+    pageName: 'myGrowth'
   }),
-  methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(workDetails)
-        }
-        // 加载状态结束
+  computed: {
+    ...mapGetters('user', [
+      'publishGrowthGetters'
+    ])
+  },
+   watch: {
+    'publishGrowthGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
-          this.finished = true
-        }
-        if (this.list.length === 0) {
-          this.finished = true
-          this.finishedText = ''
-        }
-      }, 1000)
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'publishGrowthGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
     }
-  }
+  },
+  mounted() {
+    if (this.$route.query.userId && this.publishGrowthGetters.list.length === 0) {
+      this.appendPublishGrowth({
+        userId: this.$route.query.userId,
+        page: 1,
+        size: 10
+      })
+    }
+  },
+  methods:{
+    ...mapActions('user', [
+      'appendPublishGrowth',
+    ]),
+    ...mapMutations('user', [
+      'clearPublishGrowth',
+    ]),
+    onLoad() {
+      if (this.publishGrowthGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      
+      if (this.publishGrowthGetters.status === 'loading') return false
+      const newPage = this.publishGrowthGetters.pageInfo.number + 1
+      this.appendPublishGrowth({
+        userId: this.$route.query.userId,
+        page: newPage,
+        size: 10
+      })
+    }
+  },
+  destroyed() {
+    this.clearPublishGrowth()
+  },
 }
 </script>
 
