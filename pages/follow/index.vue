@@ -3,16 +3,16 @@
     <m-navbar title="推荐关注" />
     <div class="follow__wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <div v-for="(item, i) in list" :key="i" class="follow__row">
+        <div v-for="(item, index) in popularUsersList.list" :key="index" class="follow__row">
           <div class="follow__cloumn--left">
-            <img class="avatar" :src="avatar" alt="avatar" />
+            <img class="avatar" :src="item.avatar" alt="avatar" />
             <div class="user__wrap">
               <span class="user__nickname">{{ item.nickname }}</span>
-              <span class="user__signature">{{ item.signature }}</span>
+              <span class="user__signature">{{ item.introduction }}</span>
             </div>
           </div>
-          <div class="follow__cloumn--right" @click="handleFollow(item)">
-            <img class="follow__btn" :src="item.type ? follow : unfollow" alt="" />
+          <div class="follow__cloumn--right" @click="handleFollow(item, index)">
+            <img class="follow__btn" :src="item.isFlower ? unfollow : follow" alt="" />
           </div>
         </div>
       </van-list>
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'Follow',
   layout:'navbar',
@@ -32,26 +33,80 @@ export default {
     follow: require('@/assets/icons/posts/posts-follow.png'),
     unfollow: require('@/assets/icons/posts/posts-unfollow.png')
   }),
-  methods:{
-    onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 20; i++) {
-          this.list.push({
-            nickname:'宋祖儿',
-            signature:'与其怕失败，不如狠狠地失败一次',
-            type: (i % 2 === 0) ? true : false,
-          })
-        }
-        // 加载状态结束
+  computed: {
+    ...mapGetters({
+      popularUsersList: 'attention/popularUsersListGetters'
+    })
+  },
+  async asyncData ({route, store}) {
+    if (process.browser) return {
+      isServiceload: false
+    }
+    try {
+      if (store.getters['attention/popularUsersListGetters'].list.length === 0) {
+        await store.dispatch('attention/appendPopularUsersList', { page: 1 })
+      }
+      return {
+        isServiceload: true
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  created () {
+    if (this.$store.getters['attention/popularUsersListGetters'].list.length === 0) {
+      this.$store.dispatch('attention/appendPopularUsersList', { page: 1 })
+    }
+  },
+  watch: {
+    'popularUsersList.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 30) {
-          this.finished = true;
-        }
-      }, 1000)
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+        this.loading = false
+      }
+    }
+  },
+  methods:{
+    ...mapActions({
+      queryFollowing: 'attention/queryFollowing',
+      deleteFollowing: 'attention/deleteFollowing',
+      appendPopularUsersList: 'attention/appendPopularUsersList'
+    }),
+    ...mapMutations({
+      changeFollowing: 'attention/changePopularUsersListFollowStatus'
+    }),
+    onLoad() {
+      console.log(this.popularUsersList)
+      if (this.popularUsersList.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.popularUsersList.status === 'loading') return false
+      const newPage = this.popularUsersList.pageInfo.number + 1
+      this.appendPopularUsersList({
+        page: newPage
+      })
     },
     /** 关注事件 */
-    handleFollow(){}
+    handleFollow (item, index) {
+      if (item.isFlower) {
+        this.changeFollowing(index)
+        this.deleteFollowing({
+          id: item.userId
+        })
+      } else {
+        this.changeFollowing(index)
+        this.queryFollowing({
+          id: item.userId
+        })
+      }
+    }
   }
 }
 </script>

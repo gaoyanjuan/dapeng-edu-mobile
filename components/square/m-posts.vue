@@ -5,7 +5,7 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :submit-time="modifiedTime"
-        :userInfo="listItemData.user"
+        :userInfo="user"
         :square-type="squareType"
         :attention="listItemData.isAttention"
         v-on:onOpenMenus="onShowMenus"
@@ -76,7 +76,7 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to="`/copy-form?taskId=${listItemData.task ? listItemData.task.taskId : '' }&id=${listItemData.user.userId ? listItemData.user: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -113,7 +113,7 @@ export default {
     },
     propSquareType: {
       type: String,
-      default: '作业'
+      default: 'HOMEWORK'
     },
     modifiedTime: {
       type: Number,
@@ -137,6 +137,9 @@ export default {
           user: {
             nickname: '佚名',
             avatar: ''
+          },
+          task: {
+            taskId: ''
           }
         }
       }
@@ -167,6 +170,11 @@ export default {
     showPublishMenusPopup: false
   }),
   computed: {
+    user () {
+      if (this.listItemData) {
+        return this.listItemData.user
+      }
+    },
     squareType () {
       if (this.propSquareType === 'WORKS') {
         return '作品'
@@ -191,8 +199,10 @@ export default {
     },
   },
   created () {
-    this.praiseCount = this.listItemData.praiseCount
-    this.isPraise = this.listItemData.isPraise
+    if (this.listItemData) {
+      this.praiseCount = this.listItemData.praiseCount
+      this.isPraise = this.listItemData.isPraise
+    }
   },
   mounted() {
     setTimeout(() => {

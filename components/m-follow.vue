@@ -12,24 +12,22 @@
     <!-- 关注帖子列表 -->
     <div class="follow-wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <m-posts
-          v-for="(res, i) in list"
-          :key="i"
-          squareType="作业"
-          :commentList="res.commentList"
-          :dataType="res.type"
-          :imgInfo="res.imgSmall"
-          :courseType="res.courseType"
-          :user="res.user"
-          :college="res.college"
-          :recommendType="res.recommendType"
-          :task="res.task"
-          :content="res.content"
-          :isAttention="res.isAttention"
-          :modifiedTime="res.lastModifiedTime"
-          :listItemData="res"
-          :path="navRoute"
-        />
+        <template v-if="attentionListGetters.list.length">
+          <div v-for="(res, i) in attentionListGetters.list" :key="i">
+            <m-posts
+              :propSquareType="res.topicType"
+              :courseType="res.topic ? res.topic.courseType : ''"
+              :modifiedTime="res.topic ? res.topic.createTime : 0"
+              :listItemData="res.topic ? res.topic : {}"
+            />
+          </div>
+        </template>
+        <template v-if="!attentionListGetters.list.length && finished">
+          <div class="works-blank-wrap">
+            <img class="blank-img" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </template>
       </van-list>
     </div>
   </div>
@@ -47,12 +45,44 @@ export default {
   }),
   computed: {
     ...mapGetters('attention', [
-      'popularUsersGetters',
       'attentionListGetters'
     ])
   },
+   watch: {
+    'attentionListGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'attentionListGetters.list': function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
+      }
+    }
+  },
   methods:{
-     onLoad () {}
+    ...mapActions('attention', [
+      'appendAttentionList'
+    ]),
+     onLoad () {
+      if (this.attentionListGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.attentionListGetters.status === 'loading') return false
+      const newPage = this.attentionListGetters.pageInfo.number + 1
+      this.appendAttentionList({
+        page: newPage
+      })
+    }
   }
 }
 </script>

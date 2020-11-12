@@ -8,18 +8,10 @@
         <template v-if="recommendListGetters.list.length">
           <div v-for="(res, i) in recommendListGetters.list" :key="i">
             <m-posts
-              v-if="res.recommendTopic.type === 'TEXT'"
               :propSquareType="res.hotType"
-              :courseType="res.courseType"
-              :modifiedTime="res.recommendTopic.createTime"
-              :listItemData="res.recommendTopic"
-            />
-            <m-video-posts
-              v-if="res.recommendTopic.type === 'VIDEO'"
-              :propSquareType="res.hotType"
-              :courseType="res.courseType"
-              :modifiedTime="res.recommendTopic.createTime"
-              :listItemData="res.recommendTopic"
+              :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
+              :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
+              :listItemData="res.recommendTopic ? res.recommendTopic : {}"
             />
           </div>
         </template>
@@ -81,7 +73,7 @@ export default {
         return false
       }
       if (this.recommendListGetters.status === 'loading') return false
-      const newPage = this.recommendListGetters.pageInfo.pages + 1
+      const newPage = this.recommendListGetters.pageInfo.number + 1
       this.appendRecommendList({
         page: newPage
       })
