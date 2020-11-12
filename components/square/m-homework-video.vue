@@ -18,9 +18,7 @@ export default {
       videoPlay: require('@/assets/icons/posts/video-play.png')
     }
   },
-  mounted() {
-    console.log(this.listItemData)
-  },
+  mounted() {}
 }
 </script>
 <style lang="less" scoped>

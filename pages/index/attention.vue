@@ -13,8 +13,8 @@ export default {
       if (store.getters['attention/popularUsersGetters'].length === 0) {
         await store.dispatch('attention/appendPopularUsers', { count: 5 })
       }
-      if (store.getters['attention/popularUsersListGetters'].length === 0) {
-        await store.dispatch('attention/appendPopularUsersList', { page: 1, size: 20 })
+      if (store.getters['attention/attentionListGetters'].list.length === 0) {
+        await store.dispatch('attention/appendAttentionList', { page: 1 })
       }
       return {
         isServiceload: true
@@ -27,8 +27,8 @@ export default {
     if (this.$store.getters['attention/popularUsersGetters'].length === 0) {
       this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
     }
-    if (this.$store.getters['attention/popularUsersListGetters'].length === 0) {
-      this.$store.dispatch('attention/appendPopularUsersList', { page: 1, size: 20 })
+    if (this.$store.getters['attention/attentionListGetters'].list.length === 0) {
+      this.$store.dispatch('attention/appendAttentionList', { page: 1 })
     }
   },
   watch: {},

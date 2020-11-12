@@ -5,7 +5,7 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :submit-time="modifiedTime"
-        :userInfo="listItemData.user"
+        :userInfo="user"
         :square-type="squareType"
         :attention="listItemData.isAttention"
         v-on:onOpenMenus="onShowMenus"
@@ -111,7 +111,7 @@ export default {
     },
     propSquareType: {
       type: String,
-      default: '作业'
+      default: 'HOMEWORK'
     },
     modifiedTime: {
       type: Number,
@@ -163,6 +163,11 @@ export default {
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
   computed: {
+    user () {
+      if (this.listItemData) {
+        return this.listItemData.user
+      }
+    },
     squareType () {
       if (this.propSquareType === 'WORKS') {
         return '作品'
@@ -187,8 +192,10 @@ export default {
     }
   },
   created () {
-    this.praiseCount = this.listItemData.praiseCount
-    this.isPraise = this.listItemData.isPraise
+    if (this.listItemData) {
+      this.praiseCount = this.listItemData.praiseCount
+      this.isPraise = this.listItemData.isPraise
+    }
   },
   mounted() {
     setTimeout(() => {
