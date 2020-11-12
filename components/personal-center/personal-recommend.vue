@@ -8,10 +8,8 @@
         <m-posts
           v-for="(res, index) in userHomesRecommendGetters.list"
           :key="index"
-          squareType="作业"
           :commentList="res.comments"
           :dataType="res.type"
-          :imgInfo="res.imgSmall"
           :courseType="res.courseType"
           :user="res.user"
           :college="res.college"
@@ -22,6 +20,9 @@
           :modifiedTime="res.lastModifiedTime"
           :listItemData="res"
           :path="navRoute"
+          propSquareType="HOMEWORK"
+          pageName="myRecommend"
+          :propIndex="index"
         />
         </template>
          <!-- 无数据 -->
@@ -37,13 +38,11 @@
 </template>
 
 <script>
-import { workDetails } from '@/data'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Recommend',
   layout:'navbar',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     navRoute:'/details/homework-page-details',
@@ -94,7 +93,7 @@ export default {
       }
       
       if (this.userHomesRecommendGetters.status === 'loading') return false
-      const newPage = this.userHomesRecommendGetters.pageInfo.pages + 1
+      const newPage = this.userHomesRecommendGetters.pageInfo.number + 1
       this.appendUserHomesRecommend({
         userId: this.$route.query.userId,
         page: newPage,

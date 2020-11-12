@@ -86,7 +86,7 @@ export default {
   },
   actions: {
     async queryUnLike ({ commit }, params) {
-      const res = this.$axios.delete('/likes', params)
+      const res = this.$axios.delete(`/likes/${params.id}`, { params })
       return res.data
     },
     async queryLike ({ commit }, params) {

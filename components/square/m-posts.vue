@@ -5,10 +5,12 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :submit-time="modifiedTime"
-        :userInfo="listItemData.user"
+        :userInfo="user"
         :square-type="squareType"
         :attention="listItemData.isAttention"
         v-on:onOpenMenus="onShowMenus"
+        :pageName="pageName"
+        :listItemData="listItemData"
       />
 
       <!-- content -->
@@ -74,14 +76,14 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="squareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
+      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to="`/copy-form?taskId=${listItemData.task ? listItemData.task.taskId : '' }&id=${listItemData.user.userId ? listItemData.user: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup round overlay-class="menus__popup">
-      <nuxt-link v-if="squareType === 'HOMEWORK'" tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup">
+      <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -97,7 +99,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'WorksCard',
   props:{
@@ -111,7 +113,7 @@ export default {
     },
     propSquareType: {
       type: String,
-      default: '作业'
+      default: 'HOMEWORK'
     },
     modifiedTime: {
       type: Number,
@@ -135,9 +137,16 @@ export default {
           user: {
             nickname: '佚名',
             avatar: ''
+          },
+          task: {
+            taskId: ''
           }
         }
       }
+    },
+    pageName: {
+      type: String,
+      default: ''
     }
   },
   data: () => ({
@@ -158,8 +167,14 @@ export default {
     star: require('@/assets/icons/posts/posts-star.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
+    showPublishMenusPopup: false
   }),
   computed: {
+    user () {
+      if (this.listItemData) {
+        return this.listItemData.user
+      }
+    },
     squareType () {
       if (this.propSquareType === 'WORKS') {
         return '作品'
@@ -181,11 +196,13 @@ export default {
       } else if (this.propSquareType === 'ACTIVITY_POST') {
         return '/details/growth-page-details'
       }
-    }
+    },
   },
   created () {
-    this.praiseCount = this.listItemData.praiseCount
-    this.isPraise = this.listItemData.isPraise
+    if (this.listItemData) {
+      this.praiseCount = this.listItemData.praiseCount
+      this.isPraise = this.listItemData.isPraise
+    }
   },
   mounted() {
     setTimeout(() => {
@@ -195,8 +212,16 @@ export default {
   methods: {
     ...mapActions({
       queryLike: 'comment/queryLike',
-      queryUnLike: 'comment/queryUnLike'
+      queryUnLike: 'comment/queryUnLike',
+      deleteHomework: 'user/deleteHomework',
+      appendPublishHomework: 'user/appendPublishHomework',
+      deleteWorks: 'user/deleteWorks',
+      appendPublishWorks: 'user/appendPublishWorks'
     }),
+    ...mapMutations('user', [
+      'clearPublishHomework',
+      'clearPublishWorks'
+    ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
       /**
@@ -233,6 +258,10 @@ export default {
     },
     /** 打开/关闭菜单 */
     onShowMenus() {
+      if(this.pageName.indexOf('my')!== -1) {
+        this.showPublishMenusPopup = !this.showPublishMenusPopup
+        return
+      }
       this.showMenusPopup = !this.showMenusPopup
     },
      // 评论操作
@@ -311,7 +340,41 @@ export default {
     },
     // 删除
     deleteItem() {
-
+      if(this.propSquareType === 'HOMEWORK') {
+        this.deleteHomework({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishHomework()
+          this.appendPublishHomework({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
+      }else if(this.propSquareType === 'WORKS') {
+        this.deleteWorks({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishWorks()
+          this.appendPublishWorks({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
+        
+      }
+    },
+    // 编辑作业
+    editHomework() {
+      console.log(this.listItemData)
+      this.$router.push({
+        path: '/submit',
+        query: {
+          type: this.listItemData.courseType,
+          params: this.listItemData
+        }
+      })
     }
   }
 }
@@ -456,7 +519,7 @@ export default {
 /** menus-popup */
 .m-works /deep/.van-popup {
   width: 284px;
-  height: 138px;
+  // height: 138px;
   overflow: hidden;
 }
 

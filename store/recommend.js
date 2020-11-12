@@ -6,7 +6,7 @@ export default {
         status: 'loading',
         pageInfo: {
           count: 0,
-          number: 0,
+          number: 1,
           pages: 1,
           size: process.env.global.pageSize
         }
@@ -39,11 +39,11 @@ export default {
         params: {
           ...params,
           size: process.env.global.pageSize,
-          hotTypes: 'JOB'
+          hotTypes: 'JOB,WORK,LIFE'
         }
       })
       const pageInfo = {
-        pages: params.page,
+        number: params.page,
         size: process.env.global.pageSize
       }
       commit('appendRecommendList', { data: res.data, pageInfo })
