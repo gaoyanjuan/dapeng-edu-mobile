@@ -74,7 +74,7 @@
         <nuxt-link tag="div" to="/submit?type=LIFE" >
           <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
-            <span class="menus-txt">生活动态</span>
+            <span class="menus-txt">发布动态</span>
           </div>
         </nuxt-link>
 
