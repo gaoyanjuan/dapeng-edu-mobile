@@ -4,13 +4,7 @@
       <m-posts
         v-for="(res, index) in publishGrowthGetters.list"
         :key="index"
-        :dataType="res.type"
         :courseType="res.courseType"
-        :user="res.user"
-        :college="res.college"
-        :recommendType="res.recommendType"
-        :content="res.content"
-        :isAttention="res.isAttention"
         :modifiedTime="res.createTime"
         :listItemData="res"
         :path="navRoute"

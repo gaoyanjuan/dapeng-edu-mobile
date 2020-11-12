@@ -4,13 +4,7 @@
       <m-posts
         v-for="(res, index) in publishWorksGetters.list"
         :key="index"
-        :dataType="res.type"
         :courseType="res.courseType"
-        :user="res.user"
-        :activity="res.activity"
-        :college="res.college"
-        :content="res.content"
-        :isAttention="res.isAttention"
         :modifiedTime="res.createTime"
         :listItemData="res"
         :path="navRoute"
@@ -43,9 +37,9 @@ export default {
   mounted() {
     if (this.$route.query.userId && this.publishWorksGetters.list.length === 0) {
       this.appendPublishWorks({
-          userId: this.$route.query.userId,
-          page: 1,
-          size: 10
+        userId: this.$route.query.userId,
+        page: 1,
+        size: 10
       })
     }
   },

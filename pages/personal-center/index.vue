@@ -283,7 +283,7 @@ export default {
 }
 
 .mine-user-data-wrap .data-item-column {
-  max-width: 60px;
+  // max-width: 60px;
   height: 17px;
   display: flex;
   align-items: center;
@@ -295,7 +295,7 @@ export default {
   }
 
   & .data-item-column-nums {
-    max-width: 20px;
+    // max-width: 20px;
     font-size: 12px;
     font-family: @dp-font-semibold;
     font-weight: 600;
