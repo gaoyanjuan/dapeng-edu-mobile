@@ -1,6 +1,6 @@
 <template>
   <div class="homework-video-wrap">
-    <img class="video-img" :src="videoImg" alt="作业视频封面图" :v-lazy="videoImg">
+    <img class="video-img" :src="videoImg || defaultImg" alt="作业视频封面图" :v-lazy="videoImg">
     <img class="video-play-img" :src="videoPlay" alt="视频播放按钮">
   </div>  
 </template>
@@ -15,7 +15,8 @@ export default {
   },
   data() {
     return {
-      videoPlay: require('@/assets/icons/posts/video-play.png')
+      videoPlay: require('@/assets/icons/posts/video-play.png'),
+      defaultImg: require('@/assets/icons/common/photos-bg.png'),
     }
   },
   mounted() {

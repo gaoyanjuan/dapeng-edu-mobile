@@ -42,7 +42,7 @@
 
     <!-- 用户数据：“我的喜欢和收藏” -->
     <div class="mine-user-remark-wrap">
-      <div tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
+      <div class="user-remark-left-side" @click="toMyLike">
         <img class="user-remark-icon" :src="navLike" alt="" />
         <span class="user-remark-txt">我的喜欢</span>
       </div>
@@ -192,12 +192,20 @@ export default {
     },
     toRecommend() {
       this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            type: 'recommend',
-            userId: this.userInfoGetters.userId
-          }
-        })
+        path: '/personal-center/personal-user',
+        query: {
+          type: 'recommend',
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+    toMyLike() {
+      this.$router.push({
+        path: '/personal-center/personal-like',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
     }
   }
 }

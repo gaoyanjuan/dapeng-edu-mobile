@@ -55,6 +55,9 @@ export default {
     dynamic_Blank: require('@/assets/icons/blank/have-no-dynamic.png'),
     growth_blank: require('@/assets/icons/blank/have-no-growth.png')
   }),
+  mounted() {
+    console.log('执行')
+  },
   methods:{
      onLoad() {
       setTimeout(() => {
