@@ -13,11 +13,11 @@
     <div class="fg-content">
       <client-only>
         <swiper class="swiper" :options="swiperOptions">
-          <swiper-slide v-for="(item, i) in popularUsersGetters" :key="i">
+          <swiper-slide v-for="(item, index) in popularUsersGetters" :key="index">
             <div class="user-card">
               <img class="avatar" :src="item.avatar" alt="" />
               <span class="nickname">{{ item.nickname }}</span>
-              <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow"></span>
+              <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow(item, index)"></span>
             </div>
           </swiper-slide>
           <swiper-slide class="card-more">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'FollowGallery',
   data: () => ({
@@ -48,8 +48,20 @@ export default {
     })
   },
   methods:{
+    ...mapActions({
+      queryFollowing: 'attention/queryFollowing',
+      deleteFollowing: 'attention/deleteFollowing'
+    }),
+    ...mapMutations({
+      changeFollowing: 'attention/changePopularUsersStatus'
+    }),
     /** 关注事件 */
-    handleFollow() {}
+    handleFollow (item, index) {
+      this.changeFollowing(index)
+      this.queryFollowing({
+        id: item.userId
+      })
+    }
   }
 }
 </script>

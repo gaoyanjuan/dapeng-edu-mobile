@@ -1,26 +1,33 @@
 <template>
   <div class="homework-course-wrap">
     <div class="course-img-wrap">
-      <img :src="blank" alt="课程封面" />
+      <img v-if="!course.coverImg.length" :src="blank" alt="课程封面" />
+      <img v-else v-lazy="course.coverImg[0]" alt="课程封面" />
     </div>
     <div class="course-info-wrap">
       <div class="course-title">
-        <div class="course-college">短视频</div>
-        <div class="course-name">影楼设计行业实战课</div>
+        <div class="course-college">{{ course.college | filterCollageName }}</div>
+        <div class="course-name"> {{ course.title }} </div>
       </div>
-      <div class="teacher-homework-num">累计讲师布置：10份</div>
+      <div class="teacher-homework-num">累计讲师布置：{{ course.published }}份</div>
       <div class="student-homework-num">
         <span>我已上交：</span>
-        <span class="success-num">0份</span>
+        <span class="success-num">{{ course.submit }}份</span>
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
+  props:{
+    course:{
+      type:Object,
+      default:{}
+    }
+  },
   data() {
     return {
-      blank: require('@/assets/icons/square/video-posts-cover.png')
+      blank: require('@/assets/icons/common/photos-bg.png')
     }
   }
 }
@@ -38,9 +45,13 @@ export default {
     img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
     }
   }
   .course-info-wrap {
+    display: flex;
+    flex-direction: column;
+    height: 73px;
     .course-title {
       display: flex;
       align-items: center;
@@ -65,7 +76,7 @@ export default {
     }
     .teacher-homework-num {
       margin-top: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 13px;
       font-size: 13px;
       color: #75737e;
       font-family: @dp-font-regular;

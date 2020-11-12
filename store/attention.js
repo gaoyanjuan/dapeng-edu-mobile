@@ -6,9 +6,9 @@ export default {
         status: 'loading',
         pageInfo: {
           count: 0,
-          number: 0,
+          number: 1,
           pages: 1,
-          size: process.env.global.pageSize
+          size: 15
         }
       },
       popularUsers: [],
@@ -17,7 +17,7 @@ export default {
         status: 'loading',
         pageInfo: {
           count: 0,
-          number: 0,
+          number: 1,
           pages: 1,
           size: process.env.global.pageSize
         }
@@ -25,6 +25,12 @@ export default {
     }
   },
   mutations: {
+    changePopularUsersListFollowStatus (state, payload) {
+      state.popularUsersList.list[payload].isFlower = !state.popularUsersList.list[payload].isFlower
+    },
+    changePopularUsersListStatus (state, payload) {
+      state.popularUsersList.status = payload
+    },
     appendPopularUsersList (state, payload) {
       state.popularUsersList.list = state.popularUsersList.list.concat(payload.data)
       state.popularUsersList.pageInfo = payload.pageInfo
@@ -33,6 +39,9 @@ export default {
       } else {
         state.popularUsersList.status = 'load'
       }
+    },
+    changePopularUsersStatus (state, payload) {
+      state.popularUsers[payload].isFlower = !state.popularUsers[payload].isFlower
     },
     appendPopularUsers (state, payload) {
       state.popularUsers = state.popularUsers.concat(payload.data)
@@ -56,11 +65,29 @@ export default {
     }
   },
   actions: {
+    // 关注功能
+    async queryFollowing ({ commit }, params) {
+      const res = await this.$axios.post(`/following/${params.id}`)
+      // commit('appendCommentDetails', res)
+      return res
+    },
+    // 取消关注功能
+    async deleteFollowing ({ commit }, params) {
+      const res = await this.$axios.delete(`/following/${params.id}`)
+      // commit('appendCommentDetails', res)
+      return res
+    },
     async appendPopularUsersList ({ commit }, params) {
-      const res = await this.$axios.get('/popular-users', { params })
+      commit('changePopularUsersListStatus', 'loading')
+      const res = await this.$axios.get('/popular-users', { 
+        params: {
+          ...params,
+          size: 15
+        }
+       })
       const pageInfo = {
-        pages: params.page,
-        size: process.env.global.pageSize
+        number: params.page,
+        size: 15
       }
       commit('appendPopularUsersList', { data: res.data, pageInfo })
       return res
@@ -75,12 +102,11 @@ export default {
       const res = await this.$axios.get('/feeds', {
         params: {
           ...params,
-          size: process.env.global.pageSize,
-          filterType: '3,4,8'
+          size: process.env.global.pageSize
         }
       })
       const pageInfo = {
-        pages: params.page,
+        number: params.page,
         size: process.env.global.pageSize
       }
       commit('appendAttentionList', { data: res.data, pageInfo })
