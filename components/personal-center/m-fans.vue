@@ -78,7 +78,7 @@ export default {
       }
       
       if (this.userFansGetters.status === 'loading') return false
-      const newPage = this.userFansGetters.pageInfo.pages + 1
+      const newPage = this.userFansGetters.pageInfo.number + 1
       this.appendUserFans({
         userId: this.$route.query.userId,
         page: newPage,
@@ -89,19 +89,33 @@ export default {
     handleFollow(item, index){
       console.log(item, index)
       if(item.isAttention) {
-        this.cancelFollowingUser({ id: item.userId })
         this.setUserFollowStatus({
           index: index,
           flag: false,
           data: 'userFans'
         })
+        this.cancelFollowingUser({ id: item.userId }).catch(()=>{
+          this.setUserFollowStatus({
+          index: index,
+          flag: true,
+          data: 'userFans'
+        })
+        })
+        
       }else {
-        this.followingUser({ id: item.userId })
          this.setUserFollowStatus({
           index: index,
           flag: true,
           data: 'userFans'
         })
+        this.followingUser({ id: item.userId }).catch(()=>{
+          this.setUserFollowStatus({
+          index: index,
+          flag: false,
+          data: 'userFans'
+        })
+        })
+        
       }
     }
   },
