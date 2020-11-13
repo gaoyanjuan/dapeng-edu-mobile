@@ -15,10 +15,11 @@
         <template v-if="attentionListGetters.list.length">
           <div v-for="(res, i) in attentionListGetters.list" :key="i">
             <m-posts
+              v-if="res.topic"
               :propSquareType="res.topicType"
               :courseType="res.topic ? res.topic.courseType : ''"
               :modifiedTime="res.topic ? res.topic.createTime : 0"
-              :listItemData="res.topic ? res.topic : {}"
+              :listItemData="res.topic"
             />
           </div>
         </template>
