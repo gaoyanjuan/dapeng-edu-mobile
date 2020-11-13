@@ -31,8 +31,5 @@ export default {
       this.$store.dispatch('attention/appendAttentionList', { page: 1 })
     }
   },
-  watch: {},
-  destroyed () {},
-  methods:{}
 }
 </script>
