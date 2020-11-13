@@ -47,7 +47,7 @@
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
         
         <!-- 体验课作业提交 -->
-        <nuxt-link tag="div" to="/homework-list?courseType=TEST" >
+        <nuxt-link tag="div" :to="userInfo ? '/homework-list?courseType=TEST' : '/login'" >
           <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.trial" alt="trial"/>
             <span class="menus-txt">体验课作业提交</span>
@@ -55,7 +55,7 @@
         </nuxt-link>
 
         <!-- 正式课作业提交 -->
-        <nuxt-link tag="div" to="/homework-list?courseType=VIP" >
+        <nuxt-link tag="div" :to="userInfo ? '/homework-list?courseType=VIP' : '/login'" >
           <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.formal" alt="formal"/>
             <span class="menus-txt">正式课作业提交</span>
@@ -63,7 +63,7 @@
         </nuxt-link>
 
         <!-- 作品发布 -->
-        <nuxt-link tag="div" to="/submit?type=WORKS" >
+        <nuxt-link tag="div" :to="userInfo ? '/submit?type=WORKS' : '/login'" >
           <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.works" alt="works"/>
             <span class="menus-txt">作品发布</span>
@@ -71,7 +71,7 @@
         </nuxt-link>
 
         <!-- 生活动态 -->
-        <nuxt-link tag="div" to="/submit?type=LIFE" >
+        <nuxt-link tag="div" :to="userInfo ? '/submit?type=LIFE' : '/login'" >
           <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
             <span class="menus-txt">发布动态</span>
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Footer',
   data: () => ({
@@ -116,7 +118,12 @@ export default {
       dynamic: require('@/assets/icons/tabbar/bar-pub-dynamic.png'),
     }
   }),
+
   computed:{
+     ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    }),
+    
     /**
      * 计算并赋值路由
      * 非广场区列表，默认返回‘/’

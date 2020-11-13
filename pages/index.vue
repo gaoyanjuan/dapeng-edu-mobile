@@ -3,7 +3,7 @@
 
     <!--菜单导航 -->
     <van-tabs v-model="activeName" sticky @click="onMenusClick" @scroll="onScrollEvent">
-      <van-tab title="关注" name="attention" to="/attention">
+      <van-tab title="关注" name="attention" :to="userInfo ? '/attention': '/login'">
         <template v-if="$route.name === 'index-attention'">
           <nuxt-child />
         </template>
@@ -131,6 +131,12 @@ export default {
     tabUp: require('@/assets/icons/navbar/nav-arrow-up.png'),
     tabDown: require('@/assets/icons/navbar/nav-arrow-down.png'),
   }),
+
+  computed: {
+    ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    })
+  },
 
   async asyncData ({route, store, error}) {
     try {

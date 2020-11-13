@@ -9,7 +9,7 @@
       </div>
       
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName }} </span>
+        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickName }} </span>
         <p v-else class="not-login-wrap">
           <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
         </p>
@@ -120,26 +120,10 @@ export default {
     ...mapActions('user', [
       'appendUserTrends'
     ]),
-    // 跳转登录页
-    toLogin () {
-      this.$router.push('/login')
-    },
 
     // 打开我的喜欢弹框
     openLovePopup (){
       this.lovePopup.show = true
-    },
-
-    // 进入发布页面
-    enterPublishPage(params) {
-      this.$router.push({
-        path: '/personal-center/personal-publish',
-        query:{ 
-          type: params.name,
-          userId: this.userInfoGetters.userId
-          
-        }
-      })
     },
 
     // 退出登录
@@ -173,24 +157,63 @@ export default {
         location.href = 'https://enroll.dapengjiaoyu.com'
       }, 1500)
     },
+
+    // 跳转登录页
+    toLogin () {
+      this.$router.push('/login')
+    },
+
+    // 进入发布页面
+    enterPublishPage(params) {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+      
+      this.$router.push({
+        path: '/personal-center/personal-publish',
+        query:{ 
+          type: params.name,
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
     toAttention() {
-        this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            userId: this.userInfoGetters.userId
-          }
-        })
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
     },
+
     toFans() {
-        this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            type: 'fans',
-            userId: this.userInfoGetters.userId
-          }
-        })
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          type: 'fans',
+          userId: this.userInfoGetters.userId
+        }
+      })
     },
+
     toRecommend() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+
       this.$router.push({
         path: '/personal-center/personal-user',
         query: {
