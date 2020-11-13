@@ -1,26 +1,19 @@
 <template class="dynamic-wrap">
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="list.length">
+    <template v-if="publishDynamicGetters.list.length">
       <m-posts
-        v-for="(res, i) in list"
-        :key="i"
-        squareType="作业"
-        :commentList="res.commentList"
-        :dataType="res.type"
-        :imgInfo="res.imgSmall"
+        v-for="(res, index) in publishDynamicGetters.list"
+        :key="index"
         :courseType="res.courseType"
-        :user="res.user"
-        :college="res.college"
-        :recommendType="res.recommendType"
-        :task="res.task"
-        :content="res.content"
-        :isAttention="res.isAttention"
         :modifiedTime="res.lastModifiedTime"
         :listItemData="res"
         :path="navRoute"
+        :pageName="pageName"
+        propSquareType="LIFE"
+        :propIndex="index"
       />
     </template>
-    <template v-if="!list.length && finished">
+    <template v-if="!publishDynamicGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
         <span class="txt">暂无内容</span>
@@ -30,36 +23,76 @@
 </template>
 
 <script>
-import { workDetails } from '@/data'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Dynamic',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/homework-page-details',
-    blank: require('@/assets/icons/blank/have-no-dynamic.png')
+    navRoute:'/details/dynamic-page-details',
+    blank: require('@/assets/icons/blank/have-no-dynamic.png'),
+    pageName: 'myDynamic'
   }),
-  methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(workDetails)
-        }
-        // 加载状态结束
-        this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
-          this.finished = true
-        }
-        if (this.list.length === 0) {
-          this.finished = true
-          this.finishedText = ''
-        }
-      }, 1000)
+  computed: {
+    ...mapGetters('user', [
+      'publishDynamicGetters',
+    ])
+  },
+  mounted() {
+    if (this.$route.query.userId && this.publishDynamicGetters.list.length === 0) {
+      this.appendPublishDynamic({
+        userId: this.$route.query.userId,
+        page: 1,
+        size: 10
+      })
     }
-  }
+  },
+  watch: {
+    'publishDynamicGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'publishDynamicGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    }
+  },
+  methods:{
+    ...mapActions('user', [
+      'appendPublishDynamic',
+    ]),
+    ...mapMutations('user', [
+      'clearPublishDynamic',
+    ]),
+    onLoad() {
+      if (this.publishDynamicGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      
+      if (this.publishDynamicGetters.status === 'loading') return false
+      const newPage = this.publishDynamicGetters.pageInfo.number + 1
+      this.appendPublishDynamic({
+        userId: this.$route.query.userId,
+        page: newPage,
+        size: 10
+      })
+    }
+  },
+  destroyed() {
+    this.clearPublishDynamic()
+  },
 }
 </script>
 

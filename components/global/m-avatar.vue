@@ -12,15 +12,15 @@
 
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
-      <img class="avatar-menus-follow" v-if="userInfo.userId !== userInfoGetters.userId && userInfo.userId !== dpUserId" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
-      <template v-if="userInfo.userId === userInfoGetters.userId && listItemData.approvedLevel !== '0'">
+      <img class="avatar-menus-follow" v-if="userInfo.userId !== myUserId && userInfo.userId !== dpUserId" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
+      <template v-if="userInfo.userId === myUserId && listItemData.approvedLevel !== '0' && pageName.indexOf('my') !== -1">
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
       <!-- <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" /> -->
-      <img v-if="(squareType === '作业' && pageName !== 'myRecommend') || (pageName === 'myHomework' && listItemData.approvedLevel === '0') || pageName === 'myWork'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
+      <img v-if="(squareType === '作业' && pageName !== 'myRecommend' && pageName !== 'myHomework') || (pageName === 'myHomework' &&listItemData.approvedLevel === '0') || (pageName.indexOf('my') !== -1 && pageName !== 'myRecommend' && pageName !== 'myHomework' )" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
@@ -85,7 +85,13 @@ export default {
     doubtContentShow: false,
     isDoubt: false,
     dpUserId: process.env.global.dpUserId,
+    myUserId: ''
   }),
+  created() {
+    if(this.userInfoGetters) {
+      this.myUserId = this.userInfoGetters.userId
+    }
+  },
   methods:{
     /**关注事件 */
     handleFollow() {},
