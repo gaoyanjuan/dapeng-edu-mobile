@@ -32,7 +32,8 @@ export default {
     finishedText:'没有更多了',
     navRoute:'/details/dynamic-page-details',
     blank: require('@/assets/icons/blank/have-no-dynamic.png'),
-    pageName: 'myDynamic'
+    pageName: 'myDynamic',
+    currentPage: 1
   }),
   computed: {
     ...mapGetters('user', [
@@ -43,7 +44,7 @@ export default {
     if (this.$route.query.userId && this.publishDynamicGetters.list.length === 0) {
       this.appendPublishDynamic({
         userId: this.$route.query.userId,
-        page: 1,
+        page: this.currentPage,
         size: 10
       })
     }
@@ -82,7 +83,7 @@ export default {
       }
       
       if (this.publishDynamicGetters.status === 'loading') return false
-      const newPage = this.publishDynamicGetters.pageInfo.number + 1
+      const newPage = this.currentPage + 1
       this.appendPublishDynamic({
         userId: this.$route.query.userId,
         page: newPage,
