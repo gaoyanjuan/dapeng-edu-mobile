@@ -162,7 +162,11 @@ export const mutations = {
     state.publishHomework.status = 'loading'
   },
   appendPublishWorks(state, payload) {
-    state.publishWorks.list = state.publishWorks.list.concat(payload.data)
+    if(payload.data instanceof Array) {
+      state.publishWorks.list = state.publishWorks.list.concat(payload.data)
+    }else {
+      state.publishWorks.list = []
+    }
     state.publishWorks.pageInfo = payload.pageInfo
     if (payload.data.length < state.publishWorks.pageInfo.size) {
       state.publishWorks.status = 'over'

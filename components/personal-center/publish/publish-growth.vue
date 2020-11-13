@@ -32,7 +32,8 @@ export default {
     finishedText:'没有更多了',
     navRoute:'/details/growth-page-details',
     blank: require('@/assets/icons/blank/have-no-growth.png'),
-    pageName: 'myGrowth'
+    pageName: 'myGrowth',
+    currentPage: 1
   }),
   computed: {
     ...mapGetters('user', [
@@ -63,7 +64,7 @@ export default {
     if (this.$route.query.userId && this.publishGrowthGetters.list.length === 0) {
       this.appendPublishGrowth({
         userId: this.$route.query.userId,
-        page: 1,
+        page: this.currentPage,
         size: 10
       })
     }
@@ -82,7 +83,7 @@ export default {
       }
       
       if (this.publishGrowthGetters.status === 'loading') return false
-      const newPage = this.publishGrowthGetters.pageInfo.number + 1
+      const newPage = this.currentPage + 1
       this.appendPublishGrowth({
         userId: this.$route.query.userId,
         page: newPage,
