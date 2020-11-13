@@ -58,7 +58,6 @@ export default {
     }
   },
   destroyed() {
-    console.log('执行了')
     this.clearUserLikes()
   }
 }

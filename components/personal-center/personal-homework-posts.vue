@@ -38,9 +38,6 @@ export default {
     finishedText:'没有更多了',
     navRoute:'/details/homework-page-details',
     homework_Blank:require('@/assets/icons/blank/have-no-homework.png'),
-    works_Blank: require('@/assets/icons/blank/have-no-works.png'),
-    dynamic_Blank: require('@/assets/icons/blank/have-no-dynamic.png'),
-    growth_blank: require('@/assets/icons/blank/have-no-growth.png'),
     currentPage: 1
   }),
   mounted() {
@@ -80,7 +77,7 @@ export default {
     ...mapMutations('user', [
       'clearUserLikes'
     ]),
-     onLoad() {
+    onLoad() {
       if (this.userLikesGetters.homework.status === 'over') {
         this.finished = true
         return false

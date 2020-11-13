@@ -37,10 +37,7 @@ export default {
     finished: false,
     finishedText:'没有更多了',
     navRoute:'/details/dynamic-page-details',
-    homework_Blank:require('@/assets/icons/blank/have-no-homework.png'),
-    works_Blank: require('@/assets/icons/blank/have-no-works.png'),
     dynamic_Blank: require('@/assets/icons/blank/have-no-dynamic.png'),
-    growth_blank: require('@/assets/icons/blank/have-no-growth.png'),
     currentPage: 1
   }),
    mounted() {
