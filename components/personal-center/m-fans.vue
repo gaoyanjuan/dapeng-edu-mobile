@@ -59,7 +59,6 @@ export default {
           size: 20
         })
       }
-    console.log(this.userFollowGetters)
   },
   methods:{
     ...mapActions('user', [
@@ -87,7 +86,6 @@ export default {
     },
     /** 关注事件 */
     handleFollow(item, index){
-      console.log(item, index)
       if(item.isAttention) {
         this.setUserFollowStatus({
           index: index,

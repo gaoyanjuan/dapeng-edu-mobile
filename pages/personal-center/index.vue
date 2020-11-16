@@ -9,7 +9,7 @@
       </div>
       
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName }} </span>
+        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickName }} </span>
         <p v-else class="not-login-wrap">
           <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
         </p>
@@ -120,26 +120,10 @@ export default {
     ...mapActions('user', [
       'appendUserTrends'
     ]),
-    // 跳转登录页
-    toLogin () {
-      this.$router.push('/login')
-    },
 
     // 打开我的喜欢弹框
     openLovePopup (){
       this.lovePopup.show = true
-    },
-
-    // 进入发布页面
-    enterPublishPage(params) {
-      this.$router.push({
-        path: '/personal-center/personal-publish',
-        query:{ 
-          type: params.name,
-          userId: this.userInfoGetters.userId
-          
-        }
-      })
     },
 
     // 退出登录
@@ -173,31 +157,70 @@ export default {
         location.href = 'https://enroll.dapengjiaoyu.com'
       }, 1500)
     },
-    toAttention() {
-        this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            userId: this.userInfoGetters.userId
-          }
-        })
+
+    // 跳转登录页
+    toLogin () {
+      this.$router.push('/login')
     },
-    toFans() {
-        this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            type: 'fans',
-            userId: this.userInfoGetters.userId
-          }
-        })
-    },
-    toRecommend() {
+
+    // 进入发布页面
+    enterPublishPage(params) {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+      
       this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            type: 'recommend',
-            userId: this.userInfoGetters.userId
-          }
-        })
+        path: '/personal-center/personal-publish',
+        query:{ 
+          type: params.name,
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toAttention() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toFans() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          type: 'fans',
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toRecommend() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          type: 'recommend',
+          userId: this.userInfoGetters.userId
+        }
+      })
     }
   }
 }
@@ -283,7 +306,7 @@ export default {
 }
 
 .mine-user-data-wrap .data-item-column {
-  max-width: 60px;
+  // max-width: 60px;
   height: 17px;
   display: flex;
   align-items: center;
@@ -295,7 +318,7 @@ export default {
   }
 
   & .data-item-column-nums {
-    max-width: 20px;
+    // max-width: 20px;
     font-size: 12px;
     font-family: @dp-font-semibold;
     font-weight: 600;

@@ -15,9 +15,7 @@
     </template>
     <div class="m-card-bottom">
       <div class="card-msg" :title="cardData.activityDisplay.displayName">{{ cardData.activityDisplay.displayName }}</div>
-      <div>
-        <span class="card-time">{{ cardData.rules.startDate | activitiesDate }}-{{ cardData.rules.endDate | activitiesDate }}</span>
-      </div>
+      <div class="card-time">{{ cardData.rules.startDate | activitiesDate }}-{{ cardData.rules.endDate | activitiesDate }}</div>
     </div>
   </div>
 </template>
@@ -39,7 +37,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .m-activities-card {
     margin-bottom: 24px;
     padding: 0 16px;
@@ -96,10 +94,13 @@ export default {
         line-height: 24px;
       }
       .card-time {
+        height: 16px;
+        line-height: 16px;
         font-size: 11px;
         font-family: @dp-font-regular;
         font-weight: 400;
         color: #5A5A5A;
+        margin-top: 2px;
       }
       .card-number {
         margin-left: 24px;

@@ -4,13 +4,7 @@
       <m-posts
         v-for="(res, index) in publishWorksGetters.list"
         :key="index"
-        :dataType="res.type"
         :courseType="res.courseType"
-        :user="res.user"
-        :activity="res.activity"
-        :college="res.college"
-        :content="res.content"
-        :isAttention="res.isAttention"
         :modifiedTime="res.createTime"
         :listItemData="res"
         :path="navRoute"
@@ -38,14 +32,15 @@ export default {
     finishedText:'没有更多了',
     navRoute:'/details/works-page-details',
     blank: require('@/assets/icons/blank/have-no-works.png'),
-    pageName: 'myWork'
+    pageName: 'myWork',
+    currentPage: 1
   }),
   mounted() {
     if (this.$route.query.userId && this.publishWorksGetters.list.length === 0) {
       this.appendPublishWorks({
-          userId: this.$route.query.userId,
-          page: 1,
-          size: 10
+        userId: this.$route.query.userId,
+        page: this.currentPage,
+        size: 10
       })
     }
   },
@@ -83,7 +78,7 @@ export default {
       }
       
       if (this.publishWorksGetters.status === 'loading') return false
-      const newPage = this.publishWorksGetters.pageInfo.number + 1
+      const newPage = this.currentPage + 1
       this.appendPublishWorks({
         userId: this.$route.query.userId,
         page: newPage,

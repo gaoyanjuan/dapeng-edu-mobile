@@ -182,9 +182,9 @@ export default {
       } else if (this.propSquareType === 'HOMEWORK') {
         return '作业'
       } else if (this.propSquareType === 'LIFE') {
-        return '生活'
+        return '动态'
       } else if (this.propSquareType === 'ACTIVITY_POST') {
-        return '成长'
+        return '活动'
       }
     },
     typePath () {
@@ -220,11 +220,17 @@ export default {
       deleteHomework: 'user/deleteHomework',
       appendPublishHomework: 'user/appendPublishHomework',
       deleteWorks: 'user/deleteWorks',
-      appendPublishWorks: 'user/appendPublishWorks'
+      appendPublishWorks: 'user/appendPublishWorks',
+      deleteDynamics: 'user/deleteDynamics',
+      appendPublishDynamic: 'user/appendPublishDynamic',
+      deletePosts: 'user/deletePosts',
+      appendPublishGrowth: 'user/appendPublishGrowth'
     }),
     ...mapMutations('user', [
       'clearPublishHomework',
-      'clearPublishWorks'
+      'clearPublishWorks',
+      'clearPublishDynamic',
+      'clearPublishGrowth'
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
@@ -385,7 +391,28 @@ export default {
             size: 10
           })
         })
-        
+      }else if(this.propSquareType === 'LIFE') {
+        this.deleteDynamics({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishDynamic()
+          this.appendPublishDynamic({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
+      }else if(this.propSquareType === 'ACTIVITY_POST') {
+        this.deletePosts({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishGrowth()
+          this.appendPublishGrowth({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
       }
     },
     // 编辑作业

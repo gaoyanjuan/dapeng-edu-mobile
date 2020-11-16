@@ -51,8 +51,6 @@ export default {
           size: 20
         })
       }
-    console.log(this.userFollowGetters)
-    
   },
   destroyed() {
     this.clearUserFollow()

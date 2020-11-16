@@ -9,6 +9,9 @@ export default {
       readingColleges: [
         { id: '', name: '全部' }
       ], // 阅读
+      homeworkColleges: [
+        { id: '', name: '全部' }
+      ], // 提交作业
     }
   },
   mutations: {
@@ -23,6 +26,8 @@ export default {
         state.workColleges = state.workColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_ARTICLE') {
         state.readingColleges = state.readingColleges.concat(payload.data)
+      } else if (payload.collegeType === 'RELEASE_TASK') {
+        state.homeworkColleges = state.homeworkColleges.concat(payload.data)
       } else {
         state.colleges = payload.data
       }
@@ -44,6 +49,9 @@ export default {
     },
     readingCollegesGetters (state) {
       return state.readingColleges
+    },
+    homeworkCollegesGetters (state) {
+      return state.homeworkColleges
     },
   }
 }
