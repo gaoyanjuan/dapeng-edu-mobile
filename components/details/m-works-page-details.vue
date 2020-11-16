@@ -48,6 +48,8 @@
       <m-details-footer
         :propCommentCount="works.commentCount"
         :propPraiseCount="works.praiseCount"
+        :contentType="works.type"
+        topicType="WORKS"
       />
     </div>
     <!-- 菜单弹层 -->

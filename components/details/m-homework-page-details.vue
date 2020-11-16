@@ -49,6 +49,8 @@
         :propCommentCount="homework.commentCount"
         :propPraiseCount="homework.praiseCount"
         :courseType="homework.courseType"
+        :contentType="homework.type"
+        topicType="HOMEWORK"
       />
     </div>
     <!-- 菜单弹层 -->

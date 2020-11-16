@@ -10,6 +10,7 @@
         <m-comment-item
           :isTeacher="item.type === 'MARK'"
           :key="index"
+          :contentType="contentType"
           :commentItem="item"
           :user="item.user"
           :teacherType ="courseType"
@@ -37,6 +38,10 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   props: {
+    contentType: {
+      type: String,
+      default: ''
+    },
     courseType: {
       type: String,
       default: ''

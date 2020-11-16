@@ -46,6 +46,8 @@
       <m-details-footer
         :propCommentCount="dynamic.commentCount"
         :propPraiseCount="dynamic.praiseCount"
+        :contentType="dynamic.type"
+        topicType="LIFE"
       />
     </div>
      <!-- 菜单弹层 -->
