@@ -50,6 +50,7 @@
         :propPraiseCount="works.praiseCount"
         :contentType="works.type"
         topicType="WORKS"
+        :detailData="works"
       />
     </div>
     <!-- 菜单弹层 -->
