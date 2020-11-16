@@ -2,7 +2,7 @@
   <div>
     <m-tabs>
       <m-tab-item selected="true" name="评论" :count="commentCount">
-        <m-comment-list />
+        <m-comment-list :contentType="contentType" />
       </m-tab-item>
       <m-tab-item name="喜欢" :count="praiseCount">
         <m-like-list />
@@ -23,6 +23,14 @@
 <script>
 export default {
   props: {
+    topicType: {
+      type: String,
+      default: ''
+    },
+    contentType: {
+      type: String,
+      default: ''
+    },
     propCommentCount: {
       type: Number,
       default: 0
@@ -52,11 +60,18 @@ export default {
       this.commentPop.show = true
     },
     // 喜欢事件
-    onLikeEvent() { console.log('like') },
+    onLikeEvent() {
+      console.log(this.topicType)
+      console.log(this.contentType)
+    },
     // 收藏事件
-    onCollectEvent() { console.log('collect') },
+    onCollectEvent () {
+      
+    },
     // 评论发送
-    sendComment() { console.log('发送成功') }
+    sendComment (params) {
+      console.log(params)
+    }
   }
 }
 </script>

@@ -43,6 +43,8 @@
       <m-details-footer
         :propCommentCount="growth.commentCount"
         :propPraiseCount="growth.praiseCount"
+        :contentType="growth.type"
+        :topicType="growth.topicType"
       />
     </div>
     <!-- 菜单弹层 -->
