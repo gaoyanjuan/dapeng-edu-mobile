@@ -51,6 +51,7 @@
         :courseType="homework.courseType"
         :contentType="homework.type"
         topicType="HOMEWORK"
+        :detailData="homework"
       />
     </div>
     <!-- 菜单弹层 -->

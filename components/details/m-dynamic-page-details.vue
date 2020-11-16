@@ -48,6 +48,7 @@
         :propPraiseCount="dynamic.praiseCount"
         :contentType="dynamic.type"
         topicType="LIFE"
+        :detailData="dynamic"
       />
     </div>
      <!-- 菜单弹层 -->

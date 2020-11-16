@@ -45,6 +45,7 @@
         :propPraiseCount="growth.praiseCount"
         :contentType="growth.type"
         :topicType="growth.topicType"
+        :detailData="growth"
       />
     </div>
     <!-- 菜单弹层 -->
