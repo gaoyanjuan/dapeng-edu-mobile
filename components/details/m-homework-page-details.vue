@@ -45,16 +45,11 @@
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
-      <m-tabs>
-        <m-tab-item :selected="commentSelected" :count="homework.commentCount" name="评论">
-          <m-comment-list
-            :courseType="homework.courseType"
-          />
-        </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="homework.praiseCount">
-          <m-like-list />
-        </m-tab-item>
-      </m-tabs>
+      <details-footer
+        :propCommentCount="homework.commentCount"
+        :propPraiseCount="homework.praiseCount"
+        :courseType="homework.courseType"
+      />
     </div>
 
     <!-- 底部评论框 -->

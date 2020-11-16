@@ -85,6 +85,20 @@ export default {
     }
   },
   actions: {
+    // 收藏功能
+    async queryCollection ({ commit }, params) {
+      const res = await this.$axios.post(`/favorites`, {
+        ...params
+      })
+      return res.data
+    },
+    // 取消收藏功能
+    async queryDeleteCollection ({ commit }, params) {
+      const res = await this.$axios.delete(`/favorites/${params.id}?type=${params.type}`, {
+        ...params
+      })
+      return res.data
+    },
     async queryUnLike ({ commit }, params) {
       const res = this.$axios.delete(`/likes/${params.id}`, { params })
       return res.data

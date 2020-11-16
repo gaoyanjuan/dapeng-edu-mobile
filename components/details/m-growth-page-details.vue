@@ -40,14 +40,10 @@
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
-      <m-tabs>
-        <m-tab-item :selected="commentSelected" name="评论" :count="growth.commentCount">
-          <m-comment-list />
-        </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="growth.praiseCount">
-          <m-like-list />
-        </m-tab-item>
-      </m-tabs>
+      <details-footer
+        :propCommentCount="growth.commentCount"
+        :propPraiseCount="growth.praiseCount"
+      />
     </div>
 
     <!-- 底部评论框 -->
