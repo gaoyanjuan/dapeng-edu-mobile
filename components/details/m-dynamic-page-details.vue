@@ -43,14 +43,10 @@
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
-      <m-tabs>
-        <m-tab-item selected="true" name="评论" :count="dynamic.commentCount">
-          <m-comment-list />
-        </m-tab-item>
-        <m-tab-item name="喜欢" :count="dynamic.praiseCount">
-          <m-like-list />
-        </m-tab-item>
-      </m-tabs>
+      <details-footer
+        :propCommentCount="dynamic.commentCount"
+        :propPraiseCount="dynamic.praiseCount"
+      />
     </div>
 
     <!-- 底部评论框 -->
