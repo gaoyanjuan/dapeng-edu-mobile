@@ -68,7 +68,7 @@
           </div>
           <!-- 收藏 -->
           <div class="fot__rh__star--wrap" @click="onCollect">
-            <img class="fot__star" :src="listItemData.isCollection ? unStar : star" alt="star" />
+            <img class="fot__star" :src="isCollection ? unStar : star" alt="star" />
           </div>
         </div>
       </div>
@@ -153,6 +153,7 @@ export default {
     loading: true,
     showMenusPopup:false,
     isPraise: false,
+    isCollection: false,
     praiseCount: 0,
     // 图片预览
     imagePreview: {
@@ -202,6 +203,7 @@ export default {
     if (this.listItemData) {
       this.praiseCount = this.listItemData.praiseCount
       this.isPraise = this.listItemData.isPraise
+      this.isCollection = this.listItemData.isCollection
     }
   },
   mounted() {
@@ -213,6 +215,8 @@ export default {
     ...mapActions({
       queryLike: 'comment/queryLike',
       queryUnLike: 'comment/queryUnLike',
+      queryCollection: 'comment/queryCollection',
+      queryDeleteCollection: 'comment/queryDeleteCollection',
       deleteHomework: 'user/deleteHomework',
       appendPublishHomework: 'user/appendPublishHomework',
       deleteWorks: 'user/deleteWorks',
@@ -270,7 +274,26 @@ export default {
     },
     // 收藏
     onCollect() {
-      console.log('collect')
+      if (this.isCollection) {
+        this.isCollection = false
+        this.queryDeleteCollection({
+          id: this.listItemData.id,
+          type: this.propSquareType
+        }).catch(() => {
+          this.isCollection = true
+        })
+      } else {
+        this.isCollection = true
+        this.queryCollection({
+          id: this.listItemData.id,
+          type: this.propSquareType,
+          createdId: this.listItemData.user.userId,
+          contentType: this.listItemData.type
+
+        }).catch(() => {
+          this.isCollection = false
+        })
+      }
     },
     //喜欢操作
     onLove() {

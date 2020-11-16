@@ -15,12 +15,13 @@
               <img v-else src="@/assets/icons/comment/teacher-tag.png" />
             </template>
           </div>
-          <div>{{ time | commonDate }}</div>
+          <div>{{ commentItem.createTime | commonDate }}</div>
         </div>
       </div>
       <div class="thumb-box">
-        <img src="@/assets/icons/comment/comment-favour.png" alt="">
-        <span>{{ thumbNumber | studentsCount }}</span>
+        <img v-if="isPraise" src="@/assets/icons/comment/comment-favour-true.png" alt="">
+        <img v-else src="@/assets/icons/comment/comment-favour.png" alt="">
+        <span>{{ praiseCount | studentsCount }}</span>
       </div>
     </div>
     <the-audio
@@ -30,11 +31,11 @@
       :audioUrl="audioUrl"
     >
     </the-audio>
-    <div class="content" v-else v-html="$options.filters.formatEmotions(content)"></div>
+    <div class="content" v-else v-html="$options.filters.formatEmotions(commentItem.content)"></div>
     <div v-if="contentImages" class="content-img" @click="showDialogEvent(contentImages)">
       <img :src="contentImages">
     </div>
-    <div class="replies-box" v-if="replies.length > 0" @click="toCommentDetails">
+    <div class="replies-box" v-if="replyCount > 0" @click="toCommentDetails">
       <div class="replies-item" v-for="(item, index) in replies" :key="index">
         <span>
           <span>{{ item.user.nickname }}</span><template v-if="user && (item.parentUser.userId !== user.userId)"><span class="black-text" v-if="item.parentUser">回复</span><span v-if="item.parentUser">{{ item.parentUser.nickname }}</span></template><span>：</span>
@@ -45,7 +46,7 @@
         </a>
         <span class="replies-item-content" v-html="$options.filters.formatEmotions(item.content)"></span>
       </div>
-      <div class="replies-item-count" v-if="repliesCount > 3">查看全部{{ repliesCount }}条回复</div>
+      <div class="replies-item-count" v-if="replyCount > 3">查看全部{{ replyCount }}条回复</div>
     </div>
     <div class="line"></div>
   </div>
@@ -62,17 +63,11 @@ export default {
       type: Object,
       default: null
     },
-    time: {
-      type: Number,
-      default: 0
-    },
-    thumbNumber: {
-      type: Number,
-      default: 0
-    },
-    content: {
-      type: String,
-      default: ''
+    commentItem: {
+      type: Object,
+      default: () => {
+        return null
+      }
     },
     teacherType: {
       type: String,
@@ -98,16 +93,24 @@ export default {
       type: Boolean,
       default: false
     },
-    repliesCount: {
-      type: Number,
-      default: 0
-    },
     replies: {
       type: Array,
       default: () => {
         return []
       }
     }
+  },
+  data () {
+    return {
+      isPraise: false,
+      praiseCount: 0,
+      replyCount: 0
+    }
+  },
+  created () {
+    this.isPraise = this.commentItem.isPraise
+    this.praiseCount = this.commentItem.praiseCount
+    this.replyCount = this.commentItem.replyCount
   },
   methods: {
     showDialogEvent (img) {

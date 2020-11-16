@@ -12,8 +12,8 @@
 
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
-      <img class="avatar-menus-follow" v-if="userInfo.userId !== userInfoGetters.userId && userInfo.userId !== dpUserId" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
-      <template v-if="userInfo.userId === userInfoGetters.userId && listItemData.approvedLevel !== '0'">
+      <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click="handleFollow"/>
+      <template v-if="showScore">
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Avatar',
   props:{
@@ -85,10 +85,41 @@ export default {
     doubtContentShow: false,
     isDoubt: false,
     dpUserId: process.env.global.dpUserId,
+    isAttention: false
   }),
+  computed:{
+    ...mapGetters('user',[
+      'userInfoGetters',
+    ]),
+    showFollowBtn () {
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId !== this.userInfoGetters.userId && this.userInfo.userId !== this.dpUserId
+    },
+    showScore () {
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0'
+    }
+  },
+  created () {
+    this.isAttention = this.attention
+  },
   methods:{
+    ...mapActions('user', [
+      'followingUser',
+      'cancelFollowingUser'
+    ]),
     /**关注事件 */
-    handleFollow() {},
+    handleFollow () {
+      if (this.isAttention) {
+        this.isAttention = false
+        this.cancelFollowingUser({
+          id: this.userInfo.userId
+        })
+      } else {
+        this.isAttention = true
+        this.followingUser({
+          id: this.userInfo.userId
+        })
+      }
+    },
     /**打开菜单 */
     onOpenMenus() {
       this.$emit('onOpenMenus')
@@ -97,12 +128,7 @@ export default {
     showDoubt() {
       this.doubtContentShow = !this.doubtContentShow
     }
-  },
-  computed:{
-    ...mapGetters('user',[
-      'userInfoGetters',
-    ])
-  },
+  }
 }
 </script>
 
