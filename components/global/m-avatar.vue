@@ -12,13 +12,8 @@
 
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
-<<<<<<< HEAD
       <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click="handleFollow"/>
       <template v-if="showScore">
-=======
-      <img class="avatar-menus-follow" v-if="userInfo.userId !== myUserId && userInfo.userId !== dpUserId" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
-      <template v-if="userInfo.userId === myUserId && listItemData.approvedLevel !== '0' && pageName.indexOf('my') !== -1">
->>>>>>> master
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
