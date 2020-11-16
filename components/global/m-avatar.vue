@@ -95,7 +95,7 @@ export default {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId !== this.userInfoGetters.userId && this.userInfo.userId !== this.dpUserId
     },
     showScore () {
-      return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && pageName.indexOf('my') !== -1
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
     }
   },
   created () {

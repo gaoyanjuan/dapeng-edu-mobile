@@ -55,10 +55,6 @@
 <script>
 export default {
   props: {
-    id: {
-      type: String,
-      default: ''
-    },
     user: {
       type: Object,
       default: null
@@ -120,7 +116,7 @@ export default {
       this.$router.push({
         path: '/details/comment-details',
         query: {
-          id: this.id,
+          id: this.commentItem.id,
           courseType: this.teacherType
         }
       })
