@@ -5,16 +5,16 @@
     <div class="tabs-wrap">
       <van-tabs v-model="active" sticky :offset-top="44" @click="onTabsClick">
         <van-tab title="作业">
-          <personal-homework-posts />
+          <personal-homework-posts pageName="myLike" />
         </van-tab>
         <van-tab title="作品">
-          <personal-works-posts />
+          <personal-works-posts pageName="myLike" />
         </van-tab>
         <van-tab title="动态">
-          <personal-dynamic-posts />
+          <personal-dynamic-posts pageName="myLike" />
         </van-tab>
         <van-tab title="活动">
-          <personal-growth-posts />
+          <personal-growth-posts pageName="myLike" />
         </van-tab>
         <!-- <van-tab title="阅读">
           <personal-reading-posts />

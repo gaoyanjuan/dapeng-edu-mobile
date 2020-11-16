@@ -47,7 +47,7 @@
         <span class="user-remark-txt">我的喜欢</span>
       </div>
 
-      <div tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
+      <div class="user-remark-right-side" @click="toMyCollection">
         <img class="user-remark-icon" :src="navStar" alt="" />
         <span class="user-remark-txt">我的收藏</span>
       </div>
@@ -225,6 +225,18 @@ export default {
     toMyLike() {
       this.$router.push({
         path: '/personal-center/personal-like',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+    toMyCollection() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
+      this.$router.push({
+        path: '/personal-center/personal-collection',
         query: {
           userId: this.userInfoGetters.userId
         }
