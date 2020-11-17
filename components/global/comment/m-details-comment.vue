@@ -154,7 +154,8 @@ export default {
     }),
     ...mapMutations({
       commitNewRepliesComment: 'comment/appendNewRepliesComment',
-      deleteReply: 'comment/deleteReply'
+      deleteReply: 'comment/deleteReply',
+      changeReplyCount: 'comment/changeReplyCount'
     }),
     cancel () {
       this.showConfirmPopup = false
@@ -167,6 +168,7 @@ export default {
         index: this.commentIndex
       })
       this.$toast('删除成功')
+      this.changeReplyCount(-1)
       this.showConfirmPopup = false
     },
     deleteItem () {
@@ -211,7 +213,6 @@ export default {
       }
     },
     sendComment (text) {
-      console.log(text)
       this.appendNewRepliesComment({
         label: {
           contentType: this.$route.query.contentType
@@ -236,6 +237,7 @@ export default {
               ...this.userinfo
             }
           })
+          this.changeReplyCount(1)
           this.$toast('评论成功')
         }
       })

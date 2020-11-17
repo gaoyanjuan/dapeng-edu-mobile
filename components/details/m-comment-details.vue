@@ -80,7 +80,6 @@ export default {
       }
     }
   },
-  mounted () {},
   destroyed () {
     this.clearRepliesList()
   },
@@ -91,7 +90,8 @@ export default {
     }),
     ...mapMutations({
       clearRepliesList: 'comment/clearRepliesList',
-      commitNewRepliesComment: 'comment/appendNewRepliesComment'
+      commitNewRepliesComment: 'comment/appendNewRepliesComment',
+      changeReplyCount: 'comment/changeReplyCount'
     }),
     openComment () {
       this.commentPop.show = true
@@ -121,6 +121,7 @@ export default {
               ...this.userinfo
             }
           })
+          this.changeReplyCount(1)
           this.$toast('评论成功')
         }
       })
