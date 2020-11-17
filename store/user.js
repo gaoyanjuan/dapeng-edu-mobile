@@ -315,6 +315,11 @@ export const mutations = {
     state.userLikes.activity_post.pageInfo.pages = 1
     state.userLikes.activity_post.status = 'loading'
   },
+  deleteUserLikes (state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    let index = payload.index
+    state.userLikes[type].list.splice(index, 1)
+  },
   appendUserFavorites(state, payload) {
     let type = payload.type.toLocaleLowerCase()
     state.userFavorites[type].list = state.userFavorites[type].list.concat(payload.res.data)
@@ -339,6 +344,11 @@ export const mutations = {
     state.userFavorites.activity_post.pageInfo.pages = 1
     state.userFavorites.activity_post.status = 'loading'
   },
+  deleteUserFavorites(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    let index = payload.index
+    state.userFavorites[type].list.splice(index, 1)
+  }
 }
 
 export const actions = {

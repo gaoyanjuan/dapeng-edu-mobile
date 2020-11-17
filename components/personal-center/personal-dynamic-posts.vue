@@ -1,6 +1,6 @@
 <template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="pageName === 'myLike'">
+    <template v-if="pageName === 'userLike'">
       <template v-if="userLikesGetters.life.list.length">
         <m-posts
           v-for="(res, index) in userLikesGetters.life.list"
@@ -11,16 +11,19 @@
           :path="navRoute"
           propSquareType="LIFE"
           :propIndex="index"
+          :pageName="pageName"
         />
       </template>
       <template v-if="!userLikesGetters.life.list.length && finished">
-        <div class="posts-blank-wrap">
-          <img class="blank-icon" :src="dynamic_Blank" alt="" />
-          <span class="blank-txt">暂无内容～</span>
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="dynamic_Blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
         </div>
       </template>
     </template>
-    <template v-if="pageName === 'myCollection'">
+    <template v-if="pageName === 'userCollection'">
       <template v-if="userFavoritesGetters.life.list.length">
         <m-posts
           v-for="(res, index) in userFavoritesGetters.life.list"
@@ -31,12 +34,15 @@
           :path="navRoute"
           propSquareType="LIFE"
           :propIndex="index"
+          :pageName="pageName"
         />
       </template>
       <template v-if="!userFavoritesGetters.life.list.length && finished">
-        <div class="posts-blank-wrap">
-          <img class="blank-icon" :src="dynamic_Blank" alt="" />
-          <span class="blank-txt">暂无内容～</span>
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="dynamic_Blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
         </div>
       </template>
     </template>
@@ -62,7 +68,7 @@ export default {
     currentPage: 1
   }),
    mounted() {
-    if(this.pageName === 'myLike') {
+    if(this.pageName === 'userLike') {
       if (this.userLikesGetters.life.list.length === 0) {
         this.appendUserLikes({
           type: 'LIFE',
@@ -70,7 +76,7 @@ export default {
           size: 10
         })
       }
-    }else if(this.pageName === 'myCollection') {
+    }else if(this.pageName === 'userCollection') {
       if (this.userFavoritesGetters.life.list.length === 0) {
         this.appendUserFavorites({
           type: 'LIFE',
@@ -128,7 +134,7 @@ export default {
       'clearUserLikes'
     ]),
     onLoad() {
-      if(this.pageName === 'myLike') {
+      if(this.pageName === 'userLike') {
         if (this.userLikesGetters.life.status === 'over') {
         this.finished = true
         return false
@@ -141,7 +147,7 @@ export default {
           page: newPage,
           size: 10
         })
-      }else if(this.pageName === 'myCollection') {
+      }else if(this.pageName === 'userCollection') {
         if (this.userFavoritesGetters.life.status === 'over') {
         this.finished = true
         return false
@@ -172,7 +178,7 @@ export default {
   border-top: 12px solid #F7FAF8;
 }
 
-.posts-blank-wrap {
+.blank-box .posts-blank-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;

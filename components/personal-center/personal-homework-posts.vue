@@ -1,6 +1,6 @@
 <template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="pageName === 'myLike'">
+    <template v-if="pageName === 'userLike'">
       <template v-if="userLikesGetters.homework.list.length">
         <m-posts
           v-for="(res, index) in userLikesGetters.homework.list"
@@ -11,16 +11,19 @@
           :path="navRoute"
           propSquareType="HOMEWORK"
           :propIndex="index"
+          :pageName="pageName"
         />
       </template>
       <template v-if="!userLikesGetters.homework.list.length && finished">
-        <div class="posts-blank-wrap">
-          <img class="blank-icon" :src="homework_Blank" alt="" />
-          <span class="blank-txt">暂无内容～</span>
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="homework_Blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
         </div>
       </template>
     </template>
-    <template v-if="pageName === 'myCollection'">
+    <template v-if="pageName === 'userCollection'">
       <template v-if="userFavoritesGetters.homework.list.length">
         <m-posts
           v-for="(res, index) in userFavoritesGetters.homework.list"
@@ -32,12 +35,15 @@
           :path="navRoute"
           propSquareType="HOMEWORK"
           :propIndex="index"
+          :pageName="pageName"
         />
       </template>
-      <template v-if="!userFavoritesGetters.homework.list.length && finished">
-        <div class="posts-blank-wrap">
-          <img class="blank-icon" :src="homework_Blank" alt="" />
-          <span class="blank-txt">暂无内容～</span>
+      <template v-else-if="!userFavoritesGetters.homework.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="homework_Blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
         </div>
       </template>
     </template>
@@ -60,10 +66,10 @@ export default {
     finishedText:'没有更多了',
     navRoute:'/details/homework-page-details',
     homework_Blank:require('@/assets/icons/blank/have-no-homework.png'),
-    currentPage: 1
+    currentPage: 1,
   }),
   mounted() {
-    if(this.pageName === 'myLike') {
+    if(this.pageName === 'userLike') {
       if (this.userLikesGetters.homework.list.length === 0) {
         this.appendUserLikes({
           type: 'HOMEWORK',
@@ -71,7 +77,7 @@ export default {
           size: 10
         })
       }
-    }else if(this.pageName === 'myCollection') {
+    }else if(this.pageName === 'userCollection') {
       if (this.userFavoritesGetters.homework.list.length === 0) {
         this.appendUserFavorites({
           type: 'HOMEWORK',
@@ -130,7 +136,7 @@ export default {
       'clearUserLikes'
     ]),
     onLoad() {
-      if(this.pageName === 'myLike') {
+      if(this.pageName === 'userLike') {
         if (this.userLikesGetters.homework.status === 'over') {
           this.finished = true
           return false
@@ -143,7 +149,7 @@ export default {
           page: newPage,
           size: 10
         })
-      }else if(this.pageName === 'myCollection') {
+      }else if(this.pageName === 'userCollection') {
         if (this.userFavoritesGetters.homework.status === 'over') {
           this.finished = true
           return false
@@ -158,7 +164,7 @@ export default {
         })
       }
       
-    }
+    },
   },
   computed: {
     ...mapGetters('user', [
@@ -174,7 +180,7 @@ export default {
   border-top: 12px solid #F7FAF8;
 }
 
-.posts-blank-wrap {
+.blank-box .posts-blank-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
