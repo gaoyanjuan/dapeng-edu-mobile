@@ -7,7 +7,7 @@
 <script>
 export default {
   title: '评论详情页',
-  layout: 'tabbar',
+  layout: 'navbar',
   async asyncData ({route, store, error}) {
     if (process.browser) return {
       isServiceload: false

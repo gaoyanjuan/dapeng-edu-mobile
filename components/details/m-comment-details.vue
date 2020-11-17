@@ -107,6 +107,7 @@ export default {
 <style lang="less" scoped>
 .page {
   padding: 0 16px;
+  padding-top: 33px;
   .comment-box {
     margin-top: 33px;
   }

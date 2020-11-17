@@ -78,6 +78,49 @@ export const state = () => ({
       size: process.env.global.pageSize
     }
   },
+  userLikes: {
+    homework: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    works: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    life: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    activity_post: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    }
+      
+  },
 })
 
 export const mutations = {
@@ -206,6 +249,30 @@ export const mutations = {
     state.publishGrowth.list = []
     state.publishGrowth.pageInfo.pages = 1
     state.publishGrowth.status = 'loading'
+  },
+  appendUserLikes(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userLikes[type].list = state.userLikes[type].list.concat(payload.res.data)
+    state.userLikes[type].pageInfo = payload.res.pageInfo
+    if (payload.res.data.length < state.userLikes[type].pageInfo.size) {
+      state.userLikes[type].status = 'over'
+    } else {
+      state.userLikes[type].status = 'load'
+    }
+  },
+  clearUserLikes (state) {
+    state.userLikes.homework.list = []
+    state.userLikes.homework.pageInfo.pages = 1
+    state.userLikes.homework.status = 'loading'
+    state.userLikes.works.list = []
+    state.userLikes.works.pageInfo.pages = 1
+    state.userLikes.works.status = 'loading'
+    state.userLikes.life.list = []
+    state.userLikes.life.pageInfo.pages = 1
+    state.userLikes.life.status = 'loading'
+    state.userLikes.activity_post.list = []
+    state.userLikes.activity_post.pageInfo.pages = 1
+    state.userLikes.activity_post.status = 'loading'
   },
 }
 
@@ -340,6 +407,20 @@ export const actions = {
     const res = await this.$axios.delete(`/posts/${params.id}`)
     return res
   },
+  // 查询用户的喜欢列表
+  async appendUserLikes ({ commit }, params) {
+    const res = await this.$axios.get('users/likes', {
+      params: {
+        ...params
+      }
+    })
+    const payload = {
+      type: params.type,
+      res: res
+    }
+    commit('appendUserLikes', payload)
+    return payload
+  },
 }
 
 export const getters = {
@@ -375,5 +456,8 @@ export const getters = {
   },
   publishGrowthGetters(state) {
     return state.publishGrowth
+  },
+  userLikesGetters(state) {
+    return state.userLikes
   },
 }

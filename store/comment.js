@@ -62,6 +62,19 @@ export default {
         state.likesList.status = 'load'
       }
     },
+    deleteLike (state, payload) {
+      for (let index = 0; index < state.likesList.data.length; index++) {
+        const element = state.likesList.data[index]
+        if (element.user.userId === payload.userId) {
+          state.likesList.data.splice(index, 1)
+          break
+        }
+      }
+    },
+    addNewLike (state, payload) {
+      state.likesList.data.unshift(payload)
+      state.likesList.data = state.likesList.data
+    },
     clearRepliesList (state) {
       state.replies.data = []
       state.replies.status = 'loading'
@@ -85,6 +98,20 @@ export default {
     }
   },
   actions: {
+    // 收藏功能
+    async queryCollection ({ commit }, params) {
+      const res = await this.$axios.post(`/favorites`, {
+        ...params
+      })
+      return res.data
+    },
+    // 取消收藏功能
+    async queryDeleteCollection ({ commit }, params) {
+      const res = await this.$axios.delete(`/favorites/${params.id}?type=${params.type}`, {
+        ...params
+      })
+      return res.data
+    },
     async queryUnLike ({ commit }, params) {
       const res = this.$axios.delete(`/likes/${params.id}`, { params })
       return res.data
