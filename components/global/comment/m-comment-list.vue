@@ -9,7 +9,8 @@
       <template v-for="(item, index) in commentListGetters.data">
         <m-comment-item
           :isTeacher="item.type === 'MARK'"
-          :key="index"
+          :key="item.id"
+          :itemIndex="index"
           :contentType="contentType"
           :commentItem="item"
           :user="item.user"
