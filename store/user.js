@@ -210,6 +210,11 @@ export const mutations = {
 }
 
 export const actions = {
+  async getUserDetails ({ commit, state }) {
+    const res = await this.$axios.get('old/users/details')
+    commit('appendUserInfo', res.data)
+    return res
+  },
   // 查询用户信息
   async appendUserInfo ({ commit }, params) {
     commit('appendUserInfo', params)
