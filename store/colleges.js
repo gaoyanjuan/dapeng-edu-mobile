@@ -14,7 +14,8 @@ export default {
       ], // 提交作业
       smallVideoColleges: [
         { id: '', name: '全部' }
-      ] // 小视频
+      ], // 小视频
+      submitWorkColleges: [] // 提交作品
     }
   },
   mutations: {
@@ -33,6 +34,8 @@ export default {
         state.readingColleges = state.readingColleges.concat(payload.data)
       } else if (payload.collegeType === 'RELEASE_TASK') {
         state.homeworkColleges = state.homeworkColleges.concat(payload.data)
+      } else if (payload.collegeType === 'RELEASE_WORK') {
+        state.submitWorkColleges = payload.data
       } else {
         state.colleges = payload.data
       }
@@ -48,6 +51,9 @@ export default {
   getters: {
     smallVideoCollegesGetters (state) {
       return state.smallVideoColleges
+    },
+    submitWorkCollegesGetters (state) {
+      return state.submitWorkColleges
     },
     taskCollegesGetters (state) {
       return state.taskColleges
