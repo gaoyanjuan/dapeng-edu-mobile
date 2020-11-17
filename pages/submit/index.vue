@@ -12,7 +12,7 @@
     <div class="container">
       <!-- 作业描述 -->
       <section class="homework-desc-row">
-        <div v-if="showTitle" class="title">作业标题·作业标题</div>
+        <div v-if="showTitle" class="title">{{ requirement.title }}</div>
 
         <!-- 富文本 -->
         <div class="rich-input">
@@ -59,7 +59,9 @@
       </section>
 
       <!-- 作业类型标签  -->
-      <section v-if="submitType === 'VIP' || submitType === 'TEST'" class="homework-label-row">设计</section>
+      <section v-if="submitType === 'VIP' || submitType === 'TEST'" class="homework-label-row">
+        {{ requirement.college  | filterCollageName}}
+      </section>
 
       <!-- 作品--添加学院 -->
       <section v-if="submitType === 'WORKS'" class="works-college-wrap">
@@ -98,13 +100,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import Client from '@/utils/client'
+import { randomFileName } from '@/utils/util'
+import { formatSlashDate } from '@/plugins/filters'
 export default {
   name:'Submit',
   layout:'navbar',
   data:() => ({
     /** 描述 */
     content:'',
+    /** 作业号 */
+    jobNummer: '',
     /** 描述框大小*/
     autosize: { maxHeight: 120, minHeight: 120},
     /** 字数限制 */
@@ -115,6 +122,8 @@ export default {
     contactNumber:'',
     // 图片上传列表
     fileList: [],
+    // 处理后的图片
+    imageInfo: [],
     // 可提交状态
     submitStatus: false,
     // 上传状态
@@ -126,7 +135,7 @@ export default {
     // 提交作业安全锁
     submitLock: true,
     // 完善用户名状态
-    usernamePop:{ show: false },
+    usernamePop:{ show: false, info: null},
     // 作业号弹窗状态
     homeworkNumberPop: { show: false },
     // 唤起APP
@@ -139,12 +148,6 @@ export default {
     },
     // 默认选择的学院
     collegeIndex: null,
-    // 学院列表
-    collegeList:[
-      {name:'设计'},{name:'美术'},{name:'国画'},{name:'书法'},
-      {name:'短视频'},{name:'篆刻'},{name:'吉他'},{name:'开发'},
-      {name:'古筝'},{name:'口播'}
-    ],
     label:require('@/assets/icons/submit/college-label.png'),
   }),
   watch: {
@@ -162,17 +165,12 @@ export default {
         if(n.length) { this.openAppPop.show = false }
         if(!n.length && !this.fileList.length) { this.openAppPop.show = true }
       }
-
-      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
-        if (n.length) { this.submitStatus = this.fileList.length !== 0}
-        if (!n.length) { this.submitStatus = false }
-      }
     },
 
     fileList(n, o) {
 
       if(this.submitType === 'VIP' || this.submitType === 'TEST') {
-        if (n.length) { this.submitStatus = this.content.length !== 0 }
+        if (n.length) { this.submitStatus = true }
       } 
       
       if(this.submitType === 'WORKS' || this.submitType === 'LIFE') {
@@ -196,6 +194,15 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      // 上传作业-作业要求
+      requirement: 'homework/requirementDetailsGetters',
+      // 学院列表
+      collegeList: 'colleges/submitWorkCollegesGetters',
+      // 用户信息
+      userInfo: 'user/userInfoGetters',
+    }),
+
     // 当前发布类型
     submitType: function () {
       return this.$route.query.type
@@ -255,13 +262,17 @@ export default {
       }
     }
   },
-  mounted(){
-    
-    /** 根据URL参数，决定展示剩余文字数 */
-    const type = this.$route.query.type
-    if(type === 'WORKS' || type === 'LIFE') {
+  created(){
+
+    if(this.submitType === 'WORKS') {
       this.dynamicNums = '只能输入200个字哦'
       this.openAppPop.show = true
+      this.getColleges({collegeType: 'RELEASE_WORK'})
+
+    } else if (this.submitType === 'LIFE') {
+      this.dynamicNums = '只能输入200个字哦'
+      this.openAppPop.show = true
+      
     } else {
       this.dynamicNums = '只能输入60个字哦'
       this.openAppPop.show = false
@@ -270,7 +281,21 @@ export default {
   methods:{
     ...mapActions({
       // 获取用户信息（4.0）
-      getUserInfo: 'user/getUserDetail'
+      getUserInfo: 'user/getUserDetail',
+      // 获取图片上传授权
+      getMySTS: 'publish/getMySTS',
+      // 展翅订单查询，是否存在此人
+      getZcAdviser: 'publish/getZcAdviser',
+      // 查询学院列表
+      getColleges: 'colleges/appendColleges',
+      // 发布作业
+      publishHomework: 'publish/addNewHomework',
+      // 修改作业
+      editHomework:'publish/editHomework',
+      // 发布作品
+      publishWorks:'publish/addNewWorks',
+      // 发布动态
+      publishDynamic: 'publish/addNewDynamic'
     }),
 
     // 提交前确认
@@ -283,6 +308,7 @@ export default {
       if (!this.usernamePop.show) {
         const res = await this.getUserInfo()
         if(!res.data.loginName) {
+          this.usernamePop.info = res.data
           this.usernamePop.show = true
           return
         }
@@ -302,33 +328,171 @@ export default {
     },
 
     /** 上传 */
-    onSubmit() {
-      // 是否存在顾问逻辑
-      // this.homeworkNumberPop.show = true
+    async onSubmit() {
+
+      if (this.submitType === 'TEST' || this.submitType === 'VIP') {
+        let res = await this.submitHomework()
+        if(res.status === 201) {
+          this.sucessToast('homework')
+        } else {
+          res.data && this.$toast(res.data.message)
+        }
+
+        // 体验课，需要判断是否存在顾问
+        // if(this.submitType === 'TEST') {
+          // let res = await this.getCounselor()
+          // this.homeworkNumberPop.show = true
+          // console.log(res)
+        // }
+      }
+      
+      if (this.submitType === 'WORKS') {
+        let res = await this.submitWorks()
+        if(res.status === 201) {
+          this.sucessToast('works')
+        } else {
+          res.data && this.$toast(res.data.message)
+        }
+      }
+      
+      if (this.submitType === 'LIFE') {
+        let res = await this.submitDynamic()
+        if(res.status === 201) {
+          this.sucessToast('dynamic')
+        } else {
+          res.data && this.$toast(res.data.message)
+        }
+      }
+    },
+
+    /** 提示成功 & 跳转 */
+    sucessToast(name) {
       this.$myToast('提交成功我们将第一时间处理')
-      // setTimeout(() => {
-      //   this.submitLock = true
-      //   this.$router.push('/personal-center/personal-publish?type=homework')
-      // }, 2500)
+      setTimeout(() => {
+        this.submitLock = true
+        this.$router.push({
+          path: '/personal-center/personal-publish',
+          query:{ type:name, userId: this.userInfo.userId }
+        })
+      }, 2500)
+    },
+
+    /** 提交作业【体验课、正式课】 */
+    submitHomework() {
+      return this.publishHomework({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        type: 'TEXT',
+        title: this.requirement.title,
+        taskId: this.requirement.taskId
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 提交作品 */
+    submitWorks() {
+      let index = this.collegeIndex
+      return this.publishWorks({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        collegeId: this.collegeList[index].id
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 提交动态 */
+    submitDynamic() {
+      return this.publishDynamic({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        type: 'TEXT',
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 作业提交成功，检查是否存在顾问 */
+    getCounselor() {
+      return this.getZcAdviser( this.requirement.college.id)
+      .then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
     },
 
     /** 图片文件上传至服务器 */
-    onUploadAfterRead(file) {
+    async onUploadAfterRead(file) {
       const _this = this
       file.status = 'uploading'
       file.message = '上传中...'
       this.uploadStatus = false
+
+      const res = await this.getMySTS()
+      const { accessKeyId, accessKeySecret, securityToken } = res.data
+      const ossConfig = {
+        accessKeyId: accessKeyId,
+        accessKeySecret: accessKeySecret,
+        stsToken: securityToken
+      }
+
+      const date = formatSlashDate(new Date())
+      const random = randomFileName(8)
+      const fileName = date + '/' + random + '.' + file.file.name.split('.').pop()
+
       const render = new FileReader()
       render.readAsDataURL(file.file)
       render.onload = (event) => {
-        const formData = new FormData()
-        formData.append('content', file.file)
-        setTimeout(() => {
-          file.status = 'done'
-          file.message = '上传成功'
+        const client = Client(ossConfig)
+        client.put(fileName, file.file).then(({ res }) => {
+          if (res.statusCode === 200) {
+            const url = _this.replaceUrls(res)
+            file.status = 'done'
+            file.message = '上传成功'
+            _this.uploadStatus = true
+            _this.handleMakeImage(file, url)
+          }
+        }).catch(error => {
+          file.status = 'failed'
+          file.message = '上传失败'
           _this.uploadStatus = true
-        }, 1000)
+        })
       }
+    },
+
+    /* 创造图片对象 */
+    handleMakeImage(e, url) {
+      const _this = this
+      const img = window.URL.createObjectURL(e.file)
+      const imgObj = new Image()
+      const filename = e.file.name.split('.').shift()
+      const exp = e.file.type.replace(/image\//, '')
+      imgObj.onload = () => {
+        _this.imageInfo.push({
+          filename: `${filename}.${exp}`,
+          size: e.file.size,
+          height: imgObj.height,
+          width: imgObj.width,
+          url: url
+        })
+      }
+      imgObj.src = img
+    },
+
+    /** 替换图片路径 */
+    replaceUrls(res) {
+      return res.requestUrls[0].replace(/http:\/\/dapeng-test-image.oss-cn-beijing.aliyuncs.com/,process.env.ossUrl) 
     },
 
     /** 上传前置处理 */
@@ -402,6 +566,7 @@ export default {
       // 更新图片文件总大小
       this.totalImgSize -= spliceImgSize
       this.fileList.splice(index, 1)
+      this.imageInfo.splice(index, 1)
       this.imagePreview.show = false
     },
 

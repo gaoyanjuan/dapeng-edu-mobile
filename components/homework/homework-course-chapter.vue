@@ -56,7 +56,6 @@ export default {
         path: '/requirement',
         query: {
           taskId: this.chapter.taskId,
-          submit: !this.chapter.isSubmit,
           type: this.$route.query.courseType
         }
       })
