@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name:'Submit',
   layout:'navbar',
@@ -267,17 +268,24 @@ export default {
     }
   },
   methods:{
+    ...mapActions({
+      // 获取用户信息（4.0）
+      getUserInfo: 'user/getUserDetail'
+    }),
 
     // 提交前确认
-    onSubmitConfirm(){
+    async onSubmitConfirm(){
 
       // 提交状态是否为True
       if (!this.submitStatus) return false
 
       // 判断用户是否已经完善用户名
       if (!this.usernamePop.show) {
-         this.usernamePop.show = true
-         return
+        const res = await this.getUserInfo()
+        if(!res.data.loginName) {
+          this.usernamePop.show = true
+          return
+        }
       }
 
       // 等待图片上传成功后
@@ -298,10 +306,10 @@ export default {
       // 是否存在顾问逻辑
       // this.homeworkNumberPop.show = true
       this.$myToast('提交成功我们将第一时间处理')
-      setTimeout(() => {
-        this.submitLock = true
-        this.$router.push('/personal-center/personal-publish?type=homework')
-      }, 2500)
+      // setTimeout(() => {
+      //   this.submitLock = true
+      //   this.$router.push('/personal-center/personal-publish?type=homework')
+      // }, 2500)
     },
 
     /** 图片文件上传至服务器 */

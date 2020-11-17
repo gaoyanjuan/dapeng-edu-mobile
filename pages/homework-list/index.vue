@@ -18,9 +18,9 @@
           <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
             
             <template v-if="course.list.length">
-              <nuxt-link tag="div" :to="'/homework-list/homework-select?courseType=' + courseType">
-                <homework-course v-for="(item, index) in course.list" :key="index" :course="item" />
-              </nuxt-link>
+              <div v-for="(item, index) in course.list" :key="index" @click="toTasksPage(item)">
+                <homework-course :course="item"></homework-course>
+              </div>
             </template>
 
             <template v-if="!course.list.length && finished">
@@ -52,6 +52,7 @@ export default {
     finishedText: '没有更多了',
     navTitle: '提交体验课作业',
     blank: require('@/assets/icons/blank/have-no-course.png'),
+    load: require('@/assets/icons/homework/loading.gif')
   }),
   
 
@@ -91,7 +92,12 @@ export default {
     },
     '$route.query': function (newQuery, oldQuery) {
       this.clearOpenCourses()
-      this.appendOpenCourses({ collegeId: newQuery.college, type: newQuery.courseType, page: 1 })
+      this.appendOpenCourses({
+        collegeId: newQuery.college,
+        type: newQuery.courseType,
+        clear: true,
+        page: 1,
+      })
     }
   },
 
@@ -116,6 +122,7 @@ export default {
       this.appendOpenCourses({
         collegeId: this.$route.query.college || '',
         type: this.courseType,
+        clear: false,
         page: 1
       })
     }
@@ -138,14 +145,27 @@ export default {
       this.appendOpenCourses({
         collegeId: this.$route.query.college || '',
         type: this.courseType,
+        clear: false,
         page: newPage
       })
     },
     
     collegeChange(index, item) {
+      if (this.course.status === 'loading') return false
       this.collegeIndex = index
       if(this.$route.query.college === item.id ) return
       this.$router.replace({ query: { ...this.$route.query, college: item.id } })
+    },
+
+    toTasksPage(params) {
+      this.$router.push({
+        path: '/homework-list/homework-select',
+        query: { 
+          id: params.id,
+          title: params.title,
+          courseType: this.courseType
+        }
+      })
     },
   },
   computed: {
@@ -160,64 +180,70 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.formal-homework-page {
-  .content-wrap {
-    padding-top: 44px;
+.content-wrap {
+  padding-top: 44px;
+}
+
+.college-wrap {
+  margin-top: 21px;
+  margin-left: 17px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.college-item {
+  width: 78px;
+  height: 24px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background: #f7f7f7;
+  border-radius: 4px;
+  color: #75737e;
+  font-size: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: @dp-font-regular;
+}
+
+.college-item-active {
+  background: #0cb65b;
+  color: #fff;
+}
+  
+
+.homework-wrap {
+
+  .homework-list-wrap {
+    padding: 16px;
   }
-  .college-wrap {
-    margin-top: 21px;
-    margin-left: 17px;
-    display: flex;
-    flex-wrap: wrap;
-    .college-item {
-      width: 78px;
-      height: 24px;
-      margin-right: 8px;
-      margin-bottom: 8px;
-      background: #f7f7f7;
-      border-radius: 4px;
-      color: #75737e;
-      font-size: 13px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: @dp-font-regular;
-    }
-    .college-item-active {
-      background: #0cb65b;
-      color: #fff;
-    }
+}
+
+.homework-blank-wrap {
+  width: 240px;
+  height: 158px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+
+  .blank-img {
+    width: 240px;
+    height: 126px;
+    margin-top: 24px;
   }
-  .homework-wrap {
-    .homework-list-wrap {
-      margin-left: 17px;
-      margin-top: 20px;
-    }
-    .homework-blank-wrap {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .homework-blank-wrap .blank-img {
-      width: 240px;
-      height: 126px;
-      margin-top: 24px;
-    }
-    .homework-blank-wrap .blank-txt {
-      margin-top: 12px;
-      width: max-content;
-      height: 20px;
-      font-size: 14px;
-      font-family: @dp-font-semibold;
-      font-weight: 600;
-      color: #8d8e8e;
-      line-height: 20px;
-    }
+
+  .blank-txt {
+    margin-top: 12px;
+    width: max-content;
+    height: 20px;
+    font-size: 14px;
+    font-family: @dp-font-semibold;
+    font-weight: 600;
+    color: #8d8e8e;
+    line-height: 20px;
+    text-align: center;
   }
 }
 </style>

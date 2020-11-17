@@ -537,6 +537,7 @@ export default {
 .fot__rh--wrap .fot__rh__star--wrap {
   width: 24px;
   height: 24px;
+  line-height: 24px;
 }
 
 .fot__rh--wrap .fot__nums {
