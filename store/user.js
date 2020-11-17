@@ -119,7 +119,48 @@ export const state = () => ({
         size: process.env.global.pageSize
       }
     }
-      
+  },
+  userFavorites: {
+    homework: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    works: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    life: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    activity_post: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    }
   },
 })
 
@@ -274,6 +315,40 @@ export const mutations = {
     state.userLikes.activity_post.pageInfo.pages = 1
     state.userLikes.activity_post.status = 'loading'
   },
+  deleteUserLikes (state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    let index = payload.index
+    state.userLikes[type].list.splice(index, 1)
+  },
+  appendUserFavorites(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userFavorites[type].list = state.userFavorites[type].list.concat(payload.res.data)
+    state.userFavorites[type].pageInfo = payload.res.pageInfo
+    if (payload.res.data.length < state.userFavorites[type].pageInfo.size) {
+      state.userFavorites[type].status = 'over'
+    } else {
+      state.userFavorites[type].status = 'load'
+    }
+  },
+  clearUserFavorites (state) {
+    state.userFavorites.homework.list = []
+    state.userFavorites.homework.pageInfo.pages = 1
+    state.userFavorites.homework.status = 'loading'
+    state.userFavorites.works.list = []
+    state.userFavorites.works.pageInfo.pages = 1
+    state.userFavorites.works.status = 'loading'
+    state.userFavorites.life.list = []
+    state.userFavorites.life.pageInfo.pages = 1
+    state.userFavorites.life.status = 'loading'
+    state.userFavorites.activity_post.list = []
+    state.userFavorites.activity_post.pageInfo.pages = 1
+    state.userFavorites.activity_post.status = 'loading'
+  },
+  deleteUserFavorites(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    let index = payload.index
+    state.userFavorites[type].list.splice(index, 1)
+  }
 }
 
 export const actions = {
@@ -415,6 +490,20 @@ export const actions = {
     commit('appendUserLikes', payload)
     return payload
   },
+  // 查询用户的收藏列表
+  async appendUserFavorites ({ commit }, params) {
+    const res = await this.$axios.get('users/favorites', {
+      params: {
+        ...params
+      }
+    })
+    const payload = {
+      type: params.type,
+      res: res
+    }
+    commit('appendUserFavorites', payload)
+    return payload
+  },
 }
 
 export const getters = {
@@ -453,5 +542,8 @@ export const getters = {
   },
   userLikesGetters(state) {
     return state.userLikes
+  },
+  userFavoritesGetters(state) {
+    return state.userFavorites
   },
 }

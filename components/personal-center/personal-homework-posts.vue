@@ -1,22 +1,51 @@
 <template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="userLikesGetters.homework.list.length">
-      <m-posts
-        v-for="(res, index) in userLikesGetters.homework.list"
-        :key="index"
-        :courseType="res.courseType"
-        :modifiedTime="res.lastModifiedTime"
-        :listItemData="res"
-        :path="navRoute"
-        propSquareType="HOMEWORK"
-        :propIndex="index"
-      />
+    <template v-if="pageName === 'userLike'">
+      <template v-if="userLikesGetters.homework.list.length">
+        <m-posts
+          v-for="(res, index) in userLikesGetters.homework.list"
+          :key="index"
+          :courseType="res.courseType"
+          :modifiedTime="res.lastModifiedTime"
+          :listItemData="res"
+          :path="navRoute"
+          propSquareType="HOMEWORK"
+          :propIndex="index"
+          :pageName="pageName"
+        />
+      </template>
+      <template v-if="!userLikesGetters.homework.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="homework_Blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </div>
+      </template>
     </template>
-    <template v-if="!userLikesGetters.homework.list.length && finished">
-      <div class="posts-blank-wrap">
-        <img class="blank-icon" :src="homework_Blank" alt="" />
-        <span class="blank-txt">暂无内容～</span>
-      </div>
+    <template v-if="pageName === 'userCollection'">
+      <template v-if="userFavoritesGetters.homework.list.length">
+        <m-posts
+          v-for="(res, index) in userFavoritesGetters.homework.list"
+          :key="index"
+          :courseType="res.courseType"
+          :modifiedTime="res.lastModifiedTime"
+          :listItemData="res"
+          :commentList="res.comments"
+          :path="navRoute"
+          propSquareType="HOMEWORK"
+          :propIndex="index"
+          :pageName="pageName"
+        />
+      </template>
+      <template v-else-if="!userFavoritesGetters.homework.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="homework_Blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </div>
+      </template>
     </template>
   </van-list>
 </template>
@@ -25,22 +54,39 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'LikePosts',
+  props: {
+    pageName: {
+      type: String,
+      default: ''
+    }
+  },
   data: () => ({
     loading: false,
     finished: false,
     finishedText:'没有更多了',
     navRoute:'/details/homework-page-details',
     homework_Blank:require('@/assets/icons/blank/have-no-homework.png'),
-    currentPage: 1
+    currentPage: 1,
   }),
   mounted() {
-    if (this.userLikesGetters.homework.list.length === 0) {
-      this.appendUserLikes({
-        type: 'HOMEWORK',
-        page: this.currentPage,
-        size: 10
-      })
+    if(this.pageName === 'userLike') {
+      if (this.userLikesGetters.homework.list.length === 0) {
+        this.appendUserLikes({
+          type: 'HOMEWORK',
+          page: this.currentPage,
+          size: 10
+        })
+      }
+    }else if(this.pageName === 'userCollection') {
+      if (this.userFavoritesGetters.homework.list.length === 0) {
+        this.appendUserFavorites({
+          type: 'HOMEWORK',
+          page: this.currentPage,
+          size: 10
+        })
+      }
     }
+    
 
   },
   watch: {
@@ -61,33 +107,69 @@ export default {
       } else {
         this.finishedText ='没有更多了'
       }
+    },
+    'userFavoritesGetters.homework.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'userFavoritesGetters.homework.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
     }
   },
   methods:{
     ...mapActions('user', [
-      'appendUserLikes'
+      'appendUserLikes',
+      'appendUserFavorites'
     ]),
     ...mapMutations('user', [
       'clearUserLikes'
     ]),
     onLoad() {
-      if (this.userLikesGetters.homework.status === 'over') {
-        this.finished = true
-        return false
+      if(this.pageName === 'userLike') {
+        if (this.userLikesGetters.homework.status === 'over') {
+          this.finished = true
+          return false
+        }
+      
+        if (this.userLikesGetters.homework.status === 'loading') return false
+        const newPage = this.currentPage + 1
+        this.appendUserLikes({
+          type: 'HOMEWORK',
+          page: newPage,
+          size: 10
+        })
+      }else if(this.pageName === 'userCollection') {
+        if (this.userFavoritesGetters.homework.status === 'over') {
+          this.finished = true
+          return false
+        }
+      
+        if (this.userFavoritesGetters.homework.status === 'loading') return false
+        const newPage = this.currentPage + 1
+        this.appendUserFavorites({
+          type: 'HOMEWORK',
+          page: newPage,
+          size: 10
+        })
       }
       
-      if (this.userLikesGetters.homework.status === 'loading') return false
-      const newPage = this.currentPage + 1
-      this.appendUserLikes({
-        type: 'HOMEWORK',
-        page: newPage,
-        size: 10
-      })
-    }
+    },
   },
   computed: {
     ...mapGetters('user', [
-      'userLikesGetters'
+      'userLikesGetters',
+      'userFavoritesGetters'
     ])
   },
 }
@@ -98,7 +180,7 @@ export default {
   border-top: 12px solid #F7FAF8;
 }
 
-.posts-blank-wrap {
+.blank-box .posts-blank-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
