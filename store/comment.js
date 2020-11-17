@@ -62,6 +62,19 @@ export default {
         state.likesList.status = 'load'
       }
     },
+    deleteLike (state, payload) {
+      for (let index = 0; index < state.likesList.data.length; index++) {
+        const element = state.likesList.data[index]
+        if (element.user.userId === payload.userId) {
+          state.likesList.data.splice(index, 1)
+          break
+        }
+      }
+    },
+    addNewLike (state, payload) {
+      state.likesList.data.unshift(payload)
+      state.likesList.data = state.likesList.data
+    },
     clearRepliesList (state) {
       state.replies.data = []
       state.replies.status = 'loading'

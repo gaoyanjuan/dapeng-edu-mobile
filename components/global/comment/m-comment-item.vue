@@ -18,7 +18,7 @@
           <div>{{ commentItem.createTime | commonDate }}</div>
         </div>
       </div>
-      <div class="thumb-box">
+      <div class="thumb-box" @click="onLove" >
         <img v-if="isPraise" src="@/assets/icons/comment/comment-favour-true.png" alt="">
         <img v-else src="@/assets/icons/comment/comment-favour.png" alt="">
         <span>{{ praiseCount | studentsCount }}</span>
@@ -53,9 +53,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   props: {
-    id: {
+    contentType: {
       type: String,
       default: ''
     },
@@ -113,6 +114,35 @@ export default {
     this.replyCount = this.commentItem.replyCount
   },
   methods: {
+    ...mapActions({
+      queryLike: 'comment/queryLike',
+      queryUnLike: 'comment/queryUnLike'
+    }),
+    onLove () {
+      if (this.isPraise) {
+        this.isPraise = false
+        this.praiseCount -= 1
+        this.queryUnLike({
+          id: this.commentItem.id,
+          type: 'COMMENT'
+        }).catch(() => {
+          this.isPraise = true
+          this.praiseCount += 1
+        })
+      } else {
+        this.isPraise = true
+        this.praiseCount += 1
+        this.queryLike({
+          id: this.commentItem.id,
+          type: 'COMMENT',
+          createdId: this.commentItem.user.userId,
+          contentType: this.contentType
+        }).catch(() => {
+          this.isPraise = false
+          this.praiseCount -= 1
+        })
+      }
+    },
     showDialogEvent (img) {
       this.ImagePreview([img])
     },
@@ -120,7 +150,7 @@ export default {
       this.$router.push({
         path: '/details/comment-details',
         query: {
-          id: this.id,
+          id: this.commentItem.id,
           courseType: this.teacherType
         }
       })
