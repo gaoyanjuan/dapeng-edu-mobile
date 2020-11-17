@@ -1,44 +1,147 @@
 <template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="list.length">
-      <m-video-posts v-for="(item, i) in list" :key="i" :item="item"/>
+    <template v-if="pageName === 'userLike'">
+      <template v-if="userLikesGetters.movie.list.length">
+        <m-video-posts v-for="(item, index) in userLikesGetters.movie.list" :key="index" :item="item"/>
+      </template>
+      <template v-if="!userLikesGetters.movie.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </div>
+      </template>
     </template>
-    <template v-if="!list.length && finished">
-      <div class="posts-blank-wrap">
-        <img class="blank-icon" :src="blank" alt="" />
-        <span class="blank-txt">暂无内容～</span>
-      </div>
+    <template v-if="pageName === 'userCollection'">
+      <template v-if="userFavoritesGetters.movie.list.length">
+        <m-video-posts v-for="(item, index) in userFavoritesGetters.movie.list" :key="index" :item="item"/>
+      </template>
+      <template v-if="!userFavoritesGetters.movie.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </div>
+      </template>
     </template>
   </van-list>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'LikeVideoPosts',
+  props: {
+    pageName: {
+      type: String,
+      default: ''
+    }
+  },
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    blank: require('@/assets/icons/blank/have-no-video.png')
+    blank: require('@/assets/icons/blank/have-no-video.png'),
+    currentPage: 1
   }),
-  methods:{
-    onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(i)
-        }
-        // 加载状态结束
+  computed: {
+    ...mapGetters('user', [
+      'userLikesGetters',
+      'userFavoritesGetters'
+    ])
+  },
+  watch: {
+     'userLikesGetters.movie.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'userLikesGetters.movie.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    },
+    'userFavoritesGetters.movie.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'userFavoritesGetters.movie.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    }
+  },
+  mounted() {
+    if(this.pageName === 'userLike') {
+      if (this.userLikesGetters.movie.list.length === 0) {
+        this.appendUserLikes({
+          type: 'MOVIE',
+          page: this.currentPage,
+          size: 10
+        })
+      }
+    }else if(this.pageName === 'userCollection') {
+      if (this.userFavoritesGetters.movie.list.length === 0) {
+        this.appendUserFavorites({
+          type: 'MOVIE',
+          page: this.currentPage,
+          size: 10
+        })
+      }
+    }
+  },
+  methods:{
+    ...mapActions('user', [
+      'appendUserLikes',
+      'appendUserFavorites'
+    ]),
+    onLoad() {
+      if(this.pageName === 'userLike') {
+        if (this.userLikesGetters.movie.status === 'over') {
           this.finished = true
+          return false
         }
-        if (this.list.length === 0) {
+      
+        if (this.userLikesGetters.movie.status === 'loading') return false
+        const newPage = this.currentPage + 1
+        this.appendUserLikes({
+          type: 'MOVIE',
+          page: newPage,
+          size: 10
+        })
+      }else if(this.pageName === 'userCollection') {
+        if (this.userFavoritesGetters.movie.status === 'over') {
           this.finished = true
-          this.finishedText = ''
+          return false
         }
-      }, 1000)
+      
+        if (this.userFavoritesGetters.movie.status === 'loading') return false
+        const newPage = this.currentPage + 1
+        this.appendUserFavorites({
+          type: 'MOVIE',
+          page: newPage,
+          size: 10
+        })
+      }
     }
   }
 }
@@ -49,7 +152,7 @@ export default {
   border-top: 12px solid #F7FAF8;
 }
 
-.posts-blank-wrap {
+.blank-box .posts-blank-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;

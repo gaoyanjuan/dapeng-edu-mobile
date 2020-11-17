@@ -3,29 +3,29 @@
     <div class="video-posts-wrap">
 
       <nuxt-link tag="div" class="video-posts-content" to="/details/video-page-details?type=long">
-        陪我跨年的恐怕只有学习和心中那一缕对优中那一缕跨年的恐怕只
+        {{item.title}}
       </nuxt-link>
 
       <nuxt-link tag="div" class="video-posts-cover" to="/details/video-page-details?type=long">
-        <img class="video-cover" :src="cover" alt="" />
+        <img class="video-cover" :src="item.video.cover" alt="" />
         <img class="video-play" :src="playBtn" alt="" />
-        <span class="video-duration">02:00</span>
+        <span class="video-duration">{{item.video.duration}}</span>
       </nuxt-link>
 
       <div class="video-posts-info">
-        <div class="video-posts-label">视频·设计</div>
-        <span class="video-posts-nickname">范冰冰是我女朋友</span>
-        <span class="video-posts-date">12月26日 16:55</span>
+        <div class="video-posts-label">视频 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}</div>
+        <span class="video-posts-nickname"> {{ item.user.nickname }} </span>
+        <span class="video-posts-date"> {{ item.createTime | commonDate }} </span>
       </div>
 
       <div class="video-posts-interaction">
         <div class="video-posts-comment">
           <img :src="comment" alt="" />
-          <span>3213</span>
+          <span> {{ item.commentCount | studentsCount }} </span>
         </div>
         <div class="video-posts-like">
           <img :src="like" alt="" />
-          <span>3213</span>
+          <span> {{ item.praiseCount | studentsCount }} </span>
         </div>
         <div class="video-posts-star">
           <img :src="star" alt="" />
@@ -38,6 +38,15 @@
 <script>
 export default {
   name:'M-Video-Posts',
+  props:{
+    /** 
+     * 数据对象 
+    * */
+    item:{
+      type:Object,
+      default:{}
+    }
+  },
   data: () => ({
     loading: true,
     star:require('@/assets/icons/posts/posts-star.png'),
@@ -111,8 +120,9 @@ export default {
   }
 
   .video-duration {
-    width: 49px;
-    height: 20px;
+    // width: 49px;
+    // height: 20px;
+    padding: 2px 8px;
     background: #000000;
     border-radius: 10px;
     opacity: 0.6;
@@ -139,8 +149,9 @@ export default {
   margin-top: 12px;
 
   .video-posts-label {
-    width: 70px;
-    height: 24px;
+    // width: 70px;
+    // height: 24px;
+    padding: 4px 8px;
     background: #F7F7F7;
     border-radius: 12px;
     margin-right: 8px;
@@ -149,7 +160,7 @@ export default {
     font-family: @regular;
     font-weight: 400;
     color: #465156;
-    line-height: 24px;
+    // line-height: 24px;
     text-align: center;
     cursor: pointer;
   }

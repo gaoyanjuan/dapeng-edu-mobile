@@ -206,17 +206,17 @@ export default {
 }
 
 .reading-body-row .posts-label {
-  width: 70px;
-  height: 24px;
+  padding: 4px 8px;
   background: #F7F7F7;
   border-radius: 12px;
   font-size: 12px;
   font-family: @dp-font-regular;
   font-weight: 400;
   color: #465156;
-  line-height: 24px;
   text-align: center;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .reading-body-row .posts-author {
