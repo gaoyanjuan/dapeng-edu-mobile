@@ -1,7 +1,7 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
+    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
@@ -73,8 +73,16 @@ export default {
   }),
   computed:{
     ...mapGetters({
-      works: 'work/worksDetailsGetters'
-    })
+      works: 'work/worksDetailsGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    showRightMenuFlag() {
+      if(this.works.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+      return true
+      } else {
+        return false
+      }
+    }
   },
   mounted () {
     // 详情页跳转定位
@@ -88,12 +96,20 @@ export default {
     // }
   },
   methods: {
+    ...mapActions({
+      deleteWorks: 'user/deleteWorks',
+    }),
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
     // 删除作业
-    deleteWork() {}
+    deleteWork() {
+      this.deleteWorks({ id: this.works.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    }
   }
 }
 </script>
