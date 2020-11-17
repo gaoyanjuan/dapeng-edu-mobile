@@ -9,6 +9,12 @@ export const actions = {
     return res
   },
 
+  // 展翅订单查询，是否存在此人
+  async getZcAdviser (store, params) {
+    const res = await this.$axios.get(`old/platforms/zc/advisers/code?collegeId=${params}`)
+    return res
+  },
+
   // 发布作品
   async addNewWorks (store, params) {
     const res = await this.$axios.post('/works', params)

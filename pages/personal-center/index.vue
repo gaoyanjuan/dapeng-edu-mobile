@@ -104,7 +104,6 @@ export default {
     ]
   }),
   mounted() {
-    console.log(this.oldUserInfoGetters)
     if(this.userInfoGetters && this.userInfoGetters.userId ) {
       this.appendUserTrends({ userId: this.userInfoGetters.userId })
     }
