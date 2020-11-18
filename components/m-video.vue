@@ -4,45 +4,79 @@
     <m-swipe />
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" :menus="menus" />
+    <m-menus menus-type="college" :menus="videoCollegesGetters" />
 
     <section class="works-wrap">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <m-video-posts v-for="(item, i) in list" :key="i" :item="item"/>
+      <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
+        <template v-if="videoListGetters.list.length">
+          <m-video-posts v-for="(item, i) in videoListGetters.list" :key="i" :item="item"/>
+        </template>
+        <template v-if="!videoListGetters.list.length && finished">
+          <div class="works-blank-wrap">
+            <img class="blank-img" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </template>
       </van-list>
     </section>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
-  name: 'M-Hotlists',
+  name: 'M-Video',
   data: () => ({
     list: [],
     loading: false,
     finished: false,
-    menus:[{id:'', name: '全部'},
-    {id:'sheji',name:'设计'},
-    {id:'meishu',name:'美术'},
-    {id:'guohua',name:'国画'},
-    {id:'shufa',name:'书法'},
-    {id:'video',name:'短视频'},
-    {id:'shouban',name:'手办'},
-    {id:'linmo',name:'临摹'}]
+    finishedTxt:'没有更多了',
+    blank:require('@/assets/icons/blank/have-no-video.png')
   }),
-  methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(i)
-        }
-        // 加载状态结束
+   watch: {
+    'videoListGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if(this.list.length > 10) {
-          this.finished = true
-        }
-      }, 1000)
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'videoListGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
+      }
+    }
+  },
+  computed: {
+    ...mapGetters('colleges', [
+      'videoCollegesGetters'
+    ]),
+    ...mapGetters('video', [
+      'videoListGetters'
+    ])
+  },
+  methods:{
+    ...mapActions('video', [
+      'appendVideoList'
+    ]),
+
+    onLoad() {
+       if (this.videoListGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.videoListGetters.status === 'loading') return false
+      const newPage = this.videoListGetters.pageInfo.pages + 1
+      this.appendVideoList({
+        collegeId: this.$route.query.college,
+        page: newPage
+      })
     }
   }
 }
@@ -54,5 +88,30 @@ export default {
   min-height: calc(100vh - 339px);
   padding-bottom: 65px;
   background-color: #f8f8f8;
+}
+
+
+.works-wrap .works-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.works-wrap .works-blank-wrap .blank-img {
+  width: 240px;
+  height: 126px;
+  margin-top: 24px;
+}
+
+.works-wrap .works-blank-wrap .blank-txt {
+  margin-top: 12px;
+  width: max-content;
+  height: 20px;
+  font-size: 14px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: #8D8E8E;
+  line-height: 20px;
 }
 </style>
