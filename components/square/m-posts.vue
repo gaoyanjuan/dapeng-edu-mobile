@@ -445,12 +445,12 @@ export default {
     },
     // 编辑作业
     editHomework() {
-      console.log(this.listItemData)
       this.$router.push({
         path: '/submit',
         query: {
+          action: 'edit',
           type: this.listItemData.courseType,
-          params: this.listItemData
+          id: this.listItemData.id
         }
       })
     }
