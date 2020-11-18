@@ -122,6 +122,10 @@ export default {
 
     // 打开我的喜欢弹框
     openLovePopup (){
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
       this.lovePopup.show = true
     },
 
@@ -222,6 +226,10 @@ export default {
       })
     },
     toMyLike() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
       this.$router.push({
         path: '/personal-center/personal-like',
         query: {
