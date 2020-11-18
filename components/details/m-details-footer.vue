@@ -63,7 +63,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userinfo: 'user/userInfoGetters'
+      userinfo: 'user/userInfoGetters',
+      commentListGetters: 'comment/commentListGetters'
     })
   },
   created () {
@@ -77,7 +78,8 @@ export default {
       queryCollection: 'comment/queryCollection',
       queryDeleteCollection: 'comment/queryDeleteCollection',
       queryLike: 'comment/queryLike',
-      queryUnLike: 'comment/queryUnLike'
+      queryUnLike: 'comment/queryUnLike',
+      appendNewComment: 'comment/appendNewComment'
     }),
     ...mapMutations({
       addNewLike: 'comment/addNewLike',
@@ -149,7 +151,25 @@ export default {
     },
     // 评论发送
     sendComment (params) {
-      console.log(params)
+      this.appendNewComment({
+        ...this.commentListGetters.params,
+        content: params,
+        label: {
+          contentType: this.contentType
+        },
+        user: this.userinfo
+      })
+      .then((res) => {
+        if (!res.data.highRisk) {
+          this.$toast('评论成功')
+        }
+        this.commentCount += 1
+      })
+      .catch((err) => {
+        if (err && err.data && err.data.message) {
+          this.$toast(err.data.message)
+        }
+      })
     }
   }
 }

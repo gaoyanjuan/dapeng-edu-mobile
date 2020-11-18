@@ -12,6 +12,10 @@ export default {
       homeworkColleges: [
         { id: '', name: '全部' }
       ], // 提交作业
+      smallVideoColleges: [
+        { id: '', name: '全部' }
+      ], // 小视频
+      submitWorkColleges: [] // 提交作品
     }
   },
   mutations: {
@@ -22,12 +26,16 @@ export default {
       })
       if (payload.collegeType === 'SQUARE_TASK') {
         state.taskColleges = payload.data
+      } else if (payload.collegeType === 'SQUARE_VIDEO') {
+        state.smallVideoColleges = state.smallVideoColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_WORK') {
         state.workColleges = state.workColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_ARTICLE') {
         state.readingColleges = state.readingColleges.concat(payload.data)
       } else if (payload.collegeType === 'RELEASE_TASK') {
         state.homeworkColleges = state.homeworkColleges.concat(payload.data)
+      } else if (payload.collegeType === 'RELEASE_WORK') {
+        state.submitWorkColleges = payload.data
       } else {
         state.colleges = payload.data
       }
@@ -41,6 +49,12 @@ export default {
     }
   },
   getters: {
+    smallVideoCollegesGetters (state) {
+      return state.smallVideoColleges
+    },
+    submitWorkCollegesGetters (state) {
+      return state.submitWorkColleges
+    },
     taskCollegesGetters (state) {
       return state.taskColleges
     },

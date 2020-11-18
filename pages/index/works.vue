@@ -6,26 +6,26 @@
 import { mapActions, mapMutations } from 'vuex'
 export default {
   name: 'Works',
-  async asyncData ({route, store, error}) {
-    if (process.browser) return {
-      isServiceload: false
-    }
-    try {
-      if (store.getters['colleges/workCollegesGetters'].length === 1) {
-        await store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_WORK' })
-      }
-      if (store.getters['work/workListGetters'].list.length === 0) {
-        await store.dispatch('work/appendWorkList', { categoryIds: route.query.college, page: 1 })
-      }
-      return {
-        isServiceload: true
-      }
-    } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
-    }
-  },
+  // async asyncData ({route, store, error}) {
+  //   if (process.browser) return {
+  //     isServiceload: false
+  //   }
+  //   try {
+  //     if (store.getters['colleges/workCollegesGetters'].length === 1) {
+  //       await store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_WORK' })
+  //     }
+  //     if (store.getters['work/workListGetters'].list.length === 0) {
+  //       await store.dispatch('work/appendWorkList', { categoryIds: route.query.college, page: 1 })
+  //     }
+  //     return {
+  //       isServiceload: true
+  //     }
+  //   } catch (err) {
+  //     error({ statusCode: err.data.code, message: err.data.message })
+  //   }
+  // },
   created () {
-    if (process.browser && !this.isServiceload) {
+    if (process.browser) {
       if (this.$store.getters['colleges/workCollegesGetters'].length === 1) {
         this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_WORK' })
       }

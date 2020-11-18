@@ -1,5 +1,5 @@
 <template>
-  <div class="comment">
+  <div class="comment" @click="onShowMenus" >
     <div class="comment-header">
       <div class="comment-header-left">
         <headImage
@@ -15,12 +15,18 @@
               <img v-else src="@/assets/icons/comment/teacher-tag.png" />
             </span>
           </div>
-          <div>{{ time | commonDate }}</div>
+          <div>{{ commentItem.createTime | commonDate }}</div>
         </div>
       </div>
-      <div class="thumb-box">
-        <img src="@/assets/icons/comment/comment-favour.png" alt="">
-        <span>{{ thumbNumber | studentsCount }}</span>
+      <div class="icon-box">
+        <div class="comment-icon" v-if="canReply" @click.stop="showCommentPop" >
+          <img src="@/assets/icons/comment/comment-icon.png" alt="">
+        </div>
+        <div class="thumb-box" @click.stop="onLove" >
+          <img v-if="isPraise" src="@/assets/icons/comment/comment-favour-true.png" alt="">
+          <img v-else src="@/assets/icons/comment/comment-favour.png" alt="">
+          <span>{{ praiseCount | studentsCount }}</span>
+        </div>
       </div>
     </div>
     <the-audio
@@ -32,42 +38,63 @@
     </the-audio>
     <div class="content" v-else>
       <template v-if="parentUser && replyUser && (parentUser.userId !== replyUser.userId)"><span class="black-text">回复</span><span class="reply-text">{{ parentUser.nickname }}：</span></template>
-      <span v-html="$options.filters.formatEmotions(content)"></span>
+      <span v-html="$options.filters.formatEmotions(commentItem.content)"></span>
     </div>
     <div v-if="contentImages" class="content-img" @click="showDialogEvent(contentImages)">
       <img :src="contentImages" :alt="contentImages">
     </div>
+    <m-comment-popup
+      :replyUser="commentItem.user"
+      :comment="commentPop"
+      @sendComment="sendComment"
+    />
+    <!-- 删除 菜单弹层 -->
+    <van-popup v-model="showPopup" round overlay-class="menus__popup">
+      <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
+      <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
+    </van-popup>
+    <!-- 删除确认弹层 -->
+    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup">
+      <div class="popup__item__title">确定删除该评论吗？</div>
+      <div class="popup__item">
+        <span @click.stop="cancel">取消</span>
+        <span @click.stop="confirm">确定</span>
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import audio from '@/assets/icons/comment/audio.png'
 import audioPlay from '@/assets/icons/comment/audio.gif'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   props: {
     user: {
       type: Object,
       default: null
     },
+    commentIndex: {
+      type: Number,
+      default: 0
+    },
     parentUser: {
       type: Object,
       default: null
+    },
+    canReply: {
+      type: Boolean,
+      default: false
     },
     replyUser: {
       type: Object,
       default: null
     },
-    time: {
-      type: Number,
-      default: 0
-    },
-    thumbNumber: {
-      type: Number,
-      default: 0
-    },
-    content: {
-      type: String,
-      default: ''
+    commentItem: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     contentImages: {
       type: String,
@@ -96,14 +123,130 @@ export default {
   },
   data () {
     return {
+      commentPop: { show: false },
+      showPopup: false,
+      showConfirmPopup: false,
       audioImg: audio,
-      audio: null
+      audio: null,
+      praiseCount: 0,
+      isPraise: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      commentDetailsGetters: 'comment/commentDetailsGetters',
+      userinfo: 'user/userInfoGetters'
+    })
+  },
+  created () {
+    this.isPraise = this.commentItem.isPraise
+    this.praiseCount = this.commentItem.praiseCount
   },
   mounted () {
     this.audio = new Audio(this.audioUrl)
   },
   methods: {
+    ...mapActions({
+      queryLike: 'comment/queryLike',
+      queryUnLike: 'comment/queryUnLike',
+      deleteComment: 'comment/deleteComment',
+      appendNewRepliesComment: 'comment/appendNewRepliesComment'
+    }),
+    ...mapMutations({
+      commitNewRepliesComment: 'comment/appendNewRepliesComment',
+      deleteReply: 'comment/deleteReply',
+      changeReplyCount: 'comment/changeReplyCount'
+    }),
+    cancel () {
+      this.showConfirmPopup = false
+    },
+    confirm () {
+      this.deleteComment({
+        id: this.commentItem.id
+      })
+      this.deleteReply({
+        index: this.commentIndex
+      })
+      this.$toast('删除成功')
+      this.changeReplyCount(-1)
+      this.showConfirmPopup = false
+    },
+    deleteItem () {
+      this.showPopup = false
+      this.showConfirmPopup = true
+    },
+    onShowMenus () {
+      if (this.userinfo && this.user && this.user.userId === this.userinfo.userId) {
+        this.showPopup = !this.showPopup
+      }
+    },
+    onLove () {
+      if (this.isPraise) {
+        this.isPraise = false
+        this.praiseCount -= 1
+        this.queryUnLike({
+          id: this.commentItem.id,
+          type: 'COMMENT'
+        }).catch(() => {
+          this.isPraise = true
+          this.praiseCount += 1
+        })
+      } else {
+        this.isPraise = true
+        this.praiseCount += 1
+        this.queryLike({
+          id: this.commentItem.id,
+          type: 'COMMENT',
+          createdId: this.commentItem.user.userId,
+          contentType: this.$route.query.contentType
+        }).catch(() => {
+          this.isPraise = false
+          this.praiseCount -= 1
+        })
+      }
+    },
+    showCommentPop () {
+      if (this.userinfo && this.user && this.user.userId !== this.userinfo.userId) {
+        this.commentPop.show = true
+      } else {
+        this.$toast('不可以对自己回复哦')
+      }
+    },
+    sendComment (text) {
+      this.appendNewRepliesComment({
+        label: {
+          contentType: this.$route.query.contentType
+        },
+        content: text,
+        id: this.commentDetailsGetters.id,
+        user: this.userinfo,
+        commit: true
+      })
+      .then((res) => {
+        if (!res.data.highRisk) {
+          this.commitNewRepliesComment({
+            ...res.data,
+            isPraise: false,
+            isRecommend: false,
+            praiseCount: 0,
+            parentId: this.commentDetailsGetters.id,
+            parentUser: {
+              ...this.commentDetailsGetters.user
+            },
+            user: {
+              ...this.userinfo
+            }
+          })
+          this.changeReplyCount(1)
+          this.$toast('评论成功')
+        }
+      })
+      .catch((err) => {
+        if (err && err.data && err.data.message) {
+          this.$toast(err.data.message)
+        }
+      })
+    },
     palyAudio () {
       this.audioImg = audioPlay      
       this.audio.play()
@@ -159,22 +302,31 @@ export default {
         }
       }
     }
-    .thumb-box {
+    .icon-box {
       display: flex;
-      align-items: center;
-      img {
-        width: 16px;
-        height: 16px;
-        vertical-align: middle;
+      .comment-icon {
+        img {
+          width: 20px;
+          height: 20px;
+        }
+        margin-right: 30px;
       }
-      span {
-        margin-left: 4px;
-        margin-right: 2px;
-        font-size: 11px;
-        font-family: @dp-font-regular;
-        font-weight: 400;
-        color: #A6AEA9;
-        line-height: 16px;
+      .thumb-box {
+        margin-top: 2px;
+        display: flex;
+        img {
+          width: 20px;
+          height: 20px;
+          vertical-align: middle;
+        }
+        span {
+          margin-left: 4px;
+          font-size: 12px;
+          font-family: @dp-font-medium;
+          font-weight: 500;
+          color: #A6AEA9;
+          line-height: 20px;
+        }
       }
     }
   }
@@ -233,5 +385,74 @@ export default {
 .black-text {
   color: #36404A;
   margin: 0 3px;
+}
+
+
+/** menus-popup */
+.comment /deep/.van-popup {
+  width: 284px;
+  height: 92px;
+  overflow: hidden;
+}
+
+/deep/.van-popup--center.van-popup--round {
+  border-radius: 8px;
+}
+
+.van-popup .menus__popup__item {
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #18252C;
+  text-align: center;
+  border-bottom: 1px solid #F7F7F7;
+  cursor: pointer;
+}
+
+.van-popup .menus__popup__item:active {
+  background-color:#f2f3f5;
+}
+
+.confirm__menus__popup  {
+  width: 283px !important;
+  height: 137px !important;
+  border-radius: 6px !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+.popup__item__title {
+  height: 96px;
+  font-size: 16px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: #363D35;
+  line-height: 22px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.popup__item {
+  height: 40px;
+  border-top: solid 1px #D8D8D8;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  :first-child {
+    color: #5A5A5A;
+    border-right: solid 1px #D8D8D8;
+  }
+  &>span {
+    height: 40px;
+    width: 140px;
+    font-size: 14px;
+    font-family: @dp-font-regular;
+    font-weight: 400;
+    color: #0CB65B;
+    line-height: 40px;
+  }
 }
 </style>

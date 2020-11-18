@@ -10,10 +10,10 @@
       
       <div class="header-right-side">
         <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickName }} </span>
-        <p v-else class="not-login-wrap">
-          <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
-        </p>
-        <span v-if="studentCodeGetters" class="user-code">学籍号：{{ studentCodeGetters }}</span>
+        <p v-else class="not-login-wrap"><span @click="toLogin">登陆</span><span>/</span><span>注册</span></p>
+        <template v-if="oldUserInfoGetters">
+          <span v-if="oldUserInfoGetters.studentSatusId" class="user-code">学籍号：{{ oldUserInfoGetters.studentSatusId }}</span>
+        </template>
       </div>
     </div>
 
@@ -107,12 +107,11 @@ export default {
     if(this.userInfoGetters && this.userInfoGetters.userId ) {
       this.appendUserTrends({ userId: this.userInfoGetters.userId })
     }
-    
   },
   computed:{
     ...mapGetters('user',[
       'userInfoGetters',
-      'studentCodeGetters',
+      'oldUserInfoGetters',
       'userTrendsGetters'
     ])
   },
@@ -123,6 +122,10 @@ export default {
 
     // 打开我的喜欢弹框
     openLovePopup (){
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
       this.lovePopup.show = true
     },
 
@@ -223,6 +226,10 @@ export default {
       })
     },
     toMyLike() {
+      if(!this.userInfoGetters) { 
+        this.toLogin()
+        return
+      }
       this.$router.push({
         path: '/personal-center/personal-like',
         query: {

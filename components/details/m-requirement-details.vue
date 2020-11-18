@@ -70,8 +70,8 @@
     </div>
 
     <!-- Footer Button -->
-    <div class="requirement-btn-wrap">
-      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" to="/submit?type=TEST" />
+    <div v-if="requirementDetailsGetters.submitStatus === 'SUBMIT'" class="requirement-btn-wrap">
+      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" :to="`/submit?type=${$route.query.type}`" />
     </div>
   </div>
 </template>

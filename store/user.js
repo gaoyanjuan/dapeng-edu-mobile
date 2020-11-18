@@ -7,7 +7,7 @@ export const state = () => ({
     recommendCount: 0,
     likeCount: 0,
   },
-  studentCode: null,
+  oldUserInfo: null,
   userFollow: {
     list: [],
     status: 'loading',
@@ -247,8 +247,8 @@ export const mutations = {
       state.userFollow.status = 'load'
     }
   },
-  appendStudentCode(state, payload) { 
-    state.studentCode = payload.data.studentSatusId
+  appendOldUserInfo(state, payload) { 
+    state.oldUserInfo = payload.data
   },
   clearUserFollow (state) {
     state.userFollow.list = []
@@ -452,19 +452,30 @@ export const mutations = {
 }
 
 export const actions = {
+  async getUserDetails ({ commit, state }) {
+    const res = await this.$axios.get('old/users/details')
+    commit('appendUserInfo', res.data)
+    return res
+  },
   // 查询用户信息
   async appendUserInfo ({ commit }, params) {
     commit('appendUserInfo', params)
+  },
+  // 修改信息
+  async editUserInfo ({ commit }, params) {
+    const res = await this.$axios.patch('old/users', params)
+    return res
+  },
+  // 获取用户信息【主要是获取学籍号】
+  async getUserDetail({ commit }, params) {
+    const data = await this.$axios.get(`/old/users/details`)
+    commit('appendOldUserInfo', data)
+    return data
   },
   // 检查用户是否可以注册
   async checkRegisterAble (state, params) {
     const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
     return data
-  },
-  // 获取用户信息【主要是获取学籍号】
-  async getUserDetail({ commit }, params) {
-    const data = await this.$axios.get(`/old/users/details`)
-    commit('appendStudentCode', data)
   },
   // 获取用户互动数据
   async appendUserTrends ({ commit }, params) {
@@ -636,8 +647,8 @@ export const getters = {
   userTrendsGetters (state) {
     return state.userTrends
   },
-  studentCodeGetters (state) {
-    return state.studentCode
+  oldUserInfoGetters (state) {
+    return state.oldUserInfo
   },
   userFollowGetters(state) {
     return state.userFollow

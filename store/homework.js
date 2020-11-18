@@ -28,6 +28,27 @@ export default {
           size: process.env.global.pageSize
         }
       },
+      trialsCourses: {
+        list: [],
+        status: 'loading',
+        pageInfo: {
+          count: 0,
+          number: 1,
+          pages: 1,
+          size: process.env.global.pageSize
+        }
+      },
+      stagesList: [],
+      vipCourses: {
+        list: [],
+        status: 'loading',
+        pageInfo: {
+          count: 0,
+          number: 1,
+          pages: 1,
+          size: process.env.global.pageSize
+        }
+      }
     }
   },
   mutations: {
@@ -86,7 +107,8 @@ export default {
       }
     },
     // 查询提交作业，体验课和正式课课程列表
-    appendOpenCourses (state, payload) {
+    appendOpenCourses(state, payload) {
+      if (payload.clear) { state.openCourses.list = [] }
       state.openCourses.list = state.openCourses.list.concat(payload.data)
       state.openCourses.pageInfo = payload.pageInfo
       if (payload.data.length < state.openCourses.pageInfo.size) {
@@ -95,6 +117,68 @@ export default {
         state.openCourses.status = 'load'
       }
     },
+
+    clearTrialsCourses (state) {
+      state.trialsCourses.list = []
+      state.trialsCourses.status = 'loading'
+      state.trialsCourses.pageInfo = {
+        count: 0,
+        number: 1,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+
+    changeTrialsCoursesStatus (state, payload) {
+      state.trialsCourses.status = payload
+    },
+    
+    // 查询学员体验课作业任务列表
+    appendTrialsCourses(state, payload) {
+      state.trialsCourses.list = state.trialsCourses.list.concat(payload.data)
+      state.trialsCourses.pageInfo = payload.pageInfo
+      if (payload.data.length < state.trialsCourses.pageInfo.size) {
+        state.trialsCourses.status = 'over'
+      } else {
+        state.trialsCourses.status = 'load'
+      }
+    },
+
+    // 查询用户提交作业时的期列表
+    appendStagesList(state, payload) {
+      state.stagesList = payload.data
+    },
+    
+    clearStagesList (state) {
+      state.stagesList = []
+    },
+
+
+    changeVipCoursesStatus (state, payload) {
+      state.vipCourses.status = payload
+    },
+
+    clearVipCourses (state) {
+      state.vipCourses.list = []
+      state.vipCourses.status = 'loading'
+      state.vipCourses.pageInfo = {
+        count: 0,
+        number: 1,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+
+    // 查询用户提交作业时的期列表
+    async appendVipCourses(state, payload) { 
+      state.vipCourses.list = state.vipCourses.list.concat(payload.data)
+      state.vipCourses.pageInfo = payload.pageInfo
+      if (payload.data.length < state.vipCourses.pageInfo.size) {
+        state.vipCourses.status = 'over'
+      } else {
+        state.vipCourses.status = 'load'
+      }
+    }
   },
   actions: {
     async appendHomeworkList({ commit }, params) {
@@ -118,6 +202,7 @@ export default {
     async appendHomeworkDetails({ commit }, params) {
       const res = await this.$axios.get(`/homes/${params.id}`)
       commit('appendHomeworkDetails', res)
+      return res
     },
     // 查询作业要求详情
     async appendRequirementDetails({ commit }, params) {
@@ -145,7 +230,7 @@ export default {
     },
     
     // 查询提交作业，体验课和正式课课程列表
-    async appendOpenCourses ({ commit }, params) {
+    async appendOpenCourses({ commit }, params) {
       commit('changeOpenCoursesStatus', 'loading')
       await this.$axios.get('/courses/open', {
         params: {
@@ -155,8 +240,8 @@ export default {
       }).then(course => {
         if (course.status === 200 && course.data.length) {
           let ids = ''
-          course.data.forEach(element => {
-            ids += element.college.id + ','
+          course.data.forEach( element => {
+            ids += element.id + ','
           })
           
           this.$axios.get('/courses/tasks-count', {
@@ -170,15 +255,52 @@ export default {
               item.submit = res.data[index].submit
             })
             const pageInfo = { pages: params.page, size: 10 }
-            commit('appendOpenCourses', { data: course.data, pageInfo })
+            commit('appendOpenCourses', { data: course.data, pageInfo, clear: params.clear })
             return course.data
           })
-        } else { 
+        } else {
           const pageInfo = { pages: params.page, size: 10 }
-          commit('appendOpenCourses', { data: course.data, pageInfo })
+          commit('appendOpenCourses', { data: course.data, pageInfo, clear: params.clear })
           return course.data
         }
       })
+    },
+
+    // 查询学员体验课作业任务列表
+    async appendTrialsCourses({ commit }, params) {
+      commit('changeTrialsCoursesStatus', 'loading')
+      const res = await this.$axios.get(`/trials-courses/${params.id}/tasks`, {
+        params: {
+          ...params,
+          size: process.env.global.pageSize
+        }
+      })
+      const pageInfo = { pages: params.page, size: 10 }
+      commit('appendTrialsCourses', { data: res.data, pageInfo})
+      return res
+    },
+
+    // 查询用户提交作业时的期列表
+    async appendStagesList({ commit }, params) {
+      const res = await this.$axios.get(`/users/stages`, {
+        params: { ...params }
+      })
+      commit('appendStagesList', { data: res.data})
+      return res
+    },
+
+    // 查询期下作业任务列表
+    async appendVipCourses({ commit }, params) {
+      commit('changeVipCoursesStatus', 'loading')
+      const res = await this.$axios.get(`/stages/${params.id}/tasks`, {
+        params: {
+          ...params,
+          size: process.env.global.pageSize
+        }
+      })
+      const pageInfo = { pages: params.page, size: 10 }
+      commit('appendVipCourses', { data: res.data, pageInfo})
+      return res
     },
   },
   getters: {
@@ -197,5 +319,14 @@ export default {
     openCoursesGetters (state) {
       return state.openCourses
     },
+    trialsCoursesGetters(state) {
+      return state.trialsCourses
+    },
+    stagesListGetters(state) { 
+      return state.stagesList
+    },
+    vipCoursesGetters(state) { 
+      return state.vipCourses
+    }
   }
 }

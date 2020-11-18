@@ -2,7 +2,7 @@
   <van-popup v-model="showPopup.show" round @closed="closed">
     <div class="popup-warp">
       <div class="popup-head">您还未有专属班主任，请复制作业号联系客服老师呦~</div>
-      <div class="popup-body">作业号：{{ homeworkNumber }}</div>
+      <div class="popup-body">作业号：{{ showPopup.jobNummer }}</div>
       <div class="popup-footer btn-active" @click.stop="onCustomer">联系客服</div>
       <div class="popup-copy-row" @click.stop="onCopy">复制作业号</div>
     </div>
@@ -16,10 +16,6 @@ export default {
     showPopup:{
       type: Object,
       default: {}
-    },
-    homeworkNumber:{
-      type:String,
-      default:'211128253654871536'
     }
   },
   methods:{
@@ -31,8 +27,9 @@ export default {
 
     /** 复制作业号 */
     onCopy() {
-      this.$copyText(this.homeworkNumber).then(function (e) {
-        console.log(e.text)
+      const _this = this
+      this.$copyText(this.showPopup.jobNummer).then(function (e) {
+        _this.$toast('复制成功')
       }, function(e) {
         console.log('Can not copy')
       })

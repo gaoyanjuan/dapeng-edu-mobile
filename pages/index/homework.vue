@@ -5,26 +5,26 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 export default {
-  async asyncData ({route, store, error}) {
-    if (process.browser) return {
-      isServiceload: false
-    }
-    try {
-      if (store.getters['colleges/taskCollegesGetters'].length === 0) {
-        await store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
-      }
-      if (store.getters['homework/homeworkListGetters'].list.length === 0) {
-        await store.dispatch('homework/appendHomeworkList', { categoryIds: route.query.college, courseType: route.query.courseType, page: 1 })
-      }
-      return {
-        isServiceload: true
-      }
-    } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
-    }
-  },
+  // async asyncData ({route, store, error}) {
+  //   if (process.browser) return {
+  //     isServiceload: false
+  //   }
+  //   try {
+  //     if (store.getters['colleges/taskCollegesGetters'].length === 0) {
+  //       await store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
+  //     }
+  //     if (store.getters['homework/homeworkListGetters'].list.length === 0) {
+  //       await store.dispatch('homework/appendHomeworkList', { categoryIds: route.query.college, courseType: route.query.courseType, page: 1 })
+  //     }
+  //     return {
+  //       isServiceload: true
+  //     }
+  //   } catch (err) {
+  //     error({ statusCode: err.data.code, message: err.data.message })
+  //   }
+  // },
   created () {
-    if (process.browser && !this.isServiceload) {
+    if (process.browser) {
       if (this.$store.getters['colleges/taskCollegesGetters'].length === 0) {
         this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
       }

@@ -1,7 +1,7 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
+    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">
@@ -58,23 +58,36 @@
       <div class="menus__popup__item" @click="deleteWork">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
     title:'作品详情',
     commentSelected: true,
     likeSelected: false,
-    showMenusPopup: false
+    showMenusPopup: false,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed:{
     ...mapGetters({
-      works: 'work/worksDetailsGetters'
-    })
+      works: 'work/worksDetailsGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    showRightMenuFlag() {
+      if(this.works.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+      return true
+      } else {
+        return false
+      }
+    }
   },
   mounted () {
     // 详情页跳转定位
@@ -88,12 +101,24 @@ export default {
     // }
   },
   methods: {
+    ...mapActions({
+      deleteWorks: 'user/deleteWorks',
+    }),
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
-    // 删除作业
-    deleteWork() {}
+    // 删除作品
+    deleteWork() {
+      this.showMenusPopup = false
+      this.deleteDialogParams.show = true
+    },
+    confirmDelete() {
+      this.deleteWorks({ id: this.works.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    }
   }
 }
 </script>
@@ -168,7 +193,7 @@ export default {
 /** menus-popup */
 .p-details /deep/.van-popup {
   width: 284px;
-  height: 92px;
+  // height: 92px;
   overflow: hidden;
 }
 

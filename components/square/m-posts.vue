@@ -95,6 +95,8 @@
       @onLove="onLove"
       @onCollect="onCollect"
     />
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
@@ -168,7 +170,10 @@ export default {
     star: require('@/assets/icons/posts/posts-star.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
-    showPublishMenusPopup: false
+    showPublishMenusPopup: false,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed: {
     user () {
@@ -397,6 +402,10 @@ export default {
     },
     // 删除
     deleteItem() {
+      this.deleteDialogParams.show = true
+      this.showPublishMenusPopup = false
+    },
+    confirmDelete() {
       if(this.propSquareType === 'HOMEWORK') {
         this.deleteHomework({ id: this.listItemData.id })
         .then(() => {
@@ -442,15 +451,16 @@ export default {
           })
         })
       }
+      this.deleteDialogParams.show = false
     },
     // 编辑作业
     editHomework() {
-      console.log(this.listItemData)
       this.$router.push({
         path: '/submit',
         query: {
+          action: 'edit',
           type: this.listItemData.courseType,
-          params: this.listItemData
+          id: this.listItemData.id
         }
       })
     }
@@ -588,6 +598,7 @@ export default {
 .fot__rh--wrap .fot__rh__star--wrap {
   width: 24px;
   height: 24px;
+  line-height: 24px;
 }
 
 .fot__rh--wrap .fot__nums {

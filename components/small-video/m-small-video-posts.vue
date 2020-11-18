@@ -1,41 +1,46 @@
 <template>
-  <div class="small-video-wrapper">
-
-    <nuxt-link tag="img"
-      :src="imgInfo.imgUrl" 
-      to="/details/video-page-details?type=small" 
+  <div class="small-video-wrapper" @click="toDetail">
+    <img
+      ref="coverImg"
+      :src="videoItem.coverImg" 
       class="small-video-cover"
-      :style="{ height: `${imgInfo.height}px`}"
+      :style="{ height: `${videoItem.height}px`}"
     />
-
-    <nuxt-link tag="div" 
-      to="/details/video-page-details?type=small" 
+    <div
       class="small-video-content van-multi-ellipsis--l3"
     >
-      零基础学设计只要3天零零基础学设计只要3天零基础学设计只要3天点点滴零零基础学设计只要3天
-    </nuxt-link>
+      {{ videoItem.content }}
+    </div>
 
     <div class="small-video-info">
       <div class="info-left-side">
-        <img class="avatar" :src="avatar" alt="" />
-        <span class="nickname"> 范冰冰 </span>
+        <headImage
+          :userId="videoItem.user ? videoItem.user.userId : 'disable'"
+          :headImg="videoItem.user ? videoItem.user.avatar : ''"
+          imgWidth="24px"
+          imgHeight="24px"
+        />
+        <span class="nickname"> {{ videoItem.user ? videoItem.user.nickname : '佚名' }} </span>
       </div>
-      <div class="info-right-side">
-        <img class="icon-love" :src="love" alt="" />
-        <span class="love-nums"> 3231 </span>
+      <div class="info-right-side" @click.stop="changeLike">
+        <img class="icon-love" v-if="isPraise" src="@/assets/icons/posts/small-unlove.png" alt="">
+        <img class="icon-love" v-else src="@/assets/icons/posts/small-love.png" alt="">
+        <span class="love-nums"> {{ praiseCount | studentsCount }} </span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name:'M-Small-Video',
   props:{
     /** 
      * 数据对象 
     * */
-    imgInfo: {
+    videoItem: {
       type: Object,
       default: () => {
         return null
@@ -43,11 +48,72 @@ export default {
     }
   },
   data:() => ({
-    avatar:require('@/assets/icons/common/avatar.png'),
-    love:require('@/assets/icons/posts/small-love.png'),
-    unlove:require('@/assets/icons/posts/small-unlove.png'),
-    cover:require('@/assets/icons/square/small-video-cover.png')
-  })
+    defaultImg: require('@/assets/icons/common/photos-bg.png'),
+    isPraise: false,
+    praiseCount: 0
+  }),
+  created () {
+    this.praiseCount = this.videoItem.praiseCount
+    this.isPraise = this.videoItem.isPraise
+  },
+  mounted () {
+    if (this.$refs.coverImg) {
+      this.$refs.coverImg.onerror = function () {
+        this.$refs.coverImg.src = this.defaultImg
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      queryLike: 'comment/queryLike',
+      queryUnLike: 'comment/queryUnLike'
+    }),
+    changeLike () {
+      if (this.isPraise) {
+        this.isPraise = false
+        this.praiseCount -= 1
+        this.queryUnLike({
+          id: this.videoItem.id,
+          type: this.videoItem.type
+        })
+      } else {
+        this.isPraise = true
+        this.praiseCount += 1
+        this.queryLike({
+          id: this.videoItem.id,
+          type: this.videoItem.type,
+          createdId: this.videoItem.user.userId,
+          contentType: 'TEXT'
+        })
+      }
+    },
+    toDetail () {
+      if (this.videoItem.type === 'HOMEWORK') {
+        this.$router.push({
+          path: '/details/homework-page-details',
+          query: {
+            id: this.videoItem.id
+          }
+        })
+      } else if (this.videoItem.type === 'WORKS') {
+        this.$router.push({
+          path: '/details/works-page-details',
+          query: {
+            id: this.videoItem.id
+          }
+        })
+      } else if (this.videoItem.type === 'LIFE') {
+        this.$router.push({
+          path: '/details/dynamic-page-details',
+          query: {
+            id: this.videoItem.id
+          }
+        })
+      } else {
+        this.$toast('错误')
+      }
+    }
+  }
 }
 </script>
 
