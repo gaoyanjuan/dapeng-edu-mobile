@@ -5,28 +5,28 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 export default {
-  async asyncData ({route, store, error}) {
-    if (process.browser) return {
-      isServiceload: false
-    }
-    try {
-      if (route.query.type === 'new') {
-        if (store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
-          await store.dispatch('dynamic/appendNewDynamicList', {})
-        }
-      } else if (route.query.type === 'hot') {
-        if (store.getters['dynamic/hotDynamicListGetters'].list.length === 0) {
-          await store.dispatch('dynamic/appendHotDynamicList', {})
-        }
-      } else {
-        if (store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
-          await store.dispatch('dynamic/appendNewDynamicList', {})
-        }
-      }
-    } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
-    }
-  },
+  // async asyncData ({route, store, error}) {
+  //   if (process.browser) return {
+  //     isServiceload: false
+  //   }
+  //   try {
+  //     if (route.query.type === 'new') {
+  //       if (store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
+  //         await store.dispatch('dynamic/appendNewDynamicList', {})
+  //       }
+  //     } else if (route.query.type === 'hot') {
+  //       if (store.getters['dynamic/hotDynamicListGetters'].list.length === 0) {
+  //         await store.dispatch('dynamic/appendHotDynamicList', {})
+  //       }
+  //     } else {
+  //       if (store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
+  //         await store.dispatch('dynamic/appendNewDynamicList', {})
+  //       }
+  //     }
+  //   } catch (err) {
+  //     error({ statusCode: err.data.code, message: err.data.message })
+  //   }
+  // },
   created () {
     if (this.$route.query.type === 'new') {
       if (this.$store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
