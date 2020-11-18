@@ -65,7 +65,7 @@
 
       <!-- 作业类型标签  -->
       <section v-if="submitType === 'VIP' || submitType === 'TEST'" class="homework-label-row">
-        <template v-if="requirement"> {{ requirement.college }} </template>
+        <template v-if="requirement"> {{ requirement.college | filterCollageName }} </template>
         <template v-else-if="homeworkDetails"> {{ homeworkDetails.college | filterCollageName }} </template>
       </section>
 
@@ -116,8 +116,6 @@ export default {
   data:() => ({
     /** 描述 */
     content:'',
-    /** 作业号 */
-    jobNummer: '',
     /** 描述框大小*/
     autosize: { maxHeight: 120, minHeight: 120},
     /** 字数限制 */
@@ -143,7 +141,7 @@ export default {
     // 完善用户名状态
     usernamePop:{ show: false, info: null},
     // 作业号弹窗状态
-    homeworkNumberPop: { show: false },
+    homeworkNumberPop: { show: false, jobNummer: null },
     // 唤起APP
     openAppPop: { show: false },
     // 图片预览
@@ -372,27 +370,28 @@ export default {
         if(res.status === 200) {
           this.sucessToast('homework')
         } else {
-          res.data && this.$toast(res.data.message)
+          res.data.message && this.$toast(res.data.message)
         }
       }
 
       if (this.$route.query.action === void 0) {
 
         if( this.submitType === 'TEST' || this.submitType === 'VIP') {
-
+        
           let res = await this.submitHomework()
-          if(res.status === 201) {
-            this.sucessToast('homework')
-          } else {
-            res.data && this.$toast(res.data.message)
-          }
+          if( res.status === 201) {
+            if(this.submitType === 'TEST') {
 
-          // 体验课，需要判断是否存在顾问
-          // if(this.submitType === 'TEST') {
-            // let res = await this.getCounselor()
-            // this.homeworkNumberPop.show = true
-            // console.log(res)
-          // }
+              this.homeworkNumberPop.jobNummer = res.data.identificationCode
+              // 体验课，需要判断是否存在顾问
+              await this.getCounselor()
+            } else {
+              this.sucessToast('homework')
+            }
+            
+          } else {
+            res.data.message && this.$toast(res.data.message)
+          }
         }
       }
       
@@ -401,7 +400,7 @@ export default {
         if(res.status === 201) {
           this.sucessToast('works')
         } else {
-          res.data && this.$toast(res.data.message)
+          res.data.message && this.$toast(res.data.message)
         }
       }
       
@@ -410,7 +409,7 @@ export default {
         if(res.status === 201) {
           this.sucessToast('dynamic')
         } else {
-          res.data && this.$toast(res.data.message)
+          res.data.message && this.$toast(res.data.message)
         }
       }
     },
@@ -488,11 +487,12 @@ export default {
 
     /** 作业提交成功，检查是否存在顾问 */
     getCounselor() {
-      return this.getZcAdviser( this.requirement.college.id)
-      .then( res => {
-        return res
+      this.getZcAdviser( this.requirement.college.id).then( res => {
+        this.sucessToast('homework')
       }).catch( err => {
-        return err
+        if(err.data.code === 409) {
+          this.homeworkNumberPop.show = true
+        }
       })
     },
 
@@ -682,7 +682,7 @@ export default {
     
     /** 关闭弹窗，跳转我的作业 */
     onClosed() {
-      this.$router.push('/personal-center/personal-publish?type=homework')
+      this.sucessToast('homework')
     },
   },
 
