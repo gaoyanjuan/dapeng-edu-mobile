@@ -202,6 +202,7 @@ export default {
     async appendHomeworkDetails({ commit }, params) {
       const res = await this.$axios.get(`/homes/${params.id}`)
       commit('appendHomeworkDetails', res)
+      return res
     },
     // 查询作业要求详情
     async appendRequirementDetails({ commit }, params) {

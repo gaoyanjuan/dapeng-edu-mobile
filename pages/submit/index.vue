@@ -12,7 +12,12 @@
     <div class="container">
       <!-- 作业描述 -->
       <section class="homework-desc-row">
-        <div v-if="showTitle" class="title">{{ requirement.title }}</div>
+
+        <!-- 标题 -->
+        <div v-if="showTitle" class="title">
+          <template v-if="requirement"> {{ requirement.title }} </template>
+          <template v-else-if="homeworkDetails"> {{homeworkDetails.task.title}} </template>
+        </div>
 
         <!-- 富文本 -->
         <div class="rich-input">
@@ -60,7 +65,8 @@
 
       <!-- 作业类型标签  -->
       <section v-if="submitType === 'VIP' || submitType === 'TEST'" class="homework-label-row">
-        {{ requirement.college  | filterCollageName}}
+        <template v-if="requirement"> {{ requirement.college }} </template>
+        <template v-else-if="homeworkDetails"> {{ homeworkDetails.college | filterCollageName }} </template>
       </section>
 
       <!-- 作品--添加学院 -->
@@ -100,7 +106,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Client from '@/utils/client'
 import { randomFileName } from '@/utils/util'
 import { formatSlashDate } from '@/plugins/filters'
@@ -150,6 +156,7 @@ export default {
     collegeIndex: null,
     label:require('@/assets/icons/submit/college-label.png'),
   }),
+
   watch: {
     /**
      * 【作品、动态、体验课、正式课发布】
@@ -193,10 +200,13 @@ export default {
       }
     }
   },
+
   computed: {
     ...mapGetters({
       // 上传作业-作业要求
       requirement: 'homework/requirementDetailsGetters',
+      // 作业详情
+      homeworkDetails:'homework/homeworkDetailsGetters',
       // 学院列表
       collegeList: 'colleges/submitWorkCollegesGetters',
       // 用户信息
@@ -262,7 +272,28 @@ export default {
       }
     }
   },
-  created(){
+
+  async created(){
+
+    if(this.$route.query.action === 'edit') {
+      const _this = this
+
+      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
+        await this.$store.dispatch(
+          'homework/appendHomeworkDetails', 
+          { id : this.$route.query.id }
+        )
+      }
+      
+      if (this.homeworkDetails) {
+        this.content = this.homeworkDetails.content
+        this.homeworkDetails.imgInfo.forEach( ele => {
+          _this.fileList.push(ele)
+          _this.imageInfo.push(ele)
+          _this.totalImgSize += ele.size
+        })
+      }
+    }
 
     if(this.submitType === 'WORKS') {
       this.dynamicNums = '只能输入200个字哦'
@@ -278,6 +309,7 @@ export default {
       this.openAppPop.show = false
     }
   },
+
   methods:{
     ...mapActions({
       // 获取用户信息（4.0）
@@ -296,6 +328,11 @@ export default {
       publishWorks:'publish/addNewWorks',
       // 发布动态
       publishDynamic: 'publish/addNewDynamic'
+    }),
+
+    ...mapMutations({
+      // 清空作业详情
+      clearHomeworkDetails:'homework/clearHomeworkDetails'
     }),
 
     // 提交前确认
@@ -330,20 +367,33 @@ export default {
     /** 上传 */
     async onSubmit() {
 
-      if (this.submitType === 'TEST' || this.submitType === 'VIP') {
-        let res = await this.submitHomework()
-        if(res.status === 201) {
+      if (this.$route.query.action === 'edit') {
+        let res = await this.handleEditHomework()
+        if(res.status === 200) {
           this.sucessToast('homework')
         } else {
           res.data && this.$toast(res.data.message)
         }
+      }
 
-        // 体验课，需要判断是否存在顾问
-        // if(this.submitType === 'TEST') {
-          // let res = await this.getCounselor()
-          // this.homeworkNumberPop.show = true
-          // console.log(res)
-        // }
+      if (this.$route.query.action === void 0) {
+
+        if( this.submitType === 'TEST' || this.submitType === 'VIP') {
+
+          let res = await this.submitHomework()
+          if(res.status === 201) {
+            this.sucessToast('homework')
+          } else {
+            res.data && this.$toast(res.data.message)
+          }
+
+          // 体验课，需要判断是否存在顾问
+          // if(this.submitType === 'TEST') {
+            // let res = await this.getCounselor()
+            // this.homeworkNumberPop.show = true
+            // console.log(res)
+          // }
+        }
       }
       
       if (this.submitType === 'WORKS') {
@@ -375,6 +425,20 @@ export default {
           query:{ type:name, userId: this.userInfo.userId }
         })
       }, 2500)
+    },
+
+    /** 编辑作业 */
+    handleEditHomework() {
+      return this.editHomework({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        id: this.homeworkDetails.id
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
     },
 
     /** 提交作业【体验课、正式课】 */
@@ -554,16 +618,28 @@ export default {
     // 图片提取器
     pickImages() {
       let gallery = []
+      const _this = this
       this.fileList.forEach(function(item){
-        gallery.push(item.content)
+        if(_this.$route.query.action === 'edit') {
+          gallery.push(item.url)
+        } else {
+          gallery.push(item.content)
+        }
       })
       return gallery
     },
     
     /** 删除文件预览时触发 */
     onDelete(index) {
-      const spliceImgSize = this.fileList[index].file.size
+
       // 更新图片文件总大小
+      let spliceImgSize = 0
+      if (this.fileList[index].file) {
+        spliceImgSize = this.fileList[index].file.size
+      } else {
+        spliceImgSize = this.fileList[index].size
+      }
+      
       this.totalImgSize -= spliceImgSize
       this.fileList.splice(index, 1)
       this.imageInfo.splice(index, 1)
@@ -608,7 +684,11 @@ export default {
     onClosed() {
       this.$router.push('/personal-center/personal-publish?type=homework')
     },
-  }
+  },
+
+  destroy() {
+    this.clearHomeworkDetails()
+  },
 }
 </script>
 

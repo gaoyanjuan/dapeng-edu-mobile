@@ -57,12 +57,12 @@
     <!-- 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
       <template v-if="homework.user.userId === (userInfo ? userInfo.userId : '' )">
-        <nuxt-link tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+        <div class="menus__popup__item" @click="editHomework">编辑</div>
         <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
       <template v-else>
-        <nuxt-link tag="div" to="" class="menus__popup__item">Ta抄作业</nuxt-link>
+        <div class="menus__popup__item">Ta抄作业</div>
         <div class="menus__popup__item">作业号</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
@@ -86,6 +86,7 @@ export default {
       homework:'homework/homeworkDetailsGetters',
       userInfo: 'user/userInfoGetters'
     }),
+    
     showRightMenuFlag() {
       if(this.homework.approvedLevel && this.homework.approvedLevel !== '0' && this.homework.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
       return false
@@ -104,15 +105,29 @@ export default {
     ...mapActions({
       deleteHomework: 'user/deleteHomework',
     }),
+    
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
+
     // 删除作业
     deleteHomeWork() {
       this.deleteHomework({ id: this.homework.id }).then(()=>{
         this.$toast('删除成功')
         this.$router.go(-1)
+      })
+    },
+
+    // 编辑作业
+    editHomework() {
+      this.$router.push({
+        path: '/submit',
+        query: {
+          action: 'edit',
+          type: this.homework.courseType,
+          id: this.homework.id
+        }
       })
     },
   }
