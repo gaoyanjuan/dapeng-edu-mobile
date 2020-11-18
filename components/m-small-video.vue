@@ -4,14 +4,14 @@
     <m-swipe />
 
     <!-- 二级菜单 -->
-    <m-menus v-show="$route.query.courseType !== 'DYNAMIC'" :menus="menus" menus-type="college"/>
+    <m-menus v-show="$route.query.courseType !== 'DYNAMIC'" :menus="colleges" menus-type="college"/>
 
     <section class="works-wrapper">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <m-water-fall width="167px" gap="0" :data="list">
-          <template v-for="(item, index) in list">
+        <m-water-fall width="167px" gap="0" :data="smallVideoList.list">
+          <template v-for="(item, index) in smallVideoList.list">
             <m-water-fall-item :key="index" :order="index">
-              <m-small-video-posts :imgInfo="item" />
+              <m-small-video-posts :videoItem="item" />
             </m-water-fall-item>
           </template>
         </m-water-fall>
@@ -22,37 +22,51 @@
 
 <script>
 import { waterFallImgPromise } from '@/utils/util'
-import { smallVideo } from '@/data'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Small-Video',
   data: () => ({
     list: [],
     loading: false,
-    finished: false,
-    menus:[{id:'', name: '全部'},
-    {id:'sheji',name:'设计'},
-    {id:'meishu',name:'美术'},
-    {id:'guohua',name:'国画'},
-    {id:'shufa',name:'书法'},
-    {id:'video',name:'短视频'},
-    {id:'shouban',name:'手办'},
-    {id:'linmo',name:'临摹'}]
+    finished: false
   }),
-  methods:{
-    async onLoad() {
-      const promiseList = []
-      for (let index = 0; index < smallVideo.length; index++) {
-        promiseList.push(waterFallImgPromise(smallVideo, index, 167))
-      }
-      this.list = this.list.concat(smallVideo)
-      // 加载状态结束
-      this.loading = false
-      // 数据全部加载完成
-      if(this.list.length > 60) {
+  computed: {
+    ...mapGetters({
+      colleges: 'colleges/smallVideoCollegesGetters',
+      smallVideoList: 'video/smallVideoListGetters'
+    })
+  },
+  watch: {
+    'smallVideoList.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
         this.finished = true
       }
     }
   },
+  methods:{
+    ...mapActions('video', [
+      'appendSmallVideoList'
+    ]),
+    onLoad() {
+      if (this.smallVideoList.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.smallVideoList.status === 'loading') return false
+      const newStartTime = this.smallVideoList.list.slice(-1)[0].approvedTime
+      this.appendSmallVideoList({
+        type: this.$route.query.courseType,
+        collegeId: this.$route.query.college,
+        timestamp: newStartTime
+      })
+    }
+  }
 }
 </script>
 

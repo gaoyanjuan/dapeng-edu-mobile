@@ -45,6 +45,15 @@ export default {
     }
   }),
   watch: {
+    'menus': function (newVal, oldVal) {
+      for (let index = 0; index < this.menus.length; index++) {
+        const element = this.menus[index]
+        if (element.id === this.$route.query[this.menusType]) {
+          this.cindex = index
+          break
+        }
+      }
+    },
     '$route.query': function (newVal, oldVal) {
       if (!this.automatic) return false
       if (!newVal[this.menusType]) {

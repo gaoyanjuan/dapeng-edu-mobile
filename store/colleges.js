@@ -12,6 +12,9 @@ export default {
       homeworkColleges: [
         { id: '', name: '全部' }
       ], // 提交作业
+      smallVideoColleges: [
+        { id: '', name: '全部' }
+      ], // 小视频
       submitWorkColleges: [] // 提交作品
     }
   },
@@ -23,6 +26,8 @@ export default {
       })
       if (payload.collegeType === 'SQUARE_TASK') {
         state.taskColleges = payload.data
+      } else if (payload.collegeType === 'SQUARE_VIDEO') {
+        state.smallVideoColleges = state.smallVideoColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_WORK') {
         state.workColleges = state.workColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_ARTICLE') {
@@ -44,6 +49,9 @@ export default {
     }
   },
   getters: {
+    smallVideoCollegesGetters (state) {
+      return state.smallVideoColleges
+    },
     submitWorkCollegesGetters (state) {
       return state.submitWorkColleges
     },

@@ -24,28 +24,67 @@ export function debounce(fn, time = 100) {
   }, time)
 }
 
+let sizeOf
+let url
+let http
+if (!process.browser) {
+  sizeOf = require('image-size')
+  url = require('url')
+  http = require('http')
+}
 // 获取图片宽高
+const defaultHeight = 224
+const defaultImg = require('@/assets/icons/common/photos-bg.png')
 export function waterFallImgPromise(data, index, defaultWidth = 167) {
   return new Promise((resolve) => {
-    const img = new Image()
-    img.src = data[index].imgUrl
-    if (img.complete) {
-      data[index].width = defaultWidth
-      const ratio = img.width / defaultWidth
-      data[index].height = parseInt(img.height / ratio)
-      resolve(true)
-      return
-    }
-    img.onload = function () {
-      data[index].width = defaultWidth
-      const ratio = this.width / defaultWidth
-      data[index].height = parseInt(this.height / ratio)
-      resolve(true)
-    }
-    img.onerror = function () {
-      data[index].width = defaultWidth
-      data[index].height = 363
-      resolve(false)
+    if (process.browser) {
+      const img = new Image()
+      img.src = data[index].coverImg
+      if (img.complete) {
+        data[index].width = defaultWidth
+        const ratio = img.width / defaultWidth
+        data[index].height = parseInt(img.height / ratio)
+        resolve(true)
+        return
+      }
+      img.onload = function () {
+        data[index].width = defaultWidth
+        const ratio = this.width / defaultWidth
+        data[index].height = parseInt(this.height / ratio)
+        resolve(true)
+      }
+      img.onerror = function () {
+        data[index].coverImg = defaultImg
+        data[index].width = defaultWidth
+        data[index].height = defaultHeight
+        resolve(false)
+      }
+    } else {
+      const coverImg = data[index].coverImg
+      const options = url.parse(coverImg)
+      http.get(options, function (response) {
+        const chunks = []
+        response.on('data', function (chunk) {
+          chunks.push(chunk)
+        }).on('end', function() {
+          try {
+            const img = sizeOf(Buffer.concat(chunks))
+            data[index].width = defaultWidth
+            const ratio = img.width / defaultWidth
+            data[index].height = parseInt(img.height / ratio)
+            resolve(true)
+          } catch (error) {
+            data[index].width = defaultWidth
+            data[index].height = defaultHeight
+            resolve(false)
+          }
+        })
+      }).on('error', (e) => {
+        data[index].coverImg = defaultImg
+        data[index].width = defaultWidth
+        data[index].height = defaultHeight
+        resolve(false)
+      })
     }
   })
 }

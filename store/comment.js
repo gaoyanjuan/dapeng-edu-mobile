@@ -24,6 +24,9 @@ export default {
     }
   },
   mutations: {
+    changeReplyCount (state, payload) {
+      state.commentDetails.replyCount += payload
+    },
     appendNewRepliesComment (state, payload) {
       state.replies.data.unshift(payload)
       state.replies.data = state.replies.data
