@@ -1,7 +1,7 @@
 <template>
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="homework.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
+    <m-navbar :title="title" :attention="homework.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus" />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
@@ -56,27 +56,43 @@
     </div>
     <!-- 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
-      <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
-      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      <template v-if="homework.user.userId === (userInfo ? userInfo.userId : '' )">
+        <nuxt-link tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
+        <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
+        <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      </template>
+      <template v-else>
+        <nuxt-link tag="div" to="" class="menus__popup__item">Ta抄作业</nuxt-link>
+        <div class="menus__popup__item">作业号</div>
+        <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      </template>
     </van-popup>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
     title:'作业详情',
     likeSelected: false,
     commentSelected: true,
-    showMenusPopup: false
+    showMenusPopup: false,
+    showRightMenu: true
   }),
   computed:{
     ...mapGetters({
-      homework:'homework/homeworkDetailsGetters'
-    })
+      homework:'homework/homeworkDetailsGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    showRightMenuFlag() {
+      if(this.homework.approvedLevel && this.homework.approvedLevel !== '0' && this.homework.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+      return false
+      } else {
+        return true
+      }
+    }
   },
   created () {
     if (this.$route.query.type && this.$route.query.type === 'like') {
@@ -85,12 +101,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      deleteHomework: 'user/deleteHomework',
+    }),
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
     // 删除作业
-    deleteHomeWork() {},
+    deleteHomeWork() {
+      this.deleteHomework({ id: this.homework.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    },
   }
 }
 </script>

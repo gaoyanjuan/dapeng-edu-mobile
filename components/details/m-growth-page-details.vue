@@ -1,7 +1,7 @@
 <template>
   <div v-if="growth" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="growth.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
+    <m-navbar :title="title" :attention="growth.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
@@ -69,24 +69,37 @@ export default {
   }),
   computed:{
     ...mapGetters({
-      growth:'growth/growthDetailsGetters'
-    })
+      growth:'growth/growthDetailsGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    showRightMenuFlag() {
+      if(this.growth.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
+    ...mapActions({
+      deletePosts: 'user/deletePosts',
+    }),
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
     // 删除成长
-    deleteGrowth() {},
+    deleteGrowth() {
+      this.deletePosts({ id: this.growth.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    },
 
     // 打开评论弹窗
     openComment() {
       this.commentPop.show = true
     },
-
-    // 删除成长
-    deleteDynamic() {},
 
     // 喜欢事件
     onLikeEvent() { console.log('like') },

@@ -206,6 +206,13 @@ export default {
       this.isCollection = this.listItemData.isCollection
     }
   },
+  watch: {
+    'listItemData': function (newVal, oldVal) {
+      this.praiseCount = newVal.praiseCount
+      this.isPraise = newVal.isPraise
+      this.isCollection = newVal.isCollection
+    },
+  },
   mounted() {
     setTimeout(() => {
       this.loading = false
@@ -230,7 +237,9 @@ export default {
       'clearPublishHomework',
       'clearPublishWorks',
       'clearPublishDynamic',
-      'clearPublishGrowth'
+      'clearPublishGrowth',
+      'deleteUserLikes',
+      'deleteUserFavorites'
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
@@ -285,7 +294,17 @@ export default {
         this.queryDeleteCollection({
           id: this.listItemData.id,
           type: this.propSquareType
-        }).catch(() => {
+        }).then(()=>{
+          if (this.pageName === 'userCollection') {
+            let payload = {
+              type: this.propSquareType,
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
+          
+        })
+        .catch(() => {
           this.isCollection = true
         })
       } else {
@@ -309,7 +328,16 @@ export default {
         this.queryUnLike({
           id: this.listItemData.id,
           type: this.propSquareType
-        }).catch(() => {
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: this.propSquareType,
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
+        })
+        .catch(() => {
           this.isPraise = true
           this.praiseCount += 1
         })
