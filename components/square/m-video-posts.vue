@@ -3,32 +3,33 @@
     <div class="video-posts-wrap">
 
       <nuxt-link tag="div" class="video-posts-content" to="/details/video-page-details?type=long">
-        {{item.title}}
+        {{ item.title }}
       </nuxt-link>
 
       <nuxt-link tag="div" class="video-posts-cover" to="/details/video-page-details?type=long">
-        <img class="video-cover" :src="item.video.cover" alt="" />
+        <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
+        <img v-else class="video-cover" v-lazy="cover" alt="" />
         <img class="video-play" :src="playBtn" alt="" />
-        <span class="video-duration">{{item.video.duration}}</span>
+        <span class="video-duration"> {{ item.video.duration }} </span>
       </nuxt-link>
 
       <div class="video-posts-info">
-        <div class="video-posts-label">视频 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}</div>
-        <span class="video-posts-nickname"> {{ item.user.nickname }} </span>
-        <span class="video-posts-date"> {{ item.createTime | commonDate }} </span>
+        <div class="video-posts-label">视频·{{ item.college.name.replace(/学院/, '') }}</div>
+        <span class="video-posts-nickname">{{ item.user.nickname }}</span>
+        <span class="video-posts-date">{{ item.createTime | commonDate }}</span>
       </div>
 
       <div class="video-posts-interaction">
         <div class="video-posts-comment">
           <img :src="comment" alt="" />
-          <span> {{ item.commentCount | studentsCount }} </span>
+          <span>{{ item.commentCount | studentsCount }}</span>
         </div>
         <div class="video-posts-like">
-          <img :src="like" alt="" />
-          <span> {{ item.praiseCount | studentsCount }} </span>
+          <img :src="item.isPraise ? like : unLike" alt="" />
+          <span>{{ item.praiseCount | studentsCount}}</span>
         </div>
         <div class="video-posts-star">
-          <img :src="star" alt="" />
+          <img :src="item.isCollection ? unStar : star" alt="star" />
         </div>
       </div>
     </div>
@@ -39,20 +40,19 @@
 export default {
   name:'M-Video-Posts',
   props:{
-    /** 
-     * 数据对象 
-    * */
     item:{
       type:Object,
-      default:{}
+      default: {}
     }
   },
   data: () => ({
     loading: true,
     star:require('@/assets/icons/posts/posts-star.png'),
     like:require('@/assets/icons/posts/posts-unlove.png'),
+    unLike: require('@/assets/icons/posts/posts-love.png'),
+    unStar: require('@/assets/icons/posts/posts-unstar.png'),
     comment:require('@/assets/icons/posts/posts-comment.png'),
-    cover:require('@/assets/icons/square/video-posts-cover.png'),
+    cover:require('@/assets/icons/common/photos-bg.png'),
     playBtn:require('@/assets/icons/square/video-play-btn.png')
   }),
   mounted(){
@@ -120,9 +120,8 @@ export default {
   }
 
   .video-duration {
-    // width: 49px;
-    // height: 20px;
-    padding: 2px 8px;
+    height: 20px;
+    padding: 0 8px;
     background: #000000;
     border-radius: 10px;
     opacity: 0.6;
