@@ -67,6 +67,8 @@
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
     </van-popup>
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
@@ -79,7 +81,10 @@ export default {
     likeSelected: false,
     commentSelected: true,
     showMenusPopup: false,
-    showRightMenu: true
+    showRightMenu: true,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed:{
     ...mapGetters({
@@ -113,6 +118,10 @@ export default {
 
     // 删除作业
     deleteHomeWork() {
+      this.showMenusPopup = false
+      this.deleteDialogParams.show = true
+    },
+    confirmDelete() {
       this.deleteHomework({ id: this.homework.id }).then(()=>{
         this.$toast('删除成功')
         this.$router.go(-1)
@@ -204,7 +213,7 @@ export default {
 /** menus-popup */
 .p-details /deep/.van-popup {
   width: 284px;
-  height: 138px;
+  // height: 138px;
   overflow: hidden;
 }
 

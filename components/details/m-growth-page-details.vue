@@ -53,7 +53,8 @@
       <div class="menus__popup__item" @click="deleteGrowth">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
-
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
@@ -65,7 +66,10 @@ export default {
     title:'帖子详情',
     commentSelected: true,
     likeSelected: false,
-    showMenusPopup: false
+    showMenusPopup: false,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed:{
     ...mapGetters({
@@ -90,12 +94,15 @@ export default {
     },
     // 删除成长
     deleteGrowth() {
+      this.showMenusPopup = false
+      this.deleteDialogParams.show = true
+    },
+    confirmDelete() {
       this.deletePosts({ id: this.growth.id }).then(()=>{
         this.$toast('删除成功')
         this.$router.go(-1)
       })
     },
-
     // 打开评论弹窗
     openComment() {
       this.commentPop.show = true
@@ -183,7 +190,7 @@ export default {
 /** menus-popup */
 .p-details /deep/.van-popup {
   width: 284px;
-  height: 92px;
+  // height: 92px;
   overflow: hidden;
 }
 
