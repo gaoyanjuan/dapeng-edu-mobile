@@ -108,7 +108,9 @@ export default {
     cursor: pointer;
   }
   & .menus-item-active {
-    width: fit-content;
+    min-width: 52px;
+    max-width: 62px;
+    width: -webkit-fit-content;
     padding: 0px 10px;
     height: 20px;
     font-size: 14px;
