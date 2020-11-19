@@ -24,13 +24,11 @@ export default {
   //   }
   // },
   created () {
-    if (process.browser) {
-      if (this.$store.getters['colleges/readingCollegesGetters'].length === 1) {
-        this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_ARTICLE' })
-      }
-      if (this.$store.getters['reading/readingListGetters'].list.length === 0) {
-        this.$store.dispatch('reading/appendReadingList', { collegeId: this.$route.query.college, page: 1 })
-      }
+    if (this.$store.getters['colleges/readingCollegesGetters'].length === 1) {
+      this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_ARTICLE' })
+    }
+    if (this.$store.getters['reading/readingListGetters'].list.length === 0) {
+      this.$store.dispatch('reading/appendReadingList', { collegeId: this.$route.query.college, page: 1 })
     }
   },
   watch: {
