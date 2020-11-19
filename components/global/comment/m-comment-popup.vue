@@ -102,7 +102,9 @@ export default {
         this.content += `[${emoji.title}]`
       }
     },
-
+    resetPopup () {
+      this.content = ''
+    },
     // 发送事件
     onSendClick() {
       this.content = this.content.trim()

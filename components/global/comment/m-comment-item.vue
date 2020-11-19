@@ -69,6 +69,7 @@
     </van-popup>
     <!-- 评论框弹层 -->
     <m-comment-popup
+      ref="commentPopup"
       :replyUser="commentItem.user"
       :comment="commentPop"
       @sendComment="sendComment"
