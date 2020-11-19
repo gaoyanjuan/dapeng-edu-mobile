@@ -160,6 +160,7 @@ export default {
         user: this.userinfo
       })
       .then((res) => {
+        this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
         }

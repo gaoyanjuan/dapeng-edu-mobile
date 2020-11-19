@@ -107,6 +107,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.commitNewRepliesComment({
             ...res.data,
