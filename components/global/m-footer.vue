@@ -47,36 +47,36 @@
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
         
         <!-- 体验课作业提交 -->
-        <nuxt-link tag="div" :to="userInfo ? '/homework-list?courseType=TEST' : '/login'" >
+        <div @click="enterSubmit('TEST')">
           <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.trial" alt="trial"/>
             <span class="menus-txt">体验课作业提交</span>
           </div>
-        </nuxt-link>
+        </div>
 
         <!-- 正式课作业提交 -->
-        <nuxt-link tag="div" :to="userInfo ? '/homework-list?courseType=VIP' : '/login'" >
+        <div @click="enterSubmit('VIP')">
           <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.formal" alt="formal"/>
             <span class="menus-txt">正式课作业提交</span>
           </div>
-        </nuxt-link>
+        </div>
 
         <!-- 作品发布 -->
-        <nuxt-link tag="div" :to="userInfo ? '/submit?type=WORKS' : '/login'" >
+        <div @click="enterSubmit('WORKS')">
           <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.works" alt="works"/>
             <span class="menus-txt">作品发布</span>
           </div>
-        </nuxt-link>
+        </div>
 
         <!-- 生活动态 -->
-        <nuxt-link tag="div" :to="userInfo ? '/submit?type=LIFE' : '/login'" >
+        <div @click="enterSubmit('LIFE')">
           <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
             <span class="menus-txt">发布动态</span>
           </div>
-        </nuxt-link>
+        </div>
 
       </div>
     </van-overlay>
@@ -157,6 +157,23 @@ export default {
     // 显示发布菜单
     showPublishMenus() {
       this.show = true
+    },
+
+    // 进入发布页面
+    enterSubmit(name) {
+
+      if(!this.userInfo) { 
+        this.$login()
+        return
+      }
+
+      if(name === 'VIP' || name === 'TEST') {
+        this.$router.push(`/homework-list?courseType=${name}`)
+      }
+
+      if(name === 'LIFE' || name === 'WORKS') {
+        this.$router.push(`/submit?type=${name}`)
+      }
     }
   }
 }
