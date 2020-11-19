@@ -95,8 +95,13 @@
       @onLove="onLove"
       @onCollect="onCollect"
     />
+
     <!-- 删除二次确认弹窗 -->
-    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+    />
+
   </div>
 </template>
 
