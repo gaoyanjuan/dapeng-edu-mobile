@@ -44,6 +44,7 @@
       <img :src="contentImages" :alt="contentImages">
     </div>
     <m-comment-popup
+      ref="commentPopup"
       :replyUser="commentItem.user"
       :comment="commentPop"
       @sendComment="sendComment"
@@ -223,6 +224,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        ths.$ref.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.commitNewRepliesComment({
             ...res.data,

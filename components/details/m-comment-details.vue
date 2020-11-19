@@ -45,7 +45,7 @@
     <div class="details-footer-comment-wrap">
       <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
     </div>
-    <m-comment-popup v-if="commentDetailsGetters.user" :replyUser="commentDetailsGetters.user" :comment="commentPop" @sendComment="sendComment"/>
+    <m-comment-popup ref="commentPopup" v-if="commentDetailsGetters.user" :replyUser="commentDetailsGetters.user" :comment="commentPop" @sendComment="sendComment"/>
   </div>
 </template>
 
@@ -107,6 +107,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.commitNewRepliesComment({
             ...res.data,

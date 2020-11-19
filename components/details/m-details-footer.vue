@@ -16,7 +16,7 @@
       <img class="footer-icon-collect" :src="isCollection ? uncollect : collect" alt="collect" @click="onCollectEvent"/>
     </div>
     <!-- 评论框弹层 -->
-    <m-comment-popup :comment="commentPop" @sendComment="sendComment"/>
+    <m-comment-popup ref="commentPopup" :comment="commentPop" @sendComment="sendComment"/>
   </div>
 </template>
 
@@ -160,6 +160,7 @@ export default {
         user: this.userinfo
       })
       .then((res) => {
+        this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
         }
