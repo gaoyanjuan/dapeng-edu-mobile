@@ -88,6 +88,7 @@ export default {
     font-family: @regular;
     font-weight: 400;
     color: #36404A;
+    .text-ellipsis()
   }
 
   & .popup-footer {

@@ -110,6 +110,7 @@ export default {
     async appendVideoDetails ({ commit }, params) {
       const res = await this.$axios.get(`/movies/${params.id}`)
       commit('appendVideoDetails', res)
+      return res
     }
   },
   getters: {

@@ -69,6 +69,7 @@
     </van-popup>
     <!-- 评论框弹层 -->
     <m-comment-popup
+      ref="commentPopup"
       :replyUser="commentItem.user"
       :comment="commentPop"
       @sendComment="sendComment"
@@ -213,6 +214,7 @@ export default {
         user: this.userinfo
       })
       .then((res) => {
+        this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
           this.replyCount += 1
@@ -323,6 +325,7 @@ export default {
     }
     .icon-box {
       display: flex;
+      align-items: center;
       .comment-icon {
         img {
           width: 20px;

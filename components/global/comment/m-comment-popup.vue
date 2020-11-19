@@ -102,12 +102,14 @@ export default {
         this.content += `[${emoji.title}]`
       }
     },
-
+    resetPopup () {
+      this.content = ''
+      this.comment.show = false
+    },
     // 发送事件
     onSendClick() {
       this.content = this.content.trim()
       if(this.content.length) {
-        this.comment.show = false
         this.$emit('sendComment', this.content)
       } else {
         this.$toast('评论内容不可为空')
