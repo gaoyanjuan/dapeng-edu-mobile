@@ -95,6 +95,13 @@
       @onLove="onLove"
       @onCollect="onCollect"
     />
+
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+    />
+
   </div>
 </template>
 
@@ -168,7 +175,10 @@ export default {
     star: require('@/assets/icons/posts/posts-star.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
-    showPublishMenusPopup: false
+    showPublishMenusPopup: false,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed: {
     user () {
@@ -206,6 +216,13 @@ export default {
       this.isCollection = this.listItemData.isCollection
     }
   },
+  watch: {
+    'listItemData': function (newVal, oldVal) {
+      this.praiseCount = newVal.praiseCount
+      this.isPraise = newVal.isPraise
+      this.isCollection = newVal.isCollection
+    },
+  },
   mounted() {
     setTimeout(() => {
       this.loading = false
@@ -230,7 +247,9 @@ export default {
       'clearPublishHomework',
       'clearPublishWorks',
       'clearPublishDynamic',
-      'clearPublishGrowth'
+      'clearPublishGrowth',
+      'deleteUserLikes',
+      'deleteUserFavorites'
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
@@ -285,7 +304,17 @@ export default {
         this.queryDeleteCollection({
           id: this.listItemData.id,
           type: this.propSquareType
-        }).catch(() => {
+        }).then(()=>{
+          if (this.pageName === 'userCollection') {
+            let payload = {
+              type: this.propSquareType,
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
+          
+        })
+        .catch(() => {
           this.isCollection = true
         })
       } else {
@@ -309,7 +338,16 @@ export default {
         this.queryUnLike({
           id: this.listItemData.id,
           type: this.propSquareType
-        }).catch(() => {
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: this.propSquareType,
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
+        })
+        .catch(() => {
           this.isPraise = true
           this.praiseCount += 1
         })
@@ -369,6 +407,10 @@ export default {
     },
     // 删除
     deleteItem() {
+      this.deleteDialogParams.show = true
+      this.showPublishMenusPopup = false
+    },
+    confirmDelete() {
       if(this.propSquareType === 'HOMEWORK') {
         this.deleteHomework({ id: this.listItemData.id })
         .then(() => {
@@ -414,15 +456,16 @@ export default {
           })
         })
       }
+      this.deleteDialogParams.show = false
     },
     // 编辑作业
     editHomework() {
-      console.log(this.listItemData)
       this.$router.push({
         path: '/submit',
         query: {
+          action: 'edit',
           type: this.listItemData.courseType,
-          params: this.listItemData
+          id: this.listItemData.id
         }
       })
     }

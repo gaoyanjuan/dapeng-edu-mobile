@@ -60,6 +60,7 @@ export const actions = {
   async appendReadingDetails({ commit }, params) {
     const res = await this.$axios.get(`/articles/${params.id}`)
     commit('appendReadingDetails', res)
+    return res
   }
 }
 

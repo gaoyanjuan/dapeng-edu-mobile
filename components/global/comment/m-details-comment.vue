@@ -306,6 +306,7 @@ export default {
     }
     .icon-box {
       display: flex;
+      align-items: center;
       .comment-icon {
         img {
           width: 20px;

@@ -3,32 +3,33 @@
     <div class="video-posts-wrap">
 
       <nuxt-link tag="div" class="video-posts-content" to="/details/video-page-details?type=long">
-        陪我跨年的恐怕只有学习和心中那一缕对优中那一缕跨年的恐怕只
+        {{ item.title }}
       </nuxt-link>
 
       <nuxt-link tag="div" class="video-posts-cover" to="/details/video-page-details?type=long">
-        <img class="video-cover" :src="cover" alt="" />
+        <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
+        <img v-else class="video-cover" v-lazy="cover" alt="" />
         <img class="video-play" :src="playBtn" alt="" />
-        <span class="video-duration">02:00</span>
+        <span class="video-duration"> {{ item.video.duration }} </span>
       </nuxt-link>
 
       <div class="video-posts-info">
-        <div class="video-posts-label">视频·设计</div>
-        <span class="video-posts-nickname">范冰冰是我女朋友</span>
-        <span class="video-posts-date">12月26日 16:55</span>
+        <div class="video-posts-label">视频·{{ item.college.name.replace(/学院/, '') }}</div>
+        <span class="video-posts-nickname">{{ item.user.nickname }}</span>
+        <span class="video-posts-date">{{ item.createTime | commonDate }}</span>
       </div>
 
       <div class="video-posts-interaction">
         <div class="video-posts-comment">
           <img :src="comment" alt="" />
-          <span>3213</span>
+          <span>{{ item.commentCount | studentsCount }}</span>
         </div>
         <div class="video-posts-like">
-          <img :src="like" alt="" />
-          <span>3213</span>
+          <img :src="item.isPraise ? like : unLike" alt="" />
+          <span>{{ item.praiseCount | studentsCount}}</span>
         </div>
         <div class="video-posts-star">
-          <img :src="star" alt="" />
+          <img :src="item.isCollection ? unStar : star" alt="star" />
         </div>
       </div>
     </div>
@@ -38,12 +39,20 @@
 <script>
 export default {
   name:'M-Video-Posts',
+  props:{
+    item:{
+      type:Object,
+      default: {}
+    }
+  },
   data: () => ({
     loading: true,
     star:require('@/assets/icons/posts/posts-star.png'),
     like:require('@/assets/icons/posts/posts-unlove.png'),
+    unLike: require('@/assets/icons/posts/posts-love.png'),
+    unStar: require('@/assets/icons/posts/posts-unstar.png'),
     comment:require('@/assets/icons/posts/posts-comment.png'),
-    cover:require('@/assets/icons/square/video-posts-cover.png'),
+    cover:require('@/assets/icons/common/photos-bg.png'),
     playBtn:require('@/assets/icons/square/video-play-btn.png')
   }),
   mounted(){
@@ -111,8 +120,8 @@ export default {
   }
 
   .video-duration {
-    width: 49px;
     height: 20px;
+    padding: 0 8px;
     background: #000000;
     border-radius: 10px;
     opacity: 0.6;
