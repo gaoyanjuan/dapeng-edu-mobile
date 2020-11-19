@@ -78,8 +78,6 @@ export default {
   name:'Details',
   data:() => ({
     title:'作业详情',
-    likeSelected: false,
-    commentSelected: true,
     showMenusPopup: false,
     showRightMenu: true,
     deleteDialogParams: {
@@ -98,12 +96,6 @@ export default {
       } else {
         return true
       }
-    }
-  },
-  created () {
-    if (this.$route.query.type && this.$route.query.type === 'like') {
-      this.likeSelected = true
-      this.commentSelected = false
     }
   },
   methods: {
