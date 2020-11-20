@@ -24,7 +24,7 @@ module.exports = {
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn',
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder',
-    PORT: 80,
+    PORT: 3000,
     HOST: '0.0.0.0',
     FAILED_COLOR:'red'
   },
