@@ -37,13 +37,21 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-Video-Posts',
   props:{
     item:{
       type:Object,
       default: {}
+    },
+    pageName: {
+      type: String,
+      default: ''
+    },
+    propIndex:{
+      type: Number,
+      default: 0
     }
   },
   data: () => ({
@@ -85,6 +93,10 @@ export default {
       queryCollection: 'comment/queryCollection',
       queryDeleteCollection: 'comment/queryDeleteCollection',
     }),
+    ...mapMutations('user', [
+      'deleteUserLikes',
+      'deleteUserFavorites'
+    ]),
 
     onComment() {},
 
@@ -98,6 +110,14 @@ export default {
         this.queryUnLike({
           id: this.item.id,
           type: 'MOVIE'
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: 'MOVIE',
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
         })
       } else {
         this.isPraise = true
@@ -120,6 +140,14 @@ export default {
         this.queryDeleteCollection({
           id: this.item.id,
           type: 'MOVIE'
+        }).then(()=>{
+           if (this.pageName === 'userCollection') {
+            let payload = {
+              type: 'MOVIE',
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
         })
 
       } else {
@@ -221,8 +249,9 @@ export default {
   margin-top: 12px;
 
   .video-posts-label {
-    width: 70px;
-    height: 24px;
+    // width: 70px;
+    // height: 24px;
+    padding: 4px 8px;
     background: #F7F7F7;
     border-radius: 12px;
     margin-right: 8px;
@@ -231,7 +260,7 @@ export default {
     font-family: @regular;
     font-weight: 400;
     color: #465156;
-    line-height: 24px;
+    // line-height: 24px;
     text-align: center;
     cursor: pointer;
   }

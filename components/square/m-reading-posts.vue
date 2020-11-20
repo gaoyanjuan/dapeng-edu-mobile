@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-Reading-Posts',
   props:{
@@ -62,6 +62,14 @@ export default {
     item:{
       type:Object,
       default:{}
+    },
+    pageName: {
+      type: String,
+      default: ''
+    },
+    propIndex:{
+      type: Number,
+      default: 0
     }
   },
   data:() => ({
@@ -107,6 +115,10 @@ export default {
       queryCollection: 'comment/queryCollection',
       queryDeleteCollection: 'comment/queryDeleteCollection',
     }),
+    ...mapMutations('user', [
+      'deleteUserLikes',
+      'deleteUserFavorites'
+    ]),
 
     onComment() {},
 
@@ -120,6 +132,14 @@ export default {
         this.queryUnLike({
           id: this.item.id,
           type: 'ARTICLE'
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: 'ARTICLE',
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
         })
       } else {
         this.isPraise = true
@@ -142,6 +162,14 @@ export default {
         this.queryDeleteCollection({
           id: this.item.id,
           type: 'ARTICLE'
+        }).then(()=>{
+          if (this.pageName === 'userCollection') {
+            let payload = {
+              type: 'ARTICLE',
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
         })
 
       } else {
@@ -282,17 +310,17 @@ export default {
 }
 
 .reading-body-row .posts-label {
-  width: 70px;
-  height: 24px;
+  padding: 4px 8px;
   background: #F7F7F7;
   border-radius: 12px;
   font-size: 12px;
   font-family: @dp-font-regular;
   font-weight: 400;
   color: #465156;
-  line-height: 24px;
   text-align: center;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .reading-body-row .posts-author {

@@ -1,45 +1,85 @@
 <template class="reading-wrap">
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="list.length">
-      <m-reading-posts v-for="(item, i) in list" :key="i" :item="item" />
+    <template v-if="publishReadingGetters.list.length">
+      <m-reading-posts v-for="(item, index) in publishReadingGetters.list" :key="index" :item="item" />
     </template>
-    <template v-if="!list.length && finished">
+    <template v-if="!publishReadingGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
-        <span class="txt">暂无内容</span>
+        <span class="txt">您的账号暂无发布权限</span>
       </div>
     </template>
   </van-list>
 </template>
 
 <script>
-import { reading } from '@/data'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Reading',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    blank: require('@/assets/icons/blank/have-no-reading.png')
+    blank: require('@/assets/icons/blank/have-no-reading.png'),
+    currentPage: 1
   }),
-  methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < reading.length; i++) {
-          this.list.push(reading[i])
-        }
-        // 加载状态结束
+  computed: {
+    ...mapGetters('user', [
+      'publishReadingGetters'
+    ])
+  },
+  destroyed () {
+    this.clearPublishReading()
+  },
+  watch: {
+    'publishReadingGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
-          this.finished = true
-        }
-        if (this.list.length === 0) {
-          this.finished = true
-          this.finishedText = ''
-        }
-      }, 1000)
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'publishReadingGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    }
+  },
+  mounted() {
+    if (this.$route.query.userId && this.publishReadingGetters.list.length === 0) {
+      this.appendPublishReading({
+          userId: this.$route.query.userId,
+          page: this.currentPage,
+          size: 10
+      })
+    }
+  },
+  methods:{
+    ...mapActions('user', [
+      'appendPublishReading',
+    ]),
+    ...mapMutations('user', [
+      'clearPublishReading',
+    ]),
+    onLoad() {
+      if (this.publishReadingGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      
+      if (this.publishReadingGetters.status === 'loading') return false
+      const newPage = this.currentPage + 1
+      this.appendPublishReading({
+        userId: this.$route.query.userId,
+        page: newPage,
+        size: 10
+      })
     }
   }
 }
