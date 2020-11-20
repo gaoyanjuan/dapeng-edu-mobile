@@ -2,6 +2,11 @@
 import Vue from 'vue'
 
 function login() {
-  this.$router.push('/login')
+  if (!this.$store.getters['user/userInfoGetters']) {
+    this.$router.push('/login')
+    return false
+  } else {
+    return true
+  }
 }
 Vue.prototype.$login = login
