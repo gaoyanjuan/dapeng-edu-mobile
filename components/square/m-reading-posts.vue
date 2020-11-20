@@ -111,6 +111,9 @@ export default {
     onComment() {},
 
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
@@ -131,6 +134,9 @@ export default {
     },
 
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isCollection) {
         this.isCollection = false
         this.queryDeleteCollection({

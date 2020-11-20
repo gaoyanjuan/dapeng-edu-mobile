@@ -86,6 +86,9 @@ export default {
     },
     /** 关注事件 */
     handleFollow(item, index){
+      if(!this.$login()) {
+        return 
+      }
       if(item.isAttention) {
         this.setUserFollowStatus({
           index: index,

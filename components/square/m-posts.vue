@@ -299,6 +299,9 @@ export default {
     },
     // 收藏
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isCollection) {
         this.isCollection = false
         this.queryDeleteCollection({
@@ -332,6 +335,9 @@ export default {
     },
     //喜欢操作
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1

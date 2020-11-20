@@ -160,6 +160,9 @@ export default {
       appendNewRepliesComment: 'comment/appendNewRepliesComment'
     }),
     onLove () {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
@@ -198,6 +201,9 @@ export default {
       })
     },
     showCommentPop () {
+      if(!this.$login()) {
+        return 
+      }
       if (this.userinfo && this.user && this.user.userId !== this.userinfo.userId) {
         this.commentPop.show = true
       } else {

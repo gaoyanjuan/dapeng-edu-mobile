@@ -129,6 +129,9 @@ export default {
     },
     // 收藏事件
     onCollectEvent () {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isCollection) {
         this.isCollection = false
         this.queryDeleteCollection({

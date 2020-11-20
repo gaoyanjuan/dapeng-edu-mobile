@@ -57,6 +57,9 @@ export default {
     }),
     /** 关注事件 */
     handleFollow (item, index) {
+      if(!this.$login()) {
+        return 
+      }
       this.changeFollowing(index)
       this.queryFollowing({
         id: item.userId
