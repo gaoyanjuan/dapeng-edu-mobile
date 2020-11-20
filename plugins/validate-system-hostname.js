@@ -5,12 +5,9 @@ function validateSystemHostName () {
     host: `${location.protocol}//${location.host}`
   }
   const testPCParam = {
-    client_id: 'b4cd9c34',
-    client_secret: 'VXAaTFh8yv',
-    host: `${location.protocol}//${location.host}`,
-    // callback: `${location.protocol}//${location.host}/callback`,
-    pc5_client_id: '0f030d30',
-    pc5_client_secret: 'Q5UI4oU+cNZ'
+    client_id: 'e36c78fd',
+    client_secret: 'x8BS3cGDiz',
+    host: `${location.protocol}//${location.host}`
   }
   if (process.env.MODE === 'test') {
     return testPCParam
