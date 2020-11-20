@@ -65,21 +65,24 @@ export default {
   methods: {
     // 评论操作
     openComment() {
-      console.log('comment')
+      if(!this.$login()) {
+        return 
+      }
+      this.$emit('openComment')
     },
     // 收藏
     onCollect() {
       if(!this.$login()) {
         return 
       }
-      console.log('collect')
+      this.$emit('onCollect')
     },
     //喜欢操作
     onLove() {
       if(!this.$login()) {
         return 
       }
-      console.log('love')
+      this.$emit('onLove')
     },
     // 监听图片切换
     onPhotosChange(index) {
@@ -91,11 +94,16 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
-      this.imagePreview.images = this.handleFilterImage()
-      this.imagePreview.startPosition = index
-      this.imagePreview.loveNums = this.item.praisesCount
-      this.imagePreview.commentNums = this.item.commentCount
-      this.imagePreview.show = true
+      this.imagePreview = {
+        images: this.handleFilterImage(),
+        startPosition: index,
+        itemData: this.item,
+        isPraise: this.item.isPraise,
+        isCollection: this.item.isCollection,
+        praiseCount: this.item.praiseCount,
+        commentCount: this.item.commentCount,
+        show: true
+      }
     },
     // 图片提取器
     handleFilterImage() {
