@@ -2,8 +2,8 @@
 import Vue from 'vue'
 
 function login() {
-  if (!this.$store.getters['user/userInfoGetters']) {
-    this.$router.push('/login')
+  if (!$nuxt.$store.getters['user/userInfoGetters']) {
+    $nuxt.$router.push('/login')
     return false
   } else {
     return true
