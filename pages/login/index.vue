@@ -75,6 +75,7 @@ export default {
   },
   beforeDestroy () {
     window.frames['iframe-wrap'].contentWindow.postMessage({ type: 'clearStore' }, '*')
+    document.body.style.overflow = 'scroll'
   },
   methods: {
     getLoginUrl () {
