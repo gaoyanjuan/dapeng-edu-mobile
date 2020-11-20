@@ -4,14 +4,17 @@
   "private": true,
   "scripts": {
     "commit": "git-cz",
+    "build:local": "cross-env MODE=dev nuxt build && npm start",
     "dev": "cross-env MODE=dev nuxt",
-    "dev-pro": "cross-env MODE=pro nuxt",
-    "build": "cross-env MODE=dev nuxt build",
-    "start": "cross-env MODE=pro nuxt start",
-    "generate": "nuxt generate",
-    "test": "cross-env MODE=test nuxt build && pm2 start",
-    "test:in": "cross-env MODE=internal nuxt build && pm2 start",
-    "test:spa": "cross-env MODE=test nuxt build  --spa"
+    "start": "cross-env MODE=dev nuxt start",
+    "test": "cross-env MODE=test nuxt build && ENABLE_NODE_LOG=YES pm2 start --only PC5.0-test",
+    "dev:spa": "cross-env MODE=dev nuxt build  --spa",
+    "test:spa": "cross-env MODE=test nuxt build  --spa",
+    "pro:spa": "cross-env MODE=pro nuxt build  --spa",
+    "pro": "cross-env MODE=pro nuxt build && ENABLE_NODE_LOG=YES pm2 start --only PC5.0-pro",
+    "build:test": "cross-env MODE=test nuxt build && pm2 restart all",
+    "build": "cross-env MODE=pro nuxt build && pm2 restart all",
+    "an": "cross-env MODE=dev nuxt build --analyze"
   },
   "config": {
     "commitizen": {
