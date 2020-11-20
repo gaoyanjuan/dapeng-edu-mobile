@@ -56,7 +56,7 @@
       <div class="works__fot">
         <div class="fot__rh--wrap">
           <!-- 评论 -->
-          <div class="fot__rh__commernt--wrap" @click="openComment">
+          <div class="fot__rh__commernt--wrap" @click="toDetail">
             <img class="fot__comment" :src="comment" alt="comment" />
             <span class="fot__nums">{{ listItemData.commentCount | studentsCount }}</span>
           </div>
