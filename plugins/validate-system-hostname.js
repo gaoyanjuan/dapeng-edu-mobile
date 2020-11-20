@@ -9,7 +9,7 @@ function validateSystemHostName () {
     client_secret: 'x8BS3cGDiz',
     host: `${location.protocol}//${location.host}`
   }
-  if (process.env.MODE === 'test') {
+  if (process.env.mode === 'test') {
     return testPCParam
   } else {
     return localPCParam
