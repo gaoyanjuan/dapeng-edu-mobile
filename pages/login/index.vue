@@ -33,6 +33,7 @@ export default {
     }
   },
   mounted () {
+    console.log(process.env.MODE, this.validateSystemHostName())
     this.width = document.body.clientWidth
     const ifm = document.getElementById('iframe-wrap')
     this.height = document.documentElement.clientHeight - 50
