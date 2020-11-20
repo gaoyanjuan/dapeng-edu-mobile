@@ -64,11 +64,13 @@ export default {
     ...mapActions('user', [
       'appendUserFans',
       'followingUser',
-      'cancelFollowingUser'
+      'cancelFollowingUser',
+      'readMyMessages'
     ]),
     ...mapMutations('user', [
       'clearUserFans',
-      'setUserFollowStatus'
+      'setUserFollowStatus',
+      'changeFansRedDot'
     ]),
     onLoad() {
       if (this.userFansGetters.status === 'over') {
@@ -101,7 +103,13 @@ export default {
         })
         
       }else {
-         this.setUserFollowStatus({
+        if(item.redDot) {
+          this.changeFansRedDot({
+            index
+          })
+          this.readMyMessages()
+        }
+        this.setUserFollowStatus({
           index: index,
           flag: true,
           data: 'userFans'
@@ -111,7 +119,7 @@ export default {
           index: index,
           flag: false,
           data: 'userFans'
-        })
+          })
         })
         
       }
