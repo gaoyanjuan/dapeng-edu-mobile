@@ -123,7 +123,7 @@ export default {
     // 打开我的喜欢弹框
     openLovePopup (){
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
       this.lovePopup.show = true
@@ -169,7 +169,7 @@ export default {
     // 进入发布页面
     enterPublishPage(params) {
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
       
@@ -184,7 +184,7 @@ export default {
 
     toAttention() {
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
 
@@ -198,7 +198,7 @@ export default {
 
     toFans() {
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
 
@@ -213,7 +213,7 @@ export default {
 
     toRecommend() {
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
 
@@ -227,7 +227,7 @@ export default {
     },
     toMyLike() {
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
       this.$router.push({
@@ -239,7 +239,7 @@ export default {
     },
     toMyCollection() {
       if(!this.userInfoGetters) { 
-        this.toLogin()
+        this.$login()
         return
       }
       this.$router.push({

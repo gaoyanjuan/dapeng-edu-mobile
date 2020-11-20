@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-Reading-Posts',
   props:{
@@ -62,6 +62,14 @@ export default {
     item:{
       type:Object,
       default:{}
+    },
+    pageName: {
+      type: String,
+      default: ''
+    },
+    propIndex:{
+      type: Number,
+      default: 0
     }
   },
   data:() => ({
@@ -107,6 +115,10 @@ export default {
       queryCollection: 'comment/queryCollection',
       queryDeleteCollection: 'comment/queryDeleteCollection',
     }),
+    ...mapMutations('user', [
+      'deleteUserLikes',
+      'deleteUserFavorites'
+    ]),
 
     onComment() {},
 
@@ -117,6 +129,14 @@ export default {
         this.queryUnLike({
           id: this.item.id,
           type: 'ARTICLE'
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: 'ARTICLE',
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
         })
       } else {
         this.isPraise = true
@@ -136,6 +156,14 @@ export default {
         this.queryDeleteCollection({
           id: this.item.id,
           type: 'ARTICLE'
+        }).then(()=>{
+          if (this.pageName === 'userCollection') {
+            let payload = {
+              type: 'ARTICLE',
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
         })
 
       } else {

@@ -2,7 +2,7 @@
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
     <template v-if="pageName === 'userLike'">
       <template v-if="userLikesGetters.article.list.length">
-        <m-reading-posts v-for="(item, index) in userLikesGetters.article.list" :key="index" :item="item" />
+        <m-reading-posts v-for="(item, index) in userLikesGetters.article.list" :key="index" :item="item" :pageName="pageName" :propIndex="index" />
       </template>
       <template v-if="!userLikesGetters.article.list.length && finished">
         <div class="blank-box">
@@ -15,7 +15,7 @@
     </template>
     <template v-if="pageName === 'userCollection'">
       <template v-if="userFavoritesGetters.article.list.length">
-        <m-reading-posts v-for="(item, index) in userFavoritesGetters.article.list" :key="index" :item="item" />
+        <m-reading-posts v-for="(item, index) in userFavoritesGetters.article.list" :key="index" :item="item" :pageName="pageName" :propIndex="index" />
       </template>
       <template v-if="!userFavoritesGetters.article.list.length && finished">
         <div class="blank-box">
