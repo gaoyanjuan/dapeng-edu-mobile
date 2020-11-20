@@ -122,7 +122,7 @@ export default {
           createTime: new Date().getTime(),
           user: {
             ...this.userinfo,
-            nickname: this.userinfo.nickName
+            nickname: this.userinfo.nickname
           }
         })
       }
@@ -160,7 +160,8 @@ export default {
         label: {
           contentType: this.contentType
         },
-        user: this.userinfo
+        user: this.userinfo,
+        commit: true
       })
       .then((res) => {
         this.$refs.commentPopup.resetPopup()
