@@ -220,8 +220,8 @@ export default {
   height: 100%;
   position: relative;
   background: rgba(255, 255, 255, 0.84);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 
   .menus-close {
     width: 37px;

@@ -1,12 +1,20 @@
 <template>
   <div v-if="dynamic" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="dynamic.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+    <m-navbar
+      :attention="dynamic.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="dynamic.type === 'TEXT' ? '动态详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="dynamic.img" :photoInfo="dynamic.imgInfo" :item="dynamic"/>
+      <!-- Gallery TEXT:图文-->
+      <m-gallery v-if="dynamic.type === 'TEXT'" :photos="dynamic.img" :photoInfo="dynamic.imgInfo" :item="dynamic"/>
+      
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="dynamic.type === 'VIDEO'" :video="dynamic.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -66,7 +74,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
-    title:'动态详情',
     commentSelected: true,
     likeSelected: false,
     showMenusPopup: false,
