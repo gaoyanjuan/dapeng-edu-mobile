@@ -69,10 +69,16 @@ export default {
     },
     // 收藏
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       console.log('collect')
     },
     //喜欢操作
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       console.log('love')
     },
     // 监听图片切换
