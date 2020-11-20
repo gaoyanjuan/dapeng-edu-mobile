@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'PC5.0',
+      name: 'M-5.1-test',
       exec_mode: 'cluster',
       instances: 'max', // Or a number of instances
       max_memory_restart:'600M',
@@ -10,7 +10,7 @@ module.exports = {
       error_file: "./logs/app-err.log",
       out_file: "./logs/app-out.log",
       env: {
-        "MODE": "internal"
+        "MODE": "test"
       }
     }
   ]

@@ -1,45 +1,147 @@
 <template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="list.length">
-      <m-reading-posts v-for="(item, i) in list" :key="i" :item="item" />
+    <template v-if="pageName === 'userLike'">
+      <template v-if="userLikesGetters.article.list.length">
+        <m-reading-posts v-for="(item, index) in userLikesGetters.article.list" :key="index" :item="item" :pageName="pageName" :propIndex="index" />
+      </template>
+      <template v-if="!userLikesGetters.article.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </div>
+      </template>
     </template>
-    <template v-if="!list.length && finished">
-      <div class="posts-blank-wrap">
-        <img class="blank-icon" :src="blank" alt="" />
-        <span class="blank-txt">暂无内容～</span>
-      </div>
+    <template v-if="pageName === 'userCollection'">
+      <template v-if="userFavoritesGetters.article.list.length">
+        <m-reading-posts v-for="(item, index) in userFavoritesGetters.article.list" :key="index" :item="item" :pageName="pageName" :propIndex="index" />
+      </template>
+      <template v-if="!userFavoritesGetters.article.list.length && finished">
+        <div class="blank-box">
+          <div class="posts-blank-wrap">
+            <img class="blank-icon" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </div>
+      </template>
     </template>
   </van-list>
 </template>
 
 <script>
-import { reading } from '@/data'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'LikeReadingPosts',
+  props: {
+    pageName: {
+      type: String,
+      default: ''
+    }
+  },
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    blank: require('@/assets/icons/blank/have-no-reading.png')
+    blank: require('@/assets/icons/blank/have-no-reading.png'),
+    currentPage: 1
   }),
-  methods:{
-    onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < reading.length; i++) {
-          this.list.push(reading[i])
-        }
-        // 加载状态结束
+  computed: {
+    ...mapGetters('user', [
+      'userLikesGetters',
+      'userFavoritesGetters'
+    ])
+  },
+   watch: {
+    'userLikesGetters.article.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'userLikesGetters.article.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    },
+    'userFavoritesGetters.article.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'userFavoritesGetters.article.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    }
+  },
+  mounted() {
+    if(this.pageName === 'userLike') {
+      if (this.userLikesGetters.article.list.length === 0) {
+        this.appendUserLikes({
+          type: 'ARTICLE',
+          page: this.currentPage,
+          size: 10
+        })
+      }
+    }else if(this.pageName === 'userCollection') {
+      if (this.userFavoritesGetters.article.list.length === 0) {
+        this.appendUserFavorites({
+          type: 'ARTICLE',
+          page: this.currentPage,
+          size: 10
+        })
+      }
+    }
+  },
+  methods:{
+    ...mapActions('user', [
+      'appendUserLikes',
+      'appendUserFavorites'
+    ]),
+    onLoad() {
+      if(this.pageName === 'userLike') {
+        if (this.userLikesGetters.article.status === 'over') {
           this.finished = true
+          return false
         }
-        if (this.list.length === 0) {
+      
+        if (this.userLikesGetters.article.status === 'loading') return false
+        const newPage = this.currentPage + 1
+        this.appendUserLikes({
+          type: 'ARTICLE',
+          page: newPage,
+          size: 10
+        })
+      }else if(this.pageName === 'userCollection') {
+        if (this.userFavoritesGetters.article.status === 'over') {
           this.finished = true
-          this.finishedText = ''
+          return false
         }
-      }, 1000)
+      
+        if (this.userFavoritesGetters.article.status === 'loading') return false
+        const newPage = this.currentPage + 1
+        this.appendUserFavorites({
+          type: 'ARTICLE',
+          page: newPage,
+          size: 10
+        })
+      }
     }
   }
 }
@@ -50,7 +152,7 @@ export default {
   border-top: 12px solid #F7FAF8;
 }
 
-.posts-blank-wrap {
+.blank-box .posts-blank-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
