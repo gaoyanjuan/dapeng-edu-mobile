@@ -72,6 +72,9 @@ export default {
 
     /** 评论 */
     openComment() {
+      if(!this.$login()) {
+        return 
+      }
       this.$emit('openComment')
       this.onClose()
     },
