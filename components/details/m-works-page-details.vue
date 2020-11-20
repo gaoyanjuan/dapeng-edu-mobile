@@ -1,12 +1,21 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+    <m-navbar 
+      :attention="works.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="works.type === 'TEXT' ? '作品详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="works.img" :photoInfo="works.imgInfo" :item="works"/>
+
+      <!-- Gallery TEXT:图文-->
+      <m-gallery v-if="works.type === 'TEXT'" :photos="works.img" :photoInfo="works.imgInfo" :item="works"/>
+
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="works.type === 'VIDEO'" :video="works.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -54,10 +63,11 @@
       />
     </div>
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click="deleteWork">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
+    
     <!-- 删除二次确认弹窗 -->
     <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
@@ -65,10 +75,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import mSmallVideo from '../m-small-video.vue'
 export default {
+  components: { mSmallVideo },
   name:'Details',
   data:() => ({
-    title:'作品详情',
     commentSelected: true,
     likeSelected: false,
     showMenusPopup: false,
@@ -88,17 +99,6 @@ export default {
         return false
       }
     }
-  },
-  mounted () {
-    // 详情页跳转定位
-    // if (this.$route.fullPath.includes('report')) {
-    //   this.$nextTick(() => {
-    //     const element = document.getElementById('report')
-    //     element.scrollIntoView({
-    //       behavior: 'auto'
-    //     })
-    //   })
-    // }
   },
   methods: {
     ...mapActions({

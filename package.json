@@ -33,7 +33,7 @@
     "nuxt": "^2.14.5",
     "root-font-size": "^1.0.4",
     "swiper": "^5.4.5",
-    "vant": "^2.10.8",
+    "vant": "^2.10.14",
     "vue-awesome-swiper": "^4.1.1",
     "vue-clipboard2": "^0.3.1",
     "xss": "^1.0.8"

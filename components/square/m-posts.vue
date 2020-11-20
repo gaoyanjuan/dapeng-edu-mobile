@@ -75,14 +75,14 @@
     </van-skeleton>
 
     <!-- 帖子 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to="`/copy-form?taskId=${listItemData.task ? listItemData.task.taskId : '' }&id=${listItemData.user.userId ? listItemData.user: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
@@ -299,6 +299,9 @@ export default {
     },
     // 收藏
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isCollection) {
         this.isCollection = false
         this.queryDeleteCollection({
@@ -332,6 +335,9 @@ export default {
     },
     //喜欢操作
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1

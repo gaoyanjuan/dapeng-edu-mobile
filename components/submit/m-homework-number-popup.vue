@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="showPopup.show" round @closed="closed">
+  <van-popup v-model="showPopup.show" round @closed="closed" :transition-appear="true">
     <div class="popup-warp">
       <div class="popup-head">您还未有专属班主任，请复制作业号联系客服老师呦~</div>
       <div class="popup-body">作业号：{{ showPopup.jobNummer }}</div>
