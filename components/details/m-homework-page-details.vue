@@ -1,12 +1,20 @@
 <template>
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="homework.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus" />
+    <m-navbar
+      :attention="homework.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="homework.type === 'TEXT' ? '作业详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="homework.img" :photoInfo="homework.imgInfo" :item="homework"/>
+      <!-- Gallery TEXT:图文-->
+      <m-gallery v-if="homework.type === 'TEXT'" :photos="homework.img" :photoInfo="homework.imgInfo" :item="homework"/>
+      
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="homework.type === 'VIDEO'" :video="homework.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -77,7 +85,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
-    title:'作业详情',
     showMenusPopup: false,
     showRightMenu: true,
     deleteDialogParams: {

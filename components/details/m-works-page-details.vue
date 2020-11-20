@@ -1,12 +1,21 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+    <m-navbar 
+      :attention="works.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="works.type === 'TEXT' ? '作品详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="works.img" :photoInfo="works.imgInfo" :item="works"/>
+
+      <!-- Gallery TEXT:图文-->
+      <m-gallery v-if="works.type === 'TEXT'" :photos="works.img" :photoInfo="works.imgInfo" :item="works"/>
+
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="works.type === 'VIDEO'" :video="works.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -66,10 +75,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import mSmallVideo from '../m-small-video.vue'
 export default {
+  components: { mSmallVideo },
   name:'Details',
   data:() => ({
-    title:'作品详情',
     commentSelected: true,
     likeSelected: false,
     showMenusPopup: false,
@@ -89,12 +99,6 @@ export default {
         return false
       }
     }
-  },
-  mounted () {
-    setTimeout(() => {
-      console.log(this.works)
-      return
-    }, 2000)
   },
   methods: {
     ...mapActions({
