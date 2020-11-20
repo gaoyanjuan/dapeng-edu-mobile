@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'm-5.1',
+      name: 'M-5.1-test',
       exec_mode: 'cluster',
       instances: 'max', // Or a number of instances
       max_memory_restart:'600M',
