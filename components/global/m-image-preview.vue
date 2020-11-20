@@ -33,7 +33,7 @@
     </van-image-preview>
 
     <!-- Menus Popup Block -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus-popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus-popup" :transition-appear="true">
       <div class="menus-popup-item" @click.stop="onCollect">收藏</div>
       <div class="menus-popup-item" @click.stop="onSaveImage">保存图片</div>
       <div class="menus-popup-item" @click.stop="showMenusPopup = false">取消</div>

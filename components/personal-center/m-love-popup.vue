@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="showPopup.show" round>
+  <van-popup v-model="showPopup.show" round :transition-appear="true">
     <div class="popup-warp">
       <div class="popup-head-photo"></div>
       <div class="popup-body-nums">累计获得了{{userTrendsGetters.likeCount}}个赞</div>

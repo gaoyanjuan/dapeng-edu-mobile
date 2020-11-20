@@ -54,7 +54,7 @@
       />
     </div>
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click="deleteWork">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>

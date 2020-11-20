@@ -120,10 +120,6 @@ export default {
   }),
 
   computed:{
-     ...mapGetters({
-      userInfo: 'user/userInfoGetters'
-    }),
-    
     /**
      * 计算并赋值路由
      * 非广场区列表，默认返回‘/’
@@ -162,10 +158,7 @@ export default {
     // 进入发布页面
     enterSubmit(name) {
 
-      if(!this.userInfo) { 
-        this.$login()
-        return
-      }
+      if(!this.$login()) return
 
       if(name === 'VIP' || name === 'TEST') {
         this.$router.push(`/homework-list?courseType=${name}`)
