@@ -50,12 +50,12 @@
       @sendComment="sendComment"
     />
     <!-- 删除 菜单弹层 -->
-    <van-popup v-model="showPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
     <!-- 删除确认弹层 -->
-    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup">
+    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup" :transition-appear="true">
       <div class="popup__item__title">确定删除该评论吗？</div>
       <div class="popup__item">
         <span @click.stop="cancel">取消</span>

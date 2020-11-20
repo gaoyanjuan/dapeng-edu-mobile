@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="showPopup.show" round>
+  <van-popup v-model="showPopup.show" round :transition-appear="true">
     <div class="popup-warp">
       <div class="popup-head-photo">请完善用户名，让老师与您更好的交流~</div>
       <div class="popup-body-input">

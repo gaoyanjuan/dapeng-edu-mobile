@@ -55,7 +55,7 @@
       />
     </div>
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <template v-if="homework.user.userId === (userInfo ? userInfo.userId : '' )">
         <div class="menus__popup__item" @click="editHomework">编辑</div>
         <div class="menus__popup__item" @click="deleteHomeWork">删除</div>

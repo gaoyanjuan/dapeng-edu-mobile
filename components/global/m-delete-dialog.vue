@@ -1,6 +1,6 @@
 <template>
   <div class="delete-confirm-pop">
-    <van-popup v-model="deleteDialogParams.show" round overlay-class="menus__popup">
+    <van-popup v-model="deleteDialogParams.show" round overlay-class="menus__popup" :transition-appear="true">
       <div class="delete-tips">确定删除本条数据吗？</div>
       <div class="button-group">
         <div class="cancel-button" @click="cancelDelete">取消</div>

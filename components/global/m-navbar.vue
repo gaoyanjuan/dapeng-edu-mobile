@@ -8,6 +8,7 @@
     :right-text="rightText"
     @click-left="onClickLeft"
     @click-right="onClickRight"
+    safe-area-inset-top
   >
     <template #left>
       <img class="navbar__arrow icon" :src="arrow" alt="arrow" />
