@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:'Gallery',
   props:{
@@ -55,12 +56,30 @@ export default {
       show: false,
       images: [],
       startPosition: 1,
-      commentNums:0,
-      loveNums:0
+      isPraise: false,
+      isCollection: false,
+      commentCount: 0,
+      praiseCount: 0
     },
   }),
+  computed: {
+    ...mapGetters({
+      detailsGetters: 'details/detailsGetters'
+    })
+  },
   mounted() {
     this.calcuSwiperWrap()
+  },
+  watch: {
+    'detailsGetters': function (newVal) {
+      this.imagePreview = {
+        ...this.imagePreview,
+        isPraise: newVal.isPraise,
+        isCollection: newVal.isCollection,
+        praiseCount: newVal.praiseCount,
+        commentCount: newVal.commentCount,
+      }
+    }
   },
   methods: {
     // 评论操作
@@ -97,11 +116,10 @@ export default {
       this.imagePreview = {
         images: this.handleFilterImage(),
         startPosition: index,
-        itemData: this.item,
-        isPraise: this.item.isPraise,
-        isCollection: this.item.isCollection,
-        praiseCount: this.item.praiseCount,
-        commentCount: this.item.commentCount,
+        isPraise: this.detailsGetters.isPraise,
+        isCollection: this.detailsGetters.isCollection,
+        praiseCount: this.detailsGetters.praiseCount,
+        commentCount: this.detailsGetters.commentCount,
         show: true
       }
     },

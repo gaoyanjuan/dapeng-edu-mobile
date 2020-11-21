@@ -45,6 +45,7 @@ export default {
     async appendGrowthDetails ({ commit }, params) {
       const res = await this.$axios.get(`/posts/${params.id}`)
       commit('appendGrowthDetails', res)
+      return res
     },
     async appendGrowthList ({ commit, state }, params) {
       commit('changeGrowthListStatus', 'loading')
