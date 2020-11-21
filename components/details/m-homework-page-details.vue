@@ -11,7 +11,15 @@
     <!-- Main Block -->
     <div class="details-content-wrap">
       <!-- Gallery TEXT:图文-->
-      <m-gallery v-if="homework.type === 'TEXT'" :photos="homework.img" :photoInfo="homework.imgInfo" :item="homework"/>
+      <m-gallery
+        v-if="homework.type === 'TEXT'"
+        :photos="homework.img"
+        :photoInfo="homework.imgInfo"
+        :item="homework"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
       
       <!-- Small Video VIDEO:小视频 -->
       <m-details-small-video v-if="homework.type === 'VIDEO'" :video="homework.vid"/>
@@ -54,8 +62,6 @@
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
-        :propCommentCount="homework.commentCount"
-        :propPraiseCount="homework.praiseCount"
         :courseType="homework.courseType"
         :contentType="homework.type"
         topicType="HOMEWORK"
@@ -126,7 +132,18 @@ export default {
         this.$router.go(-1)
       })
     },
-
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
+    },
     // 编辑作业
     editHomework() {
       this.$router.push({

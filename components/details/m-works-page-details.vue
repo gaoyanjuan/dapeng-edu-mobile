@@ -12,7 +12,15 @@
     <div class="details-content-wrap">
 
       <!-- Gallery TEXT:图文-->
-      <m-gallery v-if="works.type === 'TEXT'" :photos="works.img" :photoInfo="works.imgInfo" :item="works"/>
+      <m-gallery
+        v-if="works.type === 'TEXT'"
+        :photos="works.img"
+        :photoInfo="works.imgInfo"
+        :item="works"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
 
       <!-- Small Video VIDEO:小视频 -->
       <m-details-small-video v-if="works.type === 'VIDEO'" :video="works.vid"/>
@@ -55,11 +63,10 @@
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
-        :propCommentCount="works.commentCount"
-        :propPraiseCount="works.praiseCount"
         :contentType="works.type"
         topicType="WORKS"
         :detailData="works"
+        ref="detailsFooter"
       />
     </div>
     <!-- 菜单弹层 -->
@@ -112,6 +119,18 @@ export default {
     deleteWork() {
       this.showMenusPopup = false
       this.deleteDialogParams.show = true
+    },
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
     },
     confirmDelete() {
       this.deleteWorks({ id: this.works.id }).then(()=>{

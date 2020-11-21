@@ -61,6 +61,7 @@ export default {
     async appendWorksDetails({ commit }, params) {
       const res = await this.$axios.get(`/works/${params.id}`)
       commit('appendWorksDetails', res)
+      return res
     }
   },
   getters: {

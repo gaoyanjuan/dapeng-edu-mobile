@@ -59,8 +59,8 @@ export default {
           startPosition: 1,
           isPraise: false,
           isCollection: false,
-          commentCount:0,
-          praiseCount:0
+          commentCount: 0,
+          praiseCount: 0
         }
       }
     }

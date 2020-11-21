@@ -1,19 +1,19 @@
 <template>
   <div>
     <m-tabs>
-      <m-tab-item selected="true" name="评论" :count="commentCount">
+      <m-tab-item selected="true" name="评论" :count="detailsGetters.commentCount">
         <m-comment-list :contentType="contentType" />
       </m-tab-item>
-      <m-tab-item name="喜欢" :count="praiseCount">
+      <m-tab-item name="喜欢" :count="detailsGetters.praiseCount">
         <m-like-list />
       </m-tab-item>
     </m-tabs>
     <!-- 底部评论框 -->
     <div class="details-footer-comment-wrap">
       <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
-      <img class="footer-icon-like" :src="isPraise ? unlike : like" alt="like" @click="onLikeEvent"/>
+      <img class="footer-icon-like" :src="detailsGetters.isPraise ? unlike : like" alt="like" @click="onLikeEvent"/>
       <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
-      <img class="footer-icon-collect" :src="isCollection ? uncollect : collect" alt="collect" @click="onCollectEvent"/>
+      <img class="footer-icon-collect" :src="detailsGetters.isCollection ? uncollect : collect" alt="collect" @click="onCollectEvent"/>
     </div>
     <!-- 评论框弹层 -->
     <m-comment-popup ref="commentPopup" :comment="commentPop" @sendComment="sendComment"/>
@@ -49,10 +49,6 @@ export default {
   },
   data () {
     return {
-      isPraise: false,
-      isCollection: false,
-      commentCount: 0,
-      praiseCount: 0,
       commentPop: { show: false },
       comment: require('@/assets/icons/posts/posts-comment.png'),
       like: require('@/assets/icons/posts/posts-love.png'),
@@ -63,15 +59,10 @@ export default {
   },
   computed: {
     ...mapGetters({
+      detailsGetters: 'details/detailsGetters',
       userinfo: 'user/userInfoGetters',
       commentListGetters: 'comment/commentListGetters'
     })
-  },
-  created () {
-    this.commentCount = this.propCommentCount
-    this.praiseCount = this.propPraiseCount
-    this.isPraise = this.detailData.isPraise
-    this.isCollection = this.detailData.isCollection
   },
   methods: {
     ...mapActions({
@@ -82,6 +73,10 @@ export default {
       appendNewComment: 'comment/appendNewComment'
     }),
     ...mapMutations({
+      changeIsPraise: 'details/changeIsPraise',
+      changeIsCollection: 'details/changeIsCollection',
+      changeCommentCount: 'details/changeCommentCount',
+      changePraiseCount: 'details/changePraiseCount',
       addNewLike: 'comment/addNewLike',
       deleteLike: 'comment/deleteLike'
     }),
@@ -91,23 +86,23 @@ export default {
     },
     // 喜欢事件
     onLikeEvent() {
-      if (this.isPraise) {
-        this.isPraise = false
-        this.praiseCount -= 1
+      if (this.detailsGetters.isPraise) {
+        this.changeIsPraise(false)
+        this.changePraiseCount(this.detailsGetters.praiseCount - 1)
         this.queryUnLike({
           id: this.detailData.id,
           type: this.topicType,
           commit: true
         }).catch(() => {
-          this.isPraise = true
-          this.praiseCount += 1
+          this.changeIsPraise(true)
+          this.changePraiseCount(this.detailsGetters.praiseCount + 1)
         })
         this.deleteLike({
           userId: this.userinfo.userId
         })
       } else {
-        this.isPraise = true
-        this.praiseCount += 1
+        this.changeIsPraise(true)
+        this.changePraiseCount(this.detailsGetters.praiseCount + 1)
         this.queryLike({
           id: this.detailData.id,
           type: this.topicType,
@@ -115,8 +110,8 @@ export default {
           contentType: this.contentType,
           commit: true
         }).catch(() => {
-          this.isPraise = false
-          this.praiseCount -= 1
+          this.changeIsPraise(false)
+          this.changePraiseCount(this.detailsGetters.praiseCount - 1)
         })
         this.addNewLike({
           createTime: new Date().getTime(),
@@ -132,23 +127,23 @@ export default {
       if(!this.$login()) {
         return 
       }
-      if (this.isCollection) {
-        this.isCollection = false
+      if (this.detailsGetters.isCollection) {
+        this.changeIsCollection(false)
         this.queryDeleteCollection({
           id: this.detailData.id,
           type: this.topicType
         }).catch(() => {
-          this.isCollection = true
+          this.changeIsCollection(true)
         })
       } else {
-        this.isCollection = true
+        this.changeIsCollection(true)
         this.queryCollection({
           id: this.detailData.id,
           type: this.topicType,
           createdId: this.detailData.user.userId,
           contentType: this.contentType
         }).catch(() => {
-          this.isCollection = false
+          this.changeIsCollection(false)
         })
       }
     },
@@ -168,7 +163,7 @@ export default {
         if (!res.data.highRisk) {
           this.$toast('评论成功')
         }
-        this.commentCount += 1
+        this.changeCommentCount(this.detailsGetters.commentCount + 1)
       })
       .catch((err) => {
         if (err && err.data && err.data.message) {

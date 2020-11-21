@@ -11,7 +11,15 @@
     <!-- Main Block -->
     <div class="details-content-wrap">
       <!-- Gallery TEXT:图文-->
-      <m-gallery v-if="dynamic.type === 'TEXT'" :photos="dynamic.img" :photoInfo="dynamic.imgInfo" :item="dynamic"/>
+      <m-gallery
+        v-if="dynamic.type === 'TEXT'"
+        :photos="dynamic.img"
+        :photoInfo="dynamic.imgInfo"
+        :item="dynamic"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
       
       <!-- Small Video VIDEO:小视频 -->
       <m-details-small-video v-if="dynamic.type === 'VIDEO'" :video="dynamic.vid"/>
@@ -52,8 +60,6 @@
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
-        :propCommentCount="dynamic.commentCount"
-        :propPraiseCount="dynamic.praiseCount"
         :contentType="dynamic.type"
         topicType="LIFE"
         :detailData="dynamic"
@@ -112,6 +118,18 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
+    },
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
     },
     // 删除成长
     deleteDynamic() {

@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   props: {
     itemIndex: {
@@ -143,6 +143,7 @@ export default {
   },
   computed: {
     ...mapGetters({
+      detailsGetters: 'details/detailsGetters',
       userinfo: 'user/userInfoGetters'
     })
   },
@@ -158,6 +159,9 @@ export default {
       queryUnLike: 'comment/queryUnLike',
       deleteComment: 'comment/deleteComment',
       appendNewRepliesComment: 'comment/appendNewRepliesComment'
+    }),
+    ...mapMutations({
+      changeCommentCount: 'details/changeCommentCount'
     }),
     onLove () {
       if(!this.$login()) {
@@ -255,6 +259,7 @@ export default {
         commit: true
       })
       this.$toast('删除成功')
+      this.changeCommentCount(this.detailsGetters.commentCount - 1)
       this.showConfirmPopup = false
     },
     deleteItem () {
@@ -333,6 +338,7 @@ export default {
       display: flex;
       align-items: center;
       .comment-icon {
+        height: 40px;
         img {
           width: 20px;
           height: 20px;
@@ -340,12 +346,14 @@ export default {
         margin-right: 30px;
       }
       .thumb-box {
-        margin-top: 2px;
+        padding-top: 2px;
         display: flex;
+        height: 40px;
+        box-sizing: border-box;
         img {
           width: 20px;
           height: 20px;
-          vertical-align: middle;
+          vertical-align: text-bottom;
         }
         span {
           margin-left: 4px;
