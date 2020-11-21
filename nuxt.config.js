@@ -15,7 +15,8 @@ export default {
     mBaseUrl:env[process.env.MODE].DP_M_URL,
     authUrl: env[process.env.MODE].DP_AUTH_URL,
     ossUrl: env[process.env.MODE].OSS_URL,
-    orderUrl: env[process.env.MODE].ORDER_URL
+    orderUrl: env[process.env.MODE].ORDER_URL,
+    mode: env[process.env.MODE].MODE
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
