@@ -55,7 +55,12 @@ export default {
   }),
   methods: {
     onClickLeft() {
-      this.$router.go(-1)
+      const route = 'personal-center-personal-publish'
+      if(this.$route.name === route) {
+        this.$router.replace('/personal-center')
+      } else {
+        this.$router.go(-1)
+      }
     },
     onClickRight() {
       this.$emit('onClickRight')
