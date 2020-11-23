@@ -452,6 +452,9 @@ export const mutations = {
     let type = payload.type.toLocaleLowerCase()
     let index = payload.index
     state.userFavorites[type].list.splice(index, 1)
+  },
+  changeFansRedDot(state, payload) {
+    state.userFans.list[payload.index].redDot = false
   }
 }
 
@@ -652,6 +655,11 @@ export const actions = {
       }
     })
     commit('appendPublishVideo', res)
+    return res
+  },
+  // 执行消息阅读操作
+  async readMyMessages ({ commit }, params) {
+    const res = await this.$axios.put('/messages/read')
     return res
   },
 }
