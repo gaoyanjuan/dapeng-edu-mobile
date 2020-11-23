@@ -24,6 +24,41 @@ export default {
     }
   },
   mutations: {
+    changeReplyCount (state, payload) {
+      state.commentDetails.replyCount += payload
+    },
+    appendNewRepliesComment (state, payload) {
+      state.replies.data.unshift(payload)
+      state.replies.data = state.replies.data
+    },
+    deleteReply (state, payload) {
+      state.replies.data.splice(payload.index, 1)
+      state.replies.data = state.replies.data
+    },
+    deleteComment (state, payload) {
+      state.commentList.data.splice(payload.index, 1)
+      state.commentList.data = state.commentList.data
+    },
+    appendNewComment (state, payload) {
+      if (!payload.data.highRisk) {
+        const newComment = {
+          ...payload.data,
+          user: {
+            ...payload.userData,
+            nickname: payload.userData.nickname
+          },
+          praiseCount: 0,
+          isPraise: false
+        }
+        if (state.commentList.data[0] && state.commentList.data[0].type === "MARK") {
+          state.commentList.data.splice(1,0,newComment)
+          state.commentList.data = state.commentList.data
+        } else {
+          state.commentList.data.splice(0,0,newComment)
+          state.commentList.data = state.commentList.data
+        }
+      }
+    },
     clearCommentList (state) {
       state.commentList.data = []
       state.commentList.status = 'loading'
@@ -62,6 +97,19 @@ export default {
         state.likesList.status = 'load'
       }
     },
+    deleteLike (state, payload) {
+      for (let index = 0; index < state.likesList.data.length; index++) {
+        const element = state.likesList.data[index]
+        if (element.user.userId === payload.userId) {
+          state.likesList.data.splice(index, 1)
+          break
+        }
+      }
+    },
+    addNewLike (state, payload) {
+      state.likesList.data.unshift(payload)
+      state.likesList.data = state.likesList.data
+    },
     clearRepliesList (state) {
       state.replies.data = []
       state.replies.status = 'loading'
@@ -85,10 +133,46 @@ export default {
     }
   },
   actions: {
-    async queryUnLike ({ commit }, params) {
-      const res = this.$axios.delete('/likes', params)
+    async appendNewRepliesComment ({ commit }, params) {
+      const res = await this.$axios.post(`/comments/${params.id}/replies`, params)
+      return res
+    },
+    // 删除评论
+    async deleteComment ({ commit }, params) {
+      const res = await this.$axios.delete(`/comments/${params.id}`)
+      if (params.commit) {
+        commit('deleteComment', params)
+      }
+      return res
+    },
+    // 新增评论
+    async appendNewComment ({ commit }, params) {
+      const res = await this.$axios.post('/comments', params)
+      if (params.commit) {
+        commit('appendNewComment', { data: res.data, userData: params.user })
+      }
+      return res
+    },
+    // 收藏功能
+    async queryCollection ({ commit }, params) {
+      const res = await this.$axios.post(`/favorites`, {
+        ...params
+      })
       return res.data
     },
+    // 取消收藏功能
+    async queryDeleteCollection ({ commit }, params) {
+      const res = await this.$axios.delete(`/favorites/${params.id}?type=${params.type}`, {
+        ...params
+      })
+      return res.data
+    },
+    // 取消点赞
+    async queryUnLike ({ commit }, params) {
+      const res = this.$axios.delete(`/likes/${params.id}`, { params })
+      return res.data
+    },
+    // 点赞
     async queryLike ({ commit }, params) {
       const res = this.$axios.post('/likes', params)
       return res.data

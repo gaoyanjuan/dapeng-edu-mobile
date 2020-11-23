@@ -9,15 +9,13 @@
       <template v-for="(item, index) in commentListGetters.data">
         <m-comment-item
           :isTeacher="item.type === 'MARK'"
-          :key="index"
-          :id="item.id"
+          :key="item.id"
+          :itemIndex="index"
+          :contentType="contentType"
+          :commentItem="item"
           :user="item.user"
-          :time="item.createTime"
-          :thumbNumber="item.praiseCount"
-          :content="item.content"
           :teacherType ="courseType"
           :contentImages="(item.images instanceof Array) && item.images.length > 0 ? item.images[0].url : ''"
-          :repliesCount="item.replyCount"
           :isAudio="item.ext ? item.ext.approvedType === 'AUDIO' : false"
           :replies="item.replies"
           :audioUrl="item.ext ? item.ext.approvedAudioUrl : ''"
@@ -41,6 +39,10 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   props: {
+    contentType: {
+      type: String,
+      default: ''
+    },
     courseType: {
       type: String,
       default: ''

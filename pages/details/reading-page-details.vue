@@ -4,82 +4,97 @@
     <m-navbar title="阅读详情" />
     
     <!-- Body Block -->
-    <section class="posts-details-wrap">
+    <section v-if="reading" class="posts-details-wrap">
       <!-- Title -->
-      <div class="posts-title"> 陪我跨年的恐怕只有学习和心中那一缕对优中那一缕</div>
+      <div class="posts-title"> {{reading.title}} </div>
 
       <!-- Avatar -->
-      <m-avatar avatar-style="width:40px; height:40px;"/>
+      <m-avatar
+        avatar-style="width:40px; height:40px;"
+        :user-info="reading.user"
+        :submit-time="reading.createTime"
+      />
 
       <!-- Content -->
       <div class="posts-content">
-        <div class="posts-inner-text">
-          <p>2020年新的挑战新的开始，面对自己的内心，听听自己的内心的声音2020年新的挑战新的开始，面对自己的内心，听听自己的内心的声音</p> 
-          <img src="http://image.dapengjiaoyu.cn/2019-12-04/jnxy33nlfr/jnxy33nlfr/1575442449111.jpg" alt="">
-          <p>2020年新的挑战新的开始，面对自己的内心，听听自己的内心的声音2020年新的挑战新的开始，面对自己的内心，听听自己的内心的声音</p>
-        </div>
-        <div class="posts-label">阅读·设计</div>
+        <div class="posts-inner-text" ref="richText" v-html="reading.content"></div>
+        <div class="posts-label">阅读·{{ reading.college.name.replace(/学院/, '') }}</div>
       </div>
     </section>
 
     <!-- Footer Block -->
-    <section class="posts-comment-wrap">
-      <m-tabs>
-        <m-tab-item :selected="commentSelected" name="评论" :count="0">
-          <!-- <m-comment-list /> -->
-        </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="0">
-          <!-- <m-like-list /> -->
-        </m-tab-item>
-      </m-tabs>
+    <section v-if="reading" class="posts-comment-wrap">
+      <m-details-footer
+        :propCommentCount="reading.commentCount"
+        :propPraiseCount="reading.praiseCount"
+        contentType="TEXT"
+        topicType="ARTICLE"
+        :detailData="reading"
+      />
     </section>
-
-    <!-- 底部评论框 -->
-    <div class="details-footer-comment-wrap">
-      <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
-      <img class="footer-icon-like" :src="like" alt="like" @click="onLikeEvent"/>
-      <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
-      <img class="footer-icon-collect" :src="collect" alt="collect" @click="onCollectEvent"/>
-    </div>
-
-    <!-- 评论框弹层 -->
-    <m-comment-popup :comment="commentPop" @sendComment="sendComment"/>
 
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
 export default {
   name:'P-Reading-Details',
   layout:'navbar',
-  data:() => ({
-    commentSelected: true,
-    likeSelected: false,
-    commentPop: { show: false },
-    comment: require('@/assets/icons/posts/posts-comment.png'),
-    like: require('@/assets/icons/posts/posts-love.png'),
-    collect: require('@/assets/icons/posts/posts-star.png'),
-  }),
+  data:() => ({}),
+
+  computed:{
+    ...mapGetters({
+      reading:'reading/readingDetailsGetters',
+      commentList:'comment/commentListGetters',
+      likeList:'comment/likesListGetters'
+    })
+  },
+
   created () {
-    if (this.$route.query.type && this.$route.query.type === 'like') {
-      this.likeSelected = true
-      this.commentSelected = false
+    
+    if(!this.reading && this.$route.query.id) {
+      const _this = this
+
+      this.getDetails({id: this.$route.query.id}).then( res => {
+        if (res && res.data) {
+          this.$store.commit('details/changeIsPraise', res.data.isPraise)
+          this.$store.commit('details/changeIsCollection', res.data.isCollection)
+          this.$store.commit('details/changeCommentCount', res.data.commentCount)
+          this.$store.commit('details/changePraiseCount', res.data.praiseCount)
+        }
+        const imgList = this.$refs.richText.getElementsByTagName('img')
+        imgList.forEach((element, index) => {
+          element.addEventListener('click', function () {
+            _this.ImagePreview({ images: res.data.img, startPosition:index})
+          })
+        })
+      })
+    }
+
+    if(!this.commentList.data.length && this.$route.query.id) {
+      this.getComment({ topicId: this.$route.query.id, topicType: 'ARTICLE' })
+    }
+
+    if(!this.likeList.data.length && this.$route.query.id) {
+      this.getLikes({ page: 1, type: 'ARTICLE', id: this.$route.query.id})
     }
   },
+
   methods:{
-     // 打开评论弹窗
-    openComment() {
-      this.commentPop.show = true
-    },
+    ...mapActions({
+      getDetails: 'reading/appendReadingDetails',
+      getComment: 'comment/queryCommentList',
+      getLikes: 'comment/queryLikesList',
+    }),
 
-    // 喜欢事件
-    onLikeEvent() { console.log('like') },
-
-    // 收藏事件
-    onCollectEvent() { console.log('collect') },
-
-    // 评论发送
-    sendComment() { console.log('发送成功') }
+    ...mapMutations({
+      clearDetails: 'reading/clearReadingDetails'
+    }),
+  },
+  destroyed () {
+    this.clearDetails()
   }
 }
 </script>
@@ -96,13 +111,15 @@ export default {
 
 .posts-details-wrap .posts-title {
   width: 343px;
-  height: 56px;
+  min-height: 28px;
   font-size: 20px;
   font-family: @dp-font-semibold;
   font-weight: 600;
   color: #18252C;
   line-height: 28px;
   margin-bottom: 12px;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .posts-details-wrap .posts-content {
@@ -118,7 +135,7 @@ export default {
 }
 
 .posts-content .posts-inner-text {
-  & > img {
+  /deep/ & img {
     width: 343px;
     height: 220px;
     border-radius: 8px;
@@ -126,12 +143,17 @@ export default {
     margin-bottom: 12px;
     object-fit: cover;
   }
-  & > p {
+
+  /deep/ & p {
     font-size: 16px;
     font-family: @dp-font-regular;
     font-weight: 400;
     color: #36404A;
     line-height: 24px;
+  }
+
+  /deep/ & p:not(:first-child) {
+    margin-top: 15px;
   }
 }
 
@@ -153,53 +175,4 @@ export default {
   padding: 16px 16px 45px;
 }
 
-/** footer comment */
-.details-footer-comment-wrap {
-  width: 375px;
-  height: 41px;
-
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-
-  background-color: @dp-white;
-  background-image: url('~@/assets/icons/comment/footer-comment-bg.png');
-  background-repeat: no-repeat;
-  background-size: 375px 41px;
-  background-position: center;
-
-  .footer-icon-like,
-  .footer-icon-comment,
-  .footer-icon-collect {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-  }
-  
-  .footer-icon-like,
-  .footer-icon-comment {
-    margin-right: 20px;
-  }
-}
-
-.details-footer-comment-wrap .footer-input {
-  width: 215px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 18px;
-  margin-right: 16px;
-  background: #F7F7F7;
-  border-radius: 18px;
-  font-size: 12px;
-  font-family: @regular;
-  font-weight: 400;
-  color: #A6AEA9;
-  cursor: pointer;
-}
 </style>

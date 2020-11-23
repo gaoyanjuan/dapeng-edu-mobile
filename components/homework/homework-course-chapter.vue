@@ -1,23 +1,23 @@
 <template>
   <div class="course-chapter-wrap">
     <div class="course-img-wrap">
-      <img :src="blank" alt="课程封面" />
+      <img v-lazy="chapter.coverImg ? chapter.coverImg[0] : blank" alt="课程封面" />
     </div>
     <div class="course-info-wrap">
       <div class="course-title">
-        <div v-if="isVideo" class="video-homework-warp">
+        <div v-if="chapter.jobType === 'VIDEO'" class="video-homework-warp">
           <img :src="videoHomework" alt="视频作业" />
         </div>
-        <div class="course-name">影楼设计行业实战课影楼设计行业实战课</div>
+        <div class="course-name"> {{ chapter.title }} </div>
       </div>
-      <div class="teach-time">授课时间：2020.06.08 10:00</div>
+      <div class="teach-time">授课时间：{{chapter.chapter.teachTime | requireDataH5 }}</div>
       <div class="teacher-name">
-        授课老师：付付老师
+        授课老师：{{  chapter.chapter.nickname }}
       </div>
     </div>
-    <div class="submit-button-group">
-      <div v-if="!submit" class="submit-button" @click="submitHomework">
-        交作业
+    <div class="submit-button-group" @click="submitHomework">
+      <div v-if="!chapter.isSubmit" class="submit-button">
+        <img :src="submitImg" />
       </div>
       <div v-else class="has-submit-button">
         <img :src="hasSubmitImg" alt="" />
@@ -30,17 +30,17 @@
 <script>
 export default {
   props: {
-    isVideo: {
-      type: Boolean,
-      default: false
+    chapter: {
+      type: Object,
+      default: function(){}
     }
   },
   data() {
     return {
-      blank: require('@/assets/icons/square/video-posts-cover.png'),
+      blank: require('@/assets/icons/common/photos-bg.png'),
       videoHomework: require('@/assets/icons/homework/video-homework.png'),
-      hasSubmitImg: require('@/assets/icons/square/hotlists-unfollow.png'),
-      submit: false,
+      hasSubmitImg: require('@/assets/icons/homework/has-submit-homework.png'),
+      submitImg: require('@/assets/icons/homework/submit-homework.png'),
       appPopParams: {
         show: false
       }
@@ -48,14 +48,15 @@ export default {
   },
   methods: {
     submitHomework() {
-      if(this.isVideo) {
+      if(this.chapter.jobType === 'VIDEO') {
         this.appPopParams.show = true
         return false
       }
       this.$router.push({
         path: '/requirement',
         query: {
-          taskId: '88bbad60c07146c696a0b1ae0aa6f885'
+          taskId: this.chapter.taskId,
+          type: this.$route.query.courseType
         }
       })
     }
@@ -80,6 +81,7 @@ export default {
     }
   }
   .course-info-wrap {
+
     .course-title {
       display: flex;
       align-items: center;
@@ -109,9 +111,11 @@ export default {
       font-family: @dp-font-regular;
     }
     .teacher-name {
+      max-width: 180px;
       font-size: 14px;
       color: #75737e;
       font-family: @dp-font-regular;
+      .text-ellipsis();
     }
   }
   .submit-button-group {
@@ -119,22 +123,12 @@ export default {
     width: 46px;
     height: 24px;
     margin-left: 30px;
-    .submit-button {
-      width: 46px;
-      height: 24px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #0cb65b;
-      border-radius: 4px;
-      font-size: 12px;
-      color: #fff;
-      font-family: @dp-font-regular;
-    }
+    .submit-button,
     .has-submit-button {
       img {
-        width: 100%;
-        height: 100%;
+        width: 46px;
+        height: 24px;
+        vertical-align: text-top;
       }
     }
   }

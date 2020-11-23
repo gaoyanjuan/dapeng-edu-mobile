@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="showPopup.show" round>
+  <van-popup v-model="showPopup.show" round :transition-appear="true">
     <div class="popup-warp">
       <div class="popup-head-photo">请完善用户名，让老师与您更好的交流~</div>
       <div class="popup-body-input">
@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name:'Username-Popup',
   props:{
@@ -24,6 +25,11 @@ export default {
     submitStatus:false
   }),
   methods:{
+    ...mapActions({
+      // 完善用户名
+      editUserInfo: 'user/editUserInfo'
+    }),
+
     onSubmit() {
       if(this.submitStatus) {
         let res = true
@@ -48,7 +54,10 @@ export default {
           res = false
         }
 
-        if(res) {this.$emit('submit')}
+        if(res) {
+          this.editUserInfo({...this.showPopup.info,loginName: this.username})
+          this.$emit('submit')
+        }
       }
     },
     /** 监听Input  */

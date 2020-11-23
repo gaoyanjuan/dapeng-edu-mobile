@@ -3,7 +3,7 @@
 
     <!--菜单导航 -->
     <van-tabs v-model="activeName" sticky @click="onMenusClick" @scroll="onScrollEvent">
-      <van-tab title="关注" name="attention" to="/attention">
+      <van-tab title="关注" name="attention" :to="userInfo ? '/attention': '/login'">
         <template v-if="$route.name === 'index-attention'">
           <nuxt-child />
         </template>
@@ -39,16 +39,16 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <!-- <van-tab title="阅读" name="reading" to="/reading">
+      <van-tab title="阅读" name="reading" to="/reading">
         <template v-if="$route.name === 'index-reading'">
           <nuxt-child />
         </template>
-      </van-tab> -->
-      <!-- <van-tab title="视频" name="video" to="/video">
+      </van-tab>
+      <van-tab title="视频" name="video" to="/video">
         <template v-if="$route.name === 'index-video'">
           <nuxt-child />
         </template>
-      </van-tab> -->
+      </van-tab>
       <van-tab title="小视频" name="small-video">
         <template #title>
           <div class="tab-drop-menus-wrap">
@@ -132,6 +132,12 @@ export default {
     tabDown: require('@/assets/icons/navbar/nav-arrow-down.png'),
   }),
 
+  computed: {
+    ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    })
+  },
+
   async asyncData ({route, store, error}) {
     try {
       if (store.getters['banner/bannerListGetters'].length === 0) {
@@ -164,6 +170,7 @@ export default {
       this.activeName = 'works'
     } else if (to.name === 'index-small-video') {
       this.activeName = 'small-video'
+<<<<<<< HEAD
     }
     // else if (to.name === 'index-video') {
     //   this.activeName = 'video'
@@ -171,6 +178,13 @@ export default {
     // else if (to.name === 'index-reading') {
     //   this.activeName = 'reading'
     // }
+=======
+    } else if (to.name === 'index-video') {
+      this.activeName = 'video'
+    } else if (to.name === 'index-reading') {
+      this.activeName = 'reading'
+    } 
+>>>>>>> 2e2259934326eecb6c3bb01b215d762c2d344d29
     // else if (to.name === 'index-part-time-task') {
     //   this.activeName = 'part-time-task'
     // }

@@ -72,7 +72,11 @@ export default {
     account: require('@/assets/icons/register/account.png'),
     safety: require('@/assets/icons/register/safety.png'),
   }),
+<<<<<<< HEAD
   mounted () {},
+=======
+
+>>>>>>> 2e2259934326eecb6c3bb01b215d762c2d344d29
   watch:{
     mobile(n, o) {
       if (!new RegExp(/^1[3-9][0-9]\d{8}$/).test(n)) {
@@ -103,10 +107,14 @@ export default {
   },
   methods:{
     ...mapActions('user', [
+<<<<<<< HEAD
       'checkRegisterAble',
       'getUserDetail',
       'sendCode',
       'checkCode'
+=======
+      'checkRegisterAble'
+>>>>>>> 2e2259934326eecb6c3bb01b215d762c2d344d29
     ]),
     // 快速注册
     onRegister() {

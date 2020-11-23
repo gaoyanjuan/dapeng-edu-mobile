@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import qs from 'querystring'
+=======
+import qs from 'qs'
+>>>>>>> 2e2259934326eecb6c3bb01b215d762c2d344d29
 
 export const state = () => ({
   accessToken: null,
@@ -9,7 +13,7 @@ export const state = () => ({
     recommendCount: 0,
     likeCount: 0,
   },
-  studentCode: null,
+  oldUserInfo: null,
   userFollow: {
     list: [],
     status: 'loading',
@@ -60,6 +64,170 @@ export const state = () => ({
       size: process.env.global.pageSize
     }
   },
+  publishDynamic: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  publishGrowth: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  publishReading: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  publishVideo: {
+    list: [],
+    status: 'loading',
+    pageInfo: {
+      count: 0,
+      number: 0,
+      pages: 1,
+      size: process.env.global.pageSize
+    }
+  },
+  userLikes: {
+    homework: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    works: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    life: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    activity_post: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    article: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    movie: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    }
+  },
+  userFavorites: {
+    homework: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    works: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    life: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    activity_post: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    article: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    },
+    movie: {
+      list: [],
+      status: 'loading',
+      pageInfo: {
+        count: 0,
+        number: 0,
+        pages: 1,
+        size: process.env.global.pageSize
+      }
+    }
+  },
 })
 
 export const mutations = {
@@ -68,7 +236,9 @@ export const mutations = {
     state.accessToken = payload
   },
   appendUserInfo (state, payload) {
-    state.userInfo = payload
+    if (payload) {
+      state.userInfo = { ...payload, nickname: payload.nickname || payload.nickName }
+    }
   },
   appendUserTrends (state, payload) {
     state.userTrends = payload.data
@@ -85,8 +255,8 @@ export const mutations = {
       state.userFollow.status = 'load'
     }
   },
-  appendStudentCode(state, payload) { 
-    state.studentCode = payload.data.studentSatusId
+  appendOldUserInfo(state, payload) { 
+    state.oldUserInfo = payload.data
   },
   clearUserFollow (state) {
     state.userFollow.list = []
@@ -144,7 +314,11 @@ export const mutations = {
     state.publishHomework.status = 'loading'
   },
   appendPublishWorks(state, payload) {
-    state.publishWorks.list = state.publishWorks.list.concat(payload.data)
+    if(payload.data instanceof Array) {
+      state.publishWorks.list = state.publishWorks.list.concat(payload.data)
+    }else {
+      state.publishWorks.list = []
+    }
     state.publishWorks.pageInfo = payload.pageInfo
     if (payload.data.length < state.publishWorks.pageInfo.size) {
       state.publishWorks.status = 'over'
@@ -157,22 +331,159 @@ export const mutations = {
     state.publishWorks.pageInfo.pages = 1
     state.publishWorks.status = 'loading'
   },
+  appendPublishDynamic(state, payload) {
+    state.publishDynamic.list = state.publishDynamic.list.concat(payload.data)
+    state.publishDynamic.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishDynamic.pageInfo.size) {
+      state.publishDynamic.status = 'over'
+    } else {
+      state.publishDynamic.status = 'load'
+    }
+  },
+  clearPublishDynamic (state) {
+    state.publishDynamic.list = []
+    state.publishDynamic.pageInfo.pages = 1
+    state.publishDynamic.status = 'loading'
+  },
+  appendPublishGrowth(state, payload) {
+    state.publishGrowth.list = state.publishGrowth.list.concat(payload.data)
+    state.publishGrowth.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishGrowth.pageInfo.size) {
+      state.publishGrowth.status = 'over'
+    } else {
+      state.publishGrowth.status = 'load'
+    }
+  },
+  clearPublishGrowth (state) {
+    state.publishGrowth.list = []
+    state.publishGrowth.pageInfo.pages = 1
+    state.publishGrowth.status = 'loading'
+  },
+  appendPublishReading(state, payload) {
+    state.publishReading.list = state.publishReading.list.concat(payload.data)
+    state.publishReading.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishReading.pageInfo.size) {
+      state.publishReading.status = 'over'
+    } else {
+      state.publishReading.status = 'load'
+    }
+  },
+  clearPublishReading (state) {
+    state.publishReading.list = []
+    state.publishReading.pageInfo.pages = 1
+    state.publishReading.status = 'loading'
+  },
+  appendPublishVideo(state, payload) {
+    state.publishVideo.list = state.publishVideo.list.concat(payload.data)
+    state.publishVideo.pageInfo = payload.pageInfo
+    if (payload.data.length < state.publishVideo.pageInfo.size) {
+      state.publishVideo.status = 'over'
+    } else {
+      state.publishVideo.status = 'load'
+    }
+  },
+  clearPublishVideo (state) {
+    state.publishVideo.list = []
+    state.publishVideo.pageInfo.pages = 1
+    state.publishVideo.status = 'loading'
+  },
+  appendUserLikes(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userLikes[type].list = state.userLikes[type].list.concat(payload.res.data)
+    state.userLikes[type].pageInfo = payload.res.pageInfo
+    if (payload.res.data.length < state.userLikes[type].pageInfo.size) {
+      state.userLikes[type].status = 'over'
+    } else {
+      state.userLikes[type].status = 'load'
+    }
+  },
+  clearUserLikes (state) {
+    state.userLikes.homework.list = []
+    state.userLikes.homework.pageInfo.pages = 1
+    state.userLikes.homework.status = 'loading'
+    state.userLikes.works.list = []
+    state.userLikes.works.pageInfo.pages = 1
+    state.userLikes.works.status = 'loading'
+    state.userLikes.life.list = []
+    state.userLikes.life.pageInfo.pages = 1
+    state.userLikes.life.status = 'loading'
+    state.userLikes.activity_post.list = []
+    state.userLikes.activity_post.pageInfo.pages = 1
+    state.userLikes.activity_post.status = 'loading'
+    state.userLikes.article.list = []
+    state.userLikes.article.pageInfo.pages = 1
+    state.userLikes.article.status = 'loading'
+    state.userLikes.movie.list = []
+    state.userLikes.movie.pageInfo.pages = 1
+    state.userLikes.movie.status = 'loading'
+  },
+  deleteUserLikes (state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    let index = payload.index
+    state.userLikes[type].list.splice(index, 1)
+  },
+  appendUserFavorites(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userFavorites[type].list = state.userFavorites[type].list.concat(payload.res.data)
+    state.userFavorites[type].pageInfo = payload.res.pageInfo
+    if (payload.res.data.length < state.userFavorites[type].pageInfo.size) {
+      state.userFavorites[type].status = 'over'
+    } else {
+      state.userFavorites[type].status = 'load'
+    }
+  },
+  clearUserFavorites (state) {
+    state.userFavorites.homework.list = []
+    state.userFavorites.homework.pageInfo.pages = 1
+    state.userFavorites.homework.status = 'loading'
+    state.userFavorites.works.list = []
+    state.userFavorites.works.pageInfo.pages = 1
+    state.userFavorites.works.status = 'loading'
+    state.userFavorites.life.list = []
+    state.userFavorites.life.pageInfo.pages = 1
+    state.userFavorites.life.status = 'loading'
+    state.userFavorites.activity_post.list = []
+    state.userFavorites.activity_post.pageInfo.pages = 1
+    state.userFavorites.activity_post.status = 'loading'
+    state.userFavorites.article.list = []
+    state.userFavorites.article.pageInfo.pages = 1
+    state.userFavorites.article.status = 'loading'
+    state.userFavorites.movie.list = []
+    state.userFavorites.movie.pageInfo.pages = 1
+    state.userFavorites.movie.status = 'loading'
+  },
+  deleteUserFavorites(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    let index = payload.index
+    state.userFavorites[type].list.splice(index, 1)
+  }
 }
 
 export const actions = {
+  async getUserDetails ({ commit, state }) {
+    const res = await this.$axios.get('old/users/details')
+    commit('appendUserInfo', res.data)
+    return res
+  },
   // 查询用户信息
   async appendUserInfo ({ commit }, params) {
     commit('appendUserInfo', params)
+  },
+  // 修改信息
+  async editUserInfo ({ commit }, params) {
+    const res = await this.$axios.patch('old/users', params)
+    return res
+  },
+  // 获取用户信息【主要是获取学籍号】
+  async getUserDetail({ commit }, params) {
+    const data = await this.$axios.get(`/old/users/details`)
+    commit('appendOldUserInfo', data)
+    return data
   },
   // 检查用户是否可以注册
   async checkRegisterAble (state, params) {
     const data = await this.$axios.get(`/old/users/account-verify?${qs.stringify(params)}`)
     return data
-  },
-  // 获取用户信息【主要是获取学籍号】
-  async getUserDetail({ commit }, params) {
-    const data = await this.$axios.get(`/old/users/details`)
-    commit('appendStudentCode', data)
   },
   // 获取用户互动数据
   async appendUserTrends ({ commit }, params) {
@@ -269,6 +580,84 @@ export const actions = {
     const res = await this.$axios.delete(`/works/${params.id}`)
     return res
   },
+  // 用户的发布动态列表
+  async appendPublishDynamic ({ commit }, params) {
+    const res = await this.$axios.get('/users/dynamics', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishDynamic', res)
+    return res
+  },
+  // 删除动态
+  async deleteDynamics ({ commit }, params) {
+    const res = await this.$axios.delete(`/dynamics/${params.id}`)
+    return res
+  },
+  // 用户的活动帖子列表
+  async appendPublishGrowth ({ commit }, params) {
+    const res = await this.$axios.get('users/posts', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishGrowth', res)
+    return res
+  },
+  // 删除活动帖子
+  async deletePosts ({ commit }, params) {
+    const res = await this.$axios.delete(`/posts/${params.id}`)
+    return res
+  },
+  // 查询用户的喜欢列表
+  async appendUserLikes ({ commit }, params) {
+    const res = await this.$axios.get('users/likes', {
+      params: {
+        ...params
+      }
+    })
+    const payload = {
+      type: params.type,
+      res: res
+    }
+    commit('appendUserLikes', payload)
+    return payload
+  },
+  // 查询用户的收藏列表
+  async appendUserFavorites ({ commit }, params) {
+    const res = await this.$axios.get('users/favorites', {
+      params: {
+        ...params
+      }
+    })
+    const payload = {
+      type: params.type,
+      res: res
+    }
+    commit('appendUserFavorites', payload)
+    return payload
+  },
+  // 用户的发布阅读列表
+  async appendPublishReading ({ commit }, params) {
+    const res = await this.$axios.get('users/articles', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishReading', res)
+    return res
+  },
+  // 用户的发布视频列表
+  async appendPublishVideo ({ commit }, params) {
+    const res = await this.$axios.get('users/movies', {
+      params: {
+        ...params
+      }
+    })
+    commit('appendPublishVideo', res)
+    return res
+  },
 }
 
 export const getters = {
@@ -281,8 +670,8 @@ export const getters = {
   userTrendsGetters (state) {
     return state.userTrends
   },
-  studentCodeGetters (state) {
-    return state.studentCode
+  oldUserInfoGetters (state) {
+    return state.oldUserInfo
   },
   userFollowGetters(state) {
     return state.userFollow
@@ -298,5 +687,23 @@ export const getters = {
   },
   publishWorksGetters(state) {
     return state.publishWorks
+  },
+  publishDynamicGetters(state) {
+    return state.publishDynamic
+  },
+  publishGrowthGetters(state) {
+    return state.publishGrowth
+  },
+  userLikesGetters(state) {
+    return state.userLikes
+  },
+  userFavoritesGetters(state) {
+    return state.userFavorites
+  },
+  publishReadingGetters(state) {
+    return state.publishReading
+  },
+  publishVideoGetters(state) {
+    return state.publishVideo
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="comment.show" class="comment-popup-wrap">
+  <van-popup v-model="comment.show" class="comment-popup-wrap" :transition-appear="true">
 
     <!-- Comment Header Block -->
     <section class="comment-popup-header">
@@ -8,7 +8,7 @@
 
     <!-- Comment Body Block -->
     <section class="comment-popup-body">
-      <van-field v-model="content" rows="5" :border="false" type="textarea" maxlength="150" autofocus placeholder="留下评论吧…"></van-field>
+      <van-field v-model="content" rows="5" :border="false" type="textarea" maxlength="150" autofocus :placeholder="placeholderText"></van-field>
     </section>
 
     <!-- Comment Body Block -->
@@ -47,6 +47,12 @@ export default {
     comment: {
       type: Object,
       default: {}
+    },
+    replyUser: {
+      type: Object,
+      default: () => {
+        return null
+      }
     }
   },
   data:() => ({
@@ -56,7 +62,7 @@ export default {
     swiper: null,
     showEmoji: false,
     emojiList: emoji,
-
+    placeholderText: '留下评论吧…',
     // 表情轮播配置
     emojiSwiper: {
       slidesPerView: 1,
@@ -74,6 +80,11 @@ export default {
     emoji:require('@/assets/icons/comment/emoji.png'),
     emojiActive:require('@/assets/icons/comment/emoji-active.png'),
   }),
+  created () {
+    if (this.replyUser) {
+      this.placeholderText = `回复 ${this.replyUser.nickname}`
+    }
+  },
   methods:{
     // 打开表情轮播
     openEmjoi () {
@@ -91,12 +102,18 @@ export default {
         this.content += `[${emoji.title}]`
       }
     },
-
+    resetPopup () {
+      this.content = ''
+      this.comment.show = false
+    },
     // 发送事件
     onSendClick() {
+      this.content = this.content.trim()
       if(this.content.length) {
-        this.comment.show = false
         this.$emit('sendComment', this.content)
+      } else {
+        this.$toast('评论内容不可为空')
+        return false
       }
     }
   }

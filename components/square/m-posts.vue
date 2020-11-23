@@ -5,7 +5,7 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :submit-time="modifiedTime"
-        :userInfo="listItemData.user"
+        :userInfo="user"
         :square-type="squareType"
         :attention="listItemData.isAttention"
         v-on:onOpenMenus="onShowMenus"
@@ -58,7 +58,7 @@
           <!-- 评论 -->
           <div class="fot__rh__commernt--wrap" @click="openComment">
             <img class="fot__comment" :src="comment" alt="comment" />
-            <span class="fot__nums">{{ listItemData.commentCount | studentsCount }}</span>
+            <span class="fot__nums">{{ commentCount | studentsCount }}</span>
           </div>
           <!-- 喜欢 -->
           <div class="fot__rh__love--wrap" @click="onLove">
@@ -68,21 +68,21 @@
           </div>
           <!-- 收藏 -->
           <div class="fot__rh__star--wrap" @click="onCollect">
-            <img class="fot__star" :src="listItemData.isCollection ? unStar : star" alt="star" />
+            <img class="fot__star" :src="isCollection ? unStar : star" alt="star" />
           </div>
         </div>
       </div>
     </van-skeleton>
 
     <!-- 帖子 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to='`/copy-form?taskId=${listItemData.task.taskId}&id=${listItemData.user.userId}`' class="menus__popup__item">Ta抄作业</nuxt-link>
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
+      <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to="`/copy-form?taskId=${listItemData.task ? listItemData.task.taskId : '' }&id=${listItemData.user.userId ? listItemData.user: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
@@ -95,6 +95,15 @@
       @onLove="onLove"
       @onCollect="onCollect"
     />
+
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+    />
+
+    <!-- 评论框弹层 -->
+    <m-comment-popup ref="commentPopup" :comment="commentPop" @sendComment="sendComment"/>
   </div>
 </template>
 
@@ -113,7 +122,7 @@ export default {
     },
     propSquareType: {
       type: String,
-      default: '作业'
+      default: 'HOMEWORK'
     },
     modifiedTime: {
       type: Number,
@@ -137,6 +146,9 @@ export default {
           user: {
             nickname: '佚名',
             avatar: ''
+          },
+          task: {
+            taskId: ''
           }
         }
       }
@@ -147,15 +159,20 @@ export default {
     }
   },
   data: () => ({
+    commentPop: { show: false },
     loading: true,
     showMenusPopup:false,
     isPraise: false,
+    isCollection: false,
     praiseCount: 0,
+    commentCount: 0,
     // 图片预览
     imagePreview: {
       show: false,
       images: [],
       startPosition: 1,
+      isPraise: false,
+      isCollection: false,
       commentNums:0,
       loveNums:0
     },
@@ -164,18 +181,26 @@ export default {
     star: require('@/assets/icons/posts/posts-star.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
-    showPublishMenusPopup: false
+    showPublishMenusPopup: false,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed: {
+    user () {
+      if (this.listItemData) {
+        return this.listItemData.user
+      }
+    },
     squareType () {
       if (this.propSquareType === 'WORKS') {
         return '作品'
       } else if (this.propSquareType === 'HOMEWORK') {
         return '作业'
       } else if (this.propSquareType === 'LIFE') {
-        return '生活'
+        return '动态'
       } else if (this.propSquareType === 'ACTIVITY_POST') {
-        return '成长'
+        return '活动'
       }
     },
     typePath () {
@@ -191,8 +216,19 @@ export default {
     },
   },
   created () {
-    this.praiseCount = this.listItemData.praiseCount
-    this.isPraise = this.listItemData.isPraise
+    if (this.listItemData) {
+      this.commentCount = this.listItemData.commentCount
+      this.praiseCount = this.listItemData.praiseCount
+      this.isPraise = this.listItemData.isPraise
+      this.isCollection = this.listItemData.isCollection
+    }
+  },
+  watch: {
+    'listItemData': function (newVal, oldVal) {
+      this.praiseCount = newVal.praiseCount
+      this.isPraise = newVal.isPraise
+      this.isCollection = newVal.isCollection
+    },
   },
   mounted() {
     setTimeout(() => {
@@ -203,14 +239,25 @@ export default {
     ...mapActions({
       queryLike: 'comment/queryLike',
       queryUnLike: 'comment/queryUnLike',
+      queryCollection: 'comment/queryCollection',
+      queryDeleteCollection: 'comment/queryDeleteCollection',
+      appendNewComment: 'comment/appendNewComment',
       deleteHomework: 'user/deleteHomework',
       appendPublishHomework: 'user/appendPublishHomework',
       deleteWorks: 'user/deleteWorks',
-      appendPublishWorks: 'user/appendPublishWorks'
+      appendPublishWorks: 'user/appendPublishWorks',
+      deleteDynamics: 'user/deleteDynamics',
+      appendPublishDynamic: 'user/appendPublishDynamic',
+      deletePosts: 'user/deletePosts',
+      appendPublishGrowth: 'user/appendPublishGrowth'
     }),
     ...mapMutations('user', [
       'clearPublishHomework',
-      'clearPublishWorks'
+      'clearPublishWorks',
+      'clearPublishDynamic',
+      'clearPublishGrowth',
+      'deleteUserLikes',
+      'deleteUserFavorites'
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
@@ -232,11 +279,15 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
-      this.imagePreview.images = this.handleFilterImage(this.listItemData.imgInfo)
-      this.imagePreview.startPosition = index
-      this.imagePreview.loveNums = this.listItemData.praisesCount
-      this.imagePreview.commentNums = this.listItemData.commentCount
-      this.imagePreview.show = true
+      this.imagePreview = {
+        images: this.handleFilterImage(this.listItemData.imgInfo),
+        startPosition: index,
+        isPraise: this.isPraise,
+        isCollection: this.isCollection,
+        praiseCount: this.praiseCount,
+        commentCount: this.commentCount,
+        show: true
+      }
     },
     // 图片提取器
     handleFilterImage(images) {
@@ -254,29 +305,116 @@ export default {
       }
       this.showMenusPopup = !this.showMenusPopup
     },
+    sendComment (text) {
+      this.appendNewComment({
+        topicId: this.listItemData.id,
+        topicType: this.propSquareType,
+        content: text,
+        label: {
+          contentType: this.listItemData.type
+        }
+      })
+      .then((res) => {
+        this.$refs.commentPopup.resetPopup()
+        if (!res.data.highRisk) {
+          this.$toast('评论成功')
+        }
+        this.commentCount += 1
+      })
+      .catch((err) => {
+        if (err && err.data && err.data.message) {
+          this.$toast(err.data.message)
+        }
+      })
+    },
      // 评论操作
     openComment() {
-      console.log('comment')
+      if(!this.$login()) {
+        return 
+      }
+      this.commentPop.show = true
     },
     // 收藏
     onCollect() {
-      console.log('collect')
+      if(!this.$login()) {
+        return 
+      }
+      if (this.isCollection) {
+        this.isCollection = false
+        this.imagePreview = {
+          ...this.imagePreview,
+          isCollection: this.isCollection
+        }
+        this.queryDeleteCollection({
+          id: this.listItemData.id,
+          type: this.propSquareType
+        }).then(()=>{
+          if (this.pageName === 'userCollection') {
+            let payload = {
+              type: this.propSquareType,
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
+          
+        })
+        .catch(() => {
+          this.isCollection = true
+        })
+      } else {
+        this.isCollection = true
+        this.imagePreview = {
+          ...this.imagePreview,
+          isCollection: this.isCollection
+        }
+        this.queryCollection({
+          id: this.listItemData.id,
+          type: this.propSquareType,
+          createdId: this.listItemData.user.userId,
+          contentType: this.listItemData.type
+
+        }).catch(() => {
+          this.isCollection = false
+        })
+      }
     },
     //喜欢操作
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
+        this.imagePreview = {
+          ...this.imagePreview,
+          praiseCount: this.praiseCount,
+          isPraise: this.isPraise
+        }
         this.queryUnLike({
           id: this.listItemData.id,
           type: this.propSquareType
-        }).catch(() => {
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: this.propSquareType,
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
+        })
+        .catch(() => {
           this.isPraise = true
           this.praiseCount += 1
         })
       } else {
         this.isPraise = true
         this.praiseCount += 1
+        this.imagePreview = {
+          ...this.imagePreview,
+          praiseCount: this.praiseCount,
+          isPraise: this.isPraise
+        }
         this.queryLike({
           id: this.listItemData.id,
           type: this.propSquareType,
@@ -330,6 +468,10 @@ export default {
     },
     // 删除
     deleteItem() {
+      this.deleteDialogParams.show = true
+      this.showPublishMenusPopup = false
+    },
+    confirmDelete() {
       if(this.propSquareType === 'HOMEWORK') {
         this.deleteHomework({ id: this.listItemData.id })
         .then(() => {
@@ -352,17 +494,39 @@ export default {
             size: 10
           })
         })
-        
+      }else if(this.propSquareType === 'LIFE') {
+        this.deleteDynamics({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishDynamic()
+          this.appendPublishDynamic({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
+      }else if(this.propSquareType === 'ACTIVITY_POST') {
+        this.deletePosts({ id: this.listItemData.id })
+        .then(() => {
+          this.$toast('删除成功')
+          this.clearPublishGrowth()
+          this.appendPublishGrowth({
+            userId: this.$route.query.userId,
+            page: 1,
+            size: 10
+          })
+        })
       }
+      this.deleteDialogParams.show = false
     },
     // 编辑作业
     editHomework() {
-      console.log(this.listItemData)
       this.$router.push({
         path: '/submit',
         query: {
+          action: 'edit',
           type: this.listItemData.courseType,
-          params: this.listItemData
+          id: this.listItemData.id
         }
       })
     }
@@ -500,6 +664,7 @@ export default {
 .fot__rh--wrap .fot__rh__star--wrap {
   width: 24px;
   height: 24px;
+  line-height: 24px;
 }
 
 .fot__rh--wrap .fot__nums {

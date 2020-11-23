@@ -9,11 +9,11 @@
       </div>
       
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName }} </span>
-        <p v-else class="not-login-wrap">
-          <span @click="toLogin">登陆</span><span>/</span><span>注册</span>
-        </p>
-        <span v-if="studentCodeGetters" class="user-code">学籍号：{{ studentCodeGetters }}</span>
+        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickName }} </span>
+        <p v-else class="not-login-wrap"><span @click="toLogin">登陆</span><span>/</span><span @click="toRegister">注册</span></p>
+        <template v-if="oldUserInfoGetters">
+          <span v-if="oldUserInfoGetters.studentSatusId" class="user-code">学籍号：{{ oldUserInfoGetters.studentSatusId }}</span>
+        </template>
       </div>
     </div>
 
@@ -42,12 +42,12 @@
 
     <!-- 用户数据：“我的喜欢和收藏” -->
     <div class="mine-user-remark-wrap">
-      <div tag="div" class="user-remark-left-side" to="/personal-center/personal-like">
+      <div class="user-remark-left-side" @click="toMyLike">
         <img class="user-remark-icon" :src="navLike" alt="" />
         <span class="user-remark-txt">我的喜欢</span>
       </div>
 
-      <div tag="div" class="user-remark-right-side" to="/personal-center/personal-collection">
+      <div class="user-remark-right-side" @click="toMyCollection">
         <img class="user-remark-icon" :src="navStar" alt="" />
         <span class="user-remark-txt">我的收藏</span>
       </div>
@@ -98,8 +98,8 @@ export default {
       {txt:'作品',name:'works',icon: require('@/assets/icons/mine/nav-works.png')},
       {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
       {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
-      // {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
-      // {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
+      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
+      {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
     ]
   }),
@@ -107,12 +107,11 @@ export default {
     if(this.userInfoGetters && this.userInfoGetters.userId ) {
       this.appendUserTrends({ userId: this.userInfoGetters.userId })
     }
-    
   },
   computed:{
     ...mapGetters('user',[
       'userInfoGetters',
-      'studentCodeGetters',
+      'oldUserInfoGetters',
       'userTrendsGetters'
     ])
   },
@@ -120,26 +119,13 @@ export default {
     ...mapActions('user', [
       'appendUserTrends'
     ]),
-    // 跳转登录页
-    toLogin () {
-      this.$router.push('/login')
-    },
 
     // 打开我的喜欢弹框
     openLovePopup (){
+      if (!this.$login()) {
+        return
+      }
       this.lovePopup.show = true
-    },
-
-    // 进入发布页面
-    enterPublishPage(params) {
-      this.$router.push({
-        path: '/personal-center/personal-publish',
-        query:{ 
-          type: params.name,
-          userId: this.userInfoGetters.userId
-          
-        }
-      })
     },
 
     // 退出登录
@@ -173,31 +159,82 @@ export default {
         location.href = 'https://enroll.dapengjiaoyu.com'
       }, 1500)
     },
-    toAttention() {
-        this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            userId: this.userInfoGetters.userId
-          }
-        })
+
+    // 跳转登录页
+    toLogin () {
+      this.$router.push('/login')
     },
-    toFans() {
-        this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            type: 'fans',
-            userId: this.userInfoGetters.userId
-          }
-        })
+
+    // 跳转注册页
+    toRegister () {
+      this.$router.push('/register')
     },
-    toRecommend() {
+
+    // 进入发布页面
+    enterPublishPage(params) {
+      if (!this.$login()) return
+      
       this.$router.push({
-          path: '/personal-center/personal-user',
-          query: {
-            type: 'recommend',
-            userId: this.userInfoGetters.userId
-          }
-        })
+        path: '/personal-center/personal-publish',
+        query:{ 
+          type: params.name,
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toAttention() {
+      if (!this.$login()) return
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toFans() {
+      if (!this.$login()) return
+
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          type: 'fans',
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toRecommend() {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/personal-user',
+        query: {
+          type: 'recommend',
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toMyLike() {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/personal-like',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+
+    toMyCollection() {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/personal-collection',
+        query: {
+          userId: this.userInfoGetters.userId
+        }
+      })
     }
   }
 }
@@ -283,7 +320,7 @@ export default {
 }
 
 .mine-user-data-wrap .data-item-column {
-  max-width: 60px;
+  // max-width: 60px;
   height: 17px;
   display: flex;
   align-items: center;
@@ -295,7 +332,7 @@ export default {
   }
 
   & .data-item-column-nums {
-    max-width: 20px;
+    // max-width: 20px;
     font-size: 12px;
     font-family: @dp-font-semibold;
     font-weight: 600;

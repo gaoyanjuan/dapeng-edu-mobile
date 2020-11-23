@@ -5,14 +5,7 @@
         v-for="(res, index) in publishHomeworkGetters.list"
         :key="index"
         :commentList="res.comments"
-        :dataType="res.type"
         :courseType="res.courseType"
-        :user="res.user"
-        :college="res.college"
-        :recommendType="res.recommendType"
-        :task="res.task"
-        :content="res.content"
-        :isAttention="res.isAttention"
         :modifiedTime="res.lastModifiedTime"
         :listItemData="res"
         :path="navRoute"
@@ -40,13 +33,14 @@ export default {
     finishedText:'没有更多了',
     navRoute:'/details/homework-page-details',
     blank: require('@/assets/icons/blank/have-no-homework.png'),
-    pageName: 'myHomework'
+    pageName: 'myHomework',
+    currentPage: 1
   }),
   mounted() {
     if (this.$route.query.userId && this.publishHomeworkGetters.list.length === 0) {
       this.appendPublishHomework({
           userId: this.$route.query.userId,
-          page: 1,
+          page: this.currentPage,
           size: 10
       })
     }
@@ -85,7 +79,7 @@ export default {
       }
       
       if (this.publishHomeworkGetters.status === 'loading') return false
-      const newPage = this.publishHomeworkGetters.pageInfo.number + 1
+      const newPage = this.currentPage + 1
       this.appendPublishHomework({
         userId: this.$route.query.userId,
         page: newPage,

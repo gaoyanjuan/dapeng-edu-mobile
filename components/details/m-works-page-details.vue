@@ -1,12 +1,29 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="works.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
+    <m-navbar 
+      :attention="works.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="works.type === 'TEXT' ? '作品详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="works.img" :photoInfo="works.imgInfo" :item="works"/>
+
+      <!-- Gallery TEXT:图文-->
+      <m-gallery
+        v-if="works.type === 'TEXT'"
+        :photos="works.img"
+        :photoInfo="works.imgInfo"
+        :item="works"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
+
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="works.type === 'VIDEO'" :video="works.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -45,93 +62,82 @@
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
-      <m-tabs>
-        <m-tab-item :selected="commentSelected" :count="works.commentCount" name="评论">
-          <m-comment-list />
-        </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="works.praiseCount">
-          <m-like-list />
-        </m-tab-item>
-      </m-tabs>
+      <m-details-footer
+        :contentType="works.type"
+        topicType="WORKS"
+        :detailData="works"
+        ref="detailsFooter"
+      />
     </div>
-
-    <!-- 底部评论框 -->
-    <div class="details-footer-comment-wrap">
-      <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
-      <img class="footer-icon-like" :src="like" alt="like" @click="onLikeEvent"/>
-      <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
-      <img class="footer-icon-collect" :src="collect" alt="collect" @click="onCollectEvent"/>
-    </div>
-
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click="deleteWork">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
-
-    <!-- 评论框弹层 -->
-    <m-comment-popup :comment="commentPop" @sendComment="sendComment"/>
+    
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import mSmallVideo from '../m-small-video.vue'
 export default {
+  components: { mSmallVideo },
   name:'Details',
   data:() => ({
-    title:'作品详情',
     commentSelected: true,
     likeSelected: false,
     showMenusPopup: false,
-    commentPop: { show: false },
-    comment: require('@/assets/icons/posts/posts-comment.png'),
-    like: require('@/assets/icons/posts/posts-love.png'),
-    collect: require('@/assets/icons/posts/posts-star.png'),
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed:{
     ...mapGetters({
-      works: 'work/worksDetailsGetters'
-    })
-  },
-  created () {
-    if (this.$route.query.type && this.$route.query.type === 'like') {
-      this.likeSelected = true
-      this.commentSelected = false
+      works: 'work/worksDetailsGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    showRightMenuFlag() {
+      if(this.works.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+      return true
+      } else {
+        return false
+      }
     }
   },
-  mounted () {
-    // 详情页跳转定位
-    // if (this.$route.fullPath.includes('report')) {
-    //   this.$nextTick(() => {
-    //     const element = document.getElementById('report')
-    //     element.scrollIntoView({
-    //       behavior: 'auto'
-    //     })
-    //   })
-    // }
-  },
   methods: {
+    ...mapActions({
+      deleteWorks: 'user/deleteWorks',
+    }),
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
-    
-    // 打开评论弹窗
-    openComment() {
-      this.commentPop.show = true
+    // 删除作品
+    deleteWork() {
+      this.showMenusPopup = false
+      this.deleteDialogParams.show = true
     },
-
-    // 删除作业
-    deleteWork() {},
-
-    // 喜欢事件
-    onLikeEvent() { console.log('like') },
-
-    // 收藏事件
-    onCollectEvent() { console.log('collect') },
-
-    // 评论发送
-    sendComment() { console.log('发送成功') }
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
+    },
+    confirmDelete() {
+      this.deleteWorks({ id: this.works.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    }
   }
 }
 </script>
@@ -203,60 +209,10 @@ export default {
   margin-top: 12px;
 }
 
-/** footer comment */
-.details-footer-comment-wrap {
-  width: 375px;
-  height: 41px;
-
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-
-  background-color: @dp-white;
-  background-image: url('~@/assets/icons/comment/footer-comment-bg.png');
-  background-repeat: no-repeat;
-  background-size: 375px 41px;
-  background-position: center;
-
-  .footer-icon-like,
-  .footer-icon-comment,
-  .footer-icon-collect {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-  }
-  
-  .footer-icon-like,
-  .footer-icon-comment {
-    margin-right: 20px;
-  }
-}
-
-.details-footer-comment-wrap .footer-input {
-  width: 215px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 18px;
-  margin-right: 16px;
-  background: #F7F7F7;
-  border-radius: 18px;
-  font-size: 12px;
-  font-family: @regular;
-  font-weight: 400;
-  color: #A6AEA9;
-  cursor: pointer;
-}
-
 /** menus-popup */
 .p-details /deep/.van-popup {
   width: 284px;
-  height: 92px;
+  // height: 92px;
   overflow: hidden;
 }
 

@@ -12,7 +12,12 @@
     <div class="container">
       <!-- 作业描述 -->
       <section class="homework-desc-row">
-        <div v-if="showTitle" class="title">作业标题·作业标题</div>
+
+        <!-- 标题 -->
+        <div v-if="showTitle" class="title">
+          <template v-if="requirement"> {{ requirement.title }} </template>
+          <template v-else-if="homeworkDetails"> {{homeworkDetails.task.title}} </template>
+        </div>
 
         <!-- 富文本 -->
         <div class="rich-input">
@@ -59,7 +64,10 @@
       </section>
 
       <!-- 作业类型标签  -->
-      <section v-if="submitType === 'VIP' || submitType === 'TEST'" class="homework-label-row">设计</section>
+      <section v-if="submitType === 'VIP' || submitType === 'TEST'" class="homework-label-row">
+        <template v-if="requirement"> {{ requirement.college | filterCollageName }} </template>
+        <template v-else-if="homeworkDetails"> {{ homeworkDetails.college | filterCollageName }} </template>
+      </section>
 
       <!-- 作品--添加学院 -->
       <section v-if="submitType === 'WORKS'" class="works-college-wrap">
@@ -98,6 +106,10 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import Client from '@/utils/client'
+import { randomFileName } from '@/utils/util'
+import { formatSlashDate } from '@/plugins/filters'
 export default {
   name:'Submit',
   layout:'navbar',
@@ -114,6 +126,8 @@ export default {
     contactNumber:'',
     // 图片上传列表
     fileList: [],
+    // 处理后的图片
+    imageInfo: [],
     // 可提交状态
     submitStatus: false,
     // 上传状态
@@ -125,9 +139,9 @@ export default {
     // 提交作业安全锁
     submitLock: true,
     // 完善用户名状态
-    usernamePop:{ show: false },
+    usernamePop:{ show: false, info: null},
     // 作业号弹窗状态
-    homeworkNumberPop: { show: false },
+    homeworkNumberPop: { show: false, jobNummer: null },
     // 唤起APP
     openAppPop: { show: false },
     // 图片预览
@@ -138,14 +152,9 @@ export default {
     },
     // 默认选择的学院
     collegeIndex: null,
-    // 学院列表
-    collegeList:[
-      {name:'设计'},{name:'美术'},{name:'国画'},{name:'书法'},
-      {name:'短视频'},{name:'篆刻'},{name:'吉他'},{name:'开发'},
-      {name:'古筝'},{name:'口播'}
-    ],
     label:require('@/assets/icons/submit/college-label.png'),
   }),
+
   watch: {
     /**
      * 【作品、动态、体验课、正式课发布】
@@ -161,17 +170,12 @@ export default {
         if(n.length) { this.openAppPop.show = false }
         if(!n.length && !this.fileList.length) { this.openAppPop.show = true }
       }
-
-      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
-        if (n.length) { this.submitStatus = this.fileList.length !== 0}
-        if (!n.length) { this.submitStatus = false }
-      }
     },
 
     fileList(n, o) {
 
       if(this.submitType === 'VIP' || this.submitType === 'TEST') {
-        if (n.length) { this.submitStatus = this.content.length !== 0 }
+        if (n.length) { this.submitStatus = true }
       } 
       
       if(this.submitType === 'WORKS' || this.submitType === 'LIFE') {
@@ -194,7 +198,19 @@ export default {
       }
     }
   },
+
   computed: {
+    ...mapGetters({
+      // 上传作业-作业要求
+      requirement: 'homework/requirementDetailsGetters',
+      // 作业详情
+      homeworkDetails:'homework/homeworkDetailsGetters',
+      // 学院列表
+      collegeList: 'colleges/submitWorkCollegesGetters',
+      // 用户信息
+      userInfo: 'user/userInfoGetters',
+    }),
+
     // 当前发布类型
     submitType: function () {
       return this.$route.query.type
@@ -254,30 +270,83 @@ export default {
       }
     }
   },
-  mounted(){
-    
-    /** 根据URL参数，决定展示剩余文字数 */
-    const type = this.$route.query.type
-    if(type === 'WORKS' || type === 'LIFE') {
+
+  async created(){
+
+    if(this.$route.query.action === 'edit') {
+      const _this = this
+
+      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
+        await this.$store.dispatch(
+          'homework/appendHomeworkDetails', 
+          { id : this.$route.query.id }
+        )
+      }
+      
+      if (this.homeworkDetails) {
+        this.content = this.homeworkDetails.content
+        this.homeworkDetails.imgInfo.forEach( ele => {
+          _this.fileList.push(ele)
+          _this.imageInfo.push(ele)
+          _this.totalImgSize += ele.size
+        })
+      }
+    }
+
+    if(this.submitType === 'WORKS') {
       this.dynamicNums = '只能输入200个字哦'
       this.openAppPop.show = true
+      this.getColleges({collegeType: 'RELEASE_WORK'})
+
+    } else if (this.submitType === 'LIFE') {
+      this.dynamicNums = '只能输入200个字哦'
+      this.openAppPop.show = true
+      
     } else {
       this.dynamicNums = '只能输入60个字哦'
       this.openAppPop.show = false
     }
   },
+
   methods:{
+    ...mapActions({
+      // 获取用户信息（4.0）
+      getUserInfo: 'user/getUserDetail',
+      // 获取图片上传授权
+      getMySTS: 'publish/getMySTS',
+      // 展翅订单查询，是否存在此人
+      getZcAdviser: 'publish/getZcAdviser',
+      // 查询学院列表
+      getColleges: 'colleges/appendColleges',
+      // 发布作业
+      publishHomework: 'publish/addNewHomework',
+      // 修改作业
+      editHomework:'publish/editHomework',
+      // 发布作品
+      publishWorks:'publish/addNewWorks',
+      // 发布动态
+      publishDynamic: 'publish/addNewDynamic'
+    }),
+
+    ...mapMutations({
+      // 清空作业详情
+      clearHomeworkDetails:'homework/clearHomeworkDetails'
+    }),
 
     // 提交前确认
-    onSubmitConfirm(){
+    async onSubmitConfirm(){
 
       // 提交状态是否为True
       if (!this.submitStatus) return false
 
       // 判断用户是否已经完善用户名
       if (!this.usernamePop.show) {
-         this.usernamePop.show = true
-         return
+        const res = await this.getUserInfo()
+        if(!res.data.loginName) {
+          this.usernamePop.info = res.data
+          this.usernamePop.show = true
+          return
+        }
       }
 
       // 等待图片上传成功后
@@ -294,33 +363,200 @@ export default {
     },
 
     /** 上传 */
-    onSubmit() {
-      // 是否存在顾问逻辑
-      // this.homeworkNumberPop.show = true
+    async onSubmit() {
+
+      if (this.$route.query.action === 'edit') {
+        let res = await this.handleEditHomework()
+        if(res.status === 200) {
+          this.sucessToast('homework')
+        } else {
+          res.data.message && this.$toast(res.data.message)
+        }
+      }
+
+      if (this.$route.query.action === void 0) {
+
+        if( this.submitType === 'TEST' || this.submitType === 'VIP') {
+        
+          let res = await this.submitHomework()
+          if( res.status === 201) {
+            if(this.submitType === 'TEST') {
+
+              this.homeworkNumberPop.jobNummer = res.data.identificationCode
+              // 体验课，需要判断是否存在顾问
+              await this.getCounselor()
+            } else {
+              this.sucessToast('homework')
+            }
+            
+          } else {
+            res.data.message && this.$toast(res.data.message)
+          }
+        }
+      }
+      
+      if (this.submitType === 'WORKS') {
+        let res = await this.submitWorks()
+        if(res.status === 201) {
+          this.sucessToast('works')
+        } else {
+          res.data.message && this.$toast(res.data.message)
+        }
+      }
+      
+      if (this.submitType === 'LIFE') {
+        let res = await this.submitDynamic()
+        if(res.status === 201) {
+          this.sucessToast('dynamic')
+        } else {
+          res.data.message && this.$toast(res.data.message)
+        }
+      }
+    },
+
+    /** 提示成功 & 跳转 */
+    sucessToast(name) {
       this.$myToast('提交成功我们将第一时间处理')
       setTimeout(() => {
         this.submitLock = true
-        this.$router.push('/personal-center/personal-publish?type=homework')
+        this.$router.push({
+          path: '/personal-center/personal-publish',
+          query:{ type:name, userId: this.userInfo.userId }
+        })
       }, 2500)
     },
 
+    /** 编辑作业 */
+    handleEditHomework() {
+      return this.editHomework({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        id: this.homeworkDetails.id
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 提交作业【体验课、正式课】 */
+    submitHomework() {
+      return this.publishHomework({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        type: 'TEXT',
+        title: this.requirement.title,
+        taskId: this.requirement.taskId
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 提交作品 */
+    submitWorks() {
+      let index = this.collegeIndex
+      return this.publishWorks({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        collegeId: this.collegeList[index].id
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 提交动态 */
+    submitDynamic() {
+      return this.publishDynamic({
+        imgInfo: this.imageInfo,
+        content: this.content,
+        source: 'MOBILE',
+        type: 'TEXT',
+      }).then( res => {
+        return res
+      }).catch( err => {
+        return err
+      })
+    },
+
+    /** 作业提交成功，检查是否存在顾问 */
+    getCounselor() {
+      this.getZcAdviser( this.requirement.college.id).then( res => {
+        this.sucessToast('homework')
+      }).catch( err => {
+        if(err.data.code === 409) {
+          this.homeworkNumberPop.show = true
+        }
+      })
+    },
+
     /** 图片文件上传至服务器 */
-    onUploadAfterRead(file) {
+    async onUploadAfterRead(file) {
       const _this = this
       file.status = 'uploading'
       file.message = '上传中...'
       this.uploadStatus = false
+
+      const res = await this.getMySTS()
+      const { accessKeyId, accessKeySecret, securityToken } = res.data
+      const ossConfig = {
+        accessKeyId: accessKeyId,
+        accessKeySecret: accessKeySecret,
+        stsToken: securityToken
+      }
+
+      const date = formatSlashDate(new Date())
+      const random = randomFileName(8)
+      const fileName = date + '/' + random + '.' + file.file.name.split('.').pop()
+
       const render = new FileReader()
       render.readAsDataURL(file.file)
       render.onload = (event) => {
-        const formData = new FormData()
-        formData.append('content', file.file)
-        setTimeout(() => {
-          file.status = 'done'
-          file.message = '上传成功'
+        const client = Client(ossConfig)
+        client.put(fileName, file.file).then(({ res }) => {
+          if (res.statusCode === 200) {
+            const url = _this.replaceUrls(res)
+            file.status = 'done'
+            file.message = '上传成功'
+            _this.uploadStatus = true
+            _this.handleMakeImage(file, url)
+          }
+        }).catch(error => {
+          file.status = 'failed'
+          file.message = '上传失败'
           _this.uploadStatus = true
-        }, 1000)
+        })
       }
+    },
+
+    /* 创造图片对象 */
+    handleMakeImage(e, url) {
+      const _this = this
+      const img = window.URL.createObjectURL(e.file)
+      const imgObj = new Image()
+      const filename = e.file.name.split('.').shift()
+      const exp = e.file.type.replace(/image\//, '')
+      imgObj.onload = () => {
+        _this.imageInfo.push({
+          filename: `${filename}.${exp}`,
+          size: e.file.size,
+          height: imgObj.height,
+          width: imgObj.width,
+          url: url
+        })
+      }
+      imgObj.src = img
+    },
+
+    /** 替换图片路径 */
+    replaceUrls(res) {
+      return res.requestUrls[0].replace(/http:\/\/dapeng-test-image.oss-cn-beijing.aliyuncs.com/,process.env.ossUrl) 
     },
 
     /** 上传前置处理 */
@@ -382,18 +618,31 @@ export default {
     // 图片提取器
     pickImages() {
       let gallery = []
+      const _this = this
       this.fileList.forEach(function(item){
-        gallery.push(item.content)
+        if(_this.$route.query.action === 'edit') {
+          gallery.push(item.url)
+        } else {
+          gallery.push(item.content)
+        }
       })
       return gallery
     },
     
     /** 删除文件预览时触发 */
     onDelete(index) {
-      const spliceImgSize = this.fileList[index].file.size
+
       // 更新图片文件总大小
+      let spliceImgSize = 0
+      if (this.fileList[index].file) {
+        spliceImgSize = this.fileList[index].file.size
+      } else {
+        spliceImgSize = this.fileList[index].size
+      }
+      
       this.totalImgSize -= spliceImgSize
       this.fileList.splice(index, 1)
+      this.imageInfo.splice(index, 1)
       this.imagePreview.show = false
     },
 
@@ -433,9 +682,13 @@ export default {
     
     /** 关闭弹窗，跳转我的作业 */
     onClosed() {
-      this.$router.push('/personal-center/personal-publish?type=homework')
+      this.sucessToast('homework')
     },
-  }
+  },
+
+  destroy() {
+    this.clearHomeworkDetails()
+  },
 }
 </script>
 

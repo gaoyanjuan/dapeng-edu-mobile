@@ -6,7 +6,7 @@ export default {
         status: 'loading',
         pageInfo: {
           count: 0,
-          number: 0,
+          number: 1,
           pages: 1,
           size: process.env.global.pageSize
         }
@@ -25,7 +25,7 @@ export default {
     appendRecommendList (state, payload) {
       state.recommendList.list = state.recommendList.list.concat(payload.data)
       state.recommendList.pageInfo = payload.pageInfo
-      if (payload?.data?.length < state.recommendList.pageInfo.size) {
+      if (payload && payload.data && payload.data.length < state.recommendList.pageInfo.size) {
         state.recommendList.status = 'over'
       } else {
         state.recommendList.status = 'load'
@@ -39,11 +39,11 @@ export default {
         params: {
           ...params,
           size: process.env.global.pageSize,
-          hotTypes: 'JOB'
+          hotTypes: 'JOB,WORK,LIFE'
         }
       })
       const pageInfo = {
-        pages: params.page,
+        number: params.page,
         size: process.env.global.pageSize
       }
       commit('appendRecommendList', { data: res.data, pageInfo })

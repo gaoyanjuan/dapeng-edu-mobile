@@ -3,24 +3,24 @@
 
     <!-- 左边用户信息 -->
     <div class="avatar-left-side-wrap">
-      <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
+      <head-image @click.native="toPersonalCenter" :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
-        <span class="info-nickname">{{ userInfo ? userInfo.nickname : '佚名' }}</span>
+        <span @click="toPersonalCenter" class="info-nickname">{{ userInfo ? userInfo.nickname : '佚名' }}</span>
         <span class="info-date">{{ submitTime | commonDate }}</span>
       </div>
     </div>
 
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
-      <img class="avatar-menus-follow" v-if="userInfo.userId !== userInfoGetters.userId && userInfo.userId !== dpUserId" :src="attention ? unfollow : follow" alt="" @click="handleFollow"/>
-      <template v-if="userInfo.userId === userInfoGetters.userId && listItemData.approvedLevel !== '0'">
+      <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click="handleFollow"/>
+      <template v-if="showScore">
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
       <!-- <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" /> -->
-      <img v-if="(squareType === '作业' && pageName !== 'myRecommend') || (pageName === 'myHomework' && listItemData.approvedLevel === '0') || pageName === 'myWork'" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
+      <img v-if="(squareType === '作业' && pageName !== 'myRecommend' && pageName !== 'myHomework') || (pageName === 'myHomework' &&listItemData.approvedLevel === '0') || (pageName.indexOf('my') !== -1 && pageName !== 'myRecommend' && pageName !== 'myHomework' )" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Avatar',
   props:{
@@ -76,6 +76,10 @@ export default {
         }
       }
     },
+    userId: {
+      type: String,
+      default: 'available'
+    }
   },
   data: () => ({
     follow: require('@/assets/icons/posts/posts-follow.png'),
@@ -85,10 +89,69 @@ export default {
     doubtContentShow: false,
     isDoubt: false,
     dpUserId: process.env.global.dpUserId,
+    isAttention: false
   }),
+  computed:{
+    ...mapGetters('user',[
+      'userInfoGetters',
+    ]),
+    showFollowBtn () {
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId !== this.userInfoGetters.userId && this.userInfo.userId !== this.dpUserId
+    },
+    showScore () {
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
+    }
+  },
+  created () {
+    this.isAttention = this.attention
+  },
   methods:{
+    ...mapActions('user', [
+      'followingUser',
+      'cancelFollowingUser'
+    ]),
+    toPersonalCenter() {
+      if(!this.$login()) {
+        return 
+      }
+      if (this.userId === 'available') {
+        if (this.$route.query.userId === this.userInfoGetters.userId) return false
+        this.$router.push({
+          path: '/personal-center',
+          query: {
+            userId: this.userInfoGetters.userId
+          }
+        })
+      } else if (this.$router.history.current.path === '/personal-center') {
+        if (this.$route.query.userId === this.userId) return false
+        this.$router.push({
+          path: '/personal-center',
+          query: {
+            userId: this.userId
+          }
+        })
+      }
+      this.$router.push({
+        path:'/personal-center'
+      })
+    },
     /**关注事件 */
-    handleFollow() {},
+    handleFollow () {
+      if(!this.$login()) {
+        return 
+      }
+      if (this.isAttention) {
+        this.isAttention = false
+        this.cancelFollowingUser({
+          id: this.userInfo.userId
+        })
+      } else {
+        this.isAttention = true
+        this.followingUser({
+          id: this.userInfo.userId
+        })
+      }
+    },
     /**打开菜单 */
     onOpenMenus() {
       this.$emit('onOpenMenus')
@@ -97,12 +160,7 @@ export default {
     showDoubt() {
       this.doubtContentShow = !this.doubtContentShow
     }
-  },
-  computed:{
-    ...mapGetters('user',[
-      'userInfoGetters',
-    ])
-  },
+  }
 }
 </script>
 

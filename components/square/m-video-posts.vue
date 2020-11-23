@@ -2,33 +2,34 @@
   <van-skeleton title :row="8" :loading="loading">
     <div class="video-posts-wrap">
 
-      <nuxt-link tag="div" class="video-posts-content" to="/details/video-page-details?type=long">
-        陪我跨年的恐怕只有学习和心中那一缕对优中那一缕跨年的恐怕只
+      <nuxt-link tag="div" class="video-posts-content" :to="`/details/video-page-details?id=${item.id}`">
+        {{ item.title }}
       </nuxt-link>
 
-      <nuxt-link tag="div" class="video-posts-cover" to="/details/video-page-details?type=long">
-        <img class="video-cover" :src="cover" alt="" />
+      <nuxt-link tag="div" class="video-posts-cover" :to="`/details/video-page-details?id=${item.id}`">
+        <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
+        <img v-else class="video-cover" v-lazy="cover" alt="" />
         <img class="video-play" :src="playBtn" alt="" />
-        <span class="video-duration">02:00</span>
+        <span class="video-duration"> {{ item.video.duration }} </span>
       </nuxt-link>
 
       <div class="video-posts-info">
-        <div class="video-posts-label">视频·设计</div>
-        <span class="video-posts-nickname">范冰冰是我女朋友</span>
-        <span class="video-posts-date">12月26日 16:55</span>
+        <div class="video-posts-label">视频·{{ item.college.name.replace(/学院/, '') }}</div>
+        <span class="video-posts-nickname">{{ item.user.nickname }}</span>
+        <span class="video-posts-date">{{ item.createTime | commonDate }}</span>
       </div>
 
       <div class="video-posts-interaction">
-        <div class="video-posts-comment">
+        <div class="video-posts-comment" @click="onComment">
           <img :src="comment" alt="" />
-          <span>3213</span>
+          <span>{{ item.commentCount | studentsCount }}</span>
         </div>
-        <div class="video-posts-like">
-          <img :src="like" alt="" />
-          <span>3213</span>
+        <div class="video-posts-like" @click="onLove">
+          <img :src="isPraise ? like : unLike" alt="" />
+          <span>{{ praiseCount | studentsCount}}</span>
         </div>
-        <div class="video-posts-star">
-          <img :src="star" alt="" />
+        <div class="video-posts-star" @click="onCollect">
+          <img :src="isCollection ? unStar : star" alt="star" />
         </div>
       </div>
     </div>
@@ -36,20 +37,129 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-Video-Posts',
+  props:{
+    item:{
+      type:Object,
+      default: {}
+    },
+    pageName: {
+      type: String,
+      default: ''
+    },
+    propIndex:{
+      type: Number,
+      default: 0
+    }
+  },
   data: () => ({
     loading: true,
+    isPraise: false,
+    isCollection: false,
+    praiseCount: 0,
     star:require('@/assets/icons/posts/posts-star.png'),
     like:require('@/assets/icons/posts/posts-unlove.png'),
+    unLike: require('@/assets/icons/posts/posts-love.png'),
+    unStar: require('@/assets/icons/posts/posts-unstar.png'),
     comment:require('@/assets/icons/posts/posts-comment.png'),
-    cover:require('@/assets/icons/square/video-posts-cover.png'),
+    cover:require('@/assets/icons/common/photos-bg.png'),
     playBtn:require('@/assets/icons/square/video-play-btn.png')
   }),
+  created() {
+    if (this.item) {
+      this.praiseCount = this.item.praiseCount
+      this.isPraise = this.item.isPraise
+      this.isCollection = this.item.isCollection
+    }
+  },
+  watch: {
+    'item': function (newVal, oldVal) {
+      this.praiseCount = newVal.praiseCount
+      this.isPraise = newVal.isPraise
+      this.isCollection = newVal.isCollection
+    },
+  },
   mounted(){
     setTimeout(() => {
       this.loading = false
     }, 500)
+  },
+  methods:{
+    ...mapActions({
+      queryLike: 'comment/queryLike',
+      queryUnLike: 'comment/queryUnLike',
+      queryCollection: 'comment/queryCollection',
+      queryDeleteCollection: 'comment/queryDeleteCollection',
+    }),
+    ...mapMutations('user', [
+      'deleteUserLikes',
+      'deleteUserFavorites'
+    ]),
+
+    onComment() {},
+
+    onLove() {
+      if(!this.$login()) {
+        return 
+      }
+      if (this.isPraise) {
+        this.isPraise = false
+        this.praiseCount -= 1
+        this.queryUnLike({
+          id: this.item.id,
+          type: 'MOVIE'
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: 'MOVIE',
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
+        })
+      } else {
+        this.isPraise = true
+        this.praiseCount += 1
+        this.queryLike({
+          id: this.item.id,
+          type: 'MOVIE',
+          createdId: this.item.user.userId,
+          contentType: 'VIDEO'
+        })
+      }
+    },
+
+    onCollect() {
+      if(!this.$login()) {
+        return 
+      }
+      if (this.isCollection) {
+        this.isCollection = false
+        this.queryDeleteCollection({
+          id: this.item.id,
+          type: 'MOVIE'
+        }).then(()=>{
+           if (this.pageName === 'userCollection') {
+            let payload = {
+              type: 'MOVIE',
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
+        })
+
+      } else {
+        this.isCollection = true
+        this.queryCollection({
+          id: this.item.id,
+          type: 'MOVIE',
+          createdId: this.item.user.userId,
+          contentType: 'VIDEO'
+        })
+      }
+    },
   }
 }
 </script>
@@ -111,8 +221,8 @@ export default {
   }
 
   .video-duration {
-    width: 49px;
     height: 20px;
+    padding: 0 8px;
     background: #000000;
     border-radius: 10px;
     opacity: 0.6;
@@ -139,8 +249,9 @@ export default {
   margin-top: 12px;
 
   .video-posts-label {
-    width: 70px;
-    height: 24px;
+    // width: 70px;
+    // height: 24px;
+    padding: 4px 8px;
     background: #F7F7F7;
     border-radius: 12px;
     margin-right: 8px;
@@ -149,7 +260,7 @@ export default {
     font-family: @regular;
     font-weight: 400;
     color: #465156;
-    line-height: 24px;
+    // line-height: 24px;
     text-align: center;
     cursor: pointer;
   }

@@ -47,36 +47,36 @@
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
         
         <!-- 体验课作业提交 -->
-        <nuxt-link tag="div" to="/homework-list?courseType=TEST" >
+        <div @click="enterSubmit('TEST')">
           <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.trial" alt="trial"/>
             <span class="menus-txt">体验课作业提交</span>
           </div>
-        </nuxt-link>
+        </div>
 
         <!-- 正式课作业提交 -->
-        <nuxt-link tag="div" to="/homework-list?courseType=VIP" >
+        <div @click="enterSubmit('VIP')">
           <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.formal" alt="formal"/>
             <span class="menus-txt">正式课作业提交</span>
           </div>
-        </nuxt-link>
+        </div>
 
         <!-- 作品发布 -->
-        <nuxt-link tag="div" to="/submit?type=WORKS" >
+        <div @click="enterSubmit('WORKS')">
           <div class="menus-cloumn cloumn-works animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.works" alt="works"/>
             <span class="menus-txt">作品发布</span>
           </div>
-        </nuxt-link>
+        </div>
 
         <!-- 生活动态 -->
-        <nuxt-link tag="div" to="/submit?type=LIFE" >
+        <div @click="enterSubmit('LIFE')">
           <div class="menus-cloumn cloumn-dynamic animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.dynamic" alt="dynamic"/>
-            <span class="menus-txt">生活动态</span>
+            <span class="menus-txt">发布动态</span>
           </div>
-        </nuxt-link>
+        </div>
 
       </div>
     </van-overlay>
@@ -84,6 +84,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'Footer',
   data: () => ({
@@ -116,6 +118,7 @@ export default {
       dynamic: require('@/assets/icons/tabbar/bar-pub-dynamic.png'),
     }
   }),
+
   computed:{
     /**
      * 计算并赋值路由
@@ -150,6 +153,20 @@ export default {
     // 显示发布菜单
     showPublishMenus() {
       this.show = true
+    },
+
+    // 进入发布页面
+    enterSubmit(name) {
+
+      if(!this.$login()) return
+
+      if(name === 'VIP' || name === 'TEST') {
+        this.$router.push(`/homework-list?courseType=${name}`)
+      }
+
+      if(name === 'LIFE' || name === 'WORKS') {
+        this.$router.push(`/submit?type=${name}`)
+      }
     }
   }
 }
@@ -203,8 +220,8 @@ export default {
   height: 100%;
   position: relative;
   background: rgba(255, 255, 255, 0.84);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
 
   .menus-close {
     width: 37px;

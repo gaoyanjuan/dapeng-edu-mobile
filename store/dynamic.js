@@ -52,6 +52,7 @@ export default {
     async appendDynamicDetails({ commit }, params) {
       const res = await this.$axios.get(`/dynamic/${params.id}`)
       commit('appendDynamicDetails', res)
+      return res
     },
     // 查询最新动态
     async appendNewDynamicList ({ commit, state }, params) {

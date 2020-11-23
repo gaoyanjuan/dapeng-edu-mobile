@@ -1,12 +1,28 @@
 <template>
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="homework.isAttention" :show-right-menu="true" @onOpenMenus="onShowMenus"/>
+    <m-navbar
+      :attention="homework.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="homework.type === 'TEXT' ? '作业详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="homework.img" :photoInfo="homework.imgInfo" :item="homework"/>
+      <!-- Gallery TEXT:图文-->
+      <m-gallery
+        v-if="homework.type === 'TEXT'"
+        :photos="homework.img"
+        :photoInfo="homework.imgInfo"
+        :item="homework"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
+      
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="homework.type === 'VIDEO'" :video="homework.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -45,86 +61,100 @@
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
-      <m-tabs>
-        <m-tab-item :selected="commentSelected" :count="homework.commentCount" name="评论">
-          <m-comment-list
-            :courseType="homework.courseType"
-          />
-        </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="homework.praiseCount">
-          <m-like-list />
-        </m-tab-item>
-      </m-tabs>
+      <m-details-footer
+        :courseType="homework.courseType"
+        :contentType="homework.type"
+        topicType="HOMEWORK"
+        :detailData="homework"
+      />
     </div>
-
-    <!-- 底部评论框 -->
-    <div class="details-footer-comment-wrap">
-      <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
-      <img class="footer-icon-like" :src="like" alt="like" @click="onLikeEvent"/>
-      <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
-      <img class="footer-icon-collect" :src="collect" alt="collect" @click="onCollectEvent"/>
-    </div>
-
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
-      <nuxt-link tag="div" to="" class="menus__popup__item">编辑</nuxt-link>
-      <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
-      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
+      <template v-if="homework.user.userId === (userInfo ? userInfo.userId : '' )">
+        <div class="menus__popup__item" @click="editHomework">编辑</div>
+        <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
+        <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      </template>
+      <template v-else>
+        <div class="menus__popup__item">Ta抄作业</div>
+        <div class="menus__popup__item">作业号</div>
+        <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      </template>
     </van-popup>
-
-    <!-- 评论框弹层 -->
-    <m-comment-popup :comment="commentPop" @sendComment="sendComment"/>
-
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
-    title:'作业详情',
-    likeSelected: false,
-    commentSelected: true,
     showMenusPopup: false,
-    commentPop: { show: false },
-    comment: require('@/assets/icons/posts/posts-comment.png'),
-    like: require('@/assets/icons/posts/posts-love.png'),
-    collect: require('@/assets/icons/posts/posts-star.png'),
+    showRightMenu: true,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed:{
     ...mapGetters({
-      homework:'homework/homeworkDetailsGetters'
-    })
-  },
-  created () {
-    if (this.$route.query.type && this.$route.query.type === 'like') {
-      this.likeSelected = true
-      this.commentSelected = false
+      homework:'homework/homeworkDetailsGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    
+    showRightMenuFlag() {
+      if(this.homework.approvedLevel && this.homework.approvedLevel !== '0' && this.homework.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+      return false
+      } else {
+        return true
+      }
     }
   },
   methods: {
+    ...mapActions({
+      deleteHomework: 'user/deleteHomework',
+    }),
+    
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
     },
 
-    // 打开评论弹窗
-    openComment() {
-      this.commentPop.show = true
-    },
-
     // 删除作业
-    deleteHomeWork() {},
-
-    // 喜欢事件
-    onLikeEvent() { console.log('like') },
-
-    // 收藏事件
-    onCollectEvent() { console.log('collect') },
-
-    // 评论发送
-    sendComment() { console.log('发送成功') }
+    deleteHomeWork() {
+      this.showMenusPopup = false
+      this.deleteDialogParams.show = true
+    },
+    confirmDelete() {
+      this.deleteHomework({ id: this.homework.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    },
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
+    },
+    // 编辑作业
+    editHomework() {
+      this.$router.push({
+        path: '/submit',
+        query: {
+          action: 'edit',
+          type: this.homework.courseType,
+          id: this.homework.id
+        }
+      })
+    },
   }
 }
 </script>
@@ -196,60 +226,10 @@ export default {
   margin-top: 12px;
 }
 
-/** footer comment */
-.details-footer-comment-wrap {
-  width: 375px;
-  height: 41px;
-
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-
-  background-color: @dp-white;
-  background-image: url('~@/assets/icons/comment/footer-comment-bg.png');
-  background-repeat: no-repeat;
-  background-size: 375px 41px;
-  background-position: center;
-
-  .footer-icon-like,
-  .footer-icon-comment,
-  .footer-icon-collect {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-  }
-  
-  .footer-icon-like,
-  .footer-icon-comment {
-    margin-right: 20px;
-  }
-}
-
-.details-footer-comment-wrap .footer-input {
-  width: 215px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 18px;
-  margin-right: 16px;
-  background: #F7F7F7;
-  border-radius: 18px;
-  font-size: 12px;
-  font-family: @regular;
-  font-weight: 400;
-  color: #A6AEA9;
-  cursor: pointer;
-}
-
 /** menus-popup */
 .p-details /deep/.van-popup {
   width: 284px;
-  height: 138px;
+  // height: 138px;
   overflow: hidden;
 }
 

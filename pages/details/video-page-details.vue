@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Header Block -->
-    <m-navbar :title="$route.query.type === 'small'? '小视频详情':'视频详情'" />
+    <m-navbar title="视频详情" />
 
     <!-- Player Block -->
     <div class="video-posts-player">
@@ -9,85 +9,92 @@
     </div>
     
     <!-- Body Block -->
-    <section class="video-posts-details-wrap">
-      <m-avatar avatar-style="width:40px; height:40px;"/>
+    <section v-if="video" class="video-posts-details-wrap">
+      <m-avatar
+        avatar-style="width:40px; height:40px;"
+        :user-info="video.user"
+        :submit-time="video.createTime"
+      />
 
       <div class="video-posts-content">
-        陪我跨年的恐怕只有学习和心中那一缕对优中那一缕
+        {{ video.title }}
       </div>
 
-      <div class="video-posts-label">视频</div>
+      <div class="video-posts-label">视频·{{ video.college.name.replace(/学院/, '') }}</div>
     </section>
 
     <!-- Footer Block -->
-    <section class="video-posts-comment-wrap">
-      <m-tabs>
-        <m-tab-item :selected="commentSelected" name="评论" :count="0">
-          <!-- <m-comment-list /> -->
-        </m-tab-item>
-        <m-tab-item :selected="likeSelected" name="喜欢" :count="0">
-          <!-- <m-like-list /> -->
-        </m-tab-item>
-      </m-tabs>
+    <section v-if="video" class="video-posts-comment-wrap">
+      <m-details-footer
+        :propCommentCount="video.commentCount"
+        :propPraiseCount="video.praiseCount"
+        contentType="VIDEO"
+        topicType="MOVIE"
+        :detailData="video"
+      />
     </section>
-
-    <!-- 底部评论框 -->
-    <div class="details-footer-comment-wrap">
-      <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
-      <img class="footer-icon-like" :src="like" alt="like" @click="onLikeEvent"/>
-      <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
-      <img class="footer-icon-collect" :src="collect" alt="collect" @click="onCollectEvent"/>
-    </div>
-
-    <!-- 评论框弹层 -->
-    <m-comment-popup :comment="commentPop" @sendComment="sendComment"/>
 
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
 export default {
   name:'Video-Page-Details',
   layout:'navbar',
   data:() => ({
     player: null,
-    commentSelected: true,
-    likeSelected: false,
-    commentPop: { show: false },
-    comment: require('@/assets/icons/posts/posts-comment.png'),
-    like: require('@/assets/icons/posts/posts-love.png'),
-    collect: require('@/assets/icons/posts/posts-star.png'),
   }),
-  created () {
-    if (this.$route.query.type && this.$route.query.type === 'like') {
-      this.likeSelected = true
-      this.commentSelected = false
-    }
-  },
-  mounted(){
-    this.$nextTick(() => {
-      this.player = polyvPlayer({
-        wrap: '#player',
-        width: '100%',
-        height: '211px',
-        vid: '88083abbf5bcf1356e05d39666be527a_8'
-      })
+  computed:{
+    ...mapGetters({
+      video:'video/videoDetailsGetters',
+      commentList:'comment/commentListGetters',
+      likeList:'comment/likesListGetters'
     })
   },
+  created () {
+    if(!this.video && this.$route.query.id) {
+      this.getDetails({id: this.$route.query.id}).then( res => {
+        this.player = polyvPlayer({
+          wrap: '#player',
+          width: '100%',
+          height: '211px',
+          hideRepeat: true,
+          hideSwitchPlayer: true,
+          vid: res.data.video.id
+        })
+        if (res && res.data) {
+          this.$store.commit('details/changeIsPraise', res.data.isPraise)
+          this.$store.commit('details/changeIsCollection', res.data.isCollection)
+          this.$store.commit('details/changeCommentCount', res.data.commentCount)
+          this.$store.commit('details/changePraiseCount', res.data.praiseCount)
+        }
+      })
+    }
+
+    if(!this.commentList.data.length && this.$route.query.id) {
+      this.getComment({ topicId: this.$route.query.id, topicType: 'MOVIE' })
+    }
+
+    if(!this.likeList.data.length && this.$route.query.id) {
+      this.getLikes({ page: 1, type: 'MOVIE', id: this.$route.query.id})
+    }
+  },
   methods:{
-     // 打开评论弹窗
-    openComment() {
-      this.commentPop.show = true
-    },
+    ...mapActions({
+      getDetails: 'video/appendVideoDetails',
+      getComment: 'comment/queryCommentList',
+      getLikes: 'comment/queryLikesList',
+    }),
 
-    // 喜欢事件
-    onLikeEvent() { console.log('like') },
+    ...mapMutations({
+      clearDetails: 'video/clearVideoDetails'
+    }),
+  },
 
-    // 收藏事件
-    onCollectEvent() { console.log('collect') },
-
-    // 评论发送
-    sendComment() { console.log('发送成功') }
+  destroyed () {
+    this.clearDetails()
   }
 }
 </script>
@@ -126,7 +133,7 @@ export default {
 }
 
 .video-posts-label {
-  width: 40px;
+  width: 69px;
   height: 24px;
   background: #F7F7F7;
   border-radius: 12px;
@@ -140,54 +147,4 @@ export default {
   text-align: center;
 }
 
-
-/** footer comment */
-.details-footer-comment-wrap {
-  width: 375px;
-  height: 41px;
-
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-
-  background-color: @dp-white;
-  background-image: url('~@/assets/icons/comment/footer-comment-bg.png');
-  background-repeat: no-repeat;
-  background-size: 375px 41px;
-  background-position: center;
-
-  .footer-icon-like,
-  .footer-icon-comment,
-  .footer-icon-collect {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-  }
-  
-  .footer-icon-like,
-  .footer-icon-comment {
-    margin-right: 20px;
-  }
-}
-
-.details-footer-comment-wrap .footer-input {
-  width: 215px;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 18px;
-  margin-right: 16px;
-  background: #F7F7F7;
-  border-radius: 18px;
-  font-size: 12px;
-  font-family: @regular;
-  font-weight: 400;
-  color: #A6AEA9;
-  cursor: pointer;
-}
 </style>

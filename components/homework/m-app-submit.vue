@@ -1,6 +1,6 @@
 <template>
   <div class="app-submit-wrap">
-    <van-popup v-model="appPopParams.show" round class="app-pop" get-container=".app_wrap">
+    <van-popup v-model="appPopParams.show" round class="app-pop" get-container=".app_wrap" :transition-appear="true">
       <div class="app-img-wrap">
         <img :src="appImg" alt="APP" />
       </div>

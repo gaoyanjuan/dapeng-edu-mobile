@@ -5,25 +5,25 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 export default {
-  async asyncData ({route, store, error}) {
-    if (process.browser) return {
-      isServiceload: false
-    }
-    try {
-      if (route.query.type) {
-        await store.dispatch('growth/appendGrowthList', { type: route.query.type, page: 1 })
-      } else {
-        await store.dispatch('growth/appendGrowthList', { type: 'HOTTEST', page: 1 })
-      }
-      return {
-        isServiceload: true
-      }
-    } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
-    }
-  },
+  // async asyncData ({route, store, error}) {
+  //   if (process.browser) return {
+  //     isServiceload: false
+  //   }
+  //   try {
+  //     if (route.query.type) {
+  //       await store.dispatch('growth/appendGrowthList', { type: route.query.type, page: 1 })
+  //     } else {
+  //       await store.dispatch('growth/appendGrowthList', { type: 'HOTTEST', page: 1 })
+  //     }
+  //     return {
+  //       isServiceload: true
+  //     }
+  //   } catch (err) {
+  //     error({ statusCode: err.data.code, message: err.data.message })
+  //   }
+  // },
   created () {
-    if (process.browser && !this.isServiceload) {
+    if (process.browser) {
       if (this.$route.query.type) {
         this.$store.dispatch('growth/appendGrowthList', { type: this.$route.query.type, page: 1 })
       } else {

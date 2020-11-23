@@ -1,18 +1,19 @@
 <template class="video-wrap">
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
-    <template v-if="list.length">
-      <m-video-posts v-for="(item, i) in list" :key="i" :item="item"/>
+    <template v-if="publishVideoGetters.list.length">
+      <m-video-posts v-for="(item, index) in publishVideoGetters.list" :key="index" :item="item"/>
     </template>
-    <template v-if="!list.length && finished">
+    <template v-if="!publishVideoGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
-        <span class="txt">暂无内容</span>
+        <span class="txt">您的账号暂无发布权限</span>
       </div>
     </template>
   </van-list>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Video',
   data: () => ({
@@ -20,25 +21,66 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    blank: require('@/assets/icons/blank/have-no-video.png')
+    blank: require('@/assets/icons/blank/have-no-video.png'),
+    currentPage: 1
   }),
-    methods:{
-     onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i < 2; i++) {
-          this.list.push(i)
-        }
-        // 加载状态结束
+  computed: {
+    ...mapGetters('user', [
+      'publishVideoGetters'
+    ])
+  },
+  destroyed () {
+    this.clearPublishVideo()
+  },
+   watch: {
+    'publishVideoGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
         this.loading = false
-        // 数据全部加载完成
-        if (this.list.length >= 5) {
-          this.finished = true
-        }
-        if (this.list.length === 0) {
-          this.finished = true
-          this.finishedText = ''
-        }
-      }, 1000)
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'publishVideoGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedText = ''
+      } else {
+        this.finishedText ='没有更多了'
+      }
+    }
+  },
+  mounted() {
+    if (this.$route.query.userId && this.publishVideoGetters.list.length === 0) {
+      this.appendPublishVideo({
+          userId: this.$route.query.userId,
+          page: this.currentPage,
+          size: 10
+      })
+    }
+  },
+  methods:{
+    ...mapActions('user', [
+      'appendPublishVideo'
+    ]),
+    ...mapMutations('user', [
+      'clearPublishVideo'
+    ]),
+    onLoad() {
+      if (this.publishVideoGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      
+      if (this.publishVideoGetters.status === 'loading') return false
+      const newPage = this.currentPage + 1
+      this.appendPublishVideo({
+        userId: this.$route.query.userId,
+        page: newPage,
+        size: 10
+      })
     }
   }
 }

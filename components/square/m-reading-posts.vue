@@ -6,7 +6,7 @@
 
         <!-- Header Block -->
         <template v-if="item.coverImgSmall.length === 1">
-          <nuxt-link tag="div" class="reading-header-row" to="/details/reading-page-details">
+          <nuxt-link tag="div" class="reading-header-row" :to="`/details/reading-page-details?id=${item.id}`">
             <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
             <div class="posts-right-side-wrap">
               <span class="posts-title">{{ item.title }}</span>
@@ -16,7 +16,7 @@
         </template>
 
         <template v-else>
-          <nuxt-link tag="div" class="reading-header-row-more" to="/details/reading-page-details">
+          <nuxt-link tag="div" class="reading-header-row-more" :to="`/details/reading-page-details?id=${item.id}`">
             <div class="posts-title"> {{ item.title }} </div>
             <div class="posts-content"> {{ content }} </div>
             <div class="posts-photos-wrap" v-if="item.coverImgSmall">
@@ -34,16 +34,16 @@
 
         <!-- Footer Block -->
         <div class="reading-footer-row">
-          <div class="posts-commernt-wrap">
+          <div class="posts-commernt-wrap" @click="onComment">
             <img class="posts-comment" :src="comment" alt="comment" />
             <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
           </div>
-          <div class="posts-love-wrap">
-            <img class="posts-love" :src="love" alt="love" />
-            <span class="posts-nums">{{ item.praiseCount | studentsCount }}</span>
+          <div class="posts-love-wrap" @click="onLove">
+            <img class="posts-love" :src="isPraise ? unLove : love" alt="love" />
+            <span class="posts-nums">{{ praiseCount | studentsCount }}</span>
           </div>
-          <div class="posts-star-wrap">
-            <img class="posts-star" :src="star" alt="star" />
+          <div class="posts-star-wrap" @click="onCollect">
+            <img class="posts-star" :src="isCollection ? unStar : star" alt="star" />
           </div>
         </div>
       </div>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-Reading-Posts',
   props:{
@@ -61,23 +62,126 @@ export default {
     item:{
       type:Object,
       default:{}
+    },
+    pageName: {
+      type: String,
+      default: ''
+    },
+    propIndex:{
+      type: Number,
+      default: 0
     }
   },
   data:() => ({
     loading: true,
+    isPraise: false,
+    isCollection: false,
+    praiseCount: 0,
     comment: require('@/assets/icons/posts/posts-comment.png'),
     love: require('@/assets/icons/posts/posts-love.png'),
+    unLove: require('@/assets/icons/posts/posts-unlove.png'),
     star: require('@/assets/icons/posts/posts-star.png'),
+    unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
   computed:{
     content() {
       return this.item.content.replace(/<[^>]+>/g, "").replace(/&nbsp;/gi, '')
     }
   },
+  created() {
+    if (this.item) {
+      this.praiseCount = this.item.praiseCount
+      this.isPraise = this.item.isPraise
+      this.isCollection = this.item.isCollection
+    }
+  },
+  watch: {
+    'item': function (newVal, oldVal) {
+      this.praiseCount = newVal.praiseCount
+      this.isPraise = newVal.isPraise
+      this.isCollection = newVal.isCollection
+    },
+  },
   mounted(){
     setTimeout(() => {
       this.loading = false
     }, 500)
+  },
+
+  methods:{
+    ...mapActions({
+      queryLike: 'comment/queryLike',
+      queryUnLike: 'comment/queryUnLike',
+      queryCollection: 'comment/queryCollection',
+      queryDeleteCollection: 'comment/queryDeleteCollection',
+    }),
+    ...mapMutations('user', [
+      'deleteUserLikes',
+      'deleteUserFavorites'
+    ]),
+
+    onComment() {},
+
+    onLove() {
+      if(!this.$login()) {
+        return 
+      }
+      if (this.isPraise) {
+        this.isPraise = false
+        this.praiseCount -= 1
+        this.queryUnLike({
+          id: this.item.id,
+          type: 'ARTICLE'
+        }).then(()=>{
+          if (this.pageName === 'userLike') {
+            let payload = {
+              type: 'ARTICLE',
+              index: this.propIndex
+            }
+            this.deleteUserLikes(payload)
+          }
+        })
+      } else {
+        this.isPraise = true
+        this.praiseCount += 1
+        this.queryLike({
+          id: this.item.id,
+          type: 'ARTICLE',
+          createdId: this.item.user.userId,
+          contentType: 'TEXT'
+        })
+      }
+    },
+
+    onCollect() {
+      if(!this.$login()) {
+        return 
+      }
+      if (this.isCollection) {
+        this.isCollection = false
+        this.queryDeleteCollection({
+          id: this.item.id,
+          type: 'ARTICLE'
+        }).then(()=>{
+          if (this.pageName === 'userCollection') {
+            let payload = {
+              type: 'ARTICLE',
+              index: this.propIndex
+            }
+            this.deleteUserFavorites(payload)
+          }
+        })
+
+      } else {
+        this.isCollection = true
+        this.queryCollection({
+          id: this.item.id,
+          type: 'ARTICLE',
+          createdId: this.item.user.userId,
+          contentType: 'TEXT'
+        })
+      }
+    },
   }
 }
 </script>
@@ -206,17 +310,17 @@ export default {
 }
 
 .reading-body-row .posts-label {
-  width: 70px;
-  height: 24px;
+  padding: 4px 8px;
   background: #F7F7F7;
   border-radius: 12px;
   font-size: 12px;
   font-family: @dp-font-regular;
   font-weight: 400;
   color: #465156;
-  line-height: 24px;
   text-align: center;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .reading-body-row .posts-author {

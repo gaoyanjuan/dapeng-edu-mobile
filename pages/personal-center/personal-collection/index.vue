@@ -5,22 +5,22 @@
     <div class="tabs-wrap">
       <van-tabs v-model="active" sticky :offset-top="44" @click="onTabsClick">
         <van-tab title="作业">
-          <personal-posts />
+          <personal-homework-posts pageName="userCollection" />
         </van-tab>
         <van-tab title="作品">
-          <personal-posts />
+          <personal-works-posts pageName="userCollection" />
         </van-tab>
         <van-tab title="动态">
-          <personal-posts />
+          <personal-dynamic-posts pageName="userCollection" />
         </van-tab>
         <van-tab title="活动">
-          <personal-posts />
+          <personal-growth-posts pageName="userCollection" />
         </van-tab>
         <van-tab title="阅读">
-          <personal-reading-posts />
+          <personal-reading-posts pageName="userCollection" />
         </van-tab>
         <van-tab title="视频">
-          <personal-video-posts />
+          <personal-video-posts pageName="userCollection" />
         </van-tab>
       </van-tabs>
     </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
   name:'PersonalCollection',
   layout:'navbar',
@@ -43,6 +44,9 @@ export default {
     this.active = tabs.findIndex(tab => tab === query)
   },
   methods:{
+    ...mapMutations('user', [
+      'clearUserFavorites'
+    ]),
     /**
      * 监听菜单切换事件，
      * 挂载Type参数给路由
@@ -52,6 +56,9 @@ export default {
       if(this.$route.query.type === tabs[index]) return
       this.$router.replace({ query: { ...this.$route.query, type: tabs[index] } })
     }
+  },
+  destroyed() {
+    this.clearUserFavorites()
   }
 }
 </script>
