@@ -64,11 +64,13 @@ export default {
     ...mapActions('user', [
       'appendUserFans',
       'followingUser',
-      'cancelFollowingUser'
+      'cancelFollowingUser',
+      'readMyMessages'
     ]),
     ...mapMutations('user', [
       'clearUserFans',
-      'setUserFollowStatus'
+      'setUserFollowStatus',
+      'changeFansRedDot'
     ]),
     onLoad() {
       if (this.userFansGetters.status === 'over') {
@@ -104,7 +106,13 @@ export default {
         })
         
       }else {
-         this.setUserFollowStatus({
+        if(item.redDot) {
+          this.changeFansRedDot({
+            index
+          })
+          this.readMyMessages()
+        }
+        this.setUserFollowStatus({
           index: index,
           flag: true,
           data: 'userFans'
@@ -114,7 +122,7 @@ export default {
           index: index,
           flag: false,
           data: 'userFans'
-        })
+          })
         })
         
       }
@@ -168,14 +176,16 @@ export default {
 }
 
 .m-avatar .avatar-left-side-wrap {
+  position: relative;
   .l-flex-row();
 }
 
 .avatar-left-side-wrap .red-dot {
+  position: absolute;
   width: 6px;
   height: 6px;
-  margin-top: 16px;
-  margin-right: 5px;
+  top: 16px;
+  left: -10px;
   background: #FE4646;
   border-radius: 50%;
   align-self: flex-start;
