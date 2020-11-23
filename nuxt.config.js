@@ -10,12 +10,11 @@ export default {
   },
   env: {
     global: global,
-    baseUrl: env[process.env.MODE].DP_URL,
-    zhifuUrl: env[process.env.MODE].DP_ZHIFU,
-    mBaseUrl:env[process.env.MODE].DP_M_URL,
-    authUrl: env[process.env.MODE].DP_AUTH_URL,
-    ossUrl: env[process.env.MODE].OSS_URL,
-    orderUrl: env[process.env.MODE].ORDER_URL,
+    zhifuUrl: env[process.env.MODE].DP_ZHIFU, // 快捷支付链接地址
+    mBaseUrl:env[process.env.MODE].DP_M_URL, // m站地址
+    authUrl: env[process.env.MODE].DP_AUTH_URL, // 中台登录地址
+    ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
+    orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
     mode: env[process.env.MODE].MODE
   },
   head: {
@@ -55,7 +54,7 @@ export default {
   loading: {
     height: '3px',
     color: '#0CB65B',
-    failedColor:'#0CB65B'
+    failedColor: env[process.env.MODE].FAILED_COLOR
   },
 
   css: [
@@ -66,7 +65,7 @@ export default {
 
   plugins: [
     { src: '~/plugins/axios' },
-    { src: '~/plugins/clipboard.js'},
+    { src: '~/plugins/clipboard.js', ssr: false },
     { src: '~/plugins/vue-inject.js'},
     { src: '~/plugins/root-font-size.js', ssr: false},
     { src: '~/plugins/amfe-flexble.js', ssr: false},
@@ -146,8 +145,40 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
-    extend(config, ctx) { },
-    vendor: ['axios'],
+    filenames: process.env.MODE !== 'dev' ? { css: '[contenthash].css' } : { css: '[name].css' } ,
+    postcss: {
+      preset: {
+        autoprefixer: true
+      }
+    },
+    optimization: {
+			splitChunks:{
+        minSize: 10000,
+        maxSize: 200000
+      }
+		},
+    extractCSS: {
+      ignoreOrder: true
+    },
+    extend(config, ctx) {
+      if (ctx.isClient) {
+        config.devtool = 'eval-source-map'
+      }
+    },
+    vendor: [ // 插件单独打包设置
+      'vue',
+      'axios',
+      'vant',
+      'dayjs',
+      'swiper',
+      'vue-awesome-swiper',
+      'xss',
+      'image-size',
+      'js-cookie',
+      'jwt-decode',
+      '@vant/touch-emulator',
+      'animate.css'
+    ],
     publicPath: '/dapeng',
     /**
      * 如果插件位于node_modules并导出模块，
@@ -197,5 +228,85 @@ export default {
         },
       },
     },
+  },
+  render: {
+    compressor: false,
+    /**
+     * Content Security Policy
+     * @author wangkangzhen
+     * @description 主要添加img、font、script规则，如遇规则不匹配情况使用default-src规则，不在白名单设置规则内资源不允许被执行
+     * @argument 主要白名单资源域名有：*.dapengjiaoyu.cn、*.dapengjiaoyu.com、*.polyv.net、*.videocc.net、*.baidu.com
+     */
+    csp: {
+      hashAlgorithm: 'sha256',
+      policies: {
+        'default-src': ["'self'"],
+        'img-src': [
+          "'self'",
+          `data:`,
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          `blob:`,
+          '*.aliyuncs.com',
+          '*.baidu.com',
+          '*.polyv.net',
+          '*.videocc.net',
+          '*.bdimg.com',
+          '*.jiain.net',
+          'http:'
+        ],
+        'font-src': [
+          `data:`,
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+        ],
+        'worker-src': [
+          "'self'",
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          `blob:`
+        ],
+        'style-src': [
+          "'self'",
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          "'unsafe-inline'"
+        ],
+        'worker-src': ["'self'", `blob:`],
+        'style-src': [
+          "'self'",
+          "'unsafe-inline'",
+          '*.jiain.net',
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+        ],
+        'script-src-elem': [
+          "'self'",
+          '*.polyv.net',
+          '*.jiain.net',
+          '*.talk99.cn',
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          "'unsafe-inline'",
+          '*.baidu.com'
+        ],
+        'script-src': [
+          "'self'",
+          "'unsafe-eval'",
+          "'unsafe-inline'",
+          '*.polyv.net',
+          '*.baidu.com',
+          '*.jiain.net',
+          '*.talk99.cn'
+        ],
+        'connect-src': ["'self'", '*.aliyuncs.com', '*.polyv.net', '*.videocc.net', '*.baidu.com', '*.talk99.cn'],
+        'form-action': ["'self'"],
+        'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net'],
+        'object-src': ["'none'"],
+        'base-uri': ["'self'"],
+        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com']
+      }
+    },
+    addMeta: true
   }
 }
