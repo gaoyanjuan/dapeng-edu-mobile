@@ -1,4 +1,4 @@
-import qs from 'qs'
+import qs from 'querystring'
 
 export const state = () => ({
   accessToken: null,
@@ -9,7 +9,7 @@ export const state = () => ({
     recommendCount: 0,
     likeCount: 0,
   },
-  oldUserInfo: null,
+oldUserInfo: null,
   userFollow: {
     list: [],
     status: 'loading',
@@ -529,6 +529,21 @@ export const actions = {
       }
     })
     commit('appendUserHomesRecommend', res)
+    return res
+  },
+  // 发送验证码
+  async sendCode (state, params) {
+    const res = await this.$axios.get(`/old/sms/send-code?${qs.stringify(params)}`)
+    return res
+  },
+  // 对比验证码
+  async checkCode (state, params) {
+    const res = await this.$axios.get(`/old/sms/check-code?${qs.stringify(params)}`)
+    return res
+  },
+  // 注册用户
+  async userRegister (state, params) {
+    const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)
     return res
   },
   // 用户的发布作业列表
