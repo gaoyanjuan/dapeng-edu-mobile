@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import qs from 'querystring'
-=======
-import qs from 'qs'
->>>>>>> 2e2259934326eecb6c3bb01b215d762c2d344d29
 
 export const state = () => ({
   accessToken: null,
@@ -13,7 +9,7 @@ export const state = () => ({
     recommendCount: 0,
     likeCount: 0,
   },
-  oldUserInfo: null,
+oldUserInfo: null,
   userFollow: {
     list: [],
     status: 'loading',

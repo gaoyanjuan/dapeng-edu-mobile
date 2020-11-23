@@ -170,21 +170,11 @@ export default {
       this.activeName = 'works'
     } else if (to.name === 'index-small-video') {
       this.activeName = 'small-video'
-<<<<<<< HEAD
-    }
-    // else if (to.name === 'index-video') {
-    //   this.activeName = 'video'
-    // } 
-    // else if (to.name === 'index-reading') {
-    //   this.activeName = 'reading'
-    // }
-=======
     } else if (to.name === 'index-video') {
       this.activeName = 'video'
     } else if (to.name === 'index-reading') {
       this.activeName = 'reading'
     } 
->>>>>>> 2e2259934326eecb6c3bb01b215d762c2d344d29
     // else if (to.name === 'index-part-time-task') {
     //   this.activeName = 'part-time-task'
     // }
