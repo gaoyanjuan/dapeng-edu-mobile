@@ -1,5 +1,5 @@
 <template>
-  <div class="homework-video-wrap">
+  <div class="homework-video-wrap" @click="toDetail">
     <img class="video-img" :src="videoImg || defaultImg" alt="作业视频封面图" :v-lazy="videoImg">
     <img class="video-play-img" :src="videoPlay" alt="视频播放按钮">
   </div>  
@@ -19,7 +19,12 @@ export default {
       defaultImg: require('@/assets/icons/common/photos-bg.png'),
     }
   },
-  mounted() {}
+
+  methods:{
+    toDetail() {
+      this.$emit('toDetail')
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
