@@ -232,7 +232,7 @@ export default {
      * Content Security Policy
      * @author wangkangzhen
      * @description 主要添加img、font、script规则，如遇规则不匹配情况使用default-src规则，不在白名单设置规则内资源不允许被执行
-     * @argument 主要白名单资源域名有：*.dapengjiaoyu.cn、*.dapengjiaoyu.com、*.polyv.net、*.videocc.net、*.baidu.com
+     * @argument 主要白名单资源域名有：*.dapengjiaoyu.cn、*.dapengjiaoyu.com、*.polyv.net、*.videocc.net、*.baidu.com、*.talk99.cn、*.jiain.net、*.aliyuncs.com
      */
     csp: {
       hashAlgorithm: 'sha256',
@@ -265,13 +265,6 @@ export default {
         ],
         'style-src': [
           "'self'",
-          '*.dapengjiaoyu.cn',
-          '*.dapengjiaoyu.com',
-          "'unsafe-inline'"
-        ],
-        'worker-src': ["'self'", `blob:`],
-        'style-src': [
-          "'self'",
           "'unsafe-inline'",
           '*.jiain.net',
           '*.dapengjiaoyu.cn',
@@ -289,6 +282,8 @@ export default {
         ],
         'script-src': [
           "'self'",
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
           "'unsafe-eval'",
           "'unsafe-inline'",
           '*.polyv.net',
