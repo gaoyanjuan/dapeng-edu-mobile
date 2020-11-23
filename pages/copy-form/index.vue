@@ -131,13 +131,18 @@ export default {
 
       this.submitLock = false
       // if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) return false
-      this.complaint({
-        imgInfo: this.imageInfo,
+      let params = {
         taskId: this.$route.query.taskId,
-        complainPhone: this.contactNumber,
-        reason: this.content,
-        respondentId: this.$route.query.id
-      }).then((res) => {
+        data: {
+          imgInfo: this.imageInfo,
+          complainPhone: this.contactNumber,
+          reason: this.content.trim(),
+          respondentId: this.$route.query.id
+        }
+      }
+      this.complaint(
+        params
+      ).then((res) => {
         if(res.status === 201) {
           this.submitLock = true
           this.$myToast('提交成功我们将第一时间处理')
