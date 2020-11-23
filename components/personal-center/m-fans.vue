@@ -176,14 +176,16 @@ export default {
 }
 
 .m-avatar .avatar-left-side-wrap {
+  position: relative;
   .l-flex-row();
 }
 
 .avatar-left-side-wrap .red-dot {
+  position: absolute;
   width: 6px;
   height: 6px;
-  margin-top: 16px;
-  margin-right: 5px;
+  top: 16px;
+  left: -10px;
   background: #FE4646;
   border-radius: 50%;
   align-self: flex-start;
