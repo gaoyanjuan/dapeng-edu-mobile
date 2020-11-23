@@ -2,11 +2,11 @@
   <van-skeleton title :row="8" :loading="loading">
     <div class="video-posts-wrap">
 
-      <nuxt-link tag="div" class="video-posts-content" :to="`/details/video-page-details?type=long&id=${item.id}`">
+      <nuxt-link tag="div" class="video-posts-content" :to="`/details/video-page-details?id=${item.id}`">
         {{ item.title }}
       </nuxt-link>
 
-      <nuxt-link tag="div" class="video-posts-cover" :to="`/details/video-page-details?type=long&id=${item.id}`">
+      <nuxt-link tag="div" class="video-posts-cover" :to="`/details/video-page-details?id=${item.id}`">
         <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
         <img v-else class="video-cover" v-lazy="cover" alt="" />
         <img class="video-play" :src="playBtn" alt="" />
@@ -101,6 +101,9 @@ export default {
     onComment() {},
 
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
@@ -129,6 +132,9 @@ export default {
     },
 
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isCollection) {
         this.isCollection = false
         this.queryDeleteCollection({

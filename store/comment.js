@@ -148,7 +148,9 @@ export default {
     // 新增评论
     async appendNewComment ({ commit }, params) {
       const res = await this.$axios.post('/comments', params)
-      commit('appendNewComment', { data: res.data, userData: params.user })
+      if (params.commit) {
+        commit('appendNewComment', { data: res.data, userData: params.user })
+      }
       return res
     },
     // 收藏功能

@@ -22,19 +22,20 @@
         <div class="images-preview-footer">
           <div class="footer-comment-cloumn" @click.stop="openComment">
             <img class="icon" :src="comment" alt="" />
-            <span class="nums">{{ imagePreview.commentNums | studentsCount }}</span>
+            <span class="nums">{{ imagePreview.commentCount | studentsCount }}</span>
           </div>
           <div class="footer-love-cloumn" @click.stop="onLove">
-            <img class="icon" :src="love" alt="" />
-            <span class="nums">{{ imagePreview.loveNums | studentsCount }}</span>
+            <img class="icon" v-if="imagePreview.isPraise" src="@/assets/icons/posts/posts-unlove.png" alt="unlove" />
+            <img class="icon" v-else src="@/assets/icons/posts/posts-love.png" alt="love" />
+            <span class="nums">{{ imagePreview.praiseCount | studentsCount }}</span>
           </div>
         </div>
       </template>
     </van-image-preview>
 
     <!-- Menus Popup Block -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus-popup">
-      <div class="menus-popup-item" @click.stop="onCollect">收藏</div>
+    <van-popup v-model="showMenusPopup" round overlay-class="menus-popup" :transition-appear="true">
+      <div class="menus-popup-item" @click.stop="onCollect">{{ imagePreview.isCollection ? '取消收藏' : '收藏' }}</div>
       <div class="menus-popup-item" @click.stop="onSaveImage">保存图片</div>
       <div class="menus-popup-item" @click.stop="showMenusPopup = false">取消</div>
     </van-popup>
@@ -45,6 +46,10 @@
 export default {
   name: 'ImagesPreview',
   props: {
+    showBtn: {
+      type: Boolean,
+      default: false
+    },
     imagePreview: {
       type: Object,
       default() {
@@ -52,8 +57,10 @@ export default {
           show: false,
           images: [],
           startPosition: 1,
-          commentNums:0,
-          loveNums:0
+          isPraise: false,
+          isCollection: false,
+          commentCount: 0,
+          praiseCount: 0
         }
       }
     }
@@ -65,22 +72,36 @@ export default {
       more:require('@/assets/icons/preview/more.png'),
       close: require('@/assets/icons/preview/close.png'),
       comment: require('@/assets/icons/preview/comment.png'),
-      love: require('@/assets/icons/preview/love.png')
+      love: require('@/assets/icons/preview/love.png'),
+      isPraise: false,
+      isCollection: false,
+      commentCount: 0,
+      praiseCount: 0
     }
   },
   methods: {
 
     /** 评论 */
     openComment() {
+      if(!this.$login()) {
+        return 
+      }
       this.$emit('openComment')
       this.onClose()
     },
     /** 收藏 */
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       this.$emit('onCollect')
+      this.showMenusPopup = false
     },
     /** 喜欢 */
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       this.$emit('onLove')
     },
     /** 下标更新  */
@@ -96,7 +117,11 @@ export default {
       this.showMenusPopup = true
     },
     /** 保存图片 */
-    onSaveImage() {},
+    onSaveImage() {
+      const imgUrl = this.imagePreview.images[this.index]
+      window.open(imgUrl,'_blank')
+      this.showMenusPopup = false
+    }
   }
 }
 </script>

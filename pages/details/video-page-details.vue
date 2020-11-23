@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Header Block -->
-    <m-navbar :title="$route.query.type === 'small'? '小视频详情':'视频详情'" />
+    <m-navbar title="视频详情" />
 
     <!-- Player Block -->
     <div class="video-posts-player">
@@ -60,8 +60,16 @@ export default {
           wrap: '#player',
           width: '100%',
           height: '211px',
+          hideRepeat: true,
+          hideSwitchPlayer: true,
           vid: res.data.video.id
         })
+        if (res && res.data) {
+          this.$store.commit('details/changeIsPraise', res.data.isPraise)
+          this.$store.commit('details/changeIsCollection', res.data.isCollection)
+          this.$store.commit('details/changeCommentCount', res.data.commentCount)
+          this.$store.commit('details/changePraiseCount', res.data.praiseCount)
+        }
       })
     }
 

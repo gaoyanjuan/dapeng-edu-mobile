@@ -50,12 +50,12 @@
       @sendComment="sendComment"
     />
     <!-- 删除 菜单弹层 -->
-    <van-popup v-model="showPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
     <!-- 删除确认弹层 -->
-    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup">
+    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup" :transition-appear="true">
       <div class="popup__item__title">确定删除该评论吗？</div>
       <div class="popup__item">
         <span @click.stop="cancel">取消</span>
@@ -182,6 +182,9 @@ export default {
       }
     },
     onLove () {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
@@ -207,6 +210,9 @@ export default {
       }
     },
     showCommentPop () {
+      if(!this.$login()) {
+        return 
+      }
       if (this.userinfo && this.user && this.user.userId !== this.userinfo.userId) {
         this.commentPop.show = true
       } else {
@@ -308,6 +314,7 @@ export default {
       display: flex;
       align-items: center;
       .comment-icon {
+        height: 38px;
         img {
           width: 20px;
           height: 20px;
@@ -315,8 +322,9 @@ export default {
         margin-right: 30px;
       }
       .thumb-box {
-        margin-top: 2px;
+        padding-top: 2px;
         display: flex;
+        height: 38px;
         img {
           width: 20px;
           height: 20px;

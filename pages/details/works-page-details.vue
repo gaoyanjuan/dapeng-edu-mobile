@@ -14,7 +14,14 @@ export default {
       isServiceload: false
     }
     try {
-      await store.dispatch('work/appendWorksDetails', { id: route.query.id })
+      await store.dispatch('work/appendWorksDetails', { id: route.query.id }).then((res) => {
+        if (res && res.data) {
+          store.commit('details/changeIsPraise', res.data.isPraise)
+          store.commit('details/changeIsCollection', res.data.isCollection)
+          store.commit('details/changeCommentCount', res.data.commentCount)
+          store.commit('details/changePraiseCount', res.data.praiseCount)
+        }
+      })
       await store.dispatch('comment/queryCommentList', {
         topicId:route.query.id,
         topicType: 'WORKS'
@@ -28,12 +35,20 @@ export default {
         isServiceload: true
       }
     } catch (err) {
-      error({ statusCode: err.data.code, message: err.data.message })
+      console.log(err)
+      // error({ statusCode: err.data.code, message: err.data.message })
     }
   },
   created () {
     if (process.browser && !this.isServiceload) {
-      this.$store.dispatch('work/appendWorksDetails', { id: this.$route.query.id })
+      this.$store.dispatch('work/appendWorksDetails', { id: this.$route.query.id }).then((res) => {
+        if (res && res.data) {
+          this.$store.commit('details/changeIsPraise', res.data.isPraise)
+          this.$store.commit('details/changeIsCollection', res.data.isCollection)
+          this.$store.commit('details/changeCommentCount', res.data.commentCount)
+          this.$store.commit('details/changePraiseCount', res.data.praiseCount)
+        }
+      })
       this.$store.dispatch('comment/queryCommentList', {
         topicId: this.$route.query.id,
         topicType: 'WORKS'

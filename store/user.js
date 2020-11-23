@@ -230,7 +230,9 @@ export const mutations = {
     state.accessToken = payload
   },
   appendUserInfo (state, payload) {
-    state.userInfo = payload
+    if (payload) {
+      state.userInfo = { ...payload, nickname: payload.nickname || payload.nickName }
+    }
   },
   appendUserTrends (state, payload) {
     state.userTrends = payload.data

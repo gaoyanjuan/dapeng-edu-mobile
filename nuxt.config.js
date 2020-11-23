@@ -14,14 +14,16 @@ export default {
     zhifuUrl: env[process.env.MODE].DP_ZHIFU,
     mBaseUrl:env[process.env.MODE].DP_M_URL,
     authUrl: env[process.env.MODE].DP_AUTH_URL,
-    ossUrl:env[process.env.MODE].OSS_URL
+    ossUrl: env[process.env.MODE].OSS_URL,
+    orderUrl: env[process.env.MODE].ORDER_URL,
+    mode: env[process.env.MODE].MODE
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
     meta: [
       { name: 'renderer', content:'webkit'},
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no', },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover', },
       { keywords: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
       {
         hid: 'description',

@@ -6,7 +6,14 @@
     <!-- Main Block -->
     <div class="details-content-wrap">
       <!-- Gallery -->
-      <m-gallery :photos="growth.img" :photoInfo="growth.imgInfo" :item="growth"/>
+      <m-gallery
+        :photos="growth.img"
+        :photoInfo="growth.imgInfo"
+        :item="growth"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -41,15 +48,13 @@
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
-        :propCommentCount="growth.commentCount"
-        :propPraiseCount="growth.praiseCount"
         :contentType="growth.type"
         :topicType="growth.topicType"
         :detailData="growth"
       />
     </div>
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click="deleteGrowth">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -103,19 +108,18 @@ export default {
         this.$router.go(-1)
       })
     },
-    // 打开评论弹窗
-    openComment() {
-      this.commentPop.show = true
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
     },
-
-    // 喜欢事件
-    onLikeEvent() { console.log('like') },
-
-    // 收藏事件
-    onCollectEvent() { console.log('collect') },
-
-    // 评论发送
-    sendComment() { console.log('发送成功') }
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
+    }
   }
 }
 </script>

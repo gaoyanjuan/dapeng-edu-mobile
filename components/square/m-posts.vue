@@ -56,9 +56,9 @@
       <div class="works__fot">
         <div class="fot__rh--wrap">
           <!-- 评论 -->
-          <div class="fot__rh__commernt--wrap" @click="toDetail">
+          <div class="fot__rh__commernt--wrap" @click="openComment">
             <img class="fot__comment" :src="comment" alt="comment" />
-            <span class="fot__nums">{{ listItemData.commentCount | studentsCount }}</span>
+            <span class="fot__nums">{{ commentCount | studentsCount }}</span>
           </div>
           <!-- 喜欢 -->
           <div class="fot__rh__love--wrap" @click="onLove">
@@ -75,14 +75,14 @@
     </van-skeleton>
 
     <!-- 帖子 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <nuxt-link v-if="propSquareType === 'HOMEWORK'" tag="div" :to="`/copy-form?taskId=${listItemData.task ? listItemData.task.taskId : '' }&id=${listItemData.user.userId ? listItemData.user: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
       <div class="menus__popup__item" @click="deleteItem">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
@@ -102,6 +102,8 @@
       @confirmDelete="confirmDelete"
     />
 
+    <!-- 评论框弹层 -->
+    <m-comment-popup ref="commentPopup" :comment="commentPop" @sendComment="sendComment"/>
   </div>
 </template>
 
@@ -157,16 +159,20 @@ export default {
     }
   },
   data: () => ({
+    commentPop: { show: false },
     loading: true,
     showMenusPopup:false,
     isPraise: false,
     isCollection: false,
     praiseCount: 0,
+    commentCount: 0,
     // 图片预览
     imagePreview: {
       show: false,
       images: [],
       startPosition: 1,
+      isPraise: false,
+      isCollection: false,
       commentNums:0,
       loveNums:0
     },
@@ -211,6 +217,7 @@ export default {
   },
   created () {
     if (this.listItemData) {
+      this.commentCount = this.listItemData.commentCount
       this.praiseCount = this.listItemData.praiseCount
       this.isPraise = this.listItemData.isPraise
       this.isCollection = this.listItemData.isCollection
@@ -234,6 +241,7 @@ export default {
       queryUnLike: 'comment/queryUnLike',
       queryCollection: 'comment/queryCollection',
       queryDeleteCollection: 'comment/queryDeleteCollection',
+      appendNewComment: 'comment/appendNewComment',
       deleteHomework: 'user/deleteHomework',
       appendPublishHomework: 'user/appendPublishHomework',
       deleteWorks: 'user/deleteWorks',
@@ -271,11 +279,15 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
-      this.imagePreview.images = this.handleFilterImage(this.listItemData.imgInfo)
-      this.imagePreview.startPosition = index
-      this.imagePreview.loveNums = this.listItemData.praisesCount
-      this.imagePreview.commentNums = this.listItemData.commentCount
-      this.imagePreview.show = true
+      this.imagePreview = {
+        images: this.handleFilterImage(this.listItemData.imgInfo),
+        startPosition: index,
+        isPraise: this.isPraise,
+        isCollection: this.isCollection,
+        praiseCount: this.praiseCount,
+        commentCount: this.commentCount,
+        show: true
+      }
     },
     // 图片提取器
     handleFilterImage(images) {
@@ -293,14 +305,46 @@ export default {
       }
       this.showMenusPopup = !this.showMenusPopup
     },
+    sendComment (text) {
+      this.appendNewComment({
+        topicId: this.listItemData.id,
+        topicType: this.propSquareType,
+        content: text,
+        label: {
+          contentType: this.listItemData.type
+        }
+      })
+      .then((res) => {
+        this.$refs.commentPopup.resetPopup()
+        if (!res.data.highRisk) {
+          this.$toast('评论成功')
+        }
+        this.commentCount += 1
+      })
+      .catch((err) => {
+        if (err && err.data && err.data.message) {
+          this.$toast(err.data.message)
+        }
+      })
+    },
      // 评论操作
     openComment() {
-      console.log('comment')
+      if(!this.$login()) {
+        return 
+      }
+      this.commentPop.show = true
     },
     // 收藏
     onCollect() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isCollection) {
         this.isCollection = false
+        this.imagePreview = {
+          ...this.imagePreview,
+          isCollection: this.isCollection
+        }
         this.queryDeleteCollection({
           id: this.listItemData.id,
           type: this.propSquareType
@@ -319,6 +363,10 @@ export default {
         })
       } else {
         this.isCollection = true
+        this.imagePreview = {
+          ...this.imagePreview,
+          isCollection: this.isCollection
+        }
         this.queryCollection({
           id: this.listItemData.id,
           type: this.propSquareType,
@@ -332,9 +380,17 @@ export default {
     },
     //喜欢操作
     onLove() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
+        this.imagePreview = {
+          ...this.imagePreview,
+          praiseCount: this.praiseCount,
+          isPraise: this.isPraise
+        }
         this.queryUnLike({
           id: this.listItemData.id,
           type: this.propSquareType
@@ -354,6 +410,11 @@ export default {
       } else {
         this.isPraise = true
         this.praiseCount += 1
+        this.imagePreview = {
+          ...this.imagePreview,
+          praiseCount: this.praiseCount,
+          isPraise: this.isPraise
+        }
         this.queryLike({
           id: this.listItemData.id,
           type: this.propSquareType,

@@ -25,7 +25,7 @@ export default {
     appendRecommendList (state, payload) {
       state.recommendList.list = state.recommendList.list.concat(payload.data)
       state.recommendList.pageInfo = payload.pageInfo
-      if (payload?.data?.length < state.recommendList.pageInfo.size) {
+      if (payload && payload.data && payload.data.length < state.recommendList.pageInfo.size) {
         state.recommendList.status = 'over'
       } else {
         state.recommendList.status = 'load'

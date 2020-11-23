@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:'Gallery',
   props:{
@@ -55,25 +56,52 @@ export default {
       show: false,
       images: [],
       startPosition: 1,
-      commentNums:0,
-      loveNums:0
+      isPraise: false,
+      isCollection: false,
+      commentCount: 0,
+      praiseCount: 0
     },
   }),
+  computed: {
+    ...mapGetters({
+      detailsGetters: 'details/detailsGetters'
+    })
+  },
   mounted() {
     this.calcuSwiperWrap()
+  },
+  watch: {
+    'detailsGetters': function (newVal) {
+      this.imagePreview = {
+        ...this.imagePreview,
+        isPraise: newVal.isPraise,
+        isCollection: newVal.isCollection,
+        praiseCount: newVal.praiseCount,
+        commentCount: newVal.commentCount,
+      }
+    }
   },
   methods: {
     // 评论操作
     openComment() {
-      console.log('comment')
+      if(!this.$login()) {
+        return 
+      }
+      this.$emit('openComment')
     },
     // 收藏
     onCollect() {
-      console.log('collect')
+      if(!this.$login()) {
+        return 
+      }
+      this.$emit('onCollect')
     },
     //喜欢操作
     onLove() {
-      console.log('love')
+      if(!this.$login()) {
+        return 
+      }
+      this.$emit('onLove')
     },
     // 监听图片切换
     onPhotosChange(index) {
@@ -85,11 +113,15 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
-      this.imagePreview.images = this.handleFilterImage()
-      this.imagePreview.startPosition = index
-      this.imagePreview.loveNums = this.item.praisesCount
-      this.imagePreview.commentNums = this.item.commentCount
-      this.imagePreview.show = true
+      this.imagePreview = {
+        images: this.handleFilterImage(),
+        startPosition: index,
+        isPraise: this.detailsGetters.isPraise,
+        isCollection: this.detailsGetters.isCollection,
+        praiseCount: this.detailsGetters.praiseCount,
+        commentCount: this.detailsGetters.commentCount,
+        show: true
+      }
     },
     // 图片提取器
     handleFilterImage() {

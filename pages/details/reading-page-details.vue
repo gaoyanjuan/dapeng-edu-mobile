@@ -58,6 +58,12 @@ export default {
       const _this = this
 
       this.getDetails({id: this.$route.query.id}).then( res => {
+        if (res && res.data) {
+          this.$store.commit('details/changeIsPraise', res.data.isPraise)
+          this.$store.commit('details/changeIsCollection', res.data.isCollection)
+          this.$store.commit('details/changeCommentCount', res.data.commentCount)
+          this.$store.commit('details/changePraiseCount', res.data.praiseCount)
+        }
         const imgList = this.$refs.richText.getElementsByTagName('img')
         imgList.forEach((element, index) => {
           element.addEventListener('click', function () {

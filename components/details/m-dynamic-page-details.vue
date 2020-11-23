@@ -1,12 +1,28 @@
 <template>
   <div v-if="dynamic" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="dynamic.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+    <m-navbar
+      :attention="dynamic.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="dynamic.type === 'TEXT' ? '动态详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="dynamic.img" :photoInfo="dynamic.imgInfo" :item="dynamic"/>
+      <!-- Gallery TEXT:图文-->
+      <m-gallery
+        v-if="dynamic.type === 'TEXT'"
+        :photos="dynamic.img"
+        :photoInfo="dynamic.imgInfo"
+        :item="dynamic"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
+      
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="dynamic.type === 'VIDEO'" :video="dynamic.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -44,15 +60,13 @@
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
-        :propCommentCount="dynamic.commentCount"
-        :propPraiseCount="dynamic.praiseCount"
         :contentType="dynamic.type"
         topicType="LIFE"
         :detailData="dynamic"
       />
     </div>
      <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click="deleteDynamic">删除</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -66,7 +80,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
-    title:'动态详情',
     commentSelected: true,
     likeSelected: false,
     showMenusPopup: false,
@@ -105,6 +118,18 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
+    },
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
     },
     // 删除成长
     deleteDynamic() {

@@ -1,12 +1,28 @@
 <template>
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="homework.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus" />
+    <m-navbar
+      :attention="homework.isAttention"
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      :title="homework.type === 'TEXT' ? '作业详情' : '小视频详情'"
+    />
 
     <!-- Main Block -->
     <div class="details-content-wrap">
-      <!-- Gallery -->
-      <m-gallery :photos="homework.img" :photoInfo="homework.imgInfo" :item="homework"/>
+      <!-- Gallery TEXT:图文-->
+      <m-gallery
+        v-if="homework.type === 'TEXT'"
+        :photos="homework.img"
+        :photoInfo="homework.imgInfo"
+        :item="homework"
+        @openComment="openComment"
+        @onLove="onLove"
+        @onCollect="onCollect"
+      />
+      
+      <!-- Small Video VIDEO:小视频 -->
+      <m-details-small-video v-if="homework.type === 'VIDEO'" :video="homework.vid"/>
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
@@ -46,8 +62,6 @@
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
-        :propCommentCount="homework.commentCount"
-        :propPraiseCount="homework.praiseCount"
         :courseType="homework.courseType"
         :contentType="homework.type"
         topicType="HOMEWORK"
@@ -55,7 +69,7 @@
       />
     </div>
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup">
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <template v-if="homework.user.userId === (userInfo ? userInfo.userId : '' )">
         <div class="menus__popup__item" @click="editHomework">编辑</div>
         <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
@@ -77,7 +91,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Details',
   data:() => ({
-    title:'作业详情',
     showMenusPopup: false,
     showRightMenu: true,
     deleteDialogParams: {
@@ -119,7 +132,18 @@ export default {
         this.$router.go(-1)
       })
     },
-
+    // 评论操作
+    openComment () {
+      this.$refs.detailsFooter.openComment()
+    },
+    // 收藏
+    onCollect () {
+      this.$refs.detailsFooter.onCollectEvent()
+    },
+    //喜欢操作
+    onLove () {
+      this.$refs.detailsFooter.onLikeEvent()
+    },
     // 编辑作业
     editHomework() {
       this.$router.push({
