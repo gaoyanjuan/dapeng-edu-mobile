@@ -225,7 +225,7 @@ export default {
 
     // 抄作业投诉
     async appendComplaint(state, params) {
-      const res = await this.$axios.post(`/homes/${params.taskId}/plagiarism`, params)
+      const res = await this.$axios.post(`/homes/${params.taskId}/plagiarism`, params.data)
       return res
     },
     

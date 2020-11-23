@@ -76,8 +76,8 @@
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
       <template v-else>
-        <div class="menus__popup__item">Ta抄作业</div>
-        <div class="menus__popup__item">作业号</div>
+        <nuxt-link tag="div" :to="`/copy-form?taskId=${homework.id ? homework.id : '' }&id=${homework.user.userId ? homework.user.userId: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
+        <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
     </van-popup>
@@ -154,6 +154,19 @@ export default {
           id: this.homework.id
         }
       })
+    },
+    handleCopyJobNummer() {
+      /**
+       * vue-clipboard2 Usage
+       * https://www.npmjs.com/package/vue-clipboard2
+       */
+      const identCode = this.homework.identificationCode || ''
+      this.$copyText(identCode).then(function (e) {
+        console.log(e.text)
+      }, function(e) {
+        console.log('Can not copy')
+      })
+      this.showMenusPopup = false
     },
   }
 }
