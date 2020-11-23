@@ -16,7 +16,7 @@
             {{ item.name }}
           </div>
         </div>
-        <img class="btn-publish-posts" :src="publish" alt="我要发贴" @click="handlePublish"/>
+        <img class="btn-publish-posts" :src="publish" alt="我要发贴" @click="enterSubmit"/>
       </section>
     </van-sticky>
 
@@ -88,8 +88,12 @@ export default {
         page: newPage
       })
     },
+
     /** 发帖事件 */
-    handlePublish() {},
+    enterSubmit() {
+      this.$router.push(`/submit?type=LIFE&contentType=ACTIVITY_POST`)
+    },
+
     /** 切换菜单事件 */
     changeMenus(index, item) {
       // 禁止路由重复点击

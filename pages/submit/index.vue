@@ -40,6 +40,12 @@
         </div>
       </section>
 
+      <!-- 活动标签 -->
+      <section v-if="$route.query.contentType && activityData" class="activity-posts-label-row">
+        <img class="activity-icon" :src="activity" alt="topic"/>
+        <span class="activity-txt"> {{ activityData.activityDisplay && activityData.activityDisplay.displayName }}</span>
+      </section>
+
       <!-- 作业图片  -->
       <section class="homework-photos-row">
         <div class="upload-wrap">
@@ -51,7 +57,6 @@
             :preview-full-image="false"
             :after-read="onUploadAfterRead"
             :before-read="onUploadBeforeRead"
-            @oversize="onOversize"
             @click-preview="onClickPreview"
           >
             <div class="upload-area"></div>
@@ -152,7 +157,12 @@ export default {
     },
     // 默认选择的学院
     collegeIndex: null,
+    // 成长下-活动数据
+    activityData: null,
+    // label 背景
     label:require('@/assets/icons/submit/college-label.png'),
+    // 活动 label
+    activity: require('@/assets/icons/label/label-topic.png')
   }),
 
   watch: {
@@ -301,6 +311,7 @@ export default {
     } else if (this.submitType === 'LIFE') {
       this.dynamicNums = '只能输入200个字哦'
       this.openAppPop.show = true
+      this.getActivities()
       
     } else {
       this.dynamicNums = '只能输入60个字哦'
@@ -325,7 +336,9 @@ export default {
       // 发布作品
       publishWorks:'publish/addNewWorks',
       // 发布动态
-      publishDynamic: 'publish/addNewDynamic'
+      publishDynamic: 'publish/addNewDynamic',
+      // 查询活动详情
+      getActivitiesDetails: 'activities/appendActivitiesDetail'
     }),
 
     ...mapMutations({
@@ -473,12 +486,19 @@ export default {
 
     /** 提交动态 */
     submitDynamic() {
-      return this.publishDynamic({
+      let params = {
         imgInfo: this.imageInfo,
         content: this.content,
         source: 'MOBILE',
         type: 'TEXT',
-      }).then( res => {
+      }
+
+      if(this.$route.query.contentType) {
+        params.activityId = this.activityData.id
+        params.activityType = this.activityData.activity.type
+      }
+
+      return this.publishDynamic(params).then( res => {
         return res
       }).catch( err => {
         return err
@@ -494,6 +514,16 @@ export default {
           this.homeworkNumberPop.show = true
         }
       })
+    },
+
+    /** 获取活动数据 */
+    getActivities() {
+      if(this.$route.query.contentType === 'ACTIVITY_POST') {
+        const activityId = process.env.global.activityId
+        this.getActivitiesDetails(activityId).then((res) => {
+          this.activityData = res
+        })
+      }
     },
 
     /** 图片文件上传至服务器 */
@@ -595,16 +625,6 @@ export default {
     },
 
     /**
-     * 监听上传文件大小
-     * 自动过滤9M以上的图片
-     */
-    onOversize(data) {
-      if (data.file.size > 9 * 1024 * 1024) {
-        this.$toast('图片超过9M，上传失败！')
-      }
-    },
-
-    /**
    * 打开图片预览
    * @iamges:图片列表
    * @index：当前图片索引
@@ -656,7 +676,7 @@ export default {
       }
     },
 
-    /** 监听字数 */
+    /** 计算字数 */
     calcContent(words, nums) {
       if(words.length === nums) {
         this.wordsLimit = true
@@ -768,9 +788,39 @@ export default {
   }
 }
 
+/** 活动标签 */
+.activity-posts-label-row {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+  height: 24px;
+  line-height: 24px;
+  padding: 4px 8px;
+  background: #FFEFF2;
+  border-radius: 12px;
+}
+
+.activity-posts-label-row .activity-icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
+
+.activity-posts-label-row .activity-txt {
+  max-width: 230px;
+  height: 16px;
+  font-size: 12px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #FF6B92;
+  line-height: 16px;
+  .text-ellipsis();
+}
+
 /** 上传区域 */
 .homework-photos-row .upload-wrap {
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .homework-photos-row .upload-tips {
