@@ -63,6 +63,7 @@ export default {
           this.$store.commit('details/changeIsCollection', res.data.isCollection)
           this.$store.commit('details/changeCommentCount', res.data.commentCount)
           this.$store.commit('details/changePraiseCount', res.data.praiseCount)
+          this.appendBrowser({id: this.$route.query.id})
         }
         const imgList = this.$refs.richText.getElementsByTagName('img')
         imgList.forEach((element, index) => {
@@ -85,8 +86,10 @@ export default {
   methods:{
     ...mapActions({
       getDetails: 'reading/appendReadingDetails',
+      appendBrowser: 'reading/appendReadingBrowse',
       getComment: 'comment/queryCommentList',
       getLikes: 'comment/queryLikesList',
+      
     }),
 
     ...mapMutations({

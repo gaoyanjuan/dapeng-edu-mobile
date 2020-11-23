@@ -48,6 +48,11 @@ export default {
     }
   },
   actions: {
+     // 新增动态浏览量
+     async appendDynamicBrowse({ commit }, params) {
+      const res = await this.$axios.put(`/dynamics/${params.id}/browse?topicType=LIFE`)
+      return res
+    },
     /** * 查询动态详情 */
     async appendDynamicDetails({ commit }, params) {
       const res = await this.$axios.get(`/dynamic/${params.id}`)

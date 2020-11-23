@@ -22,6 +22,9 @@ export default {
           store.commit('details/changePraiseCount', res.data.praiseCount)
         }
       })
+      await store.dispatch('dynamic/appendDynamicBrowse', { 
+        id: route.query.id 
+      })
       await store.dispatch('comment/queryCommentList', {
         topicId:route.query.id,
         topicType: 'LIFE'
@@ -47,6 +50,9 @@ export default {
           this.$store.commit('details/changeCommentCount', res.data.commentCount)
           this.$store.commit('details/changePraiseCount', res.data.praiseCount)
         }
+      })
+      this.$store.dispatch('dynamic/appendDynamicBrowse', {
+        id : this.$route.query.id
       })
       this.$store.dispatch('comment/queryCommentList', {
         topicId: this.$route.query.id,
