@@ -237,7 +237,10 @@ export default {
     csp: {
       hashAlgorithm: 'sha256',
       policies: {
-        'default-src': ["'self'"],
+        'default-src': [
+          "'self'",
+          '*.polyv.net',
+        ],
         'img-src': [
           "'self'",
           `data:`,
@@ -256,6 +259,7 @@ export default {
           `data:`,
           '*.dapengjiaoyu.cn',
           '*.dapengjiaoyu.com',
+          '*.yzcdn.cn'
         ],
         'worker-src': [
           "'self'",
@@ -277,6 +281,7 @@ export default {
           '*.talk99.cn',
           '*.dapengjiaoyu.cn',
           '*.dapengjiaoyu.com',
+          '*.sohu.com',
           "'unsafe-inline'",
           '*.baidu.com'
         ],
