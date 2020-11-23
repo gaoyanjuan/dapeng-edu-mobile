@@ -72,11 +72,7 @@ export default {
     account: require('@/assets/icons/register/account.png'),
     safety: require('@/assets/icons/register/safety.png'),
   }),
-  mounted () {
-    this.getUserDetail().then((res) => {
-      console.log(res)
-    })
-  },
+
   watch:{
     mobile(n, o) {
       if (!new RegExp(/^1[3-9][0-9]\d{8}$/).test(n)) {
@@ -106,8 +102,7 @@ export default {
   },
   methods:{
     ...mapActions('user', [
-      'checkRegisterAble',
-      'getUserDetail'
+      'checkRegisterAble'
     ]),
     // 快速注册
     onRegister() {
