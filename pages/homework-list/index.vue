@@ -220,30 +220,25 @@ export default {
 }
 
 .homework-blank-wrap {
-  width: 240px;
-  height: 158px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
 
   .blank-img {
     width: 240px;
     height: 126px;
-    margin-top: 24px;
   }
 
   .blank-txt {
     margin-top: 12px;
-    width: max-content;
-    height: 20px;
     font-size: 14px;
-    font-family: @dp-font-semibold;
+    font-family: @semibold;
     font-weight: 600;
-    color: #8d8e8e;
-    line-height: 20px;
-    text-align: center;
+    color: #8D8E8E;
   }
 }
 </style>

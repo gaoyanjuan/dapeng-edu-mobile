@@ -17,6 +17,10 @@ export const actions = {
     const data  = await this.$axios.get(`/activitys?linkContentTypes=${payload.linkContentTypes}&page=${payload.page}&size=${payload.size}`)
     commit('appendActivities', data)
     return data
+  },
+  async appendActivitiesDetail({ commit }, payload) {
+    const data  = await this.$axios.get(`/activitys/${payload}`)
+    return data.data
   }
 }
 
