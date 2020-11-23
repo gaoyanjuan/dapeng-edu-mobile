@@ -10,7 +10,7 @@
       
       <div class="header-right-side">
         <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickName }} </span>
-        <p v-else class="not-login-wrap"><span @click="toLogin">登陆</span><span>/</span><span>注册</span></p>
+        <p v-else class="not-login-wrap"><span @click="toLogin">登陆</span><span>/</span><span @click="toRegister">注册</span></p>
         <template v-if="oldUserInfoGetters">
           <span v-if="oldUserInfoGetters.studentSatusId" class="user-code">学籍号：{{ oldUserInfoGetters.studentSatusId }}</span>
         </template>
@@ -165,11 +165,14 @@ export default {
       this.$router.push('/login')
     },
 
+    // 跳转注册页
+    toRegister () {
+      this.$router.push('/register')
+    },
+
     // 进入发布页面
     enterPublishPage(params) {
-      if (!this.$login()) {
-        return
-      }
+      if (!this.$login()) return
       
       this.$router.push({
         path: '/personal-center/personal-publish',
@@ -181,9 +184,7 @@ export default {
     },
 
     toAttention() {
-      if (!this.$login()) {
-        return
-      }
+      if (!this.$login()) return
 
       this.$router.push({
         path: '/personal-center/personal-user',
@@ -194,9 +195,7 @@ export default {
     },
 
     toFans() {
-      if (!this.$login()) {
-        return
-      }
+      if (!this.$login()) return
 
       this.$router.push({
         path: '/personal-center/personal-user',
@@ -208,10 +207,7 @@ export default {
     },
 
     toRecommend() {
-      if (!this.$login()) {
-        return
-      }
-
+      if (!this.$login()) return
       this.$router.push({
         path: '/personal-center/personal-user',
         query: {
@@ -220,10 +216,9 @@ export default {
         }
       })
     },
+
     toMyLike() {
-      if (!this.$login()) {
-        return
-      }
+      if (!this.$login()) return
       this.$router.push({
         path: '/personal-center/personal-like',
         query: {
@@ -231,10 +226,9 @@ export default {
         }
       })
     },
+
     toMyCollection() {
-      if (!this.$login()) {
-        return
-      }
+      if (!this.$login()) return
       this.$router.push({
         path: '/personal-center/personal-collection',
         query: {

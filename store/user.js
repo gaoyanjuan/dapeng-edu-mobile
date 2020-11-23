@@ -1,3 +1,5 @@
+import qs from 'qs'
+
 export const state = () => ({
   accessToken: null,
   userInfo: null,
