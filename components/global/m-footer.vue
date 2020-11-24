@@ -214,10 +214,11 @@ export default {
 }
 
 .menus-wrapper {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
   position: relative;
   background: rgba(255, 255, 255, 0.84);
   padding-bottom: 65px;
@@ -240,6 +241,7 @@ export default {
     flex-direction: column;
     align-items: center;
     position: absolute;
+    z-index: 2006;
   }
 
   .cloumn-trial {

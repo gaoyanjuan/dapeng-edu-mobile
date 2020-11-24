@@ -314,7 +314,6 @@ export default {
       display: flex;
       align-items: center;
       .comment-icon {
-        height: 38px;
         img {
           width: 20px;
           height: 20px;
@@ -322,9 +321,7 @@ export default {
         margin-right: 30px;
       }
       .thumb-box {
-        padding-top: 2px;
         display: flex;
-        height: 38px;
         img {
           width: 20px;
           height: 20px;

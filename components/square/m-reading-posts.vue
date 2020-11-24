@@ -249,6 +249,8 @@ export default {
     color: #A3A8AB;
     line-height: 20px;
     margin-top: 4px;
+    word-wrap: break-word;
+    word-break: break-all;
     overflow: hidden;
     text-overflow:ellipsis;
     white-space: nowrap;
@@ -280,6 +282,8 @@ export default {
   color: #A3A8AB;
   line-height: 20px;
   margin-top: 4px;
+  word-wrap: break-word;
+  word-break: break-all;
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
