@@ -42,7 +42,7 @@
     </van-tabbar>
 
     <!-- 底部 发布菜单 -->
-    <van-overlay :show="show" z-index="2005" :duration="0" :lock-scroll='false'>
+    <van-overlay :show="show" z-index="2005" :duration="0">
       <div class="menus-wrapper" @click.stop>
         <img class="menus-close" :src="publish.close" alt="close" @click="show = false"/>
         
@@ -221,7 +221,6 @@ export default {
   justify-content: center;
   position: relative;
   background: rgba(255, 255, 255, 0.84);
-  padding-bottom: 65px;
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
 
@@ -229,7 +228,7 @@ export default {
     width: 37px;
     height: 37px;
     position: absolute;
-    bottom: 65px;
+    bottom: 8px;
     z-index: 2006;
     cursor: pointer;
   }
