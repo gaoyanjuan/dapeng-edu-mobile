@@ -62,7 +62,7 @@
             :listItemData="item"
             :modifiedTime="item.lastModifiedTime"
             :propIndex="idx"
-            path="/details/homework-page-details"
+            path="/details/homework"
             squareType="作业"
           />
         </van-list>

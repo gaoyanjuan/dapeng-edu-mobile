@@ -87,7 +87,7 @@ export default {
   name:'Mine',
   data: ()=> ({
     lovePopup: { show: false },
-    userRoute:'/personal-center/personal-user',
+    userRoute:'/personal-center/dashboard',
     avatar:require('@/assets/icons/common/avatar.png'),
     notLoginAvatar: require('@/assets/icons/mine/not-login.png'),
     navLike: require('@/assets/icons/mine/nav-like.png'),
@@ -175,7 +175,7 @@ export default {
       if (!this.$login()) return
       
       this.$router.push({
-        path: '/personal-center/personal-publish',
+        path: '/personal-center/publish',
         query:{ 
           type: params.name,
           userId: this.userInfoGetters.userId
@@ -187,7 +187,7 @@ export default {
       if (!this.$login()) return
 
       this.$router.push({
-        path: '/personal-center/personal-user',
+        path: '/personal-center/dashboard',
         query: {
           userId: this.userInfoGetters.userId
         }
@@ -198,7 +198,7 @@ export default {
       if (!this.$login()) return
 
       this.$router.push({
-        path: '/personal-center/personal-user',
+        path: '/personal-center/dashboard',
         query: {
           type: 'fans',
           userId: this.userInfoGetters.userId
@@ -209,7 +209,7 @@ export default {
     toRecommend() {
       if (!this.$login()) return
       this.$router.push({
-        path: '/personal-center/personal-user',
+        path: '/personal-center/dashboard',
         query: {
           type: 'recommend',
           userId: this.userInfoGetters.userId
@@ -220,7 +220,7 @@ export default {
     toMyLike() {
       if (!this.$login()) return
       this.$router.push({
-        path: '/personal-center/personal-like',
+        path: '/personal-center/likes',
         query: {
           userId: this.userInfoGetters.userId
         }
@@ -230,7 +230,7 @@ export default {
     toMyCollection() {
       if (!this.$login()) return
       this.$router.push({
-        path: '/personal-center/personal-collection',
+        path: '/personal-center/collection',
         query: {
           userId: this.userInfoGetters.userId
         }

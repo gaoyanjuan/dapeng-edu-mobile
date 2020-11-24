@@ -33,7 +33,7 @@
           :listItemData="item"
           :isAttention="item.isAttention"
           :modifiedTime="item.createTime"
-          path="/details/growth-page-details"
+          path="/details/growth"
           propSquareType="ACTIVITY_POST"
         />
       </van-list>

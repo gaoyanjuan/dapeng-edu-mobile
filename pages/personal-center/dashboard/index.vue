@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name:'Personal-User',
+  name:'Dashboard',
   layout:'navbar',
   data: () => ({
     activeName:'attention',

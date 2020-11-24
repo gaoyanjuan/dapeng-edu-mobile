@@ -22,7 +22,7 @@
             :listItemData="item"
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
-            path="/details/works-page-details"
+            path="/details/works"
             propSquareType="WORKS"
           />
         </template>

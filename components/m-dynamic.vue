@@ -20,7 +20,7 @@
             :listItemData="item"
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
-            path="/details/dynamic-page-details"
+            path="/details/dynamic"
             propSquareType="LIFE"
           />
         </template>
@@ -36,7 +36,7 @@
             :listItemData="item"
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
-            path="/details/dynamic-page-details"
+            path="/details/dynamic"
             propSquareType="LIFE"
           />
         </template>
@@ -52,7 +52,7 @@
             :listItemData="item"
             :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
-            path="/details/dynamic-page-details"
+            path="/details/dynamic"
             propSquareType="LIFE"
           />
         </template>

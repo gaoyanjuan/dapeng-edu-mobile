@@ -432,7 +432,7 @@ export default {
       setTimeout(() => {
         this.submitLock = true
         this.$router.push({
-          path: '/personal-center/personal-publish',
+          path: '/personal-center/publish',
           query:{ type:name, userId: this.userInfo.userId }
         })
       }, 2500)

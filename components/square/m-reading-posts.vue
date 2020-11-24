@@ -6,7 +6,7 @@
 
         <!-- Header Block -->
         <template v-if="item.coverImgSmall.length === 1">
-          <nuxt-link tag="div" class="reading-header-row" :to="`/details/reading-page-details?id=${item.id}`">
+          <nuxt-link tag="div" class="reading-header-row" :to="`/details/reading?id=${item.id}`">
             <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
             <div class="posts-right-side-wrap">
               <span class="posts-title">{{ item.title }}</span>
@@ -16,7 +16,7 @@
         </template>
 
         <template v-else>
-          <nuxt-link tag="div" class="reading-header-row-more" :to="`/details/reading-page-details?id=${item.id}`">
+          <nuxt-link tag="div" class="reading-header-row-more" :to="`/details/reading?id=${item.id}`">
             <div class="posts-title"> {{ item.title }} </div>
             <div class="posts-content"> {{ content }} </div>
             <div class="posts-photos-wrap" v-if="item.coverImgSmall">
