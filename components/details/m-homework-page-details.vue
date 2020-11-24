@@ -202,6 +202,8 @@ export default {
   font-weight: 400;
   color: #18252C;
   line-height: 24px;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 .inner-content-txt /deep/ .emotion {

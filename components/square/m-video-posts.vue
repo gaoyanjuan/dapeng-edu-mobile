@@ -190,6 +190,8 @@ export default {
   font-weight: 400;
   color: #18252C;
   line-height: 24px;
+  word-wrap: break-word;
+  word-break: break-all;
   cursor: pointer;
   .text-ellipsis-with-two-line()
 }
