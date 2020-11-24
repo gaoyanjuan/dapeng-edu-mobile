@@ -1,6 +1,7 @@
 import Cookie from 'js-cookie'
 import { getcookiesInServer } from '@/utils/cookie-tool'
 import Vue from 'vue'
+import { Dialog } from 'vant'
 const HttpAgent = require('agentkeepalive')
 const HttpsAgent = require('agentkeepalive').HttpsAgent
 
@@ -44,25 +45,19 @@ export default function ({ store, redirect, req, route, error, app: { $axios } }
         pages: parseInt(response.headers['x-pagination-pages']) || 1,
         size: parseInt(response.headers['x-pagination-size']) || process.env.global.pageSize
       }
-      // if (response.headers['x-pagination-pages']) {
-      //   response.pageInfo = {
-      //     count: parseInt(response.headers['x-pagination-count']) || 0,
-      //     number: parseInt(response.headers['x-pagination-number']) || 0,
-      //     pages: parseInt(response.headers['x-pagination-pages']) || 1,
-      //     size: parseInt(response.headers['x-pagination-size']) || process.env.global.pageSize
-      //   }
-      // }
-      // 请求接口数据正常，返回数据
       return response
     },
     error => {
+      if (!error.response) { return error }
       if (error.response.status == 401 && Cookie.get('access_token')) {
-        if (error.response.data.state === 1001) {
+        if (error.response.data && error.response.data.state === 1001) {
           removeToken(store)
-          this.$toast('该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码')
-        } else if (error.response.data.error === 'invalid_token') {
+          login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
+
+        } else if (error.response.data && error.response.data.error === 'invalid_token') {
           removeToken(store)
-          this.$toast('登录失效')
+          login({ message: '登录失效' }, redirect)
+
         } else {
           if (!isRefreshing) {
             isRefreshing = true
@@ -76,7 +71,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios } }
               return $axios(error.config)
             }).catch(res => {
               removeToken(store)
-              this.$toast('登录失效')
+              login({ message: '登录失效' }, redirect)
             })
           } else {
             // 正在刷新token，将返回一个未执行resolve的promise
@@ -92,10 +87,18 @@ export default function ({ store, redirect, req, route, error, app: { $axios } }
         console.log(error.response.data , '服务端接口错误信息')
       } else if (error.response.status == 401) {
         console.log(error.response.data , '服务端接口错误信息')
-      } else if (error.response.status == 409 && error.response.data.code === 404229){
-        return error.response
       } else if (error.response.status == 409) {
-        return error.response
+        // http状态500，请求API找不到，重定向到404页面   
+        if (error.response.data && error.response.data.code === 404229) {
+          redirect('/404')
+          return
+        } else if (error.response.data && error.response.data.code === 404259) {
+          location.reload()
+          return
+        } else {
+          console.log(error.response , '服务端接口错误信息')
+          return Promise.reject(error.response)
+        }
       }
       console.log(error.response , '服务端接口错误信息')
       return Promise.reject(error.response)   // 返回接口返回的错误信息
@@ -119,4 +122,15 @@ function removeToken (store) {
   Cookie.remove('access_token')
   Cookie.remove('refresh_token')
   store.dispatch('user/appendUserInfo', null)
+}
+
+function login(params, redirect) {
+  Dialog({
+    messageAlign: 'left',
+    confirmButtonText: '去登录',
+    confirmButtonColor:'#00B93B',
+    message: params.message
+  }).then(() => {
+    redirect('/login')
+  })
 }

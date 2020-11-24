@@ -303,7 +303,7 @@ export default {
         ],
         'connect-src': ["'self'", '*.aliyuncs.com', '*.polyv.net', '*.videocc.net', '*.baidu.com', '*.talk99.cn'],
         'form-action': ["'self'"],
-        'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net'],
+        'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net', '*.localhost'],
         'object-src': ["'none'"],
         'base-uri': ["'self'"],
         'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com']
