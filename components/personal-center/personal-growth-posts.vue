@@ -63,7 +63,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/growth-page-details',
+    navRoute:'/details/growth',
     growth_blank: require('@/assets/icons/blank/have-no-growth.png'),
     currentPage: 1
   }),

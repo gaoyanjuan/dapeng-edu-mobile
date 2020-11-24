@@ -21,6 +21,7 @@ export default {
     title: '大鹏教育-高品质的设计师在线教育',
     meta: [
       { name: 'renderer', content:'webkit'},
+      { name: 'x5-fullscreen', content: 'true' },
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover', },
       { keywords: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },

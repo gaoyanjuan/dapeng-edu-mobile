@@ -49,7 +49,7 @@ export default {
     loading: false,
     finished: false,
     finishedTxt: '没有更多了',
-    navRoute:'/details/homework-page-details',
+    navRoute:'/details/homework',
     blank:require('@/assets/icons/blank/have-no-homework.png')
   }),
   computed:{

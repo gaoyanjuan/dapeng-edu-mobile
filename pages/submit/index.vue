@@ -183,14 +183,13 @@ export default {
     },
 
     fileList(n, o) {
-
       if(this.submitType === 'VIP' || this.submitType === 'TEST') {
-        if (n.length) { this.submitStatus = true }
-      } 
+        if (n.length && this.uploadStatus) { this.submitStatus = true }
+      }
       
       if(this.submitType === 'WORKS' || this.submitType === 'LIFE') {
-        if (n.length && this.submitType === 'WORKS') { this.submitStatus = this.collegeIndex !== null }
-        if (n.length && this.submitType === 'LIFE') { this.submitStatus = true }
+        if (n.length && this.submitType === 'WORKS' && this.uploadStatus) { this.submitStatus = this.collegeIndex !== null }
+        if (n.length && this.submitType === 'LIFE' && this.uploadStatus) { this.submitStatus = true }
         if (n.length) { this.openAppPop.show = false }
         if (!n.length && !this.content.length) { this.openAppPop.show = true }
       }
@@ -433,7 +432,7 @@ export default {
       setTimeout(() => {
         this.submitLock = true
         this.$router.push({
-          path: '/personal-center/personal-publish',
+          path: '/personal-center/publish',
           query:{ type:name, userId: this.userInfo.userId }
         })
       }, 2500)
@@ -532,6 +531,7 @@ export default {
       file.status = 'uploading'
       file.message = '上传中...'
       this.uploadStatus = false
+      this.submitStatus = false
 
       const res = await this.getMySTS()
       const { accessKeyId, accessKeySecret, securityToken } = res.data
@@ -580,6 +580,15 @@ export default {
           width: imgObj.width,
           url: url
         })
+
+        // 作品类型下-设置提交状态需要学院
+        if(_this.submitType === 'WORKS') {
+          if( _this.collegeIndex !== null) {
+           _this.submitStatus = true
+          }
+        } else {
+          _this.submitStatus = true
+        }
       }
       imgObj.src = img
     },
@@ -600,7 +609,7 @@ export default {
         }
 
         // 图片大小限制
-        if (this.totalImgSize + file.size > this.maxImgLimit) {
+        if ((this.totalImgSize + file.size) > this.maxImgLimit) {
           this.$toast('图片超过9M，上传失败！')
           reject()
         }
@@ -616,7 +625,9 @@ export default {
             this.$toast('图片超过4096*4096，上传失败！')
             reject()
           } else {
-            this.totalImgSize += file.size
+            if ((this.totalImgSize + file.size) <= this.maxImgLimit) {
+              this.totalImgSize += file.size
+            }
             resolve()
           }
         }
