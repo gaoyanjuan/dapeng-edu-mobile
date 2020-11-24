@@ -3,9 +3,9 @@
 
     <!-- 左边用户信息 -->
     <div class="avatar-left-side-wrap">
-      <head-image @click.native="toPersonalCenter" :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
+      <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
-        <span @click="toPersonalCenter" class="info-nickname">{{ userInfo ? userInfo.nickname : '佚名' }}</span>
+        <span class="info-nickname">{{ userInfo ? userInfo.nickname : '佚名' }}</span>
         <span class="info-date">{{ submitTime | commonDate }}</span>
       </div>
     </div>
@@ -110,31 +110,31 @@ export default {
       'followingUser',
       'cancelFollowingUser'
     ]),
-    toPersonalCenter() {
-      if(!this.$login()) {
-        return 
-      }
-      if (this.userId === 'available') {
-        if (this.$route.query.userId === this.userInfoGetters.userId) return false
-        this.$router.push({
-          path: '/personal-center',
-          query: {
-            userId: this.userInfoGetters.userId
-          }
-        })
-      } else if (this.$router.history.current.path === '/personal-center') {
-        if (this.$route.query.userId === this.userId) return false
-        this.$router.push({
-          path: '/personal-center',
-          query: {
-            userId: this.userId
-          }
-        })
-      }
-      this.$router.push({
-        path:'/personal-center'
-      })
-    },
+    // toPersonalCenter() {
+    //   if(!this.$login()) {
+    //     return 
+    //   }
+    //   if (this.userId === 'available') {
+    //     if (this.$route.query.userId === this.userInfoGetters.userId) return false
+    //     this.$router.push({
+    //       path: '/personal-center',
+    //       query: {
+    //         userId: this.userInfoGetters.userId
+    //       }
+    //     })
+    //   } else if (this.$router.history.current.path === '/personal-center') {
+    //     if (this.$route.query.userId === this.userId) return false
+    //     this.$router.push({
+    //       path: '/personal-center',
+    //       query: {
+    //         userId: this.userId
+    //       }
+    //     })
+    //   }
+    //   this.$router.push({
+    //     path:'/personal-center'
+    //   })
+    // },
     /**关注事件 */
     handleFollow () {
       if(!this.$login()) {
