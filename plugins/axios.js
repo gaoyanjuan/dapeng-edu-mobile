@@ -1,9 +1,26 @@
 import Cookie from 'js-cookie'
 import { getcookiesInServer } from '@/utils/cookie-tool'
 import Vue from 'vue'
+const HttpAgent = require('agentkeepalive')
+const HttpsAgent = require('agentkeepalive').HttpsAgent
 
 
-export default function ({store, redirect, req, route, error, app: { $axios }}) {
+export default function ({ store, redirect, req, route, error, app: { $axios } }) {
+  
+  $axios.defaults.httpAgent = new HttpAgent({
+    keepAlive: true,
+    freeSocketTimeout: 4000,
+    maxFreeSockets: 256
+  })
+
+  $axios.defaults.httpsAgent = new HttpsAgent({
+    keepAlive: true,
+    freeSocketTimeout: 4000,
+    maxFreeSockets: 256
+  })
+
+  $axios.defaults.timeout = 20000
+
   $axios.interceptors.request.use(config => {
     if (config.url.startsWith('/token')) {
       config.headers.Authorization = `Basic ${Cookie.get('client')}`
@@ -96,4 +113,10 @@ function refreshToken (store) {
     redirect_uri: `${hostData.host}/callback`,
     grant_type: 'refresh_token'
   })
+}
+
+function removeToken (store) {
+  Cookie.remove('access_token')
+  Cookie.remove('refresh_token')
+  store.dispatch('user/appendUserInfo', null)
 }
