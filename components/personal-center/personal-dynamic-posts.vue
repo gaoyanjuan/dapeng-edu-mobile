@@ -63,7 +63,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/dynamic-page-details',
+    navRoute:'/details/dynamic',
     dynamic_Blank: require('@/assets/icons/blank/have-no-dynamic.png'),
     currentPage: 1
   }),

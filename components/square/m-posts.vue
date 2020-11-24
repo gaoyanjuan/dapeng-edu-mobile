@@ -205,13 +205,13 @@ export default {
     },
     typePath () {
       if (this.propSquareType === 'WORKS') {
-        return '/details/works-page-details'
+        return '/details/works'
       } else if (this.propSquareType === 'HOMEWORK') {
-        return '/details/homework-page-details'
+        return '/details/homework'
       } else if (this.propSquareType === 'LIFE') {
-        return '/details/dynamic-page-details'
+        return '/details/dynamic'
       } else if (this.propSquareType === 'ACTIVITY_POST') {
-        return '/details/growth-page-details'
+        return '/details/growth'
       }
     },
     ...mapGetters('user',[

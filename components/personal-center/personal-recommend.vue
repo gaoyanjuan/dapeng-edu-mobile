@@ -45,7 +45,7 @@ export default {
   data: () => ({
     loading: false,
     finished: false,
-    navRoute:'/details/homework-page-details',
+    navRoute:'/details/homework',
     finishedText: '没有更多了',
     blank: require('@/assets/icons/blank/have-no-homework.png'),
   }),

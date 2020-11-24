@@ -90,21 +90,21 @@ export default {
     toDetail () {
       if (this.videoItem.type === 'HOMEWORK') {
         this.$router.push({
-          path: '/details/homework-page-details',
+          path: '/details/homework',
           query: {
             id: this.videoItem.id
           }
         })
       } else if (this.videoItem.type === 'WORKS') {
         this.$router.push({
-          path: '/details/works-page-details',
+          path: '/details/works',
           query: {
             id: this.videoItem.id
           }
         })
       } else if (this.videoItem.type === 'LIFE') {
         this.$router.push({
-          path: '/details/dynamic-page-details',
+          path: '/details/dynamic',
           query: {
             id: this.videoItem.id
           }

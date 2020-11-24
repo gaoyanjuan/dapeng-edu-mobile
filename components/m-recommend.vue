@@ -35,7 +35,7 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      navRoute:'/details/homework-page-details'
+      navRoute:'/details/homework'
     }
   },
   computed: {

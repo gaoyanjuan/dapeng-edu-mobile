@@ -30,7 +30,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/growth-page-details',
+    navRoute:'/details/growth',
     blank: require('@/assets/icons/blank/have-no-growth.png'),
     pageName: 'myGrowth',
     currentPage: 1

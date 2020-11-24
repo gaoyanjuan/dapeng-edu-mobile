@@ -64,7 +64,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/homework-page-details',
+    navRoute:'/details/homework',
     homework_Blank:require('@/assets/icons/blank/have-no-homework.png'),
     currentPage: 1,
   }),

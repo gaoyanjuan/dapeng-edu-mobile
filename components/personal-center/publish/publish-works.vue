@@ -30,7 +30,7 @@ export default {
     loading: false,
     finished: false,
     finishedText:'没有更多了',
-    navRoute:'/details/works-page-details',
+    navRoute:'/details/works',
     blank: require('@/assets/icons/blank/have-no-works.png'),
     pageName: 'myWork',
     currentPage: 1
