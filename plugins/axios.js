@@ -126,7 +126,6 @@ function removeToken (store) {
 
 function login(params, redirect) {
   Dialog({
-    messageAlign: 'left',
     confirmButtonText: '去登录',
     confirmButtonColor:'#00B93B',
     message: params.message
