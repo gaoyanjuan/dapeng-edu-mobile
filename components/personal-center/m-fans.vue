@@ -7,7 +7,7 @@
           <!-- 左边用户信息 -->
           <div class="avatar-left-side-wrap">
             <div v-if="item.redDot" class="red-dot"></div>
-            <img class="avatar" :src="item.avatar || avatar" alt="" />
+            <head-image :headImg="item ? item.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
             <div class="avatar-info-wrap">
               <span class="info-nickname"> {{ item.nickname }} </span>
               <span class="info-signature"> {{ item.introduction || '这个人很懒,什么都没有写~'}} </span>

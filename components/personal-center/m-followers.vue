@@ -4,7 +4,7 @@
       <template v-if="userFollowGetters.list.length > 0">
       <div v-for="(item, index) in userFollowGetters.list" :key="index" class="follow__row">
         <div class="follow__cloumn--left">
-          <img class="avatar" :src="item.avatar || avatar" alt="avatar" />
+          <head-image :headImg="item ? item.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
           <div class="user__wrap">
             <span class="user__nickname">{{ item.nickname }}</span>
             <span class="user__signature">{{ item.introduction || '这个人很懒,什么都没有写~' }}</span>
