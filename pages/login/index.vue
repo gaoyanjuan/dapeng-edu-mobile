@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import Cookie from 'js-cookie'
 
 export default {
   layout: 'navbar',
@@ -45,7 +44,7 @@ export default {
     document.body.style.overflow = 'hidden'
     this.src = this.getLoginUrl()
     const clientData = `${this.config.clientId}:${this.config.clientSecret}`
-    Cookie.set('client', `${btoa(clientData)}`)
+    this.$cookiz.set('client', `${btoa(clientData)}`)
     // postMessage事件对接 （注册、用户协议、隐私政策）
     window.addEventListener('message', (e) => {
       // "reg" 表示跳转注册页
