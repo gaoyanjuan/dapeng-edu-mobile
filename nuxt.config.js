@@ -88,7 +88,8 @@ export default {
 
   modules: [
     '@nuxtjs/style-resources',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    ['cookie-universal-nuxt', { alias: 'cookiz' }]
   ],
   axios: {
     proxy: true, // 表示开启代理
@@ -170,13 +171,13 @@ export default {
     vendor: [ // 插件单独打包设置
       'vue',
       'axios',
+      'cookie-universal-nuxt',
       'vant',
       'dayjs',
       'swiper',
       'vue-awesome-swiper',
       'xss',
       'image-size',
-      'js-cookie',
       'jwt-decode',
       '@vant/touch-emulator',
       'animate.css'
