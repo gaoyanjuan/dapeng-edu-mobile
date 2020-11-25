@@ -41,7 +41,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import Cookie from 'js-cookie'
 
 export default {
   name:'Affirm-Password',
@@ -122,8 +121,8 @@ export default {
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            Cookie.set('access_token', res.data.access_token)
-            Cookie.set('refresh_token', res.data.refresh_token)
+            this.$cookiz.set('access_token', res.data.access_token)
+            this.$cookiz.set('refresh_token', res.data.refresh_token)
             localStorage.setItem('login_time', new Date().getTime())
             // 完成注册
             this.$router.push('/')

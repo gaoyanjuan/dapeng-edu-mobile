@@ -23,7 +23,7 @@ export default {
       { name: 'renderer', content:'webkit'},
       { name: 'x5-fullscreen', content: 'true' },
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover', },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'},
       { keywords: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
       {
         hid: 'description',
@@ -88,7 +88,8 @@ export default {
 
   modules: [
     '@nuxtjs/style-resources',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    ['cookie-universal-nuxt', { alias: 'cookiz' }]
   ],
   axios: {
     proxy: true, // 表示开启代理
@@ -170,13 +171,13 @@ export default {
     vendor: [ // 插件单独打包设置
       'vue',
       'axios',
+      'cookie-universal-nuxt',
       'vant',
       'dayjs',
       'swiper',
       'vue-awesome-swiper',
       'xss',
       'image-size',
-      'js-cookie',
       'jwt-decode',
       '@vant/touch-emulator',
       'animate.css'
@@ -245,7 +246,8 @@ export default {
         'default-src': [
           "'self'",
           '*.polyv.net',
-          '*.dapeng.lan'
+          '*.dapeng.lan',
+          '*.dapengjiaoyu.cn'
         ],
         'img-src': [
           "'self'",

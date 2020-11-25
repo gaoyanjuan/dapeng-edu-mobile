@@ -207,22 +207,23 @@ export default {
 
 /deep/ .van-overlay {
   width: 375px;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .menus-wrapper {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  padding-bottom: 50px;
   background: rgba(255, 255, 255, 0.84);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 
   .menus-close {
     width: 37px;

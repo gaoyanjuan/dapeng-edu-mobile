@@ -5,7 +5,6 @@
 <script>
 import { getUrlParam } from '@/plugins/assist'
 import { mapActions } from 'vuex'
-import Cookie from 'js-cookie'
 export default {
   layout: 'navbar',
   methods: {
@@ -21,8 +20,8 @@ export default {
       grant_type: 'authorization_code',
       redirect_uri: `${this.validateSystemHostName().host}/callback`
     })
-    Cookie.set('access_token', data.access_token)
-    Cookie.set('refresh_token', data.refresh_token)
+    this.$cookiz.set('access_token', data.access_token)
+    this.$cookiz.set('refresh_token', data.refresh_token)
     const redirectUrl = decodeURIComponent(localStorage.getItem('redirect_url'))
     if (redirectUrl.includes('redirect')) {
       window.top.location = redirectUrl.split('redirect=')[1]
