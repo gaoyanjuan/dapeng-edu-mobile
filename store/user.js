@@ -241,9 +241,6 @@ export const mutations = {
   },
   appendUserFollow (state, payload) {
     state.userFollow.list = state.userFollow.list.concat(payload.data)
-    state.userFollow.list.forEach((item)=>{
-      item.isAttention = true
-    })
     state.userFollow.pageInfo = payload.pageInfo
     if (payload.data.length < state.userFollow.pageInfo.size) {
       state.userFollow.status = 'over'

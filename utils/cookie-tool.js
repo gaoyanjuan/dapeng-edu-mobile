@@ -1,4 +1,3 @@
-import Cookie from 'js-cookie'
 
 /**
  * 根据名称获取cookie中的值
@@ -39,5 +38,5 @@ export function getcookiesInServer (req) {
  * @param {*} key 
  */
 export function getcookiesInClient (key) {
-  return Cookie.get(key) ? Cookie.get(key) : ''
+  return $nuxt.$cookiz.get(key) ? $nuxt.$cookiz.get(key) : ''
 }

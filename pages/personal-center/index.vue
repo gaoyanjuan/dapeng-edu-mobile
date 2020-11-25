@@ -80,7 +80,6 @@
 
 <script>
 import { mapGetters,mapActions } from 'vuex'
-import Cookie from 'js-cookie'
 import { appSource } from '@/utils/device-type'
 
 export default {
@@ -130,8 +129,9 @@ export default {
 
     // 退出登录
     onLogoutEvent() {
-      Cookie.remove('access_token')
-      Cookie.remove('refresh_token')
+      this.$cookiz.remove('access_token')
+      this.$cookiz.remove('refresh_token')
+      this.$cookiz.remove('userinfo')
       const redirectUrl = `${location.protocol}//${location.host}`
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
