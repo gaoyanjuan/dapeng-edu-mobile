@@ -96,7 +96,8 @@ export default {
       'userInfoGetters',
     ]),
     showFollowBtn () {
-      return this.userInfoGetters && this.userInfo && this.userInfo.userId !== this.userInfoGetters.userId && this.userInfo.userId !== this.dpUserId
+      let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
+      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
