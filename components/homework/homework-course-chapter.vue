@@ -10,9 +10,9 @@
         </div>
         <div class="course-name"> {{ chapter.title }} </div>
       </div>
-      <div class="teach-time">授课时间：{{chapter.chapter.teachTime | requireDataH5 }}</div>
+      <div class="teach-time">授课时间：{{chapter.teachTime | requireDataH5 }}</div>
       <div class="teacher-name">
-        授课老师：{{  chapter.chapter.nickname }}
+        授课老师：{{  chapter.teachNickname }}
       </div>
     </div>
     <div class="submit-button-group" @click="submitHomework">
