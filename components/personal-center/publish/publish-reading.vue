@@ -6,7 +6,7 @@
     <template v-if="!publishReadingGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
-        <span class="txt">您的账号暂无发布权限</span>
+        <span class="txt">暂无内容</span>
       </div>
     </template>
   </van-list>
