@@ -19,7 +19,7 @@
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
-      <!-- <img class="avatar-menus-doubt" v-if="isDoubt" :src="doubtImg" alt="疑" @click="showDoubt" /> -->
+      <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click="showDoubt" />
       <img v-if="(squareType === '作业' && pageName !== 'myRecommend' && pageName !== 'myHomework') || (pageName === 'myHomework' &&listItemData.approvedLevel === '0') || (pageName.indexOf('my') !== -1 && pageName !== 'myRecommend' && pageName !== 'myHomework' )" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
@@ -96,7 +96,8 @@ export default {
       'userInfoGetters',
     ]),
     showFollowBtn () {
-      return this.userInfoGetters && this.userInfo && this.userInfo.userId !== this.userInfoGetters.userId && this.userInfo.userId !== this.dpUserId
+      let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
+      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
@@ -249,6 +250,7 @@ export default {
   border-radius: 4px;
   color: #36404A;
   font-size: 12px;
+  box-sizing: border-box;
   
 }
 </style>
