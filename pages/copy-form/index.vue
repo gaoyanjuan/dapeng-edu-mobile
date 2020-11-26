@@ -162,6 +162,7 @@ export default {
       file.status = 'uploading'
       file.message = '上传中...'
       this.uploadStatus = false
+      this.submitStatus = false
 
       const res = await this.getMySTS()
       const { accessKeyId, accessKeySecret, securityToken } = res.data
@@ -210,6 +211,9 @@ export default {
           width: imgObj.width,
           url: url
         })
+        if( _this.content.length) {
+          _this.submitStatus = true
+        }
       }
       imgObj.src = img
     },
@@ -246,7 +250,9 @@ export default {
             this.$toast('图片超过4096*4096，上传失败！')
             reject()
           } else {
-            this.totalImgSize += file.size
+            if ((this.totalImgSize + file.size) <= this.maxImgLimit) {
+              this.totalImgSize += file.size
+            }
             resolve()
           }
         }
