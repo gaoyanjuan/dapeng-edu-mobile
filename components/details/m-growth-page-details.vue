@@ -51,6 +51,7 @@
         :contentType="growth.type"
         :topicType="growth.topicType"
         :detailData="growth"
+        ref="detailsFooter"
       />
     </div>
     <!-- 菜单弹层 -->

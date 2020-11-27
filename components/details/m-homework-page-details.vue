@@ -66,6 +66,7 @@
         :contentType="homework.type"
         topicType="HOMEWORK"
         :detailData="homework"
+        ref="detailsFooter"
       />
     </div>
     <!-- 菜单弹层 -->

@@ -63,6 +63,7 @@
         :contentType="dynamic.type"
         topicType="LIFE"
         :detailData="dynamic"
+        ref="detailsFooter"
       />
     </div>
      <!-- 菜单弹层 -->
