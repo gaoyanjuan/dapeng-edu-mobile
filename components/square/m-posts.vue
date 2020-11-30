@@ -56,7 +56,7 @@
       <div class="works__fot">
         <div class="fot__rh--wrap">
           <!-- 评论 -->
-          <div class="fot__rh__commernt--wrap" @click="openComment">
+          <div class="fot__rh__commernt--wrap" @click="toDetail">
             <img class="fot__comment" :src="comment" alt="comment" />
             <span class="fot__nums">{{ commentCount | studentsCount }}</span>
           </div>
@@ -76,7 +76,7 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <nuxt-link v-if="showCopyFlag" tag="div" :to="`/copy-form?taskId=${listItemData.id ? listItemData.id : '' }&id=${listItemData.user.userId ? listItemData.user.userId: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
+      <div v-if="showCopyFlag" class="menus__popup__item" @click="toCopyForm">Ta抄作业</div>
       <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
       <div class="menus__popup__item" @click="onShowMenus">取消</div>
     </van-popup>
@@ -218,7 +218,17 @@ export default {
       'userInfoGetters',
     ]),
     showCopyFlag () {
-      return this.propSquareType === 'HOMEWORK' && this.userInfoGetters && this.listItemData.user && this.userInfoGetters.userId !== this.listItemData.user.userId
+      if(this.propSquareType === 'HOMEWORK') {
+        if(this.userInfoGetters && this.listItemData.user) {
+          if(this.userInfoGetters.userId !== this.listItemData.user.userId) {
+            return true
+          }
+        }else {
+          return true
+        }
+      }else {
+        return false
+      }
     }
   },
   created () {
@@ -534,6 +544,14 @@ export default {
           type: this.listItemData.courseType,
           id: this.listItemData.id
         }
+      })
+    },
+    toCopyForm() {
+      if(!this.$login()) {
+        return 
+      }
+      this.$router.push({
+        path: `/copy-form?taskId=${this.listItemData.id ? this.listItemData.id : '' }&id=${this.listItemData.user.userId ? this.listItemData.user.userId: '' }`
       })
     }
   }

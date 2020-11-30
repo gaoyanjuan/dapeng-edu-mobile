@@ -18,7 +18,7 @@
         <div class="blank-box">
           <div class="posts-blank-wrap">
             <img class="blank-icon" :src="growth_blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无喜欢活动帖子</span>
           </div>
         </div>
       </template>
@@ -41,7 +41,7 @@
         <div class="blank-box">
           <div class="posts-blank-wrap">
             <img class="blank-icon" :src="growth_blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无收藏活动帖子</span>
           </div>
         </div>
       </template>

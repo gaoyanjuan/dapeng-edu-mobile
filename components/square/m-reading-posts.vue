@@ -34,7 +34,7 @@
 
         <!-- Footer Block -->
         <div class="reading-footer-row">
-          <div class="posts-commernt-wrap" @click="onComment">
+          <div class="posts-commernt-wrap" @click="toDetail">
             <img class="posts-comment" :src="comment" alt="comment" />
             <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
           </div>
@@ -182,6 +182,11 @@ export default {
         })
       }
     },
+    toDetail() {
+      this.$router.push({
+        path: `/details/reading?id=${this.item.id}`
+      })
+    }
   }
 }
 </script>

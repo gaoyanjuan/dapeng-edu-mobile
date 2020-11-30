@@ -12,7 +12,7 @@
     <div class="details-content-wrap">
       <!-- Gallery TEXT:图文-->
       <m-gallery
-        v-if="homework.type === 'TEXT'"
+        v-if="homework.type === 'TEXT' && homework.imgInfo"
         :photos="homework.img"
         :photoInfo="homework.imgInfo"
         :item="homework"
@@ -77,7 +77,7 @@
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
       <template v-else>
-        <nuxt-link tag="div" :to="`/copy-form?taskId=${homework.id ? homework.id : '' }&id=${homework.user.userId ? homework.user.userId: '' }`" class="menus__popup__item">Ta抄作业</nuxt-link>
+        <div class="menus__popup__item" @click="toCopyForm">Ta抄作业</div>
         <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
@@ -169,6 +169,14 @@ export default {
       })
       this.showMenusPopup = false
     },
+    toCopyForm() {
+      if(!this.$login()) {
+        return 
+      }
+      this.$router.push({
+        path: `/copy-form?taskId=${this.homework.id ? this.homework.id : '' }&id=${this.homework.user.userId ? this.homework.user.userId: '' }`
+      })
+    }
   }
 }
 </script>

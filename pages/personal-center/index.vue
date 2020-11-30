@@ -5,12 +5,12 @@
     <div class="mine-header-wrap">
       <div class="header-left-side">
         <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" />
-        <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" />
+        <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" @click="toLogin" />
       </div>
       
       <div class="header-right-side">
         <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickName }} </span>
-        <p v-else class="not-login-wrap"><span @click="toLogin">登录</span><span>/</span><span @click="toRegister">注册</span></p>
+        <p v-else class="not-login-wrap"><span @click="toLogin">登录</span><span>/</span><span @click="toLogin">注册</span></p>
         <template v-if="oldUserInfoGetters">
           <span v-if="oldUserInfoGetters.studentSatusId" class="user-code">学籍号：{{ oldUserInfoGetters.studentSatusId }}</span>
         </template>

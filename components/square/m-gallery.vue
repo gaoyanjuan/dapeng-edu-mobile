@@ -139,17 +139,20 @@ export default {
      * 取图片高度作为容器高度。
     */
     calcuSwiperWrap() {
-      const width = document.documentElement.clientWidth
-      const imgWidth = parseInt(this.photoInfo[0].width) || 375
-      const imgHeight = parseInt(this.photoInfo[0].height) || 300
-      const height = width / imgWidth * imgHeight
-      if (height > 500) {
-        this.photosHei = `height: 500px;`
-      } else if (height < 200) {
-        this.photosHei = `height: 200px;`
-      } else {
-        this.photosHei = `height:${height}px;`
+      if(this.photoInfo && this.photoInfo[0]) {
+        const width = document.documentElement.clientWidth
+        const imgWidth = parseInt(this.photoInfo[0].width) || 375
+        const imgHeight = parseInt(this.photoInfo[0].height) || 300
+        const height = width / imgWidth * imgHeight
+        if (height > 500) {
+          this.photosHei = `height: 500px;`
+        } else if (height < 200) {
+          this.photosHei = `height: 200px;`
+        } else {
+          this.photosHei = `height:${height}px;`
+        }
       }
+      
     },
   },
 }
