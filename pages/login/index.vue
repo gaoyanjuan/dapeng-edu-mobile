@@ -34,7 +34,7 @@ export default {
   mounted () {
     this.width = document.body.clientWidth
     const ifm = document.getElementById('iframe-wrap')
-    this.height = document.documentElement.clientHeight - 50
+    this.height = document.documentElement.clientHeight
     this.config.clientId = this.validateSystemHostName().client_id
     this.config.clientSecret = this.validateSystemHostName().client_secret
     this.config.redirect_uri = `${this.validateSystemHostName().host}/callback`
