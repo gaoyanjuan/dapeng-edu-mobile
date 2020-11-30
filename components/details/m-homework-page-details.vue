@@ -2,7 +2,6 @@
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
     <m-navbar
-      :attention="homework.isAttention"
       :show-right-menu="showRightMenuFlag"
       @onOpenMenus="onShowMenus"
       :title="homework.type === 'TEXT' ? '作业详情' : '小视频详情'"
@@ -29,6 +28,7 @@
         <m-avatar 
           avatar-style="width:36px; height:36px;"
           :user-info="homework.user"
+          :attention="homework.isAttention"
           :submit-time="homework.lastModifiedTime"
         />
         
@@ -106,7 +106,7 @@ export default {
     
     showRightMenuFlag() {
       if(this.homework.approvedLevel && this.homework.approvedLevel !== '0' && this.homework.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
-      return false
+        return false
       } else {
         return true
       }

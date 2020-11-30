@@ -1,8 +1,7 @@
 <template>
   <div v-if="works" class="p-details">
     <!-- Back last page -->
-    <m-navbar 
-      :attention="works.isAttention"
+    <m-navbar
       :show-right-menu="showRightMenuFlag"
       @onOpenMenus="onShowMenus"
       :title="works.type === 'TEXT' ? '作品详情' : '小视频详情'"
@@ -30,6 +29,7 @@
         <m-avatar
           avatar-style="width:36px; height:36px;"
           :user-info="works.user"
+          :attention="works.isAttention"
           :submit-time="works.createTime"
         />
         
@@ -82,9 +82,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import mSmallVideo from '../m-small-video.vue'
 export default {
-  components: { mSmallVideo },
   name:'Details',
   data:() => ({
     commentSelected: true,
@@ -100,8 +98,8 @@ export default {
       userInfo: 'user/userInfoGetters'
     }),
     showRightMenuFlag() {
-      if(this.works.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
-      return true
+      if(this.works.user && this.works.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+        return true
       } else {
         return false
       }

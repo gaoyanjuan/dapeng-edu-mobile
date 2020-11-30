@@ -2,13 +2,12 @@
   <div class="small-video-wrapper" @click="toDetail">
     <img
       ref="coverImg"
-      :src="videoItem.coverImg" 
+      v-lazy="videoItem.coverImg"
       class="small-video-cover"
       :style="{ height: `${videoItem.height}px`}"
     />
-    <div
-      class="small-video-content van-multi-ellipsis--l3"
-    >
+
+    <div class="small-video-content van-multi-ellipsis--l3">
       {{ videoItem.content }}
     </div>
 
@@ -20,8 +19,9 @@
           imgWidth="24px"
           imgHeight="24px"
         />
-        <span class="nickname"> {{ videoItem.user ? videoItem.user.nickname : '佚名' }} </span>
+        <span class="nickname van-ellipsis"> {{ videoItem.user ? videoItem.user.nickname : '佚名' }} </span>
       </div>
+
       <div class="info-right-side" @click.stop="changeLike">
         <img class="icon-love" v-if="isPraise" src="@/assets/icons/posts/small-unlove.png" alt="">
         <img class="icon-love" v-else src="@/assets/icons/posts/small-love.png" alt="">
@@ -167,6 +167,8 @@ export default {
     }
 
     .nickname {
+      width: 80px;
+      line-height: 17px;
       font-size: 12px;
       font-family: @regular;
       font-weight: 400;

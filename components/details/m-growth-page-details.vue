@@ -1,7 +1,7 @@
 <template>
   <div v-if="growth" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :attention="growth.isAttention" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+    <m-navbar :title="title" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
 
     <!-- Main Block -->
     <div class="details-content-wrap">
@@ -20,6 +20,7 @@
         <m-avatar
           avatar-style="width:36px; height:36px;"
           :user-info="growth.user"
+          :attention="growth.isAttention"
           :submit-time="growth.createTime"
         />
         
@@ -83,7 +84,7 @@ export default {
       userInfo: 'user/userInfoGetters'
     }),
     showRightMenuFlag() {
-      if(this.growth.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+      if(this.growth.user && this.growth.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
         return true
       } else {
         return false
