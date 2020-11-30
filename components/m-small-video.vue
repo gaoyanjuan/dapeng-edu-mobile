@@ -7,14 +7,20 @@
     <m-menus v-show="$route.query.courseType !== 'DYNAMIC'" :menus="colleges" menus-type="college"/>
 
     <section class="works-wrapper">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <m-water-fall width="167px" gap="0" :data="smallVideoList.list">
-          <template v-for="(item, index) in smallVideoList.list">
-            <m-water-fall-item :key="index" :order="index">
+      <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
+        <template v-if="smallVideoList.list.length">
+          <m-water-fall width="167px" gap="0" :data="smallVideoList.list">
+            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="index" :order="index">
               <m-small-video-posts :videoItem="item" />
             </m-water-fall-item>
-          </template>
-        </m-water-fall>
+          </m-water-fall>
+        </template>
+        <template v-if="!smallVideoList.list.length && finished">
+          <div class="small-video-blank-wrap">
+            <img class="blank-img" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </template>
       </van-list>
     </section>
   </div>
@@ -28,7 +34,9 @@ export default {
   data: () => ({
     list: [],
     loading: false,
-    finished: false
+    finished: false,
+    finishedTxt:'没有更多了',
+    blank:require('@/assets/icons/blank/have-no-video.png')
   }),
   computed: {
     ...mapGetters({
@@ -46,6 +54,13 @@ export default {
         this.finished = false
       } else if (newVal === 'over') {
         this.finished = true
+      }
+    },
+    'smallVideoList.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
       }
     }
   },
@@ -76,6 +91,31 @@ export default {
   min-height: calc(100vh - 339px);
   padding:10px 16px 65px;
   background-color:@dp-white;
+}
+
+
+.small-video-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.small-video-blank-wrap .blank-img {
+  width: 240px;
+  height: 126px;
+  margin-top: 24px;
+}
+
+.small-video-blank-wrap .blank-txt {
+  margin-top: 12px;
+  width: max-content;
+  height: 20px;
+  font-size: 14px;
+  font-family: @semibold;
+  font-weight: 600;
+  color: #8D8E8E;
+  line-height: 20px;
 }
 </style>
 

@@ -2,7 +2,6 @@
   <div v-if="dynamic" class="p-details">
     <!-- Back last page -->
     <m-navbar
-      :attention="dynamic.isAttention"
       :show-right-menu="showRightMenuFlag"
       @onOpenMenus="onShowMenus"
       :title="dynamic.type === 'TEXT' ? '动态详情' : '小视频详情'"
@@ -29,6 +28,7 @@
         <m-avatar
           avatar-style="width:36px; height:36px;"
           :user-info="dynamic.user"
+          :attention="dynamic.isAttention"
           :submit-time="dynamic.createTime"
         />
         
@@ -94,8 +94,8 @@ export default {
       userInfo: 'user/userInfoGetters'
     }),
     showRightMenuFlag() {
-      if(this.dynamic.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
-      return true
+      if(this.dynamic.user && this.dynamic.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+        return true
       } else {
         return false
       }
