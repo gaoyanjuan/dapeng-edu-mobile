@@ -18,7 +18,7 @@
         <div class="blank-box">
           <div class="posts-blank-wrap">
             <img class="blank-icon" :src="homework_Blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无喜欢作业</span>
           </div>
         </div>
       </template>
@@ -42,7 +42,7 @@
         <div class="blank-box">
           <div class="posts-blank-wrap">
             <img class="blank-icon" :src="homework_Blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无收藏作业</span>
           </div>
         </div>
       </template>

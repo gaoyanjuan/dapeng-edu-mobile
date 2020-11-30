@@ -20,7 +20,7 @@
       </div>
 
       <div class="video-posts-interaction">
-        <div class="video-posts-comment" @click="onComment">
+        <div class="video-posts-comment" @click="toDetail">
           <img :src="comment" alt="" />
           <span>{{ item.commentCount | studentsCount }}</span>
         </div>
@@ -160,6 +160,11 @@ export default {
         })
       }
     },
+    toDetail() {
+      this.$router.push({
+        path: `/details/video?id=${this.item.id}`
+      })
+    }
   }
 }
 </script>

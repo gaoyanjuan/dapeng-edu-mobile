@@ -13,7 +13,7 @@
             v-for="(item, index) in homeworkListGetters.list"
             :key="index"
             propSquareType="HOMEWORK"
-            :commentList="item.commentList"
+            :commentList="item.comments"
             :dataType="item.type"
             :imgInfo="item.imgSmall"
             :courseType="item.courseType"

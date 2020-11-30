@@ -12,7 +12,7 @@
     <div class="details-footer-comment-wrap">
       <div class="footer-input" @click="openComment"> 留下你的评论吧 </div>
       <img class="footer-icon-like" :src="detailsGetters.isPraise ? unlike : like" alt="like" @click="onLikeEvent"/>
-      <img class="footer-icon-comment" :src="comment" alt="comment" @click="commentPop.show = true"/>
+      <img class="footer-icon-comment" :src="comment" alt="comment" @click="openComment"/>
       <img class="footer-icon-collect" :src="detailsGetters.isCollection ? uncollect : collect" alt="collect" @click="onCollectEvent"/>
     </div>
     <!-- 评论框弹层 -->
@@ -82,10 +82,16 @@ export default {
     }),
     // 打开评论弹窗
     openComment() {
+      if(!this.$login()) {
+        return 
+      }
       this.commentPop.show = true
     },
     // 喜欢事件
     onLikeEvent() {
+      if(!this.$login()) {
+        return 
+      }
       if (this.detailsGetters.isPraise) {
         this.changeIsPraise(false)
         this.changePraiseCount(this.detailsGetters.praiseCount - 1)

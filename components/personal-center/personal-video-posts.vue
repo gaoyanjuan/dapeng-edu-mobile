@@ -8,7 +8,7 @@
         <div class="blank-box">
           <div class="posts-blank-wrap">
             <img class="blank-icon" :src="blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无喜欢视频</span>
           </div>
         </div>
       </template>
@@ -21,7 +21,7 @@
         <div class="blank-box">
           <div class="posts-blank-wrap">
             <img class="blank-icon" :src="blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无收藏视频</span>
           </div>
         </div>
       </template>

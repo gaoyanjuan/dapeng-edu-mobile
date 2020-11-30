@@ -94,6 +94,9 @@ export default {
       changeReplyCount: 'comment/changeReplyCount'
     }),
     openComment () {
+      if(!this.$login()) {
+        return 
+      }
       this.commentPop.show = true
     },
     sendComment (text) {
