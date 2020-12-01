@@ -24,11 +24,13 @@ export default {
   // },
   created () {
     if (process.browser) {
-      if (this.$route.query.type) {
-        this.$store.dispatch('growth/appendGrowthList', { type: this.$route.query.type, page: 1 })
-      } else {
-        this.$store.dispatch('growth/appendGrowthList', { type: 'HOTTEST', page: 1 })
-      }
+      try {
+        if (this.$route.query.type) {
+          this.$store.dispatch('growth/appendGrowthList', { type: this.$route.query.type, page: 1 })
+        } else {
+          this.$store.dispatch('growth/appendGrowthList', { type: 'HOTTEST', page: 1 })
+        }
+      } catch (error) {}
     }
   },
   watch: {

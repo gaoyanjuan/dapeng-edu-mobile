@@ -31,6 +31,7 @@
     "ali-oss": "^6.11.2",
     "amfe-flexible": "^2.2.1",
     "animate.css": "^4.1.1",
+    "btoa": "^1.2.1",
     "cookie-universal-nuxt": "^2.1.4",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
