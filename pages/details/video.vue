@@ -13,6 +13,7 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :user-info="video.user"
+        :attention="video.isAttention"
         :submit-time="video.createTime"
       />
 

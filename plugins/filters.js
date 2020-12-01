@@ -58,6 +58,7 @@ const activitiesDate = function (date) {
   return dayjs(date).format('YYYY/MM/DD') // 使用 dayjs 格式化时间
 }
 
+
 /** 
  * 通用时间过滤
  * 60000 一分钟

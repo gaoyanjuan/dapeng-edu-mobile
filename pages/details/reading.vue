@@ -12,6 +12,7 @@
       <m-avatar
         avatar-style="width:40px; height:40px;"
         :user-info="reading.user"
+        :attention="reading.isAttention"
         :submit-time="reading.createTime"
       />
 
