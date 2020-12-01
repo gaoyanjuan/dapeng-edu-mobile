@@ -7,12 +7,14 @@ export default {
   async asyncData ({route, store}) {},
   created () {
     if (process.browser) {
-      if (this.$store.getters['colleges/smallVideoCollegesGetters'].length === 1) {
-        this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_VIDEO' })
-      }
-      if (this.$store.getters['video/smallVideoListGetters'].list.length === 0) {
-        this.$store.dispatch('video/appendSmallVideoList', { type: this.$route.query.type, collegeId: this.$route.query.college })
-      }
+      try {
+        if (this.$store.getters['colleges/smallVideoCollegesGetters'].length === 1) {
+          this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_VIDEO' })
+        }
+        if (this.$store.getters['video/smallVideoListGetters'].list.length === 0) {
+          this.$store.dispatch('video/appendSmallVideoList', { type: this.$route.query.type, collegeId: this.$route.query.college })
+        }
+      } catch (error) {}
     }
   },
   watch: {

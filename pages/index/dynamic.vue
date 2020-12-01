@@ -28,18 +28,22 @@ export default {
   //   }
   // },
   created () {
-    if (this.$route.query.type === 'new') {
-      if (this.$store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
-        this.$store.dispatch('dynamic/appendNewDynamicList', {})
-      }
-    } else if (this.$route.query.type === 'hot') {
-      if (this.$store.getters['dynamic/hotDynamicListGetters'].list.length === 0) {
-        this.$store.dispatch('dynamic/appendHotDynamicList', {})
-      }
-    } else {
-      if (this.$store.getters['dynamic/hotDynamicListGetters'].list.length === 0) {
-        this.$store.dispatch('dynamic/appendHotDynamicList', {})
-      }
+    if (process.browser) {
+      try {
+        if (this.$route.query.type === 'new') {
+          if (this.$store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
+            this.$store.dispatch('dynamic/appendNewDynamicList', {})
+          }
+        } else if (this.$route.query.type === 'hot') {
+          if (this.$store.getters['dynamic/hotDynamicListGetters'].list.length === 0) {
+            this.$store.dispatch('dynamic/appendHotDynamicList', {})
+          }
+        } else {
+          if (this.$store.getters['dynamic/hotDynamicListGetters'].list.length === 0) {
+            this.$store.dispatch('dynamic/appendHotDynamicList', {})
+          }
+        }
+      } catch (error) {}
     }
   },
   watch: {

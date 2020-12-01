@@ -1,6 +1,7 @@
 import { getcookiesInServer } from '@/utils/cookie-tool'
 import Vue from 'vue'
 import { Dialog } from 'vant'
+const btoa = require('btoa')
 const HttpAgent = require('agentkeepalive')
 const HttpsAgent = require('agentkeepalive').HttpsAgent
 
@@ -23,8 +24,9 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
 
   $axios.interceptors.request.use(config => {
     if (config.url.startsWith('/token')) {
-      config.headers.Authorization = `Basic ${$cookiz.get('client')}`
-    } else if ($cookiz.get('access_token')) {
+      const clientData = `${Vue.prototype.validateSystemHostName().client_id}:${Vue.prototype.validateSystemHostName().client_secret}`
+      config.headers.Authorization = `Basic ${btoa(clientData)}`
+    } else if ($cookiz.get('access_token')) { 
       config.headers.Authorization = `Bearer ${$cookiz.get('access_token')}`
     } else if (getcookiesInServer(req).access_token) {
       config.headers.Authorization = `Bearer ${getcookiesInServer(req).access_token}`
@@ -47,30 +49,49 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
       return response
     },
     error => {
-      if (!error.response) { return error }
+      if (error && error.code === 'ECONNABORTED' && error.message && error.message.indexOf('timeout') !== -1) {
+        const date = new Date()
+        console.error({
+          'url': error.config.url,
+          'date': filter.formatDate(date),
+          'message': '请求超时'
+        })
+        return error
+      }
+      if (!error || !error.response) {
+        return error
+      }
       if (error.response.status == 401 && $cookiz.get('access_token')) {
         if (error.response.data && error.response.data.state === 1001) {
-          removeToken(store)
-          login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
-
+          if (process.browser) {
+            removeToken(store, $cookiz)
+            login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
+          }
         } else if (error.response.data && error.response.data.error === 'invalid_token') {
-          removeToken(store)
-          login({ message: '登录失效' }, redirect)
-
+          if (process.browser) {
+            removeToken(store, $cookiz)
+            login({ message: '登录失效' }, redirect)
+          }
         } else {
           if (!isRefreshing) {
             isRefreshing = true
-            return refreshToken(store).then(res => {
-              $cookiz.set('access_token', res.data.access_token)
-              $cookiz.set('refresh_token', res.data.refresh_token)
+            return refreshToken(store, $cookiz).then(res => {
+              $cookiz.set('access_token', res.data.access_token, {
+                expires: new Date(refreshToken.exp * 1000)
+              })
+              $cookiz.set('refresh_token', res.data.refresh_token, {
+                expires: new Date(refreshToken.exp * 1000)
+              })
               // 已经刷新了token，将所有队列中的请求进行重试
               requests.forEach(cb => cb(res.data.access_token))
               isRefreshing = false
               requests = []
               return $axios(error.config)
             }).catch(res => {
-              removeToken(store)
-              login({ message: '登录失效' }, redirect)
+              if (process.browser) {
+                removeToken(store, $cookiz)
+                login({ message: '登录失效' }, redirect)
+              }
             })
           } else {
             // 正在刷新token，将返回一个未执行resolve的promise
@@ -105,10 +126,10 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
   )
 }
 
-function refreshToken (store) {
+function refreshToken (store, $cookiz) {
   const hostData = Vue.prototype.validateSystemHostName()
-  const accessToken = $nuxt.$cookiz.get('access_token')
-  const refreshToken = $nuxt.$cookiz.get('refresh_token')
+  const accessToken = $cookiz.get('access_token')
+  const refreshToken = $cookiz.get('refresh_token')
   return store.dispatch('accesstoken/getRefreshToken', {
     access_token: accessToken,
     refresh_token: refreshToken,
@@ -117,11 +138,13 @@ function refreshToken (store) {
   })
 }
 
-function removeToken (store) {
-  $nuxt.$cookiz.remove('access_token')
-  $nuxt.$cookiz.remove('refresh_token')
-  $nuxt.$cookiz.remove('userinfo')
-  store.dispatch('user/appendUserInfo', null)
+function removeToken (store, $cookiz) {
+  try {
+    $cookiz.remove('access_token')
+    $cookiz.remove('refresh_token')
+    $cookiz.remove('userinfo')
+    store.dispatch('user/appendUserInfo', null)
+  } catch (error) {}
 }
 
 function login(params, redirect) {

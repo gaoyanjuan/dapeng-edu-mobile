@@ -19,19 +19,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {}
-  },
-  created () {
-    if (this.userInfoGetters) {
-      this.getUserDetails()
-    }
-  },
-  computed:{
-    ...mapGetters('user', ['userInfoGetters'])
-  },
-  methods: {
-    ...mapActions({
-      getUserDetails: 'user/getUserDetails',
-    }) 
   }
 }
 </script>

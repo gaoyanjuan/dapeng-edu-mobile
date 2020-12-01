@@ -73,7 +73,7 @@ export default {
     { src: '~/plugins/amfe-flexble.js', ssr: false},
     { src: '~/plugins/swiper.js', ssr: false},
     { src: '~/plugins/touch-emulator.js', ssr: false},
-    { src: '~/plugins/validate-system-hostname', ssr: false },
+    { src: '~/plugins/validate-system-hostname', ssr: true },
     { src: '~/plugins/vant', ssr: true},
     { src: '~/plugins/head-image.js', ssr: true },
     { src: '~/plugins/filters.js', ssr: true },

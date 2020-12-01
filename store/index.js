@@ -15,7 +15,13 @@ export default {
           commit('user/appendUserInfo', userinfo)
         } else {
           await dispatch('user/getUserDetails').then((res) => {
-            app.$cookiz.set('userinfo', res.data)
+            if (res && res.data) {
+              const { userId, nickname, avatar, dpAccount, mobile, loginName } = res.data
+              const userinfo = {
+                userId, nickname, avatar, dpAccount, mobile, loginName
+              }
+              app.$cookiz.set('userinfo', userinfo)
+            }
           })
         }
       } else {
