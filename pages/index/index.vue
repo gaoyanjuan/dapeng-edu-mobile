@@ -21,9 +21,11 @@ export default {
   // },
   created () {
     if (process.browser) {
-      if (this.$store.getters['recommend/recommendListGetters'].list.length === 0) {
-        this.$store.dispatch('recommend/appendRecommendList', { page : 1 })
-      }
+      try {
+        if (this.$store.getters['recommend/recommendListGetters'].list.length === 0) {
+          this.$store.dispatch('recommend/appendRecommendList', { page : 1 })
+        } 
+      } catch (error) {}
     }
   }
 }

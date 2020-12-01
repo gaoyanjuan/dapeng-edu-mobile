@@ -25,12 +25,14 @@ export default {
   // },
   created () {
     if (process.browser) {
-      if (this.$store.getters['colleges/taskCollegesGetters'].length === 0) {
-        this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
-      }
-      if (this.$store.getters['homework/homeworkListGetters'].list.length === 0) {
-        this.$store.dispatch('homework/appendHomeworkList', { categoryIds: this.$route.query.college, courseType: this.$route.query.courseType, page: 1 })
-      }
+      try {
+        if (this.$store.getters['colleges/taskCollegesGetters'].length === 0) {
+          this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
+        }
+        if (this.$store.getters['homework/homeworkListGetters'].list.length === 0) {
+          this.$store.dispatch('homework/appendHomeworkList', { categoryIds: this.$route.query.college, courseType: this.$route.query.courseType, page: 1 })
+        } 
+      } catch (error) {}
     }
   },
   watch: {

@@ -1,13 +1,15 @@
 function validateSystemHostName () {
   const localPCParam = {
     client_id: 'local-m5',
-    client_secret: 'secret',
-    host: `${location.protocol}//${location.host}`
+    client_secret: 'secret'
   }
   const testPCParam = {
     client_id: 'e36c78fd',
-    client_secret: 'x8BS3cGDiz',
-    host: `${location.protocol}//${location.host}`
+    client_secret: 'x8BS3cGDiz'
+  }
+  if (process.browser) {
+    localPCParam.host = `${location.protocol}//${location.host}`
+    testPCParam.host = `${location.protocol}//${location.host}`
   }
   if (process.env.mode === 'test') {
     return testPCParam

@@ -458,7 +458,10 @@ export const mutations = {
 export const actions = {
   async getUserDetails ({ commit, state }) {
     const res = await this.$axios.get('old/users/details')
-    commit('appendUserInfo', res.data)
+    .catch((error) => {})
+    if (res && res.data) {
+      commit('appendUserInfo', res.data)
+    }
     return res
   },
   // 查询用户信息
@@ -472,8 +475,11 @@ export const actions = {
   },
   // 获取用户信息【主要是获取学籍号】
   async getUserDetail({ commit }, params) {
-    const data = await this.$axios.get(`/old/users/details`)
-    commit('appendOldUserInfo', data)
+    const data = await this.$axios.get('/old/users/details')
+    .catch((error) => {})
+    if (data && data.data) {
+      commit('appendOldUserInfo', data)
+    }
     return data
   },
   // 检查用户是否可以注册
@@ -488,7 +494,10 @@ export const actions = {
         ...params
       }
     })
-    commit('appendUserTrends', res)
+    .catch(() => {})
+    if (res && res.data) {
+      commit('appendUserTrends', res)
+    }
     return res
   },
   // 用户关注列表

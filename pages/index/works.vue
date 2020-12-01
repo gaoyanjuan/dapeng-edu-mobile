@@ -26,12 +26,14 @@ export default {
   // },
   created () {
     if (process.browser) {
-      if (this.$store.getters['colleges/workCollegesGetters'].length === 1) {
-        this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_WORK' })
-      }
-      if (this.$store.getters['work/workListGetters'].list.length === 0) {
-        this.$store.dispatch('work/appendWorkList', { categoryIds: this.$route.query.college, page: 1 })
-      }
+      try {
+        if (this.$store.getters['colleges/workCollegesGetters'].length === 1) {
+          this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_WORK' })
+        }
+        if (this.$store.getters['work/workListGetters'].list.length === 0) {
+          this.$store.dispatch('work/appendWorkList', { categoryIds: this.$route.query.college, page: 1 })
+        } 
+      } catch (error) {}
     }
   },
   watch: {
