@@ -15,7 +15,7 @@
           :commentItem="item"
           :user="item.user"
           :teacherType ="courseType"
-          :contentImages="(item.images instanceof Array) && item.images.length > 0 ? item.images[0].url : ''"
+          :contentImages="(item.imgInfo instanceof Array) && item.imgInfo.length > 0 ? item.imgInfo[0].url : ''"
           :isAudio="item.ext ? item.ext.approvedType === 'AUDIO' : false"
           :replies="item.replies"
           :audioUrl="item.ext ? item.ext.approvedAudioUrl : ''"

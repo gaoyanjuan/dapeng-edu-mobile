@@ -128,9 +128,12 @@ export default {
       if (!this.submitStatus) return false
 
       if (!this.submitLock) return false
-
+      if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) {
+        this.$toast('手机号错误')
+        return false
+      }
       this.submitLock = false
-      // if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) return false
+      
       let params = {
         taskId: this.$route.query.taskId,
         data: {

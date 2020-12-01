@@ -13,6 +13,7 @@
             :audioUrl="commentDetailsGetters.ext ? commentDetailsGetters.ext.approvedAudioUrl : ''"
             :audioCount="commentDetailsGetters.ext ? commentDetailsGetters.ext.approvedAudioLength : 0"
             :teacherType="$route.query.courseType"
+            :contentImages="(commentDetailsGetters.imgInfo instanceof Array) && commentDetailsGetters.imgInfo.length > 0 ? commentDetailsGetters.imgInfo[0].url : ''"
           />
         </div>
         <div class="line"></div>
@@ -34,7 +35,7 @@
                 :parentUser="item.parentUser"
                 :replyUser="commentDetailsGetters.user"
                 :commentItem="item"
-                :contentImages="(item.images instanceof Array) && item.images.length > 0 ? item.images[0].url : ''"
+                :contentImages="(item.imgInfo instanceof Array) && item.imgInfo.length > 0 ? item.imgInfo[0].url : ''"
               />
             </div>
           </div>
