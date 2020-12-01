@@ -108,6 +108,9 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
       } else if (error.response.status == 401) {
         if (!$cookiz.get('access_token') && store.getters['user/userInfoGetters']) {
           removeToken(store, $cookiz)
+          if (process.browser) {
+            login({ message: '登录失效' }, redirect)
+          }
         }
         console.log(error.response.data , '服务端接口错误信息')
       } else if (error.response.status == 409) {
