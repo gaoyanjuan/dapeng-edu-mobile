@@ -16,8 +16,11 @@ module.exports = {
     REFRESH_TOKEN_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn',
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',
-    BASE_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn/pcmove', // 阿里云测试内网地址
-    OLD_BASE_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn/pc',
+    // BASE_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn/pcmove',
+    // OLD_BASE_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn/pc',
+    BASE_URL: 'http://172.17.207.43:8000/pcmove',
+    OLD_BASE_URL: 'http://172.17.207.43:8000/pc',
+
     DP_AUTH_URL: 'https://auth-test.dapengjiaoyu.cn',
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn',
