@@ -40,7 +40,7 @@
       <template v-if="parentUser && replyUser && (parentUser.userId !== replyUser.userId)"><span class="black-text">回复</span><span class="reply-text">{{ parentUser.nickname }}：</span></template>
       <span v-html="$options.filters.formatEmotions(commentItem.content)"></span>
     </div>
-    <div v-if="contentImages" class="content-img" @click="showDialogEvent(contentImages)">
+    <div v-if="contentImages" class="content-img" @click.stop="showDialogEvent(contentImages)">
       <img :src="contentImages" :alt="contentImages">
     </div>
     <m-comment-popup
@@ -384,8 +384,10 @@ export default {
     margin-left: 48px;
     height: 120px;
     img {
+      width: 120px;
       height: 120px;
       border-radius: 5px;
+      object-fit: cover;
     }
   }
 }

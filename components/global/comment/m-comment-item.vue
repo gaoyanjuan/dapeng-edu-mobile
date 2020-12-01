@@ -45,7 +45,7 @@
         <span>
           <span>{{ item.user.nickname }}</span><template v-if="user && (item.parentUser.userId !== user.userId)"><span class="black-text" v-if="item.parentUser">回复</span><span v-if="item.parentUser">{{ item.parentUser.nickname }}</span></template><span>：</span>
         </span>
-        <a class="replies-item-img" v-if="item.images">
+        <a class="replies-item-img" v-if="item.imgInfo" @click.stop="showDialogEvent(item.imgInfo[0].url)">
           <img src="@/assets/icons/comment/comment-img-icon.png" alt=""/>
           <span>图片</span>
         </a>
@@ -383,6 +383,8 @@ export default {
     margin-left: 48px;
     height: 120px;
     img {
+      object-fit: cover;
+      width: 120px;
       height: 120px;
       border-radius: 5px;
     }
