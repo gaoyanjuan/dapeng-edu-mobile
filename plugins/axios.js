@@ -106,6 +106,9 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
         }
         console.log(error.response.data , '服务端接口错误信息')
       } else if (error.response.status == 401) {
+        if (!$cookiz.get('access_token') && store.getters['user/userInfoGetters']) {
+          removeToken(store, $cookiz)
+        }
         console.log(error.response.data , '服务端接口错误信息')
       } else if (error.response.status == 409) {
         // http状态500，请求API找不到，重定向到404页面   
