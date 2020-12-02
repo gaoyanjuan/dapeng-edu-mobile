@@ -27,9 +27,8 @@ export default {
 
     /** 复制作业号 */
     onCopy() {
-      const _this = this
-      this.$copyText(this.showPopup.jobNummer).then(function (e) {
-        _this.$toast('复制成功')
+      this.$copyText(this.showPopup.jobNummer).then( (e) => {
+        this.$toast('复制成功')
       }, function(e) {
         console.log('Can not copy')
       })

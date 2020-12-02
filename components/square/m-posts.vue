@@ -282,8 +282,8 @@ export default {
        * https://www.npmjs.com/package/vue-clipboard2
        */
       const identCode = this.listItemData.identificationCode
-      this.$copyText(identCode).then(function (e) {
-        console.log(e.text)
+      this.$copyText(identCode).then( (e) => {
+        this.$toast('复制成功')
       }, function(e) {
         console.log('Can not copy')
       })

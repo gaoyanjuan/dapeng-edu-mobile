@@ -104,7 +104,6 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
             })
           }
         }
-        console.log(error.response.data , '服务端接口错误信息')
       } else if (error.response.status == 401) {
         if (!$cookiz.get('access_token') && store.getters['user/userInfoGetters']) {
           removeToken(store, $cookiz)
@@ -112,7 +111,6 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
             login({ message: '登录失效' }, redirect)
           }
         }
-        console.log(error.response.data , '服务端接口错误信息')
       } else if (error.response.status == 409) {
         // http状态500，请求API找不到，重定向到404页面   
         if (error.response.data && error.response.data.code === 404229) {
@@ -122,11 +120,9 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           location.reload()
           return
         } else {
-          console.log(error.response , '服务端接口错误信息')
           return Promise.reject(error.response)
         }
       }
-      console.log(error.response , '服务端接口错误信息')
       return Promise.reject(error.response)   // 返回接口返回的错误信息
     }
   )

@@ -82,7 +82,6 @@ export default {
       changeFollowing: 'attention/changePopularUsersListFollowStatus'
     }),
     onLoad() {
-      console.log(this.popularUsersList)
       if (this.popularUsersList.status === 'over') {
         this.finished = true
         return false

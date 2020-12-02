@@ -247,7 +247,8 @@ export default {
           "'self'",
           '*.polyv.net',
           '*.dapeng.lan',
-          '*.dapengjiaoyu.cn'
+          '*.dapengjiaoyu.cn',
+          '*.talk99.cn'
         ],
         'img-src': [
           "'self'",

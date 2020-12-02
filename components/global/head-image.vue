@@ -1,20 +1,9 @@
-<style lang="less" scoped>
-img {
-  vertical-align: middle;
-  object-fit: cover;
-  cursor: pointer;
-}
-</style>
 <template>
   <div class="head-image-box">
-    <img
-      ref="headerImg"
-      :src="headUrl"
-      :alt="imgName"
-      :style="headImgStyle"
-    />
+    <img ref="headerImg" v-lazy="headUrl" :alt="imgName" :style="headImgStyle" />
   </div>
 </template>
+
 <script>
 import { mapGetters } from 'vuex'
 export default {
@@ -78,3 +67,11 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+img {
+  vertical-align: middle;
+  object-fit: cover;
+  cursor: pointer;
+}
+</style>
