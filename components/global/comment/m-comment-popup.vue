@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model="comment.show" class="comment-popup-wrap" :transition-appear="true">
+  <van-popup v-model="comment.show" class="comment-popup-wrap" :transition-appear="true" @click.stop="">
 
     <!-- Comment Header Block -->
     <section class="comment-popup-header">

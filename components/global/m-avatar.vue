@@ -12,15 +12,15 @@
 
     <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
     <div class="avatar-right-side-wrap">
-      <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click="handleFollow"/>
+      <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click.stop="handleFollow"/>
       <template v-if="showScore">
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
-      <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click="showDoubt" />
-      <img v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework' &&listItemData.approvedLevel === '0') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )" class="avatar-menus-more" :src="more" alt="更多" @click="onOpenMenus"/>
+      <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
+      <img v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework' &&listItemData.approvedLevel === '0') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )" class="avatar-menus-more" :src="more" alt="更多" @click.stop="onOpenMenus"/>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
