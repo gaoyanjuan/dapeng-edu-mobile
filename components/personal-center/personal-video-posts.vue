@@ -122,7 +122,7 @@ export default {
         }
       
         if (this.userLikesGetters.movie.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userLikesGetters.movie.pageInfo.pages + 1
         this.appendUserLikes({
           type: 'MOVIE',
           page: newPage,

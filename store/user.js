@@ -383,7 +383,7 @@ export const mutations = {
   appendUserLikes(state, payload) {
     let type = payload.type.toLocaleLowerCase()
     state.userLikes[type].list = state.userLikes[type].list.concat(payload.res.data)
-    state.userLikes[type].pageInfo = payload.res.pageInfo
+    state.userLikes[type].pageInfo = payload.pageInfo
     if (payload.res.data.length < state.userLikes[type].pageInfo.size) {
       state.userLikes[type].status = 'over'
     } else {
@@ -452,6 +452,10 @@ export const mutations = {
   },
   changeFansRedDot(state, payload) {
     state.userFans.list[payload.index].redDot = false
+  },
+  changeUserLikesStatus(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userLikes[type].status = payload.status
   }
 }
 
@@ -617,6 +621,11 @@ export const actions = {
   },
   // 查询用户的喜欢列表
   async appendUserLikes ({ commit }, params) {
+    let statuParams = {
+      type: params.type,
+      status: 'loading'
+    }
+    commit('changeUserLikesStatus', statuParams)
     const res = await this.$axios.get('users/likes', {
       params: {
         ...params
@@ -624,7 +633,11 @@ export const actions = {
     })
     const payload = {
       type: params.type,
-      res: res
+      res: res,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
     }
     commit('appendUserLikes', payload)
     return payload

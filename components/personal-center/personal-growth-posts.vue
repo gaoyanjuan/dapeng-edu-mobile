@@ -141,7 +141,7 @@ export default {
         }
       
         if (this.userLikesGetters.activity_post.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userLikesGetters.activity_post.pageInfo.pages + 1
         this.appendUserLikes({
           type: 'ACTIVITY_POST',
           page: newPage,
