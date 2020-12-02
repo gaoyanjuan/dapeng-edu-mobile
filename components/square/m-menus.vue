@@ -42,6 +42,8 @@ export default {
       slidesPerView: 'auto',
       spaceBetween: 10,
       freeMode: true,
+      observer: true,
+      observeParents: true,
     }
   }),
   watch: {

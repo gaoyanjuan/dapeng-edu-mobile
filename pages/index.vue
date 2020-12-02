@@ -183,8 +183,10 @@ export default {
 
     /***
      * 下拉菜单选择定位
+     * 小视频：type
+     * 其它：courseType
      */
-    if (to.query.courseType) {
+    if (to.query.courseType || to.query.type) {
       this.setDownMenusPosition(to)
     }
   },
@@ -266,7 +268,7 @@ export default {
       this.videoMenuValue = params.value
       this.showVideoMenu = !this.showVideoMenu
       if(this.$route.query.type === params.value) return
-      
+
       if(params.value === 'LIFE') {
         this.$router.replace({ query: { type: params.value } })
       } else {
@@ -287,7 +289,7 @@ export default {
     setDownMenusPosition(to) {
       if(to.name === 'index-small-video') {
         this.videoDownMenus.forEach(element => {
-          if (element.value === to.query.courseType) {
+          if (element.value === to.query.type) {
             this.videoMenuValue = element.value
           }
         })
