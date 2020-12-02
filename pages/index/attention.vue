@@ -26,10 +26,12 @@ export default {
   created () {
     if (process.browser) {
       try {
-        if (this.$store.getters['attention/popularUsersGetters'].length === 0) {
-          this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
-        }
-        if (this.$store.getters['attention/attentionListGetters'].list.length === 0) {
+        this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
+        if(this.$store.getters['user/userInfoGetters']) {
+          this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {
+            this.$store.dispatch('attention/appendAttentionList', { page: 1 })
+          })
+        } else {
           this.$store.dispatch('attention/appendAttentionList', { page: 1 })
         }
       } catch (error) {}
