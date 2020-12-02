@@ -1,5 +1,5 @@
 <template>
-  <div class="m-works">
+  <div class="m-works" @click="toDetail">
     <van-skeleton title avatar :row="8" :loading="loading">
       <!-- header -->
       <m-avatar
@@ -15,8 +15,8 @@
 
       <!-- content -->
       <div class="works__cot">
-        <div class="work__row--txt" @click="toDetail" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
-        <div class="work__row__photos--group">
+        <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
+        <div class="work__row__photos--group" @click.stop="">
           <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
           <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
           <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
@@ -24,7 +24,7 @@
       </div>
 
       <!-- classification -->
-      <div class="works__class" @click="toDetail">
+      <div class="works__class">
         <m-posts-class :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`" />
       </div>
 
@@ -39,7 +39,7 @@
       </div>
 
       <!-- comment 体验课不展示讲师评论 -->
-      <div class="works__comment" v-if="commentList && courseType !=='TEST'">
+      <div class="works__comment" v-if="commentList && courseType !=='TEST'" @click.stop="">
         <m-teacher-audio
           :teacherName="commentList.user ? commentList.user.nickname : ''"
           :teacherType="courseType"
@@ -61,13 +61,13 @@
             <span class="fot__nums">{{ commentCount | studentsCount }}</span>
           </div>
           <!-- 喜欢 -->
-          <div class="fot__rh__love--wrap" @click="onLove">
+          <div class="fot__rh__love--wrap" @click.stop="onLove">
             <img class="fot__love" v-if="isPraise" :src="unLove" alt="love" />
             <img class="fot__love" v-else :src="love" alt="unlove" />
             <span class="fot__nums">{{ praiseCount | studentsCount }}</span>
           </div>
           <!-- 收藏 -->
-          <div class="fot__rh__star--wrap" @click="onCollect">
+          <div class="fot__rh__star--wrap" @click.stop="onCollect">
             <img class="fot__star" :src="isCollection ? unStar : star" alt="star" />
           </div>
         </div>
@@ -76,16 +76,16 @@
 
     <!-- 帖子 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div v-if="showCopyFlag" class="menus__popup__item" @click="toCopyForm">Ta抄作业</div>
-      <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
-      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      <div v-if="showCopyFlag" class="menus__popup__item" @click.stop="toCopyForm">Ta抄作业</div>
+      <div class="menus__popup__item" @click.stop="handleCopyJobNummer">作业号</div>
+      <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
 
     <!-- 顶部Navbar  菜单弹层 -->
     <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
-      <div class="menus__popup__item" @click="deleteItem">删除</div>
-      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+      <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
+      <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
 
     <!--Image preview -->

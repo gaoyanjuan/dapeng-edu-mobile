@@ -16,12 +16,12 @@
         <van-tab title="活动">
           <personal-growth-posts pageName="userLike" />
         </van-tab>
-        <van-tab title="阅读">
+        <!-- <van-tab title="阅读">
           <personal-reading-posts pageName="userLike" />
         </van-tab>
         <van-tab title="视频">
           <personal-video-posts pageName="userLike" />
-        </van-tab>
+        </van-tab> -->
       </van-tabs>
     </div>
   </div>
