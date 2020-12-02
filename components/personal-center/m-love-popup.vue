@@ -2,7 +2,7 @@
   <van-popup v-model="showPopup.show" round :transition-appear="true">
     <div class="popup-warp">
       <div class="popup-head-photo"></div>
-      <div class="popup-body-nums">累计获得了{{userTrendsGetters.likeCount}}个赞</div>
+      <div class="popup-body-nums">累计获得了{{userTrendsGetters.likeCount}}个喜欢</div>
       <div class="popup-footer-btn" @click="showPopup.show = false">知道啦</div>
     </div>
   </van-popup>
