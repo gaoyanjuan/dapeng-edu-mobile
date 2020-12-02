@@ -119,7 +119,11 @@ export default {
     /** 保存图片 */
     onSaveImage() {
       const imgUrl = this.imagePreview.images[this.index]
-      window.open(imgUrl,'_blank')
+      let a = document.createElement('a')
+      let event = new MouseEvent('click')
+      a.download = imgUrl
+      a.href = imgUrl
+      a.dispatchEvent(event)
       this.showMenusPopup = false
     }
   }
