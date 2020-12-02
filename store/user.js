@@ -383,7 +383,7 @@ export const mutations = {
   appendUserLikes(state, payload) {
     let type = payload.type.toLocaleLowerCase()
     state.userLikes[type].list = state.userLikes[type].list.concat(payload.res.data)
-    state.userLikes[type].pageInfo = payload.res.pageInfo
+    state.userLikes[type].pageInfo = payload.pageInfo
     if (payload.res.data.length < state.userLikes[type].pageInfo.size) {
       state.userLikes[type].status = 'over'
     } else {
@@ -418,7 +418,7 @@ export const mutations = {
   appendUserFavorites(state, payload) {
     let type = payload.type.toLocaleLowerCase()
     state.userFavorites[type].list = state.userFavorites[type].list.concat(payload.res.data)
-    state.userFavorites[type].pageInfo = payload.res.pageInfo
+    state.userFavorites[type].pageInfo = payload.pageInfo
     if (payload.res.data.length < state.userFavorites[type].pageInfo.size) {
       state.userFavorites[type].status = 'over'
     } else {
@@ -452,6 +452,20 @@ export const mutations = {
   },
   changeFansRedDot(state, payload) {
     state.userFans.list[payload.index].redDot = false
+  },
+  changeUserLikesStatus(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userLikes[type].status = payload.status
+  },
+  changeUserFavoritesStatus(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userFavorites[type].status = payload.status
+  },
+  changeUserFollowStatus(state, payload) {
+    state.userFollow.status = payload
+  },
+  changeUserFansStatus(state, payload) {
+    state.userFans.status = payload
   }
 }
 
@@ -502,13 +516,21 @@ export const actions = {
   },
   // 用户关注列表
   async appendUserFollow ({ commit }, params) {
+    commit('changeUserFollowStatus', 'loading')
     const res = await this.$axios.get('/users/follows', {
       params: {
         ...params
       }
     })
-    commit('appendUserFollow', res)
-    return res
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: 20
+      }
+    }
+    commit('appendUserFollow', payload)
+    return payload
   },
   // 关注
   async followingUser (store, params) {
@@ -522,12 +544,20 @@ export const actions = {
   },
   // 用户粉丝列表
   async appendUserFans ({ commit }, params) {
+    commit('changeUserFansStatus', 'loading')
     const res = await this.$axios.get('/users/fans', {
       params: {
         ...params
       }
     })
-    commit('appendUserFans', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: 20
+      }
+    }
+    commit('appendUserFans', payload)
     return res
   },
   // 用户推荐作业列表
@@ -617,6 +647,11 @@ export const actions = {
   },
   // 查询用户的喜欢列表
   async appendUserLikes ({ commit }, params) {
+    let statuParams = {
+      type: params.type,
+      status: 'loading'
+    }
+    commit('changeUserLikesStatus', statuParams)
     const res = await this.$axios.get('users/likes', {
       params: {
         ...params
@@ -624,13 +659,22 @@ export const actions = {
     })
     const payload = {
       type: params.type,
-      res: res
+      res: res,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
     }
     commit('appendUserLikes', payload)
     return payload
   },
   // 查询用户的收藏列表
   async appendUserFavorites ({ commit }, params) {
+    let statuParams = {
+      type: params.type,
+      status: 'loading'
+    }
+    commit('changeUserFavoritesStatus', statuParams)
     const res = await this.$axios.get('users/favorites', {
       params: {
         ...params
@@ -638,7 +682,11 @@ export const actions = {
     })
     const payload = {
       type: params.type,
-      res: res
+      res: res,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
     }
     commit('appendUserFavorites', payload)
     return payload

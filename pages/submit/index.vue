@@ -428,7 +428,23 @@ export default {
 
     /** 提示成功 & 跳转 */
     sucessToast(name) {
-      this.$myToast('提交成功我们将第一时间处理')
+      if(this.submitType === 'VIP' || this.submitType === 'TEST') {
+        this.$myToast('作业提交成功')
+      }
+
+      if(this.submitType === 'WORKS') {
+        this.$myToast('作品发布成功')
+      }
+
+      if(this.submitType === 'LIFE') {
+        this.$myToast('动态发布成功')
+      }
+      
+      // 他抄作业……
+      if(!this.submitType) {
+        this.$myToast('提交成功我们将第一时间处理')
+      }
+
       setTimeout(() => {
         this.submitLock = true
         this.$router.push({

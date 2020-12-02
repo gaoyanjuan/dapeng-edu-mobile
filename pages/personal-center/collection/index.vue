@@ -16,12 +16,12 @@
         <van-tab title="活动">
           <personal-growth-posts pageName="userCollection" />
         </van-tab>
-        <van-tab title="阅读">
+        <!-- <van-tab title="阅读">
           <personal-reading-posts pageName="userCollection" />
         </van-tab>
         <van-tab title="视频">
           <personal-video-posts pageName="userCollection" />
-        </van-tab>
+        </van-tab> -->
       </van-tabs>
     </div>
   </div>

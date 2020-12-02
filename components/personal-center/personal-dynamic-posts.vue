@@ -141,7 +141,7 @@ export default {
         }
       
         if (this.userLikesGetters.life.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userLikesGetters.life.pageInfo.pages + 1
         this.appendUserLikes({
           type: 'LIFE',
           page: newPage,
@@ -154,7 +154,7 @@ export default {
         }
       
         if (this.userFavoritesGetters.life.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userFavoritesGetters.life.pageInfo.pages + 1
         this.appendUserFavorites({
           type: 'LIFE',
           page: newPage,

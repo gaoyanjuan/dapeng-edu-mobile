@@ -143,7 +143,7 @@ export default {
         }
       
         if (this.userLikesGetters.homework.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userLikesGetters.homework.pageInfo.pages + 1
         this.appendUserLikes({
           type: 'HOMEWORK',
           page: newPage,
@@ -156,7 +156,7 @@ export default {
         }
       
         if (this.userFavoritesGetters.homework.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userFavoritesGetters.homework.pageInfo.pages + 1
         this.appendUserFavorites({
           type: 'HOMEWORK',
           page: newPage,

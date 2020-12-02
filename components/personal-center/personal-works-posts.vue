@@ -141,7 +141,7 @@ export default {
         }
       
         if (this.userLikesGetters.works.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userLikesGetters.works.pageInfo.pages + 1
         this.appendUserLikes({
           type: 'WORKS',
           page: newPage,
@@ -154,7 +154,7 @@ export default {
         }
       
         if (this.userFavoritesGetters.works.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userFavoritesGetters.works.pageInfo.pages + 1
         this.appendUserFavorites({
           type: 'WORKS',
           page: newPage,
