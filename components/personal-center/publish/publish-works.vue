@@ -78,7 +78,7 @@ export default {
       }
       
       if (this.publishWorksGetters.status === 'loading') return false
-      const newPage = this.currentPage + 1
+      const newPage = this.publishWorksGetters.pageInfo.pages + 1
       this.appendPublishWorks({
         userId: this.$route.query.userId,
         page: newPage,

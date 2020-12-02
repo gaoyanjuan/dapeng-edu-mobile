@@ -75,7 +75,7 @@ export default {
       }
       
       if (this.publishVideoGetters.status === 'loading') return false
-      const newPage = this.currentPage + 1
+      const newPage = this.publishVideoGetters.pageInfo.pages + 1
       this.appendPublishVideo({
         userId: this.$route.query.userId,
         page: newPage,

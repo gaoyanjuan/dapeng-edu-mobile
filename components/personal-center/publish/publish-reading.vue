@@ -74,7 +74,7 @@ export default {
       }
       
       if (this.publishReadingGetters.status === 'loading') return false
-      const newPage = this.currentPage + 1
+      const newPage = this.publishReadingGetters.pageInfo.pages + 1
       this.appendPublishReading({
         userId: this.$route.query.userId,
         page: newPage,

@@ -83,7 +83,7 @@ export default {
       }
       
       if (this.publishGrowthGetters.status === 'loading') return false
-      const newPage = this.currentPage + 1
+      const newPage = this.publishGrowthGetters.pageInfo.pages + 1
       this.appendPublishGrowth({
         userId: this.$route.query.userId,
         page: newPage,
