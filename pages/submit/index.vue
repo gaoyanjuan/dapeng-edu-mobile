@@ -439,11 +439,6 @@ export default {
       if(this.submitType === 'LIFE') {
         this.$myToast('动态发布成功')
       }
-      
-      // 他抄作业……
-      if(!this.submitType) {
-        this.$myToast('提交成功我们将第一时间处理')
-      }
 
       setTimeout(() => {
         this.submitLock = true

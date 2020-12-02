@@ -55,12 +55,12 @@
       <section class="contact-number-row">
         <div class="label">联系电话</div>
         <div class="contact-number-input">
-          <van-field v-model="contactNumber" clearable placeholder="请输入您的联系电话" />
+          <van-field v-model="contactNumber" @focus="onFocus" @blur="onBlur" clearable placeholder="请输入您的联系电话" />
         </div>
       </section>
 
       <!-- 底部说明文字  -->
-      <footer class="footer-row">
+      <footer class="footer-row" ref="footer">
         <p>您的投诉将在7天内处理，请勿重复提交，</p> 
         <p>处理结果将在第一时间在通知消息中反馈，或直接联系在线客服。</p>
       </footer>
@@ -301,6 +301,16 @@ export default {
       this.fileList.splice(index, 1)
       this.imageInfo.splice(index, 1)
       this.imagePreview.show = false
+    },
+
+    /** 监听联系电话Input 事件 */
+    onFocus() {
+      this.$refs.footer.style.display = 'none'
+    },
+
+    /** 监听联系电话Blur  事件*/
+    onBlur() {
+      this.$refs.footer.style.display = 'block'
     },
   }
 }
