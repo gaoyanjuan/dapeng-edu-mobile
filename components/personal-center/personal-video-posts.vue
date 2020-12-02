@@ -122,7 +122,7 @@ export default {
         }
       
         if (this.userLikesGetters.movie.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userLikesGetters.movie.pageInfo.pages + 1
         this.appendUserLikes({
           type: 'MOVIE',
           page: newPage,
@@ -135,7 +135,7 @@ export default {
         }
       
         if (this.userFavoritesGetters.movie.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userFavoritesGetters.movie.pageInfo.pages + 1
         this.appendUserFavorites({
           type: 'MOVIE',
           page: newPage,
