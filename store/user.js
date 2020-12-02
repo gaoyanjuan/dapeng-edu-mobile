@@ -418,7 +418,7 @@ export const mutations = {
   appendUserFavorites(state, payload) {
     let type = payload.type.toLocaleLowerCase()
     state.userFavorites[type].list = state.userFavorites[type].list.concat(payload.res.data)
-    state.userFavorites[type].pageInfo = payload.res.pageInfo
+    state.userFavorites[type].pageInfo = payload.pageInfo
     if (payload.res.data.length < state.userFavorites[type].pageInfo.size) {
       state.userFavorites[type].status = 'over'
     } else {
@@ -456,7 +456,11 @@ export const mutations = {
   changeUserLikesStatus(state, payload) {
     let type = payload.type.toLocaleLowerCase()
     state.userLikes[type].status = payload.status
-  }
+  },
+  changeUserFavoritesStatus(state, payload) {
+    let type = payload.type.toLocaleLowerCase()
+    state.userFavorites[type].status = payload.status
+  },
 }
 
 export const actions = {
@@ -644,6 +648,11 @@ export const actions = {
   },
   // 查询用户的收藏列表
   async appendUserFavorites ({ commit }, params) {
+    let statuParams = {
+      type: params.type,
+      status: 'loading'
+    }
+    commit('changeUserFavoritesStatus', statuParams)
     const res = await this.$axios.get('users/favorites', {
       params: {
         ...params
@@ -651,7 +660,11 @@ export const actions = {
     })
     const payload = {
       type: params.type,
-      res: res
+      res: res,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
     }
     commit('appendUserFavorites', payload)
     return payload

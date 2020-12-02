@@ -154,7 +154,7 @@ export default {
         }
       
         if (this.userFavoritesGetters.activity_post.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userFavoritesGetters.activity_post.pageInfo.pages + 1
         this.appendUserFavorites({
           type: 'ACTIVITY_POST',
           page: newPage,

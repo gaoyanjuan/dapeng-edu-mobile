@@ -135,7 +135,7 @@ export default {
         }
       
         if (this.userFavoritesGetters.article.status === 'loading') return false
-        const newPage = this.currentPage + 1
+        const newPage = this.userFavoritesGetters.article.pageInfo.pages + 1
         this.appendUserFavorites({
           type: 'ARTICLE',
           page: newPage,
