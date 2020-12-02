@@ -4,7 +4,7 @@
     <m-swipe />
 
     <!-- 二级菜单 -->
-    <m-menus v-show="$route.query.courseType !== 'DYNAMIC'" :menus="colleges" menus-type="college"/>
+    <m-menus v-show="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
 
     <section class="works-wrapper">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -76,7 +76,7 @@ export default {
       if (this.smallVideoList.status === 'loading') return false
       const newStartTime = this.smallVideoList.list.slice(-1)[0].approvedTime
       this.appendSmallVideoList({
-        type: this.$route.query.courseType,
+        type: this.$route.query.type,
         collegeId: this.$route.query.college,
         timestamp: newStartTime
       })

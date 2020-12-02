@@ -124,9 +124,9 @@ export default {
     ],
     videoDownMenus: [
       { text: '全部', value: '' },
-      { text: '作业', value: 'HOMEWORK' },
-      { text: '作品', value: 'WORKS' },
-      { text: '动态', value: 'DYNAMIC' },
+      { text: '作业', value: 'HOME' },
+      { text: '作品', value: 'WORK' },
+      { text: '动态', value: 'LIFE' },
     ],
     tabUp: require('@/assets/icons/navbar/nav-arrow-up.png'),
     tabDown: require('@/assets/icons/navbar/nav-arrow-down.png'),
@@ -222,7 +222,7 @@ export default {
           path: '/small-video',
           query: {
             ...this.$route.query,
-            courseType: this.videoMenuValue
+            type: this.videoMenuValue
           }
         })
       }
@@ -265,8 +265,8 @@ export default {
     onChangeVideoMenus(params) {
       this.videoMenuValue = params.value
       this.showVideoMenu = !this.showVideoMenu
-      if(this.$route.query.courseType === params.value) return
-      this.$router.replace({ query: { ...this.$route.query, courseType: params.value } })
+      if(this.$route.query.type === params.value) return
+      this.$router.replace({ query: { ...this.$route.query, type: params.value } })
     },
 
     /** 监听滚动，仅在Sticky模式下生效*/
