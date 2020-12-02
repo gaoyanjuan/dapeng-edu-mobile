@@ -49,9 +49,6 @@ export default {
     avatar: require('@/assets/icons/common/avatar.png'),
     more: require('@/assets/icons/square/more.png'),
   }),
-  mounted(){
-    console.log(this.popularUsersGetters)
-  },
   computed: {
     ...mapGetters({
       popularUsersGetters: 'attention/popularUsersGetters',
