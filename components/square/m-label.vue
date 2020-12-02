@@ -8,7 +8,7 @@
     </div>
 
     <!-- Topic -->
-    <div v-if="activityData" class="label__topic--wrap" @click="toActivityDetails">
+    <div v-if="activityData" class="label__topic--wrap" @click.stop="toActivityDetails">
       <img class="label__topic" :src="topic" alt="topic" />
       <span class="label__topic__txt">{{ activityData.displayName }}</span>
       <span class="label__topic__bar">|</span>
