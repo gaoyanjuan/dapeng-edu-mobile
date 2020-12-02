@@ -97,7 +97,7 @@ export default {
       }
       
       if (this.userFollowGetters.status === 'loading') return false
-      const newPage = this.userFollowGetters.pageInfo.number + 1
+      const newPage = this.userFollowGetters.pageInfo.pages + 1
       this.appendUserFollow({
         userId: this.$route.query.userId,
         page: newPage,

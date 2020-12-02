@@ -461,6 +461,12 @@ export const mutations = {
     let type = payload.type.toLocaleLowerCase()
     state.userFavorites[type].status = payload.status
   },
+  changeUserFollowStatus(state, payload) {
+    state.userFollow.status = payload
+  },
+  changeUserFansStatus(state, payload) {
+    state.userFans.status = payload
+  }
 }
 
 export const actions = {
@@ -510,13 +516,21 @@ export const actions = {
   },
   // 用户关注列表
   async appendUserFollow ({ commit }, params) {
+    commit('changeUserFollowStatus', 'loading')
     const res = await this.$axios.get('/users/follows', {
       params: {
         ...params
       }
     })
-    commit('appendUserFollow', res)
-    return res
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: 20
+      }
+    }
+    commit('appendUserFollow', payload)
+    return payload
   },
   // 关注
   async followingUser (store, params) {
@@ -530,12 +544,20 @@ export const actions = {
   },
   // 用户粉丝列表
   async appendUserFans ({ commit }, params) {
+    commit('changeUserFansStatus', 'loading')
     const res = await this.$axios.get('/users/fans', {
       params: {
         ...params
       }
     })
-    commit('appendUserFans', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: 20
+      }
+    }
+    commit('appendUserFans', payload)
     return res
   },
   // 用户推荐作业列表
