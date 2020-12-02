@@ -266,7 +266,12 @@ export default {
       this.videoMenuValue = params.value
       this.showVideoMenu = !this.showVideoMenu
       if(this.$route.query.type === params.value) return
-      this.$router.replace({ query: { ...this.$route.query, type: params.value } })
+      
+      if(params.value === 'LIFE') {
+        this.$router.replace({ query: { type: params.value } })
+      } else {
+        this.$router.replace({ query: { ...this.$route.query, type: params.value } })
+      }
     },
 
     /** 监听滚动，仅在Sticky模式下生效*/
