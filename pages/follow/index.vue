@@ -8,7 +8,7 @@
             <img class="avatar" :src="item.avatar" alt="avatar" />
             <div class="user__wrap">
               <span class="user__nickname">{{ item.nickname }}</span>
-              <span class="user__signature">{{ item.introduction }}</span>
+              <span class="user__signature">{{ item.introduction || introduction}}</span>
             </div>
           </div>
           <div class="follow__cloumn--right" @click="handleFollow(item, index)">
@@ -29,6 +29,7 @@ export default {
     list:[],
     loading: false,
     finished: false,
+    introduction:'这个人很懒，什么都没有写 ~',
     avatar: require('@/assets/icons/common/avatar.png'),
     follow: require('@/assets/icons/posts/posts-follow.png'),
     unfollow: require('@/assets/icons/posts/posts-unfollow.png')
