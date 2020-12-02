@@ -3,23 +3,24 @@
     <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
       <template v-if="userFansGetters.list.length > 0">
         <template  v-for="(item, index) in userFansGetters.list" >
-        <div :key="index" v-if="item.userId" class="m-avatar">  
-          <!-- 左边用户信息 -->
-          <div class="avatar-left-side-wrap">
-            <div v-if="item.redDot" class="red-dot"></div>
-            <head-image :headImg="item ? item.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
-            <div class="avatar-info-wrap">
-              <span class="info-nickname"> {{ item.nickname }} </span>
-              <span class="info-signature"> {{ item.introduction || '这个人很懒,什么都没有写~'}} </span>
-              <span class="info-date"> {{ item.createTime | commonDate }} </span>
+          <div :key="index" v-if="item.userId" class="m-avatar">  
+            <!-- 左边用户信息 -->
+            <div class="avatar-left-side-wrap">
+              <div v-if="item.redDot" class="red-dot"></div>
+              <head-image :headImg="item ? item.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
+              
+              <div class="avatar-info-wrap">
+                <span class="info-nickname"> {{ item.nickname }} </span>
+                <span class="info-signature"> {{ item.introduction || '这个人很懒,什么都没有写~'}} </span>
+                <span class="info-date"> {{ item.createTime | commonDate }} </span>
+              </div>
+            </div>
+
+            <!-- 右边关注 -->
+            <div class="avatar-right-side-wrap">
+              <img class="avatar-menus-follow" :src="item.isAttention ? unfollow : follow" @click="handleFollow(item, index)"/>
             </div>
           </div>
-
-          <!-- 右边关注 -->
-          <div class="avatar-right-side-wrap">
-            <img class="avatar-menus-follow" :src="item.isAttention ? unfollow : follow" @click="handleFollow(item, index)"/>
-          </div>
-        </div>
         </template>
       </template>
 

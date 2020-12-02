@@ -12,18 +12,25 @@
     <!-- 为你推荐 滑动区域 -->
     <div class="fg-content">
       <client-only>
-        <swiper class="swiper" :options="swiperOptions">
-          <swiper-slide v-for="(item, index) in popularUsersGetters" :key="index">
-            <div class="user-card">
-              <img class="avatar" :src="item.avatar" alt="" />
-              <span class="nickname">{{ item.nickname }}</span>
-              <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow(item, index)"></span>
-            </div>
-          </swiper-slide>
-          <swiper-slide class="card-more">
-            <nuxt-link to="/follow" class="card-more-txt" tag="span">更多推荐</nuxt-link>
-          </swiper-slide>
-        </swiper>
+        <template v-if="popularUsersGetters">
+          <swiper class="swiper" :options="swiperOptions">
+            <swiper-slide v-for="(item, index) in popularUsersGetters" :key="index">
+              <div class="user-card">
+                <img class="avatar" v-lazy="item.avatar" />
+                <span class="nickname">{{ item.nickname }}</span>
+                <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow(item, index)"></span>
+              </div>
+            </swiper-slide>
+            <swiper-slide class="card-more">
+              <nuxt-link to="/follow" class="card-more-txt" tag="span">更多推荐</nuxt-link>
+            </swiper-slide>
+          </swiper>
+        </template>
+        <!-- <template v-if="!popularUsersGetters">
+          <div class="">
+            正在加载
+          </div>
+        </template> -->
       </client-only>
     </div>
   </section>
@@ -42,6 +49,9 @@ export default {
     avatar: require('@/assets/icons/common/avatar.png'),
     more: require('@/assets/icons/square/more.png'),
   }),
+  mounted(){
+    console.log(this.popularUsersGetters)
+  },
   computed: {
     ...mapGetters({
       popularUsersGetters: 'attention/popularUsersGetters',
