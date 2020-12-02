@@ -315,7 +315,7 @@ export default {
     },
     /** 打开/关闭菜单 */
     onShowMenus() {
-      if(this.pageName.indexOf('my')!== -1) {
+      if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
         this.showPublishMenusPopup = !this.showPublishMenusPopup
         return
       }
