@@ -79,7 +79,7 @@ export default {
       }
       
       if (this.publishHomeworkGetters.status === 'loading') return false
-      const newPage = this.currentPage + 1
+      const newPage = this.publishHomeworkGetters.pageInfo.pages + 1
       this.appendPublishHomework({
         userId: this.$route.query.userId,
         page: newPage,

@@ -466,6 +466,10 @@ export const mutations = {
   },
   changeUserFansStatus(state, payload) {
     state.userFans.status = payload
+  },
+  changeListStatus(state, payload) {
+    let type = payload
+    state[type].status = 'loading'
   }
 }
 
@@ -587,12 +591,21 @@ export const actions = {
   },
   // 用户的发布作业列表
   async appendPublishHomework ({ commit }, params) {
+
+    commit('changeListStatus', 'publishHomework')
     const res = await this.$axios.get('/users/homes', {
       params: {
         ...params
       }
     })
-    commit('appendPublishHomework', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+    }
+    commit('appendPublishHomework', payload)
     return res
   },
   // 删除作业
@@ -602,12 +615,20 @@ export const actions = {
   },
   // 用户的发布作品列表
   async appendPublishWorks ({ commit }, params) {
+    commit('changeListStatus', 'publishWorks')
     const res = await this.$axios.get('/users/works', {
       params: {
         ...params
       }
     })
-    commit('appendPublishWorks', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+    }
+    commit('appendPublishWorks', payload)
     return res
   },
   // 删除作品
@@ -617,12 +638,20 @@ export const actions = {
   },
   // 用户的发布动态列表
   async appendPublishDynamic ({ commit }, params) {
+    commit('changeListStatus', 'publishDynamic')
     const res = await this.$axios.get('/users/dynamics', {
       params: {
         ...params
       }
     })
-    commit('appendPublishDynamic', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+    }
+    commit('appendPublishDynamic', payload)
     return res
   },
   // 删除动态
@@ -632,12 +661,20 @@ export const actions = {
   },
   // 用户的活动帖子列表
   async appendPublishGrowth ({ commit }, params) {
+    commit('changeListStatus', 'publishGrowth')
     const res = await this.$axios.get('users/posts', {
       params: {
         ...params
       }
     })
-    commit('appendPublishGrowth', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+    }
+    commit('appendPublishGrowth', payload)
     return res
   },
   // 删除活动帖子
@@ -693,22 +730,38 @@ export const actions = {
   },
   // 用户的发布阅读列表
   async appendPublishReading ({ commit }, params) {
+    commit('changeListStatus', 'publishReading')
     const res = await this.$axios.get('users/articles', {
       params: {
         ...params
       }
     })
-    commit('appendPublishReading', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+    }
+    commit('appendPublishReading', payload)
     return res
   },
   // 用户的发布视频列表
   async appendPublishVideo ({ commit }, params) {
+    commit('changeListStatus', 'publishVideo')
     const res = await this.$axios.get('users/movies', {
       params: {
         ...params
       }
     })
-    commit('appendPublishVideo', res)
+    let payload = {
+      data: res.data,
+      pageInfo: {
+        pages: params.page,
+        size: process.env.global.pageSize
+      }
+    }
+    commit('appendPublishVideo', payload)
     return res
   },
   // 执行消息阅读操作
