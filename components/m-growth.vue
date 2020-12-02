@@ -91,6 +91,7 @@ export default {
 
     /** 发帖事件 */
     enterSubmit() {
+      if(!this.$login()) return
       this.$router.push(`/submit?type=LIFE&contentType=ACTIVITY_POST`)
     },
 

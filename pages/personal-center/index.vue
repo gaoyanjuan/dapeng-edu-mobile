@@ -244,7 +244,7 @@ export default {
 .mine {
   width: 100%;
   padding: 16px 16px 80px;
-  min-height: 100%;
+  min-height: calc(100vh - 90px);
   background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F1 100%);
 }
 
