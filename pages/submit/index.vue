@@ -468,7 +468,7 @@ export default {
       return this.publishHomework({
         imgInfo: this.imageInfo,
         content: this.content,
-        source: 'MOBILE',
+        source: 'PC',
         type: 'TEXT',
         title: this.requirement.title,
         taskId: this.requirement.taskId

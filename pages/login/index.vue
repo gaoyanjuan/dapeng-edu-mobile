@@ -5,7 +5,6 @@
     :width="width"
     :height="height"
     frameborder="0"
-    scrolling="no"
   ></iframe>
 </template>
 
