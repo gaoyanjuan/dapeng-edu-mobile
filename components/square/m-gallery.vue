@@ -1,6 +1,7 @@
 <template>
   <div>
-    <van-swipe 
+    <van-swipe
+      v-if="photos"
       class="swipe-photos"
       :style="photosHei"
       :loop="loop"
