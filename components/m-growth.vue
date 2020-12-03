@@ -34,7 +34,8 @@
           :isAttention="item.isAttention"
           :modifiedTime="item.createTime"
           path="/details/growth"
-          propSquareType="ACTIVITY_POST"
+          :propSquareType="item.topicType"
+          isGrowth="growth"
         />
       </van-list>
     </section>

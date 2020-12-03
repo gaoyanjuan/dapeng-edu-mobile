@@ -32,7 +32,7 @@
         <!-- classification -->
         <div class="inner-content-class">
           <div class="inner-content-class-wrap">
-            <span>活动</span>
+            <span>{{ growth.topicType === 'LIFE' ? '动态' : '活动' }}</span>
           </div>
         </div>
 

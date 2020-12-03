@@ -124,6 +124,10 @@ export default {
       type: String,
       default: 'HOMEWORK'
     },
+    isGrowth: {
+      type: String,
+      default: ''
+    },
     modifiedTime: {
       type: Number,
       dafault: 0
@@ -362,7 +366,7 @@ export default {
           isCollection: this.isCollection
         }
         this.queryDeleteCollection({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userCollection') {
@@ -384,11 +388,10 @@ export default {
           isCollection: this.isCollection
         }
         this.queryCollection({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
-
         }).catch(() => {
           this.isCollection = false
         })
@@ -408,7 +411,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryUnLike({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userLike') {
@@ -432,7 +435,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryLike({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
@@ -447,7 +450,7 @@ export default {
       if (this.propSquareType) {
         if (this.listItemData.tagsId) {
           this.$router.push({
-            path: this.typePath,
+            path: this.path,
             query: {
               id: this.listItemData.id,
               tagsId: this.listItemData.tagsId,
@@ -456,7 +459,7 @@ export default {
           })
         } else {
           this.$router.push({
-            path: this.typePath,
+            path: this.path,
             query: {
               id: this.listItemData.id,
             }
