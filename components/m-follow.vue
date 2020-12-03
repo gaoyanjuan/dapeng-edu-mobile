@@ -19,6 +19,7 @@
               :propSquareType="res.topicType"
               :courseType="res.topic ? res.topic.courseType : ''"
               :modifiedTime="res.topic ? res.topic.createTime : 0"
+              :path="`/details/${pathType(res)}`"
               :listItemData="res.topic"
             />
           </div>
@@ -83,6 +84,31 @@ export default {
       this.appendAttentionList({
         page: newPage
       })
+    },
+    pathType(item){
+      switch (item.topicType) {
+        case 'HOMEWORK':
+          return 'homework'
+          break;
+        case 'WORKS':
+          return 'works'
+          break;
+        case 'LIFE':
+          return 'dynamic'
+          break;
+        case 'ARTICLE':
+          return 'reading'
+          break;
+        case 'MOVIE':
+          return 'video'
+          break;
+        case 'video':
+          return 'VIDEO'
+          break;
+        default:
+          return '111'
+          break;
+      }
     }
   }
 }

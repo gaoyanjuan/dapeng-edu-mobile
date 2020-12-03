@@ -83,7 +83,7 @@
 
     <!-- 顶部Navbar  菜单弹层 -->
     <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
+      <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
       <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
@@ -123,6 +123,10 @@ export default {
     propSquareType: {
       type: String,
       default: 'HOMEWORK'
+    },
+    isGrowth: {
+      type: String,
+      default: ''
     },
     modifiedTime: {
       type: Number,
@@ -316,6 +320,10 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
+        if (this.listItemData.approvedLevel && this.listItemData.approvedLevel !== '0') {
+          this.showMenusPopup = !this.showMenusPopup
+          return
+        }
         this.showPublishMenusPopup = !this.showPublishMenusPopup
         return
       }
@@ -362,7 +370,7 @@ export default {
           isCollection: this.isCollection
         }
         this.queryDeleteCollection({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userCollection') {
@@ -384,11 +392,10 @@ export default {
           isCollection: this.isCollection
         }
         this.queryCollection({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
-
         }).catch(() => {
           this.isCollection = false
         })
@@ -408,7 +415,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryUnLike({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userLike') {
@@ -432,7 +439,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryLike({
-          id: this.listItemData.id,
+          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
@@ -447,7 +454,7 @@ export default {
       if (this.propSquareType) {
         if (this.listItemData.tagsId) {
           this.$router.push({
-            path: this.typePath,
+            path: this.path,
             query: {
               id: this.listItemData.id,
               tagsId: this.listItemData.tagsId,
@@ -456,7 +463,7 @@ export default {
           })
         } else {
           this.$router.push({
-            path: this.typePath,
+            path: this.path,
             query: {
               id: this.listItemData.id,
             }

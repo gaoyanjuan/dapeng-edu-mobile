@@ -34,6 +34,10 @@ export default {
       type: String,
       default: ''
     },
+    isGrowth: {
+      type: String,
+      default: ''
+    },
     contentType: {
       type: String,
       default: ''
@@ -96,7 +100,7 @@ export default {
         this.changeIsPraise(false)
         this.changePraiseCount(this.detailsGetters.praiseCount - 1)
         this.queryUnLike({
-          id: this.detailData.id,
+          id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType,
           commit: true
         }).catch(() => {
@@ -110,7 +114,7 @@ export default {
         this.changeIsPraise(true)
         this.changePraiseCount(this.detailsGetters.praiseCount + 1)
         this.queryLike({
-          id: this.detailData.id,
+          id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType,
           createdId: this.detailData.user.userId,
           contentType: this.contentType,
@@ -136,7 +140,7 @@ export default {
       if (this.detailsGetters.isCollection) {
         this.changeIsCollection(false)
         this.queryDeleteCollection({
-          id: this.detailData.id,
+          id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType
         }).catch(() => {
           this.changeIsCollection(true)
@@ -144,7 +148,7 @@ export default {
       } else {
         this.changeIsCollection(true)
         this.queryCollection({
-          id: this.detailData.id,
+          id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType,
           createdId: this.detailData.user.userId,
           contentType: this.contentType
