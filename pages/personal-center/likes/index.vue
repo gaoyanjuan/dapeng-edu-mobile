@@ -107,4 +107,7 @@ export default {
   border-radius: 2px;
   background-image: none;
 }
+/deep/.van-sticky--fixed {
+  transform: translateX(-50%)!important;
+}
 </style>
