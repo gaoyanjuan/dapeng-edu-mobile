@@ -83,7 +83,7 @@
 
     <!-- 顶部Navbar  菜单弹层 -->
     <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="editHomework">编辑</div>
+      <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
       <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
@@ -316,6 +316,10 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
+        if (this.listItemData.approvedLevel && this.listItemData.approvedLevel !== '0') {
+          this.showMenusPopup = !this.showMenusPopup
+          return
+        }
         this.showPublishMenusPopup = !this.showPublishMenusPopup
         return
       }
