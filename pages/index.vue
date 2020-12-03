@@ -110,7 +110,7 @@ export default {
   name: 'Square',
   data: () => ({
     activeName: 'recommend',
-    scrollTop: 'top:88px;',
+    scrollTop: `top:${88 / 37.5}rem;`,
     showHomeworkMenu: false,
     showVideoMenu: false,
     dropMenusName: '作业',
@@ -279,9 +279,10 @@ export default {
     /** 监听滚动，仅在Sticky模式下生效*/
     onScrollEvent(params) {
       if(params.scrollTop > 30) {
-        this.scrollTop = 'top:44px;'
+        this.scrollTop = `top:${44 / 37.5}rem;`
       } else {
-        this.scrollTop = 'top:'+ (88 - params.scrollTop) +'px;'
+        // this.scrollTop = 'top:'+ (88 - params.scrollTop) +'px;'
+        this.scrollTop = `top:${(88 - params.scrollTop) / 37.5}rem;`
       }
     },
 
