@@ -80,7 +80,7 @@
 
 <script>
 import { mapGetters,mapActions } from 'vuex'
-import { appSource } from '@/utils/device-type'
+import { openInApp } from '@/utils/device-type'
 
 export default {
   name:'Mine',
@@ -138,26 +138,7 @@ export default {
 
      /// 唤起APP
     openAppEvent () {
-      const device = appSource()
-      if (device.type === 'ios') {
-        location.href = 'https://enroll.dapengjiaoyu.com'
-      }
-
-      if (device.type === 'andriod') {
-        this.callAndroid()
-      }
-    },
-
-    // 唤起安卓客户端
-    callAndroid() {
-      let ifr = document.createElement('iframe')
-      ifr.src = 'dpedu://com.app.zhijin'
-      ifr.style.display = 'none'
-      document.body.appendChild(ifr)
-      // 等待一段时间后，无反应则URL跳转
-      setTimeout(() => {
-        location.href = 'https://enroll.dapengjiaoyu.com'
-      }, 1500)
+      openInApp()
     },
 
     // 跳转登录页
