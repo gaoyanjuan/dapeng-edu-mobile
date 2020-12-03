@@ -14,5 +14,11 @@ export default {
       return state.audioActive
     }
   },
-  actions: {}
+  actions: {
+     // 获取APP版本及下载链接
+     async getAppInfo({ commit }) {
+      const res = await this.$axios.get('/app-version')
+      return JSON.parse(res.data.content)
+    },
+  }
 }

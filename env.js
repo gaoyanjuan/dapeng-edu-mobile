@@ -9,7 +9,7 @@ module.exports = {
     REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan',
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     PORT: 3000,
-    HOST: '127.0.0.1'
+    HOST: '0.0.0.0'
   },
   test: {
     MODE: 'test',
