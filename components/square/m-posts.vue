@@ -316,6 +316,10 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
+        if (this.listItemData.approvedLevel && this.listItemData.approvedLevel !== '0') {
+          this.showMenusPopup = !this.showMenusPopup
+          return
+        }
         this.showPublishMenusPopup = !this.showPublishMenusPopup
         return
       }
