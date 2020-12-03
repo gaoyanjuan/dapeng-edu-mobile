@@ -8,7 +8,7 @@
 
     <!-- Comment Body Block -->
     <section class="comment-popup-body">
-      <van-field v-model="content" rows="5" :border="false" type="textarea" maxlength="150" autofocus :placeholder="placeholderText"></van-field>
+      <van-field v-model="content" rows="5" :border="false" type="textarea" maxlength="150" :placeholder="placeholderText"></van-field>
     </section>
 
     <!-- Comment Body Block -->
