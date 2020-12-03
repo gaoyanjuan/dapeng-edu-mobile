@@ -3,7 +3,7 @@
     <m-navbar title="我的喜欢" />
 
     <div class="tabs-wrap">
-      <van-tabs v-model="active" sticky :offset-top="44" @click="onTabsClick">
+      <van-tabs v-model="active" sticky :offset-top="'1.1733rem'" @click="onTabsClick">
         <van-tab title="作业">
           <personal-homework-posts pageName="userLike" />
         </van-tab>
@@ -106,5 +106,8 @@ export default {
   background: #0CB65B;
   border-radius: 2px;
   background-image: none;
+}
+/deep/.van-sticky--fixed {
+  transform: translateX(-50%)!important;
 }
 </style>
