@@ -111,7 +111,7 @@ export default {
   }
   & .menus-item-active {
     min-width: 52px;
-    max-width: 62px;
+    max-width: 68px;
     width: -webkit-fit-content;
     padding: 0px 10px;
     height: 20px;
