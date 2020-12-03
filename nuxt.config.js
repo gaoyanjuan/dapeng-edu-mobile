@@ -46,10 +46,7 @@ export default {
         hid: 'player',
         type: 'text/javascript',
         src: '//player.polyv.net/script/player.js'
-      },
-      {
-        src: 'http://pv.sohu.com/cityjson?ie=utf-8'
-      },
+      }
     ]
   },
 
@@ -248,7 +245,15 @@ export default {
           '*.polyv.net',
           '*.dapeng.lan',
           '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
           '*.talk99.cn'
+        ],
+        'frame-src': [
+          '*.polyv.net',
+          '*.dapeng.lan',
+          '*.talk99.cn',
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
         ],
         'img-src': [
           "'self'",
