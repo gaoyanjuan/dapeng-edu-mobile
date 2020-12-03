@@ -12,6 +12,7 @@
               :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
               :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
               :listItemData="res.recommendTopic ? res.recommendTopic : {}"
+              :path="`/details/${pathType(res)}`"
             />
           </div>
         </template>
@@ -77,6 +78,31 @@ export default {
       this.appendRecommendList({
         page: newPage
       })
+    },
+    pathType(item){
+      switch (item.hotType) {
+        case 'HOMEWORK':
+          return 'homework'
+          break;
+        case 'WORKS':
+          return 'works'
+          break;
+        case 'LIFE':
+          return 'dynamic'
+          break;
+        case 'ARTICLE':
+          return 'reading'
+          break;
+        case 'MOVIE':
+          return 'video'
+          break;
+        case 'video':
+          return 'VIDEO'
+          break;
+        default:
+          return '111'
+          break;
+      }
     }
   }
 }
