@@ -69,6 +69,8 @@ export default {
       queryUnLike: 'comment/queryUnLike'
     }),
     changeLike () {
+      if(!this.$login()) return
+      
       if (this.isPraise) {
         this.isPraise = false
         this.praiseCount -= 1
