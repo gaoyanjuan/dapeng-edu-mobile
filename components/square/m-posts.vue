@@ -74,19 +74,24 @@
       </div>
     </van-skeleton>
 
-    <!-- 帖子 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div v-if="showCopyFlag" class="menus__popup__item" @click.stop="toCopyForm">Ta抄作业</div>
-      <div class="menus__popup__item" @click.stop="handleCopyJobNummer">作业号</div>
-      <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
-    </van-popup>
+    <div @click.stop="">
+      <!-- 帖子 菜单弹层 -->
+      <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
+        <div v-if="showCopyFlag" class="menus__popup__item" @click.stop="toCopyForm">Ta抄作业</div>
+        <div class="menus__popup__item" @click.stop="handleCopyJobNummer">作业号</div>
+        <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
+      </van-popup>
 
-    <!-- 顶部Navbar  菜单弹层 -->
-    <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
-      <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
-      <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
-    </van-popup>
+      <!-- 复制作业号 -->
+      <m-copy-code :show-popup="showCopyCode" @closed="onClosed"/>
+
+      <!-- 顶部Navbar  菜单弹层 -->
+      <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
+        <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
+        <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
+        <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
+      </van-popup>
+    </div>
 
     <!--Image preview -->
     <m-image-preview
@@ -170,6 +175,7 @@ export default {
     isCollection: false,
     praiseCount: 0,
     commentCount: 0,
+    showCopyCode: { show: false, jobNummer: null },
     // 图片预览
     imagePreview: {
       show: false,
@@ -281,17 +287,13 @@ export default {
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
-      /**
-       * vue-clipboard2 Usage
-       * https://www.npmjs.com/package/vue-clipboard2
-       */
-      const identCode = this.listItemData.identificationCode
-      this.$copyText(identCode).then( (e) => {
-        this.$toast('复制成功')
-      }, function(e) {
-        console.log('Can not copy')
-      })
+      this.showCopyCode.show = true
+      this.showCopyCode.jobNummer = this.listItemData.identificationCode
       this.showMenusPopup = false
+    },
+    /** 关闭弹窗 */
+    onClosed() {
+      this.showCopyCode.show = false
     },
     /**
      * 打开图片预览
