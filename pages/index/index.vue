@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex'
 export default {
   // async asyncData ({route, store}) {
   //   if (process.browser) return {
@@ -27,6 +28,23 @@ export default {
         } 
       } catch (error) {}
     }
-  }
+  },
+  watch: {
+    '$route.query': function (newQuery, oldQuery) {
+      this.clearRecommendList()
+      this.appendRecommendList({ page : 1 })
+    }
+  },
+  methods: {
+    ...mapMutations('recommend', [
+      'clearRecommendList'
+    ]),
+    ...mapActions('recommend', [
+      'appendRecommendList'
+    ]),
+  },
+  destroyed () {
+    this.clearRecommendList()
+  },
 }
 </script>

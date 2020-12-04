@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   // async asyncData ({route, store, error}) {
   //   if (process.browser) return {
@@ -48,6 +48,8 @@ export default {
   },
   watch: {
     '$route.query': function (newQuery, oldQuery) {
+      this.clearNewDynamicList()
+      this.clearHotDynamicList()
       if (newQuery.type === 'new') {
         if (this.newDynamicListGetters.list.length === 0) {
           this.appendNewDynamicList({})
@@ -63,6 +65,10 @@ export default {
     ...mapActions('dynamic', [
       'appendNewDynamicList',
       'appendHotDynamicList'
+    ]),
+    ...mapMutations('dynamic', [
+      'clearNewDynamicList',
+      'clearHotDynamicList'
     ])
   },
   computed:{
@@ -70,6 +76,10 @@ export default {
       'newDynamicListGetters',
       'hotDynamicListGetters'
     ])
+  },
+  destroyed() {
+    this.clearNewDynamicList()
+    this.clearHotDynamicList()
   }
 }
 </script>

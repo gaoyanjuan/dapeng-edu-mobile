@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   // async asyncData ({route, store}) {
   //   if (process.browser) return {
@@ -37,5 +37,25 @@ export default {
       } catch (error) {}
     }
   },
+  methods: {
+    ...mapMutations('attention', [
+      'clearAttentionLiAst'
+    ])
+  },
+  watch: {
+    '$route.query': function (newQuery, oldQuery) {
+      this.clearAttentionLiAst()
+      if(this.$store.getters['user/userInfoGetters']) {
+          this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {
+            this.$store.dispatch('attention/appendAttentionList', { page: 1 })
+          })
+        } else {
+          this.$store.dispatch('attention/appendAttentionList', { page: 1 })
+        }
+    }
+  },
+  destroyed() {
+    this.clearAttentionLiAst()
+  }
 }
 </script>
