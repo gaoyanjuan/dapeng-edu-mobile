@@ -163,6 +163,9 @@ export default {
       })
     },
     handleCopyJobNummer() {
+      if(!this.$login()) {
+        return 
+      }
       this.showCopyCode.show = true
       this.showCopyCode.jobNummer = this.homework.identificationCode
       this.showMenusPopup = false

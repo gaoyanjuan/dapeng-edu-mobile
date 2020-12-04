@@ -287,6 +287,9 @@ export default {
     ]),
     /** 复制作业号 */
     handleCopyJobNummer() {
+      if(!this.$login()) {
+        return 
+      }
       this.showCopyCode.show = true
       this.showCopyCode.jobNummer = this.listItemData.identificationCode
       this.showMenusPopup = false
