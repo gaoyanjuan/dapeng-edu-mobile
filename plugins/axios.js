@@ -152,7 +152,8 @@ function removeToken (store, $cookiz) {
 function login(params, redirect) {
   Dialog({
     confirmButtonText: '去登录',
-    confirmButtonColor:'#00B93B',
+    confirmButtonColor: '#00B93B',
+    showCancelButton: true,
     message: params.message
   }).then(() => {
     redirect('/login')

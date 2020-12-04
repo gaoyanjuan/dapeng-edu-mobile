@@ -80,6 +80,15 @@ export default {
     emoji:require('@/assets/icons/comment/emoji.png'),
     emojiActive:require('@/assets/icons/comment/emoji-active.png'),
   }),
+
+  watch:{
+    content(oldVal, newVal) {
+      if(oldVal.length === 150) {
+        this.$toast('评论仅限150个字')
+      }
+    }
+  },
+
   created () {
     if (this.replyUser) {
       this.placeholderText = `回复 ${this.replyUser.nickname}`
