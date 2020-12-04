@@ -37,9 +37,7 @@ export default {
     this.config.clientId = this.validateSystemHostName().client_id
     this.config.clientSecret = this.validateSystemHostName().client_secret
     this.config.redirect_uri = `${this.validateSystemHostName().host}/callback`
-    const fullPath = this.$route.fullPath
-    const redirectUrl = this.$route.fullPath === '/login' ? '/login?redirect=/' : this.$route.fullPath
-    localStorage.setItem('redirect_url', redirectUrl)
+
     document.body.style.overflow = 'hidden'
     this.src = this.getLoginUrl()
     const clientData = `${this.config.clientId}:${this.config.clientSecret}`

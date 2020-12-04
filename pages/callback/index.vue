@@ -22,12 +22,10 @@ export default {
     })
     this.$cookiz.set('access_token', data.access_token)
     this.$cookiz.set('refresh_token', data.refresh_token)
-    const redirectUrl = decodeURIComponent(localStorage.getItem('redirect_url'))
-    if (redirectUrl.includes('redirect')) {
-      window.top.location = redirectUrl.split('redirect=')[1]
-    } else {
-      window.top.location = `${this.validateSystemHostName().host}`
-    }
+    const redirectUrl = decodeURIComponent(localStorage.getItem('route'))
+    window.top.location = '/'
+    // window.top.location = `${this.validateSystemHostName().host + redirectUrl}`
+    // window.top.history.replaceState({},'', this.validateSystemHostName().host + redirectUrl)
   }
 }
 </script>
