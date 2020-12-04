@@ -22,7 +22,10 @@
       />
 
       <!-- Small Video VIDEO:小视频 -->
-      <m-details-small-video v-if="works.type === 'VIDEO'" :video="works.vid"/>
+      <m-details-small-video
+        v-if="works.type === 'VIDEO'" 
+        :video="works.vid"
+      />
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->

@@ -21,7 +21,10 @@
       />
       
       <!-- Small Video VIDEO:小视频 -->
-      <m-details-small-video v-if="dynamic.type === 'VIDEO'" :video="dynamic.vid"/>
+      <m-details-small-video
+        v-if="dynamic.type === 'VIDEO'"
+        :video="dynamic.vid"
+      />
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->
