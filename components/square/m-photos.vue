@@ -1,5 +1,5 @@
 <template>
-  <div v-if="photos">
+  <div v-if="photos" @click.stop="">
     <!-- Just one -->
     <div v-if="photos.length === 1" class="works-photos-wrap-one">
       <img class="basic-pic photos-one" v-lazy="photos[0]" @click="openImagePre(0)"/>

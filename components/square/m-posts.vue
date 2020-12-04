@@ -16,7 +16,7 @@
       <!-- content -->
       <div class="works__cot">
         <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
-        <div class="work__row__photos--group" @click.stop="">
+        <div class="work__row__photos--group">
           <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
           <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
           <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
@@ -89,6 +89,7 @@
       <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
         <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
         <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
+        <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
       </van-popup>
     </div>
@@ -290,6 +291,7 @@ export default {
       this.showCopyCode.show = true
       this.showCopyCode.jobNummer = this.listItemData.identificationCode
       this.showMenusPopup = false
+      this.showPublishMenusPopup = false
     },
     /** 关闭弹窗 */
     onClosed() {

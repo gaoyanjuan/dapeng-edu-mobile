@@ -2,7 +2,7 @@
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
     <m-navbar
-      :show-right-menu="showRightMenuFlag"
+      :show-right-menu="true"
       @onOpenMenus="onShowMenus"
       :title="homework.type === 'TEXT' ? '作业详情' : '小视频详情'"
     />
@@ -74,13 +74,23 @@
     </div>
     <!-- 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <template v-if="homework.user.userId === (userInfo ? userInfo.userId : '' )">
+      <template 
+        v-if="homework.approvedLevel && homework.approvedLevel === '0'
+        &&
+        homework.user.userId === ( userInfo ? userInfo.userId : '') ">
         <div class="menus__popup__item" @click="editHomework">编辑</div>
         <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
+        <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
       <template v-else>
-        <div class="menus__popup__item" @click="toCopyForm">Ta抄作业</div>
+        <div
+          v-if="userInfo && homework.user
+          &&
+          userInfo.userId !== homework.user.userId"
+          class="menus__popup__item"
+          @click="toCopyForm"
+        >Ta抄作业</div>
         <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>

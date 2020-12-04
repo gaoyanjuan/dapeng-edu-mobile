@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <span @click.stop="">
     <img v-if="label === 'EXCELLENT'" :class="source === 'listPage'? 'photos__label':'details__label'" :src="awesome">
     <img v-if="label === 'PROGRESS'" :class="source === 'listPage'? 'photos__label':'details__label'"  :src="progress">
     <img v-if="label === 'CREATIVE'" :class="source === 'listPage'? 'photos__label':'details__label'" :src="creative">
