@@ -58,7 +58,7 @@ export function appSource(params) {
 /**
  * 区分宿主浏览器-微信
  */
-function checkBrowser(params) {
+export function checkBrowser() {
   let ua = navigator.userAgent.toLowerCase()
   if (ua.indexOf('micromessenger') != -1) { 
     return true
@@ -80,11 +80,11 @@ export function openInApp() {
   }
 
   if (device.type === 'andriod') {
-
-    // if (checkBrowser()) {
-    //   alert('命中目标')
-    //   return
-    // }
+    
+    if (checkBrowser()) {
+      $nuxt.$router.push('/call-app')
+      return
+    }
     
     const parent = document.getElementsByTagName('body')[0]
     
