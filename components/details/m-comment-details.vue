@@ -23,7 +23,7 @@
         <van-list
           v-model="loading"
           :finished="finished"
-          finished-text="没有更多了"
+          finished-text="-没有更多了-"
           loading-text="正在努力加载"
           @load="onLoad"
         >
