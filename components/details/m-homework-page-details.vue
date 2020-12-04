@@ -84,13 +84,21 @@
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
       <template v-else>
-        <div
-          v-if="userInfo && homework.user
-          &&
-          userInfo.userId !== homework.user.userId"
-          class="menus__popup__item"
-          @click="toCopyForm"
-        >Ta抄作业</div>
+        <template v-if="userInfo">
+          <div
+            v-if="userInfo && homework.user
+            &&
+            userInfo.userId !== homework.user.userId"
+            class="menus__popup__item"
+            @click="toCopyForm"
+          >Ta抄作业</div>
+        </template>
+        <template v-else>
+          <div
+            class="menus__popup__item"
+            @click="toCopyForm"
+          >Ta抄作业</div>
+        </template>
         <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
