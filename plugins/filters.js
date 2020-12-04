@@ -94,6 +94,9 @@ const requireData = function (data) {
 
 //作业要求时间戳移动端
 const requireDataH5 = function (data) {
+  if (!data) {
+    return '-----'
+  }
   return dayjs(data).format('YYYY-MM-DD HH:mm')
 }
 
