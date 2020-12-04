@@ -27,6 +27,16 @@ export default {
         state.newDynamicList.status = 'load'
       }
     },
+    clearNewDynamicList(state) {
+      state.newDynamicList.list = []
+      state.newDynamicList.page = 1
+      state.newDynamicList.status = 'loading'
+    },
+    clearHotDynamicList(state) {
+      state.hotDynamicList.list = []
+      state.hotDynamicList.page = 1
+      state.hotDynamicList.status = 'loading'
+    },
     changeHotDynamicListStatus (state, payload) {
       state.hotDynamicList.status = payload
     },
