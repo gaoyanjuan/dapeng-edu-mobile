@@ -208,6 +208,7 @@ export default {
 }
 
 .inner-content-txt .txt {
+  display: block;
   font-size: 16px;
   font-family: @regular;
   font-weight: 400;
