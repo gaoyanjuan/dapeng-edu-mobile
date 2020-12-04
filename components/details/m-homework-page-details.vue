@@ -82,6 +82,8 @@
         <div class="menus__popup__item" @click="onShowMenus">取消</div>
       </template>
     </van-popup>
+    <!-- 复制作业号 -->
+    <m-copy-code :show-popup="showCopyCode" @closed="onClosed"/>
     <!-- 删除二次确认弹窗 -->
     <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
@@ -94,6 +96,7 @@ export default {
   data:() => ({
     showMenusPopup: false,
     showRightMenu: true,
+    showCopyCode: { show: false, jobNummer: null },
     deleteDialogParams: {
       show: false
     }
@@ -157,17 +160,13 @@ export default {
       })
     },
     handleCopyJobNummer() {
-      /**
-       * vue-clipboard2 Usage
-       * https://www.npmjs.com/package/vue-clipboard2
-       */
-      const identCode = this.homework.identificationCode || ''
-      this.$copyText(identCode).then( (e) => {
-        this.$toast('复制成功')
-      }, function(e) {
-        console.log('Can not copy')
-      })
+      this.showCopyCode.show = true
+      this.showCopyCode.jobNummer = this.homework.identificationCode
       this.showMenusPopup = false
+    },
+    /** 关闭弹窗 */
+    onClosed() {
+      this.showCopyCode.show = false
     },
     toCopyForm() {
       if(!this.$login()) {
