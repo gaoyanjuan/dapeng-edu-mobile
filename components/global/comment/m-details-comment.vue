@@ -230,7 +230,7 @@ export default {
         commit: true
       })
       .then((res) => {
-        ths.$ref.commentPopup.resetPopup()
+        this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.commitNewRepliesComment({
             ...res.data,
