@@ -6,7 +6,9 @@
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userInfo ? userInfo.nickname : '佚名' }}</span>
-        <span class="info-date">{{ submitTime | commonDate }}</span>
+        <span class="info-date">
+          {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
+          </span>
       </div>
     </div>
 
@@ -107,6 +109,10 @@ export default {
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
+    },
+    showMySubmit() {
+      let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
+      return this.userInfo && this.userInfo.userId === currentUserId && this.pageName === 'requirement'
     }
   },
   created () {
