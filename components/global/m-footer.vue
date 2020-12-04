@@ -50,7 +50,10 @@
         <div @click="enterSubmit('TEST')">
           <div class="menus-cloumn cloumn-trial animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.trial" alt="trial"/>
-            <span class="menus-txt">体验课作业提交</span>
+            <div class="menus-txt">
+              <div>体验课</div>
+              <div>作业提交</div>
+            </div>
           </div>
         </div>
 
@@ -58,7 +61,10 @@
         <div @click="enterSubmit('VIP')">
           <div class="menus-cloumn cloumn-formal animate__animated animate__bounceInUp">
             <img class="menus-icon" :src="publish.formal" alt="formal"/>
-            <span class="menus-txt">正式课作业提交</span>
+            <div class="menus-txt">
+              <div>正式课</div>
+              <div>作业提交</div>
+            </div>
           </div>
         </div>
 
@@ -276,7 +282,7 @@ export default {
   }
 
   .menus-txt {
-    width: 48px;
+    // width: 48px;
     height: 34px;
     font-size: 12px;
     font-family: @regular;
