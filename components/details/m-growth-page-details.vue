@@ -38,7 +38,7 @@
 
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="成长" :activityData="growth.activityBaseDto"/>
+          <m-label label-type="成长" :activityData="growth.activity"/>
         </div>
       </div>
     </div>
