@@ -175,6 +175,7 @@ export default {
 }
 
 .inner-content-txt .txt {
+  display: block;
   font-size: 16px;
   font-family: @dp-font-regular;
   font-weight: 400;
