@@ -333,7 +333,7 @@ export default {
     },
     sendComment (text) {
       this.appendNewComment({
-        topicId: this.listItemData.id,
+        topicId: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
         topicType: this.propSquareType,
         content: text,
         label: {
