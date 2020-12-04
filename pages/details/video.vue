@@ -61,7 +61,7 @@ export default {
           wrap: '#player',
           width: '100%',
           height: '211px',
-          hideRepeat: true,
+          // hideRepeat: true,
           hideSwitchPlayer: true,
           vid: res.data.video.id
         })
