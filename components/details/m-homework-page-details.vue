@@ -21,7 +21,10 @@
       />
       
       <!-- Small Video VIDEO:小视频 -->
-      <m-details-small-video v-if="homework.type === 'VIDEO'" :video="homework.vid"/>
+      <m-details-small-video
+        v-if="homework.type === 'VIDEO'"
+        :video="homework.vid"
+      />
 
       <div class="details-inner-content-wrap">
         <!-- Avatar -->

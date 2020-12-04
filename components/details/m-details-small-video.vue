@@ -28,6 +28,7 @@ export default {
       vid: this.video,
       hideRepeat: true,
       hideSwitchPlayer: true,
+      cover_display: 'scaleAspectFit',
     })
   },
 }

@@ -8,20 +8,10 @@
       <m-footer />
     </div>
     <div class="off-line-wrap" v-if="$nuxt.isOffline">
-      掉线了~~
+      请检查网络
     </div>
   </div>
 </template>
-
-<script>
-import { mapGetters, mapActions } from 'vuex'
-
-export default {
-  data () {
-    return {}
-  }
-}
-</script>
 
 <style lang="less" scoped>
 .app_wrap {

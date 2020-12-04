@@ -26,6 +26,8 @@
             type="textarea"
             :maxlength="maxCount"
             :placeholder="placeholder"
+            @focus="onFocus"
+            @blur="onBlur"
             @input="onChangeInput"
           />
         </div>
@@ -695,6 +697,22 @@ export default {
         this.calcContent(words ,200)
       } else {
         this.calcContent(words ,60)
+      }
+    },
+
+    /** 监听获取焦点事件 */
+    onFocus() {
+      if(this.submitType === 'WORKS' || this.submitType === 'LIFE') {
+        this.openAppPop.show = false
+      }
+    },
+
+    /** 监听失去焦点事件 */
+    onBlur() {
+      if(this.submitType === 'WORKS' || this.submitType === 'LIFE') {
+        if (!this.content.length && !this.fileList.length) {
+          this.openAppPop.show = true
+        }
       }
     },
 

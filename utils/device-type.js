@@ -54,3 +54,80 @@ export function appSource(params) {
     return { type: 'pc' }
   }
 }
+
+/**
+ * 区分宿主浏览器-微信
+ */
+function checkBrowser(params) {
+  let ua = navigator.userAgent.toLowerCase()
+  if (ua.indexOf('micromessenger') != -1) { 
+    return true
+  } else { 
+    return false
+  }
+}
+
+/**
+ * 唤起app
+ * @param {*} params 
+ */
+export function openInApp() {
+
+  const device = appSource()
+  
+  if (device.type === 'ios') {
+    location.href = 'https://enroll.dapengjiaoyu.cn'
+  }
+
+  if (device.type === 'andriod') {
+
+    // if (checkBrowser()) {
+    //   alert('命中目标')
+    //   return
+    // }
+    
+    const parent = document.getElementsByTagName('body')[0]
+    
+    if (document.getElementById('openIframe')) {
+      parent.removeChild(document.getElementById('openIframe'))
+    }
+
+    if (document.getElementById('downiframe')) {
+      parent.removeChild(document.getElementById('downiframe'))
+    }
+    
+    let ifr = document.createElement('iframe')
+    ifr.id = 'openIframe'
+    ifr.src = 'dpedu://com.app.zhijin'
+    ifr.style.display = 'none'
+    parent.appendChild(ifr)
+
+    // 等待一段时间后，无反应则URL跳转
+    let downloadTimeout = setTimeout(function () {
+      $nuxt.$store.$axios.get('/app-version').then((res) => { 
+        let iframe = document.createElement('iframe')
+        iframe.id = 'downiframe'
+        iframe.src = JSON.parse(res.data.content).url
+        iframe.style.display = 'none'
+        parent.appendChild(iframe)
+      })
+    }, 1500)
+
+    /* 判读是否唤起app成功 浏览器是否进入后台 */
+    var visibilityChange = null
+    if (typeof document.hidden !== 'undefined') {
+      visibilityChange = 'visibilitychange'
+    } else if (typeof document.mozHidden !== 'undefined') {
+      visibilityChange = 'mozvisibilitychange'
+    } else if (typeof document.msHidden !== 'undefined') {
+      visibilityChange = 'msvisibilitychange'
+    } else if (typeof document.webkitHidden !== 'undefined') {
+      visibilityChange = 'webkitvisibilitychange'
+    }
+
+    // 添加监听器
+    document.addEventListener(visibilityChange, function () {
+      clearTimeout(downloadTimeout)
+    }, false)
+  }
+}
