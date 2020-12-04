@@ -227,6 +227,7 @@ export default {
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
+          this.changeCommentCount(this.detailsGetters.commentCount + 1)
           this.replyCount += 1
           this.repliesList.unshift({
             ...res.data,

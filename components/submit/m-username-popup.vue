@@ -55,8 +55,13 @@ export default {
         }
 
         if(res) {
-          this.editUserInfo({...this.showPopup.info,loginName: this.username})
-          this.$emit('submit')
+          this.editUserInfo({...this.showPopup.info,loginName: this.username}).then( res => {
+            if(res.status === 200) {
+              this.$emit('submit')
+            } else {
+              this.$toast(res.data.message)
+            }
+          })
         }
       }
     },
@@ -71,6 +76,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.van-toast {
+  text-align: left !important;
+}
+
+</style>
 
 <style lang="less" scoped>
 

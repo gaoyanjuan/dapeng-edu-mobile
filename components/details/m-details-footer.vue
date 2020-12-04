@@ -169,6 +169,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        debugger
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
