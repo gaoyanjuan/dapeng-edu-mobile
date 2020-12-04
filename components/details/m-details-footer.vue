@@ -169,12 +169,11 @@ export default {
         commit: true
       })
       .then((res) => {
-        debugger
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
+          this.changeCommentCount(this.detailsGetters.commentCount + 1)
         }
-        this.changeCommentCount(this.detailsGetters.commentCount + 1)
       })
       .catch((err) => {
         if (err && err.data && err.data.message) {
