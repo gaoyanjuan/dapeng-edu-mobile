@@ -18,7 +18,7 @@
         <template v-if="!smallVideoList.list.length && finished">
           <div class="small-video-blank-wrap">
             <img class="blank-img" :src="blank" alt="" />
-            <span class="blank-txt">暂无内容～</span>
+            <span class="blank-txt">暂无内容</span>
           </div>
         </template>
       </van-list>
