@@ -64,6 +64,7 @@
             :propIndex="idx"
             path="/details/homework"
             squareType="作业"
+            pageName="requirement"
           />
         </van-list>
       </div>
