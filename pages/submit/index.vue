@@ -339,7 +339,9 @@ export default {
       // 发布动态
       publishDynamic: 'publish/addNewDynamic',
       // 查询活动详情
-      getActivitiesDetails: 'activities/appendActivitiesDetail'
+      getActivitiesDetails: 'activities/appendActivitiesDetail',
+      // 获取用户发布的作业
+      getUserPublished: 'user/appendPublishHomework'
     }),
 
     ...mapMutations({
@@ -352,6 +354,15 @@ export default {
 
       // 提交状态是否为True
       if (!this.submitStatus) return false
+
+      // 提交作品时先检查是否有提交作业
+      if(this.submitType === 'WORKS') {
+        const res = await this.getUserPublished()
+        if(res.data.length === 0) {
+          this.$toast('未提交过作业不允许发作品')
+          return
+        }
+      }
 
       // 判断用户是否已经完善用户名
       if (!this.usernamePop.show) {

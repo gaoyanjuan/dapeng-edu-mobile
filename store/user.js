@@ -590,8 +590,7 @@ export const actions = {
     return res
   },
   // 用户的发布作业列表
-  async appendPublishHomework ({ commit }, params) {
-
+  async appendPublishHomework({ commit }, params = {}) {
     commit('changeListStatus', 'publishHomework')
     const res = await this.$axios.get('/users/homes', {
       params: {
@@ -601,7 +600,7 @@ export const actions = {
     let payload = {
       data: res.data,
       pageInfo: {
-        pages: params.page,
+        pages: params.page ? params.page : 1,
         size: process.env.global.pageSize
       }
     }
