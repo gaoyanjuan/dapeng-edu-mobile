@@ -129,7 +129,7 @@ export default {
 
       if (!this.submitLock) return false
       if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) {
-        this.$toast('手机号错误')
+        this.$toast('请输入正确的手机号')
         return false
       }
       this.submitLock = false
