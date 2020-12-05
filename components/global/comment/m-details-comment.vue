@@ -178,8 +178,6 @@ export default {
       this.showConfirmPopup = true
     },
     onShowMenus () {
-      console.log(this.showPopup)
-      console.log('执行')
       if (this.userinfo && this.user && this.user.userId === this.userinfo.userId) {
         this.showPopup = !this.showPopup
       }
