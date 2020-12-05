@@ -55,7 +55,7 @@
       <section class="contact-number-row">
         <div class="label">联系电话</div>
         <div class="contact-number-input">
-          <van-field v-model="contactNumber" @focus="onFocus" @blur="onBlur" clearable placeholder="请输入您的联系电话" />
+          <van-field v-model="contactNumber" @focus="onFocus" @blur="onBlur" :maxlength="13" clearable placeholder="请输入您的联系电话" />
         </div>
       </section>
 
@@ -128,7 +128,7 @@ export default {
       if (!this.submitStatus) return false
 
       if (!this.submitLock) return false
-      if(!(/^1[34578]\d{9}$/.test(this.contactNumber))) {
+      if(!(/^[0-9]*$/.test(this.contactNumber))) {
         this.$toast('请输入正确的手机号')
         return false
       }
