@@ -105,6 +105,9 @@ export default {
   mounted() {
     if(this.userInfoGetters && this.userInfoGetters.userId ) {
       this.appendUserTrends({ userId: this.userInfoGetters.userId })
+      if (!this.userInfoGetters.loginName || !this.userInfoGetters.nickname) {
+        this.getUserDetails()
+      }
     }
   },
   computed:{
@@ -116,7 +119,8 @@ export default {
   },
   methods:{
     ...mapActions('user', [
-      'appendUserTrends'
+      'appendUserTrends',
+      'getUserDetails'
     ]),
 
     // 打开我的喜欢弹框
