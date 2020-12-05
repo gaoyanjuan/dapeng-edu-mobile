@@ -50,7 +50,7 @@
       @sendComment="sendComment"
     />
     <!-- 删除 菜单弹层 -->
-    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true">
+    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true" :close-on-click-overlay="false">
       <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
@@ -130,7 +130,8 @@ export default {
       audioImg: audio,
       audio: null,
       praiseCount: 0,
-      isPraise: false
+      isPraise: false,
+      commentFlag: true
     }
   },
   computed: {
@@ -220,6 +221,8 @@ export default {
       }
     },
     sendComment (text) {
+      if(!this.commentFlag) return false
+      this.commentFlag = false
       this.appendNewRepliesComment({
         label: {
           contentType: this.$route.query.contentType
@@ -230,6 +233,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        this.commentFlag = true
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.commitNewRepliesComment({
@@ -250,6 +254,7 @@ export default {
         }
       })
       .catch((err) => {
+        this.commentFlag = true
         if (err && err.data && err.data.message) {
           this.$toast(err.data.message)
         }

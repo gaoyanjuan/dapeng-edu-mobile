@@ -57,7 +57,8 @@ export default {
     return {
       commentPop: { show: false },
       loading: false,
-      finished: false
+      finished: false,
+      commentFlag: true
     }
   },
   computed: {
@@ -101,6 +102,8 @@ export default {
       this.commentPop.show = true
     },
     sendComment (text) {
+      if(!this.commentFlag) return false
+      this.commentFlag = false
       this.appendNewRepliesComment({
         label: {
           contentType: this.$route.query.contentType
@@ -111,6 +114,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        this.commentFlag = true
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.commitNewRepliesComment({
@@ -131,6 +135,7 @@ export default {
         }
       })
       .catch((err) => {
+        this.commentFlag = true
         if (err && err.data && err.data.message) {
           this.$toast(err.data.message)
         }
