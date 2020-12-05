@@ -50,7 +50,7 @@
       @sendComment="sendComment"
     />
     <!-- 删除 菜单弹层 -->
-    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true">
+    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true" :close-on-click-overlay="false">
       <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
