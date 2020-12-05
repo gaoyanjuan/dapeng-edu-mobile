@@ -8,7 +8,10 @@
         :key="index"
         ref="tabName"
       >
-        <span class="tab-name" >{{ tab.name }}</span><span class="tab-count">({{(tab.count === 0 ? 0 : tab.count) | studentsCount }})</span>
+        <span class="tab-name" >{{ tab.name }}</span>
+        <span class="tab-count" v-if="tab.count !== 0">
+          ({{tab.count | studentsCount }})
+        </span>
       </li>
     </ul>
     <div class="line" :style="{left:underlineLeft+'px'}"></div>
