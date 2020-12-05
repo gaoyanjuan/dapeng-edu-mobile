@@ -30,8 +30,8 @@ export default {
   },
   methods: {
     toActivitiesDetail() {
-      const tempwindow = window.open('_blank')
-      tempwindow.location = this.cardData.activityDisplay.detailPagesURL
+      const url = this.cardData.activityDisplay.detailPagesURL
+      window.open(url, '_blank')
     }
   }
 }
