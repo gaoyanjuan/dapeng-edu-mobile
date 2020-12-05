@@ -226,32 +226,33 @@ export default {
         id: this.commentItem.id,
         user: this.userinfo
       })
-      .then((res) => {
-        this.commentFlag = true
-        this.$refs.commentPopup.resetPopup()
-        if (!res.data.highRisk) {
-          this.$toast('评论成功')
-          this.changeCommentCount(this.detailsGetters.commentCount + 1)
-          this.replyCount += 1
-          this.repliesList.unshift({
-            ...res.data,
-            isPraise: false,
-            isRecommend: false,
-            praiseCount: 0,
-            parentId: this.commentItem.id,
-            parentUser: {
-              ...this.commentItem.user
-            },
-            user: {
-              ...this.userinfo
-            }
-          })
-        }
-      })
-      .catch((err) => {
-        this.commentFlag = true
-        if (err && err.data && err.data.message) {
-          this.$toast(err.data.message)
+      .then(({status, data}) => {
+        if (status === 201) {
+          this.commentFlag = true
+          this.$refs.commentPopup.resetPopup()
+          if (!data.highRisk) {
+            this.$toast('评论成功')
+            this.changeCommentCount(this.detailsGetters.commentCount + 1)
+            this.replyCount += 1
+            this.repliesList.unshift({
+              ...data,
+              isPraise: false,
+              isRecommend: false,
+              praiseCount: 0,
+              parentId: this.commentItem.id,
+              parentUser: {
+                ...this.commentItem.user
+              },
+              user: {
+                ...this.userinfo
+              }
+            })
+          }
+        } else {
+          this.commentFlag = true
+          if (data && data.message) {
+            this.$toast(data.message)
+          }
         }
       })
     },
