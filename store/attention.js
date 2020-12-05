@@ -40,6 +40,11 @@ export default {
         state.popularUsersList.status = 'load'
       }
     },
+    clearPopularUsersList(state) {
+      state.popularUsersList.list = []
+      state.popularUsersList.status = 'loading'
+      state.popularUsersList.pageInfo.pages = 1
+    },
     changePopularUsersStatus (state, payload) {
       state.popularUsers[payload].isFlower = !state.popularUsers[payload].isFlower
     },

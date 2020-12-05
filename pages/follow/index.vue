@@ -39,21 +39,6 @@ export default {
       popularUsersList: 'attention/popularUsersListGetters'
     })
   },
-  async asyncData ({route, store}) {
-    if (process.browser) return {
-      isServiceload: false
-    }
-    try {
-      if (store.getters['attention/popularUsersListGetters'].list.length === 0) {
-        await store.dispatch('attention/appendPopularUsersList', { page: 1 })
-      }
-      return {
-        isServiceload: true
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  },
   created () {
     if (this.$store.getters['attention/popularUsersListGetters'].list.length === 0) {
       this.$store.dispatch('attention/appendPopularUsersList', { page: 1 })
@@ -80,7 +65,8 @@ export default {
       appendPopularUsersList: 'attention/appendPopularUsersList'
     }),
     ...mapMutations({
-      changeFollowing: 'attention/changePopularUsersListFollowStatus'
+      changeFollowing: 'attention/changePopularUsersListFollowStatus',
+      clearPopularUsersList: 'attention/clearPopularUsersList'
     }),
     onLoad() {
       if (this.popularUsersList.status === 'over') {
@@ -110,6 +96,9 @@ export default {
         })
       }
     }
+  },
+  destroyed () {
+    this.clearPopularUsersList()
   }
 }
 </script>

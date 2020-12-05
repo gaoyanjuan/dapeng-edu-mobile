@@ -60,17 +60,22 @@ export default {
       deleteFollowing: 'attention/deleteFollowing'
     }),
     ...mapMutations({
-      changeFollowing: 'attention/changePopularUsersStatus'
+      changeFollowing: 'attention/changePopularUsersStatus',
     }),
     /** 关注事件 */
     handleFollow (item, index) {
-      if(!this.$login()) {
-        return 
+      if(!this.$login()) { return }
+      if (item.isFlower) {
+        this.changeFollowing(index)
+        this.deleteFollowing({
+          id: item.userId
+        })
+      } else {
+        this.changeFollowing(index)
+        this.queryFollowing({
+          id: item.userId
+        })
       }
-      this.changeFollowing(index)
-      this.queryFollowing({
-        id: item.userId
-      })
     }
   }
 }
