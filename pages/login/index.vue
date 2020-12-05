@@ -9,7 +9,6 @@
 </template>
 
 <script>
-
 export default {
   layout: 'navbar',
   data () {
@@ -28,6 +27,12 @@ export default {
       authUrl: process.env.authUrl,
       width: 0,
       height: 0
+    }
+  },
+  created() {
+    if(this.$cookiz.get('access_token')) {
+      this.$router.go(-1)
+      return
     }
   },
   mounted () {

@@ -132,6 +132,7 @@ export default {
       this.$cookiz.remove('access_token')
       this.$cookiz.remove('refresh_token')
       this.$cookiz.remove('userinfo')
+      localStorage.setItem('route', null)
       const redirectUrl = `${location.protocol}//${location.host}`
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
@@ -143,6 +144,7 @@ export default {
 
     // 跳转登录页
     toLogin () {
+      localStorage.setItem('route', $nuxt.$route.fullPath)
       this.$router.push('/login')
     },
 
