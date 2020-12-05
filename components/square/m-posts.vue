@@ -195,7 +195,8 @@ export default {
     showPublishMenusPopup: false,
     deleteDialogParams: {
       show: false
-    }
+    },
+    commentFlag: true
   }),
   computed: {
     user () {
@@ -337,6 +338,8 @@ export default {
       this.showMenusPopup = !this.showMenusPopup
     },
     sendComment (text) {
+      if(!this.commentFlag) return false
+      this.commentFlag = false
       this.appendNewComment({
         topicId: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
         topicType: this.propSquareType,
@@ -346,6 +349,7 @@ export default {
         }
       })
       .then((res) => {
+        this.commentFlag = true
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
@@ -353,6 +357,7 @@ export default {
         this.commentCount += 1
       })
       .catch((err) => {
+        this.commentFlag = true
         if (err && err.data && err.data.message) {
           this.$toast(err.data.message)
         }
