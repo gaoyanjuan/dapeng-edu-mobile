@@ -4,7 +4,7 @@
     <m-swipe />
     
     <!-- 二级菜单 -->
-    <van-sticky :offset-top="44">
+    <van-sticky :offset-top="`1.1733rem`">
       <section class="menus-wrap">
         <div class="menus-left-side-wrap">
           <div 
