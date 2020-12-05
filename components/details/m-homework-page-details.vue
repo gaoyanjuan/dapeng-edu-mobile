@@ -38,11 +38,12 @@
         <!-- Conetnt -->
         <div class="inner-content-txt">
           <m-posts-remark
+            class="label-star"
             v-if="homework.recommendType"
             :label="homework.recommendType"
             source="detailsPage"
           />
-          <span class="txt" v-html="$options.filters.formatEmotions(homework.content)"></span>
+          <span class="txt" :class="homework.recommendType ? 'label-index' : ''" v-html="$options.filters.formatEmotions(homework.content)"></span>
         </div>
 
         <!-- classification -->
@@ -221,6 +222,15 @@ export default {
 
 .details-inner-content-wrap .inner-content-txt {
   margin-top: 16px;
+  position: relative;
+  .label-star {
+    display: inline-block;
+    height: 24px;
+    position: absolute;
+  }
+  .label-index {
+    text-indent: 90px;
+  }
 }
 
 .inner-content-txt .txt {
