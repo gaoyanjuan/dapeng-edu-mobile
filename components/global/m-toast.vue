@@ -4,7 +4,7 @@
     <div class="success-wrap">
       <!-- :class="showContent ? 'fadein' : 'fadeout'" -->
       <img class="success-icon" :src="sucess" alt="sucess"/>
-      <span class="success-text">{{ content }}</span>
+      <span class="success-text" v-html="content"></span>
     </div>
   </div>
 </template>

@@ -148,7 +148,7 @@ export default {
       ).then((res) => {
         if(res.status === 201) {
           this.submitLock = true
-          this.$myToast('提交成功我们将第一时间处理')
+          this.$myToast(`<p>提交成功</p><p>我们将第一时间处理</p>`)
           setTimeout(() => {
             this.$router.push('/')
           }, 1500)
