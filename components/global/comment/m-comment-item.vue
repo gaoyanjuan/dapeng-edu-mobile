@@ -138,7 +138,8 @@ export default {
       repliesList: [],
       isPraise: false,
       praiseCount: 0,
-      replyCount: 0
+      replyCount: 0,
+      commentFlag: true
     }
   },
   computed: {
@@ -215,6 +216,8 @@ export default {
       }
     },
     sendComment (text) {
+      if(!this.commentFlag) return false
+      this.commentFlag = false
       this.appendNewRepliesComment({
         label: {
           contentType: this.contentType
@@ -224,6 +227,7 @@ export default {
         user: this.userinfo
       })
       .then((res) => {
+        this.commentFlag = true
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
@@ -245,6 +249,7 @@ export default {
         }
       })
       .catch((err) => {
+        this.commentFlag = true
         if (err && err.data && err.data.message) {
           this.$toast(err.data.message)
         }
