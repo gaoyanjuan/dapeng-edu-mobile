@@ -58,7 +58,8 @@ export default {
       like: require('@/assets/icons/posts/posts-love.png'),
       unlike: require('@/assets/icons/posts/posts-unlove.png'),
       collect: require('@/assets/icons/posts/posts-star.png'),
-      uncollect: require('@/assets/icons/posts/posts-unstar.png')
+      uncollect: require('@/assets/icons/posts/posts-unstar.png'),
+      commentFlag: true
     }
   },
   computed: {
@@ -159,6 +160,8 @@ export default {
     },
     // 评论发送
     sendComment (params) {
+      if(!this.commentFlag) return false
+      this.commentFlag = false
       this.appendNewComment({
         ...this.commentListGetters.params,
         content: params,
@@ -169,6 +172,7 @@ export default {
         commit: true
       })
       .then((res) => {
+        this.commentFlag = true
         this.$refs.commentPopup.resetPopup()
         if (!res.data.highRisk) {
           this.$toast('评论成功')
@@ -176,6 +180,7 @@ export default {
         }
       })
       .catch((err) => {
+        this.commentFlag = true
         if (err && err.data && err.data.message) {
           this.$toast(err.data.message)
         }
