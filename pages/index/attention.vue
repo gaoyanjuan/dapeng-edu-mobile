@@ -46,12 +46,12 @@ export default {
     '$route.query': function (newQuery, oldQuery) {
       this.clearAttentionLiAst()
       if(this.$store.getters['user/userInfoGetters']) {
-          this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {
-            this.$store.dispatch('attention/appendAttentionList', { page: 1 })
-          })
-        } else {
+        this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {
           this.$store.dispatch('attention/appendAttentionList', { page: 1 })
-        }
+        })
+      } else {
+        this.$store.dispatch('attention/appendAttentionList', { page: 1 })
+      }
     }
   },
   destroyed() {

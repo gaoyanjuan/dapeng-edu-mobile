@@ -384,6 +384,7 @@ export default {
         if(res.status === 200) {
           this.sucessToast('homework')
         } else {
+          this.submitLock = true
           res.data.message && this.$toast(res.data.message)
         }
       }
@@ -404,6 +405,7 @@ export default {
             }
             
           } else {
+            this.submitLock = true
             res.data.message && this.$toast(res.data.message)
           }
         }
@@ -414,6 +416,7 @@ export default {
         if(res.status === 201) {
           this.sucessToast('works')
         } else {
+          this.submitLock = true
           res.data.message && this.$toast(res.data.message)
         }
       }
@@ -423,6 +426,7 @@ export default {
         if(res.status === 201) {
           this.sucessToast('dynamic')
         } else {
+          this.submitLock = true
           res.data.message && this.$toast(res.data.message)
         }
       }
@@ -615,9 +619,9 @@ export default {
     onUploadBeforeRead(file) {
       return new Promise((resolve, reject) => {
         // 图片类型校验
-        const allowImgType = ['image/jpeg', 'image/png', 'image/gif']
+        const allowImgType = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
         if (!allowImgType.includes(file.type)) {
-          this.$toast('上传图片仅支持jpg/png/gif格式图片')
+          this.$toast('上传图片仅支持jpg/png/gif/webp格式图片')
           reject()
         }
 
