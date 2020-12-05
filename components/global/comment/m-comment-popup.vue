@@ -84,6 +84,7 @@ export default {
   watch:{
     content(oldVal, newVal) {
       if(oldVal.length === 150) {
+        document.activeElement.blur()
         this.$toast('评论仅限150个字')
       }
     }

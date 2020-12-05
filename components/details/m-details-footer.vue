@@ -86,9 +86,7 @@ export default {
     }),
     // 打开评论弹窗
     openComment() {
-      if(!this.$login()) {
-        return 
-      }
+      if(!this.$login()) { return }
       this.commentPop.show = true
     },
     // 喜欢事件
