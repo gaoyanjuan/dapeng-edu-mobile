@@ -26,7 +26,9 @@ export default {
   created () {
     if (process.browser) {
       try {
-        this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
+        if (this.$store.getters['attention/popularUsersGetters'].length === 0) {
+          this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
+        }
         if(this.$store.getters['user/userInfoGetters']) {
           this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {
             this.$store.dispatch('attention/appendAttentionList', { page: 1 })
@@ -39,12 +41,14 @@ export default {
   },
   methods: {
     ...mapMutations('attention', [
-      'clearAttentionLiAst'
+      'clearAttentionLiAst',
+      'clearPopularUsers'
     ])
   },
   watch: {
     '$route.query': function (newQuery, oldQuery) {
       this.clearAttentionLiAst()
+      this.clearPopularUsers()
       if(this.$store.getters['user/userInfoGetters']) {
         this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {
           this.$store.dispatch('attention/appendAttentionList', { page: 1 })
@@ -56,6 +60,7 @@ export default {
   },
   destroyed() {
     this.clearAttentionLiAst()
+    this.clearPopularUsers()
   }
 }
 </script>
