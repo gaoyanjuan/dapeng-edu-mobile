@@ -40,24 +40,28 @@ export default {
       state.commentList.data = state.commentList.data
     },
     appendNewComment (state, payload) {
-      if (!payload.data.highRisk) {
-        const newComment = {
-          ...payload.data,
-          user: {
-            ...payload.userData,
-            nickname: payload.userData.nickname
-          },
-          praiseCount: 0,
-          isPraise: false
-        }
-        if (state.commentList.data[0] && state.commentList.data[0].type === "MARK") {
-          state.commentList.data.splice(1,0,newComment)
-          state.commentList.data = state.commentList.data
-        } else {
-          state.commentList.data.splice(0,0,newComment)
-          state.commentList.data = state.commentList.data
+      if (payload.userData) {
+        if (!payload.data.highRisk) {
+          const newComment = {
+            ...payload.data,
+            user: {
+              ...payload.userData,
+              nickname: payload.userData.nickname ? payload.userData.nickname : payload.userData.loginName
+            },
+            replyCount: 0,
+            praiseCount: 0,
+            isPraise: false
+          }
+          if (state.commentList.data[0] && state.commentList.data[0].type === "MARK") {
+            state.commentList.data.splice(1,0,newComment)
+            state.commentList.data = state.commentList.data
+          } else {
+            state.commentList.data.splice(0,0,newComment)
+            state.commentList.data = state.commentList.data
+          }
         }
       }
+      
     },
     clearCommentList (state) {
       state.commentList.data = []
@@ -148,7 +152,7 @@ export default {
     // 新增评论
     async appendNewComment ({ commit }, params) {
       const res = await this.$axios.post('/comments', params)
-      if (params.commit) {
+      if (res.status === 201) {
         commit('appendNewComment', { data: res.data, userData: params.user })
       }
       return res

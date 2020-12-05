@@ -169,18 +169,19 @@ export default {
         user: this.userinfo,
         commit: true
       })
-      .then((res) => {
-        this.commentFlag = true
-        this.$refs.commentPopup.resetPopup()
-        if (!res.data.highRisk) {
-          this.$toast('评论成功')
-          this.changeCommentCount(this.detailsGetters.commentCount + 1)
-        }
-      })
-      .catch((err) => {
-        this.commentFlag = true
-        if (err && err.data && err.data.message) {
-          this.$toast(err.data.message)
+      .then(({status, data}) => {
+        if (status === 201) {
+          this.commentFlag = true
+          this.$refs.commentPopup.resetPopup()
+          if (!data.highRisk) {
+            this.$toast('评论成功')
+            this.changeCommentCount(this.detailsGetters.commentCount + 1)
+          }
+        } else {
+          this.commentFlag = true
+          if (data && data.message) {
+            this.$toast(data.message)
+          }
         }
       })
     }
