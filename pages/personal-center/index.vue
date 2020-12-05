@@ -105,6 +105,9 @@ export default {
   mounted() {
     if(this.userInfoGetters && this.userInfoGetters.userId ) {
       this.appendUserTrends({ userId: this.userInfoGetters.userId })
+      if (!this.userInfoGetters.loginName || !this.userInfoGetters.nickname) {
+        this.getUserDetails()
+      }
     }
   },
   computed:{
@@ -116,7 +119,8 @@ export default {
   },
   methods:{
     ...mapActions('user', [
-      'appendUserTrends'
+      'appendUserTrends',
+      'getUserDetails'
     ]),
 
     // 打开我的喜欢弹框
@@ -132,6 +136,7 @@ export default {
       this.$cookiz.remove('access_token')
       this.$cookiz.remove('refresh_token')
       this.$cookiz.remove('userinfo')
+      localStorage.setItem('route', null)
       const redirectUrl = `${location.protocol}//${location.host}`
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
@@ -143,6 +148,7 @@ export default {
 
     // 跳转登录页
     toLogin () {
+      localStorage.setItem('route', $nuxt.$route.fullPath)
       this.$router.push('/login')
     },
 

@@ -49,6 +49,6 @@ export default {
   height: 24px;
   line-height: 24px;
   margin-right: 7px;
-  vertical-align: text-bottom;
+  vertical-align: top;
 }
 </style>
