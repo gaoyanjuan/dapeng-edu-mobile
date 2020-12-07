@@ -9,7 +9,6 @@ export const state = () => ({
     recommendCount: 0,
     likeCount: 0,
   },
-oldUserInfo: null,
   userFollow: {
     list: [],
     status: 'loading',
@@ -234,6 +233,8 @@ export const mutations = {
   appendUserInfo (state, payload) {
     if (payload) {
       state.userInfo = { ...payload, nickname: payload.nickname || payload.nickName }
+    } else {
+      state.userInfo = null
     }
   },
   appendUserTrends (state, payload) {
@@ -247,9 +248,6 @@ export const mutations = {
     } else {
       state.userFollow.status = 'load'
     }
-  },
-  appendOldUserInfo(state, payload) { 
-    state.oldUserInfo = payload.data
   },
   clearUserFollow (state) {
     state.userFollow.list = []
@@ -490,15 +488,6 @@ export const actions = {
   async editUserInfo ({ commit }, params) {
     const res = await this.$axios.patch('old/users', params)
     return res
-  },
-  // 获取用户信息【主要是获取学籍号】
-  async getUserDetail({ commit }, params) {
-    const data = await this.$axios.get('/old/users/details')
-    .catch((error) => {})
-    if (data && data.data) {
-      commit('appendOldUserInfo', data)
-    }
-    return data
   },
   // 检查用户是否可以注册
   async checkRegisterAble (state, params) {
@@ -779,9 +768,6 @@ export const getters = {
   },
   userTrendsGetters (state) {
     return state.userTrends
-  },
-  oldUserInfoGetters (state) {
-    return state.oldUserInfo
   },
   userFollowGetters(state) {
     return state.userFollow
