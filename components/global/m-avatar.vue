@@ -235,7 +235,7 @@ export default {
 .avatar-right-side-wrap .avatar-menus-more {
   width: 11px;
   height: 15px;
-  margin-left: 12px;
+  margin: 12px 0 12px 12px;
   cursor: pointer;
 }
 .avatar-right-side-wrap .avatar-menus-score {
