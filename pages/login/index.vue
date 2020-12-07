@@ -5,6 +5,7 @@
     :width="width"
     :height="height"
     frameborder="0"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation allow-pointer-lock"
   ></iframe>
 </template>
 
@@ -71,6 +72,8 @@ export default {
           default:
             break
         }
+      } else if(event.type === 'go_back') {
+        window.history.back(-1)
       }
     })
   },
