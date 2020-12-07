@@ -2,13 +2,13 @@
   <section class="m-avatar">
 
     <!-- 左边用户信息 -->
-    <div class="avatar-left-side-wrap">
+    <div class="avatar-left-side-wrap" @click.stop>
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userInfo && userInfo.nickname ? userInfo.nickname : userInfo.dpAccount }}</span>
         <span class="info-date">
           {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
-          </span>
+        </span>
       </div>
     </div>
 
