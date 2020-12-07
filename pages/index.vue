@@ -143,9 +143,6 @@ export default {
       if (store.getters['banner/bannerListGetters'].length === 0) {
         await store.dispatch('banner/appendBannerList', { collegeId: 'j5m484vz' })
       }
-      if (store.getters['user/userInfoGetters']) {
-        await store.dispatch('user/getUserDetail')
-      }
     } catch (err) {
       console.log(err)
     }
