@@ -117,7 +117,6 @@ export default {
   },
   created () {
     this.isAttention = this.attention
-    console.log(this.$route.path)
   },
   methods:{
     ...mapActions('user', [
