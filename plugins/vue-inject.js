@@ -13,3 +13,13 @@ Vue.prototype.$eventListener = (obj, type, fn) => {
     obj.addEventListener(type, fn, false)
   }
 }
+
+
+const defaultImg = require('@/assets/icons/common/photos-bg.png')
+function errorImg() {
+  let img = event.srcElement
+  img.src = defaultImg
+  img.onerror = null
+}
+
+Vue.prototype.$errorImg = errorImg

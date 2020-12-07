@@ -60,7 +60,7 @@
       <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
     </van-popup>
     <!-- 删除确认弹层 -->
-    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup" :transition-appear="true">
+    <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup" :transition-appear="true" @click.stop>
       <div class="popup__item__title">确定删除该评论吗？</div>
       <div class="popup__item">
         <span @click.stop="cancel">取消</span>

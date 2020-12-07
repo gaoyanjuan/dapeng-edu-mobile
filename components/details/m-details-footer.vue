@@ -2,7 +2,7 @@
   <div>
     <m-tabs>
       <m-tab-item selected="true" name="评论" :count="detailsGetters.commentCount">
-        <m-comment-list :contentType="contentType" />
+        <m-comment-list :contentType="contentType" :courseType="courseType" />
       </m-tab-item>
       <m-tab-item name="喜欢" :count="detailsGetters.praiseCount">
         <m-like-list />
@@ -39,6 +39,10 @@ export default {
       default: ''
     },
     contentType: {
+      type: String,
+      default: ''
+    },
+    courseType: {
       type: String,
       default: ''
     },

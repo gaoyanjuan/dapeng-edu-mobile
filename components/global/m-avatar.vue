@@ -2,13 +2,13 @@
   <section class="m-avatar">
 
     <!-- 左边用户信息 -->
-    <div class="avatar-left-side-wrap">
+    <div class="avatar-left-side-wrap" @click.stop>
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userInfo && userInfo.nickname ? userInfo.nickname : userInfo.dpAccount }}</span>
         <span class="info-date">
           {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
-          </span>
+        </span>
       </div>
     </div>
 
@@ -22,13 +22,16 @@
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
       <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
-      <img
-        v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )"
-        class="avatar-menus-more"
-        :src="more"
-        alt="更多"
+      <span
         @click.stop="onOpenMenus"
-      />
+        v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )"
+      >
+        <img
+          class="avatar-menus-more"
+          :src="more"
+          alt="更多"
+        />
+      </span>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
@@ -105,7 +108,7 @@ export default {
     ]),
     showFollowBtn () {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId
+      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention'
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
@@ -235,7 +238,7 @@ export default {
 .avatar-right-side-wrap .avatar-menus-more {
   width: 11px;
   height: 15px;
-  margin-left: 12px;
+  margin: 12px 0 12px 12px;
   cursor: pointer;
 }
 .avatar-right-side-wrap .avatar-menus-score {
