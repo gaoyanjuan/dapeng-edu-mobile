@@ -346,7 +346,8 @@ export default {
 
     ...mapMutations({
       // 清空作业详情
-      clearHomeworkDetails:'homework/clearHomeworkDetails'
+      clearHomeworkDetails:'homework/clearHomeworkDetails',
+      clearPublishHomework: 'user/clearPublishHomework'
     }),
 
     // 提交前确认
@@ -451,6 +452,7 @@ export default {
 
       if(this.submitType === 'WORKS') {
         this.$myToast('作品发布成功')
+        this.clearPublishHomework()
       }
 
       if(this.submitType === 'LIFE') {
