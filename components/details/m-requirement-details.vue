@@ -14,7 +14,7 @@
         </div>
         <div class="content-info-row">
           <div><span>讲</span><span>师：</span></div>
-          <div>{{ requirementDetailsGetters.user.nickname }}</div>
+          <div>{{ requirementDetailsGetters.user && requirementDetailsGetters.user.nickname }}</div>
         </div>
         <div class="content-info-row">
           <div>作业要求：</div>
@@ -34,7 +34,13 @@
           <span>作业案例：</span>
           <span>已提交：{{ requirementDetailsGetters.total | studentsCount }}份</span>
         </div>
-        <img class="example-photo" :src="requirementDetailsGetters.coverImgSamll" :alt="requirementDetailsGetters.title" />
+        <img class="example-photo"
+          v-if="requirementDetailsGetters.coverImg"
+          :src="requirementDetailsGetters.coverImg"
+          :alt="requirementDetailsGetters.title" />
+        <div class="player-box" v-if="requirementDetailsGetters.vid">
+          <div id="player"></div>
+        </div>
       </div>
     </div>
 
@@ -95,6 +101,19 @@ export default {
       'requirementDetailsGetters',
       'requirementListGetters'
     ])
+  },
+  mounted() {
+    this.$nextTick(() => {
+      if (this.requirementDetailsGetters && this.requirementDetailsGetters.vid) {
+        this.player = polyvPlayer({
+          wrap: '#player',
+          hideSwitchPlayer: true,
+          width: '100%',
+          height: '198px',
+          vid: this.requirementDetailsGetters.vid
+        })
+      }
+    })
   },
   methods: {
     ...mapActions('homework', [
@@ -211,6 +230,13 @@ export default {
   height: 198px;
   border-radius: 6px;
   object-fit: cover;
+}
+
+.requirement-content-example .player-box {
+  margin-top: 12px;
+  border-radius: 6px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .requirement-footer-wrap .requirement-footer-title {
