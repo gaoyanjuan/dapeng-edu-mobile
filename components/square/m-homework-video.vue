@@ -1,6 +1,6 @@
 <template>
   <div class="homework-video-wrap" @click="toDetail">
-    <img class="video-img" :src="videoImg || defaultImg" alt="作业视频封面图" :v-lazy="videoImg">
+    <img class="video-img" :src="videoImg" @error="$errorImg()" alt="作业视频封面图">
     <img class="video-play-img" :src="videoPlay" alt="视频播放按钮">
   </div>  
 </template>
