@@ -38,7 +38,7 @@ module.exports = {
   },
   pro: {
     MODE: 'production',
-    DP_ZHIFU: 'https://zhifu.dapengjiaoyu.com/#/quickPayMent',
+    DP_ZHIFU: 'https://zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://m.dapengjiaoyu.cn',
     BASE_URL: 'http://pc-move-appl.dev.dapengjiaoyu.cn', // 外网后端地址
     OSS_URL: 'https://image.dapengjiaoyu.com',

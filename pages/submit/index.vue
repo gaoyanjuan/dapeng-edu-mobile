@@ -323,7 +323,7 @@ export default {
   methods:{
     ...mapActions({
       // 获取用户信息（4.0）
-      getUserInfo: 'user/getUserDetail',
+      getUserInfo: 'user/getUserDetails',
       // 获取图片上传授权
       getMySTS: 'publish/getMySTS',
       // 展翅订单查询，是否存在此人

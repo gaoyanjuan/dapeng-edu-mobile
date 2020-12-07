@@ -11,9 +11,7 @@
       <div class="header-right-side">
         <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickname || userInfoGetters.dpAccount }} </span>
         <p v-else class="not-login-wrap"><span @click="toLogin">登录</span><span>/</span><span @click="toLogin">注册</span></p>
-        <template v-if="oldUserInfoGetters">
-          <span v-if="oldUserInfoGetters.studentSatusId" class="user-code">学籍号：{{ oldUserInfoGetters.studentSatusId }}</span>
-        </template>
+        <span v-if="userInfoGetters && userInfoGetters.studentSatusId" class="user-code">学籍号：{{ userInfoGetters.studentSatusId }}</span>
       </div>
     </div>
 
@@ -104,16 +102,15 @@ export default {
   }),
   mounted() {
     if(this.userInfoGetters && this.userInfoGetters.userId ) {
-      this.appendUserTrends({ userId: this.userInfoGetters.userId })
-      if (!this.userInfoGetters.loginName || !this.userInfoGetters.nickname) {
+      if (!this.userInfoGetters.gender || !this.userInfoGetters.loginName || !this.userInfoGetters.nickname) {
         this.getUserDetails()
       }
+      this.appendUserTrends({ userId: this.userInfoGetters.userId })
     }
   },
   computed:{
     ...mapGetters('user',[
       'userInfoGetters',
-      'oldUserInfoGetters',
       'userTrendsGetters'
     ])
   },

@@ -2,7 +2,7 @@
 import Vue from 'vue'
 
 function login() {
-  if (!$nuxt.$store.getters['user/userInfoGetters']) {
+  if (!$nuxt.$cookiz.get('access_token')) {
     localStorage.setItem('route', $nuxt.$route.fullPath)
     location.href="/login"
     return false

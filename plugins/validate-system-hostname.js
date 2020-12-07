@@ -20,3 +20,5 @@ function validateSystemHostName () {
 
 import Vue from 'vue'
 Vue.prototype.validateSystemHostName = validateSystemHostName
+
+export default validateSystemHostName
