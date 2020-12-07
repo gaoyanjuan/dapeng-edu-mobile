@@ -22,13 +22,16 @@
         <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
       </template>
       <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
-      <img
-        v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )"
-        class="avatar-menus-more"
-        :src="more"
-        alt="更多"
+      <span
         @click.stop="onOpenMenus"
-      />
+        v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )"
+      >
+        <img
+          class="avatar-menus-more"
+          :src="more"
+          alt="更多"
+        />
+      </span>
     </div>
     <div class="doubt-content" v-if="doubtContentShow">
       此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
