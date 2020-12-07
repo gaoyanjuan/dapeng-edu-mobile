@@ -30,12 +30,6 @@ export default {
       height: 0
     }
   },
-  created() {
-    if(this.$cookiz.get('access_token')) {
-      this.$router.go(-1)
-      return
-    }
-  },
   mounted () {
     this.width = document.body.clientWidth
     const ifm = document.getElementById('iframe-wrap')
