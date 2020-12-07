@@ -7,6 +7,7 @@
           :key="index"
           :courseType="res.courseType"
           :modifiedTime="res.lastModifiedTime"
+          :commentList="res.comments"
           :listItemData="res"
           :path="navRoute"
           propSquareType="HOMEWORK"
