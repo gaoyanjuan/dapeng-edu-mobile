@@ -82,6 +82,8 @@ export default {
   }
   .course-info-wrap {
 
+    width: 190px;
+
     .course-title {
       display: flex;
       align-items: center;
@@ -105,6 +107,8 @@ export default {
       }
     }
     .teach-time {
+      max-width: 190px;
+      height: 20px;
       margin: 4px 0;
       font-size: 14px;
       color: #75737e;
