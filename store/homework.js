@@ -79,7 +79,13 @@ export default {
     // 查询作业要求详情
     appendRequirementDetails(state, payload) {
       state.requirementDetails = payload.data
-      state.requirementDetails.coverImgSamll = state.requirementDetails.coverImg[0]
+      if (state.requirementDetails.coverImg) {
+        if (state.requirementDetails.coverImg[0].endsWith(',')) {
+          state.requirementDetails.coverImg = state.requirementDetails.coverImg[0].substr(0, state.requirementDetails.coverImg[0].length - 1)
+        } else {
+          state.requirementDetails.coverImg = state.requirementDetails.coverImg[0]
+        }
+      }
     },
     // 作业要求下作业任务列表
     appendRequirementList(state, payload) {
