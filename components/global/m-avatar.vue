@@ -105,7 +105,7 @@ export default {
     ]),
     showFollowBtn () {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId
+      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention'
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
@@ -117,6 +117,7 @@ export default {
   },
   created () {
     this.isAttention = this.attention
+    console.log(this.$route.path)
   },
   methods:{
     ...mapActions('user', [
