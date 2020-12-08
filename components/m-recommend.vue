@@ -12,6 +12,7 @@
               :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
               :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
               :listItemData="res.recommendTopic ? res.recommendTopic : {}"
+              :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
               :path="`/details/${pathType(res)}`"
             />
           </div>
