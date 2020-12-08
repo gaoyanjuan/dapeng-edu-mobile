@@ -30,6 +30,13 @@ export default {
       height: 0
     }
   },
+  created () {
+    if (process.browser) {
+      if (this.$cookiz.get('access_token')) {
+        this.$router.replace('/personal-center')
+      }
+    }
+  },
   mounted () {
     this.width = document.body.clientWidth
     const ifm = document.getElementById('iframe-wrap')
