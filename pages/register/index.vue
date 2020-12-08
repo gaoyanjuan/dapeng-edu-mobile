@@ -77,7 +77,9 @@ export default {
       if (!new RegExp(/^1[3-9][0-9]\d{8}$/).test(n)) {
         this.authStatus = false
       } else {
-        this.authStatus = true
+        if(!this.timer) {
+          this.authStatus = true
+        }
       }
       this.registerAble = true
       this.warning.show = false
@@ -177,7 +179,7 @@ export default {
         this.registerAble = false
 
         if (data.accountType === 'MOBILE') {
-          const newMobile = validateMobileCode(data.account)
+          const newMobile = this.validateMobileCode(data.account)
           this.warning.content = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
         } else if (data.accountType === 'DPACCOUNT') {
           this.warning.content = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
@@ -201,6 +203,12 @@ export default {
           }
         }, 1000)
       }
+    },
+
+    validateMobileCode (mobile) {
+      const first = mobile.slice(0, 3)
+      const last = mobile.slice(-4)
+      return first + '****' + last
     },
 
     // 协议
