@@ -581,7 +581,7 @@ export default {
         const client = Client(ossConfig)
         client.put(fileName, file.file).then(({ res }) => {
           if (res.statusCode === 200) {
-            const url = _this.replaceUrls(res)
+            const url = process.env.ossUrl + '/' + fileName
             file.status = 'done'
             file.message = '上传成功'
             _this.uploadStatus = true
@@ -621,11 +621,6 @@ export default {
         }
       }
       imgObj.src = img
-    },
-
-    /** 替换图片路径 */
-    replaceUrls(res) {
-      return res.requestUrls[0].replace(/http:\/\/dapeng-test-image.oss-cn-beijing.aliyuncs.com/,process.env.ossUrl) 
     },
 
     /** 上传前置处理 */
