@@ -12,25 +12,18 @@
     <!-- 为你推荐 滑动区域 -->
     <div class="fg-content">
       <client-only>
-        <template v-if="popularUsersGetters">
-          <swiper class="swiper" :options="swiperOptions">
-            <swiper-slide v-for="(item, index) in popularUsersGetters" :key="index">
-              <div class="user-card">
-                <img class="avatar" v-lazy="item.avatar" />
-                <span class="nickname">{{ item.nickname }}</span>
-                <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow(item, index)"></span>
-              </div>
-            </swiper-slide>
-            <swiper-slide class="card-more">
-              <nuxt-link to="/follow" class="card-more-txt" tag="span">更多推荐</nuxt-link>
-            </swiper-slide>
-          </swiper>
-        </template>
-        <!-- <template v-if="!popularUsersGetters">
-          <div class="">
-            正在加载
-          </div>
-        </template> -->
+        <swiper class="swiper" :options="swiperOptions">
+          <swiper-slide v-for="(item, index) in popularUsersGetters" :key="index">
+            <div class="user-card">
+              <img class="avatar" v-lazy="item.avatar" />
+              <span class="nickname">{{ item.nickname }}</span>
+              <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow(item, index)"></span>
+            </div>
+          </swiper-slide>
+          <swiper-slide class="card-more">
+            <nuxt-link to="/follow" class="card-more-txt" tag="span">更多推荐</nuxt-link>
+          </swiper-slide>
+        </swiper>
       </client-only>
     </div>
   </section>
