@@ -39,7 +39,7 @@
       </div>
 
       <!-- comment 体验课不展示讲师评论 -->
-      <div class="works__comment" v-if="commentList && courseType !=='TEST'" @click.stop="">
+      <div class="works__comment" v-if="commentList && courseType && courseType !=='TEST'" @click.stop="">
         <m-teacher-audio
           :teacherName="commentList.user ? commentList.user.nickname : ''"
           :teacherType="courseType"
