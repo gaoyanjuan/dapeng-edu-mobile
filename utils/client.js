@@ -8,6 +8,6 @@ export default function Client (data) {
     accessKeyId: data.accessKeyId,
     accessKeySecret: data.accessKeySecret,
     stsToken: data.stsToken,
-    bucket: 'dapeng-test-image'
+    bucket: process.env.ossBucket
   })
 }

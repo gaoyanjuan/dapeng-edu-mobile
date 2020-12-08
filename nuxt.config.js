@@ -15,7 +15,8 @@ export default {
     authUrl: env[process.env.MODE].DP_AUTH_URL, // 中台登录地址
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
     orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
-    mode: env[process.env.MODE].MODE
+    mode: env[process.env.MODE].MODE,
+    ossBucket: env[process.env.MODE].OSS_BUCKET // oss的bucket
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
