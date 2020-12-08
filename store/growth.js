@@ -53,7 +53,6 @@ export default {
         params: {
           ...params,
           activityId: '5ebe914525185c00017b7e29',
-          lifeType: 'TEXT',
           size: process.env.global.pageSize,
           page: params.page
         }

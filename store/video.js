@@ -3,6 +3,8 @@ import { waterFallImgPromise } from '@/utils/util.js'
 export default {
   state: () => {
     return {
+      activeCollegeId: '',
+      scrollTop: 0,
       videoList: {
         list: [],
         status: 'loading',
@@ -27,6 +29,12 @@ export default {
     }
   },
   mutations: {
+    changeScrollTop (state, payload) {
+      state.scrollTop = payload
+    },
+    changeActiveCollege (state, payload) {
+      state.activeCollegeId = payload
+    },
     clearSmallVideoList (state) {
       state.smallVideoList.list = []
       state.smallVideoList.status = 'loading'

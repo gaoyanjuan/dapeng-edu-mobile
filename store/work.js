@@ -46,8 +46,7 @@ export default {
       const res = await this.$axios.get('/works', {
         params: {
           ...params,
-          size: process.env.global.pageSize,
-          contentTypes: 'TEXT'
+          size: process.env.global.pageSize
         }
       })
       const pageInfo = {
