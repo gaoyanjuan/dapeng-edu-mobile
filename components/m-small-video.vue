@@ -9,7 +9,7 @@
     <section class="works-wrapper">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="smallVideoList.list.length">
-          <m-water-fall width="167px" gap="0" :data="smallVideoList.list">
+          <m-water-fall width="167px" gap="0" :data="smallVideoList.list" @complete="completeEvent">
             <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="index" :order="index">
               <m-small-video-posts :videoItem="item" />
             </m-water-fall-item>
@@ -33,6 +33,7 @@ export default {
   name: 'M-Small-Video',
   data: () => ({
     list: [],
+    waterFallComplete: false,
     loading: false,
     finished: false,
     finishedTxt:'没有更多了',
@@ -68,7 +69,15 @@ export default {
     ...mapActions('video', [
       'appendSmallVideoList'
     ]),
+    completeEvent () {
+      if (!this.waterFallComplete) {
+        this.waterFallComplete = true
+        this.loading = false
+        document.documentElement.scrollTop = this.$store.state.video.scrollTop
+      }
+    },
     onLoad() {
+      if (!this.waterFallComplete) return false
       if (this.smallVideoList.status === 'over') {
         this.finished = true
         return false
@@ -81,6 +90,9 @@ export default {
         timestamp: newStartTime
       })
     }
+  },
+  destroyed () {
+    this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
   }
 }
 </script>
