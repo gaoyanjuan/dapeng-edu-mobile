@@ -30,12 +30,9 @@ export default {
       height: 0
     }
   },
-  created () {
-    if (process.browser) {
-      if (this.$cookiz.get('access_token')) {
-        this.$router.replace('/personal-center')
-        return
-      }
+  async asyncData ({ redirect, app: { $cookiz } }) {
+    if ($cookiz.get('access_token')) {
+      redirect('/')
     }
   },
   mounted () {

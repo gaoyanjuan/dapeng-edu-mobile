@@ -12,6 +12,11 @@ export default {
       'getAuthToken'
     ])
   },
+  async asyncData ({ redirect, app: { $cookiz } }) {
+    if ($cookiz.get('access_token')) {
+      redirect('/')
+    }
+  },
   async mounted () {
     const fullPath = this.$route.fullPath
     const code = getUrlParam(fullPath, '?', 'code')
