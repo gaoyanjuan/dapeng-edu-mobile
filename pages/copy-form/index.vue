@@ -115,6 +115,11 @@ export default {
       }
     },
   },
+  mounted() {
+    this.$nextTick(() => { 
+      this.listenHight()
+    })
+  },
   methods:{
     ...mapActions({
       // 获取图片上传授权
@@ -307,6 +312,19 @@ export default {
     onBlur() {
       this.$refs.footer.style.display = 'block'
     },
+
+    /** 监听页面高度 */
+    listenHight() {
+      const height = this.$el.clientHeight
+      window.addEventListener('resize', () => {
+        const thisHeight = this.$el.clientHeight
+        if(height - thisHeight < 50){
+          this.$refs.footer.style.display = 'block'
+        } else {
+          this.$refs.footer.style.display = 'none'
+        }
+      })
+    }
   }
 }
 </script>
@@ -461,6 +479,10 @@ export default {
 }
 
 /** 联系电话 Style */
+.contact-number-row {
+  margin-bottom: 150px;
+}
+
 .contact-number-row .label {
   font-size: 14px;
   font-family: @dp-font-regular;
