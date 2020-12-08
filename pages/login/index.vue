@@ -34,6 +34,7 @@ export default {
     if (process.browser) {
       if (this.$cookiz.get('access_token')) {
         this.$router.replace('/personal-center')
+        return
       }
     }
   },
