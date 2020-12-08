@@ -39,11 +39,10 @@
             v-model="fileList"
             :max-count="4"
             :deletable="false"
-            :max-size="2 * 1024 * 1024"
+            :max-size="9 * 1024 * 1024"
             :preview-full-image="false"
             :after-read="onUploadAfterRead"
             :before-read="onUploadBeforeRead"
-            @oversize="onOversize"
             @click-preview="onClickPreview"
           >
             <div class="upload-area"></div>
@@ -246,7 +245,7 @@ export default {
         const img = window.URL.createObjectURL(file)
         const imgObj = new Image()
         imgObj.onload = () => {
-          if(imgObj.width >= 4096 || imgObj.height >= 4096) {
+          if(imgObj.width > 4096 || imgObj.height > 4096) {
             this.$toast('图片长度超过4096，上传失败！')
             reject()
           } else if ((imgObj.width * imgObj.height) > (4096 * 4096)) {
@@ -261,16 +260,6 @@ export default {
         }
         imgObj.src = img
       })
-    },
-
-    /**
-     * 监听上传文件大小
-     * 自动过滤2M以上的图片
-     */
-    onOversize(data) {
-      if (data.file.size > 2 * 1024 * 1024) {
-        this.$toast('请上传2M以内的图片')
-      }
     },
 
     /**
