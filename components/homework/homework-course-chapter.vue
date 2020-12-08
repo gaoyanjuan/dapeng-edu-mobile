@@ -101,7 +101,7 @@ export default {
         font-size: 16px;
         color: #383640;
         font-weight: 600;
-        margin-left: 3px;
+        // margin-left: 3px;
         font-family: @dp-font-medium;
         .text-ellipsis();
       }
