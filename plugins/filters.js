@@ -100,6 +100,14 @@ const requireDataH5 = function (data) {
   return dayjs(data).format('YYYY-MM-DD HH:mm')
 }
 
+//选课列表时间戳移动端
+const formatHomeworkDate = function (data) {
+  if (!data) {
+    return '-----'
+  }
+  return dayjs(data).format('YYYY.MM.DD HH:mm')
+}
+
 const lecturerCommentDate = function (data) {
   const now = new dayjs()
   const date = new dayjs(data)
@@ -178,7 +186,8 @@ const filter = {
   requireDataH5,
   formatEmotions,
   filterCollageName,
-  formatSlashDate
+  formatSlashDate,
+  formatHomeworkDate
 }
 Object.keys(filter).forEach((key) => {
   Vue.filter(key, filter[key])

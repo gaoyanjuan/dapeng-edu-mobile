@@ -10,7 +10,7 @@
         </div>
         <div class="course-name"> {{ chapter.title }} </div>
       </div>
-      <div class="teach-time">授课时间：{{chapter.teachTime | requireDataH5 }}</div>
+      <div class="teach-time">授课时间：{{chapter.teachTime | formatHomeworkDate }}</div>
       <div class="teacher-name">
         授课老师：{{  chapter.teachNickname }}
       </div>
