@@ -4,7 +4,7 @@
     <m-swipe />
 
     <!-- 二级菜单 -->
-    <m-menus v-show="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
+    <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
 
     <section class="works-wrapper">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
