@@ -77,7 +77,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           if (process.browser) {
             login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
           } else {
-            redirect({ path: '/invalid-login', query: { type: 'displacement' } })
+            redirect({ path: '/login/invalid-login', query: { type: 'displacement' } })
           }
           // 用户有登录状态,但是refresh_token已经失效
         } else if (error.response.data && error.response.data.error === 'invalid_token') {
@@ -85,7 +85,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
           } else {
-            redirect({ path: '/invalid-login', query: { type: 'failure' } })
+            redirect({ path: '/login/invalid-login', query: { type: 'failure' } })
           }
         } else {
            // 用户有登录状态,access_token已经失效
@@ -93,7 +93,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
           } else {
-            redirect({ path: '/invalid-login', query: { type: 'failure' } })
+            redirect({ path: '/login/invalid-login', query: { type: 'failure' } })
           }
         }
       } else if (error.response.status == 401) {
@@ -103,7 +103,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
           } else {
-            redirect({ path: '/invalid-login', query: { type: 'failure' } })
+            redirect({ path: '/login/invalid-login', query: { type: 'failure' } })
           }
         } else {
           // 用户未登录状态下,请求需要登录的接口
