@@ -480,7 +480,7 @@ export default {
 
 /** 联系电话 Style */
 .contact-number-row {
-  margin-bottom: 150px;
+  padding-bottom: 80px;
 }
 
 .contact-number-row .label {
