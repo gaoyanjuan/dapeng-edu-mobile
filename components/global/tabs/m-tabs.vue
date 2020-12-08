@@ -12,6 +12,7 @@
         <span class="tab-count" v-if="tab.count !== 0">
           ({{tab.count | studentsCount }})
         </span>
+        <span class="tab-count" v-else>&nbsp;</span>
       </li>
     </ul>
     <div class="line" :style="{left:underlineLeft+'px'}"></div>
@@ -91,6 +92,10 @@ export default {
     }
     &>:nth-child(1) {
       margin-left: 0px;
+      .tab-count {
+        min-width: 17px;
+        display: inline-block;
+      }
     }
     .active  {
       &>.tab-name {
