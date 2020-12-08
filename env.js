@@ -9,7 +9,8 @@ module.exports = {
     REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan',
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     PORT: 3000,
-    HOST: '0.0.0.0'
+    HOST: '0.0.0.0',
+    OSS_BUCKET: 'dapeng-test-image'
   },
   test: {
     MODE: 'test',
@@ -27,7 +28,8 @@ module.exports = {
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder',
     PORT: 3000,
     HOST: '0.0.0.0',
-    FAILED_COLOR:'#0CB65B'
+    FAILED_COLOR: '#0CB65B',
+    OSS_BUCKET: 'dapeng-test-image'
   },
   internal: {
     MODE: 'internal',
@@ -44,6 +46,7 @@ module.exports = {
     OSS_URL: 'https://image.dapengjiaoyu.com',
     PORT: 80,
     HOST: '0.0.0.0',
-    FAILED_COLOR:'#0CB65B'
+    FAILED_COLOR: '#0CB65B',
+    OSS_BUCKET: 'dapeng-image'  
   },
 }
