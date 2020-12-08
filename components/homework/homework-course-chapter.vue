@@ -10,7 +10,7 @@
         </div>
         <div class="course-name"> {{ chapter.title }} </div>
       </div>
-      <div class="teach-time">授课时间：{{chapter.teachTime | requireDataH5 }}</div>
+      <div class="teach-time">授课时间：{{chapter.teachTime | formatHomeworkDate }}</div>
       <div class="teacher-name">
         授课老师：{{  chapter.teachNickname }}
       </div>
@@ -101,7 +101,7 @@ export default {
         font-size: 16px;
         color: #383640;
         font-weight: 600;
-        margin-left: 3px;
+        // margin-left: 3px;
         font-family: @dp-font-medium;
         .text-ellipsis();
       }
