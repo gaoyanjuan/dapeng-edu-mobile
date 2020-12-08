@@ -5,7 +5,7 @@
     :width="width"
     :height="height"
     frameborder="0"
-    sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation allow-pointer-lock"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation allow-pointer-lock allow-popups"
   ></iframe>
 </template>
 
