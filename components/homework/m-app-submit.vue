@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import { appSource } from '@/utils/device-type'
+import { openInApp } from '@/utils/device-type'
 export default {
   props: {
     appPopParams: {
@@ -32,21 +32,8 @@ export default {
       this.appPopParams.show = false
     },
     openAppEvent() {
-      const device = appSource()
-      if (device.type === 'ios') {
-        location.href = 'https://enroll.dapengjiaoyu.com'
-      }
-      if (device.type === 'andriod') {
-        let ifr = document.createElement('iframe')
-        ifr.src = 'dpedu://com.app.zhijin'
-        ifr.style.display = 'none'
-        document.body.appendChild(ifr)
-        // 等待一段时间后，无反应则URL跳转
-        setTimeout(() => {
-          location.href = 'https://enroll.dapengjiaoyu.com'
-        }, 1500)
-      }
       this.appPopParams.show = false
+      openInApp()
     }
   }
 }
