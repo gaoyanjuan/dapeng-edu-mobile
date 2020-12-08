@@ -113,6 +113,7 @@ export default {
       font-size: 14px;
       color: #75737e;
       font-family: @dp-font-regular;
+      .text-ellipsis();
     }
     .teacher-name {
       max-width: 180px;
