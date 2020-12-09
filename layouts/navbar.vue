@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="app_wrap" v-if="$nuxt.isOnline">
+    <div class="app_wrap" v-if="$nuxt.isOnline && show">
       <Nuxt />
     </div>
     <div class="off-line-wrap" v-if="$nuxt.isOffline">
@@ -9,6 +9,25 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data:() => ({
+    show: false,
+  }),
+  mounted() {
+
+    /*** 
+     * 【刷新或者首次加载】
+     * 等待文档树渲染完毕后，再放开显示
+    */
+    this.$nextTick(() => {
+      this.show = true
+    })
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .app_wrap {

@@ -65,6 +65,7 @@ export default {
 
   plugins: [
     { src: '~/plugins/axios' },
+    { src: '~/plugins/loading.js', ssr: false },
     { src: '~/plugins/clipboard.js', ssr: false },
     { src: '~/plugins/vue-inject.js'},
     { src: '~/plugins/root-font-size.js', ssr: false},
