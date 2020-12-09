@@ -48,33 +48,7 @@ export default {
   }),
   watch: {
     'menus': function (newVal, oldVal) {
-      let activeValue
-      if (this.$route.name === 'index-small-video') {
-        activeValue = this.$store.state.video.activeCollegeId
-      }
-      for (let index = 0; index < this.menus.length; index++) {
-        const element = this.menus[index]
-        if (this.$route.query[this.menusType]) {
-          if (element.id === this.$route.query[this.menusType]) {
-            this.cindex = index
-            if (this.$route.name === 'index-small-video') {
-              this.$store.commit('video/changeActiveCollege', element.id)
-            }
-            break
-          }
-        } else if (element.id === activeValue) {
-          this.cindex = index
-          if (this.$route.query[this.menusType] !== activeValue) {
-            this.$router.replace({
-              query: {
-                ...this.$route.query,
-                [this.menusType]: activeValue
-              }
-            })
-          }
-          break
-        }
-      }
+      this.cacheCollege()
     },
     '$route.query': function (newVal, oldVal) {
       if (!this.automatic) return false
@@ -84,47 +58,62 @@ export default {
     }
   },
   mounted () {
-    let activeValue
-    if (this.$route.name === 'index-small-video') {
-      activeValue = this.$store.state.video.activeCollegeId
-    }
-    for (let index = 0; index < this.menus.length; index++) {
-      const element = this.menus[index]
-      if (this.$route.query[this.menusType]) {
-        if (element.id === this.$route.query[this.menusType]) {
-          this.cindex = index
-          if (this.$route.name === 'index-small-video') {
-            this.$store.commit('video/changeActiveCollege', element.id)
-          }
-          break
-        }
-      } else if (element.id === activeValue) {
-        this.cindex = index
-        if (this.$route.query[this.menusType] !== activeValue) {
-          this.$router.replace({
-            query: {
-              ...this.$route.query,
-              [this.menusType]: activeValue
-            }
-          })
-        }
-        break
-      }
-    }
+    this.cacheCollege()
   },
   methods: {
+
+    cacheCollege() {
+
+      let activeValue = null
+
+      if (this.$route.name === 'index-small-video') {
+        activeValue = this.$store.state.video.activeCollegeId
+      }
+
+      for (let index = 0; index < this.menus.length; index++) {
+        const element = this.menus[index]
+        
+        /** 路由存在学院 */
+        const college = this.$route.query[this.menusType]
+
+        if (college && college === element.id) {
+          this.cindex = index
+          this.smallVideoStore(element)
+        }
+        
+        /** 学院切换，对小视频列表的缓存 */
+        if (element.id === activeValue) {
+          this.cindex = index
+          this.routeReplace(activeValue)
+        }
+      }
+    },
+
+    routeReplace(activeValue) {
+      if (this.$route.query[this.menusType] !== activeValue) {
+        this.$router.replace({ 
+          query: { ...this.$route.query, [this.menusType]: activeValue }
+        })
+      }
+    },
+
+    smallVideoStore (element) {
+      if (this.$route.name === 'index-small-video') {
+        this.$store.commit('video/changeActiveCollege', element.id)
+      }
+    },
+
     changeCollege(index, item) {
       // 禁止路由重复点击
       if (this.$route.query[this.menusType] === item.id) return
       this.cindex = index
-      try {
-        this.$router.replace({
-          query: {
-            ...this.$route.query,
-            [this.menusType] : item.id
-          }
-        })
-      } catch (error) {console.log(error)}
+
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          [this.menusType] : item.id
+        }
+      })
     }
   },
 }

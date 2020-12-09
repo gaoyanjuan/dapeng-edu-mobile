@@ -232,15 +232,14 @@ export default {
           this.showHomeworkMenu = !this.showHomeworkMenu
           return
         }
-        try {
-          this.$router.replace({
-            path: '/homework',
-            query: {
-              college: '',
-              courseType: this.homeworkMenuValue
-            }
-          })
-        } catch (error) {console.log(error)}
+
+        this.$router.replace({
+          path: '/homework',
+          query: {
+            college: '',
+            courseType: this.homeworkMenuValue
+          }
+        })
       }
 
       if(name !== 'homework' || name !== 'small-video') {
