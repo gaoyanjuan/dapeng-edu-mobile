@@ -193,8 +193,7 @@ export default {
       const res = await this.$axios.get('/homes', {
         params: {
           ...params,
-          size: process.env.global.pageSize,
-          jobType: 'TEXT'
+          size: process.env.global.pageSize
         }
       })
       const pageInfo = {

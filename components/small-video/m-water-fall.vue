@@ -109,6 +109,7 @@ export default {
         // 设置最外层容器高度
         this.height = Math.max(...hMap)
       }
+      this.$emit('complete')
     },
 
     initWaterFall() {

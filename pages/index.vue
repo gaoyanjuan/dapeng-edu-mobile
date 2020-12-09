@@ -220,7 +220,7 @@ export default {
         this.$router.replace({
           path: '/small-video',
           query: {
-            ...this.$route.query,
+            college: this.$route.query.college,
             type: this.videoMenuValue
           }
         })
@@ -232,14 +232,15 @@ export default {
           this.showHomeworkMenu = !this.showHomeworkMenu
           return
         }
-
-        this.$router.replace({
-          path: '/homework',
-          query: {
-            ...this.$route.query,
-            courseType: this.homeworkMenuValue
-          }
-        })
+        try {
+          this.$router.replace({
+            path: '/homework',
+            query: {
+              college: this.$route.query.college,
+              courseType: this.homeworkMenuValue
+            }
+          })
+        } catch (error) {console.log(error)}
       }
 
       if(name !== 'homework' || name !== 'small-video') {

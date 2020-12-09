@@ -48,10 +48,28 @@ export default {
   }),
   watch: {
     'menus': function (newVal, oldVal) {
+      let activeValue
+      if (this.$route.name === 'index-small-video') {
+        activeValue = this.$store.state.video.activeCollegeId
+      }
       for (let index = 0; index < this.menus.length; index++) {
         const element = this.menus[index]
-        if (element.id === this.$route.query[this.menusType]) {
+        if (this.$route.query[this.menusType]) {
+          if (element.id === this.$route.query[this.menusType]) {
+            this.cindex = index
+            this.$store.commit('video/changeActiveCollege', element.id)
+            break
+          }
+        } else if (element.id === activeValue) {
           this.cindex = index
+          if (this.$route.query[this.menusType] !== activeValue) {
+            this.$router.replace({
+              query: {
+                ...this.$route.query,
+                [this.menusType]: activeValue
+              }
+            })
+          }
           break
         }
       }
@@ -64,10 +82,28 @@ export default {
     }
   },
   mounted () {
+    let activeValue
+    if (this.$route.name === 'index-small-video') {
+      activeValue = this.$store.state.video.activeCollegeId
+    }
     for (let index = 0; index < this.menus.length; index++) {
       const element = this.menus[index]
-      if (element.id === this.$route.query[this.menusType]) {
+      if (this.$route.query[this.menusType]) {
+        if (element.id === this.$route.query[this.menusType]) {
+          this.cindex = index
+          this.$store.commit('video/changeActiveCollege', element.id)
+          break
+        }
+      } else if (element.id === activeValue) {
         this.cindex = index
+        if (this.$route.query[this.menusType] !== activeValue) {
+          this.$router.replace({
+            query: {
+              ...this.$route.query,
+              [this.menusType]: activeValue
+            }
+          })
+        }
         break
       }
     }
@@ -77,12 +113,14 @@ export default {
       // 禁止路由重复点击
       if (this.$route.query[this.menusType] === item.id) return
       this.cindex = index
-      this.$router.replace({
-        query: {
-          ...this.$route.query,
-          [this.menusType] : item.id
-        }
-      })
+      try {
+        this.$router.replace({
+          query: {
+            ...this.$route.query,
+            [this.menusType] : item.id
+          }
+        })
+      } catch (error) {console.log(error)}
     }
   },
 }
