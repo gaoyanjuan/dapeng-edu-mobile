@@ -18,7 +18,7 @@
         <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
         <div class="work__row__photos--group">
           <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
-          <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
+          <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData && listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
           <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
         </div>
       </div>

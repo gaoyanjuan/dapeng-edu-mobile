@@ -102,19 +102,6 @@ export default {
       'requirementListGetters'
     ])
   },
-  mounted() {
-    this.$nextTick(() => {
-      if (this.requirementDetailsGetters && this.requirementDetailsGetters.vid) {
-        this.player = polyvPlayer({
-          wrap: '#player',
-          hideSwitchPlayer: true,
-          width: '100%',
-          height: '198px',
-          vid: this.requirementDetailsGetters.vid
-        })
-      }
-    })
-  },
   methods: {
     ...mapActions('homework', [
       'appendRequirementList'
@@ -134,6 +121,21 @@ export default {
         }
       })
     },
+  },
+  watch: {
+    'requirementDetailsGetters': function (params) {
+      if (params && params.vid) {
+        this.$nextTick(() => {
+          this.player = polyvPlayer({
+            wrap: '#player',
+            hideSwitchPlayer: true,
+            width: '100%',
+            height: '198px',
+            vid: params.vid
+          })
+        })
+      }
+    }
   }
 }
 </script>
