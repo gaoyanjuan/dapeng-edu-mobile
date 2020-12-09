@@ -38,7 +38,7 @@
           v-if="requirementDetailsGetters.coverImg"
           :src="requirementDetailsGetters.coverImg"
           :alt="requirementDetailsGetters.title" />
-        <div class="player-box" v-if="requirementDetailsGetters.vid">
+        <div class="player-box" v-if="requirementDetailsGetters && requirementDetailsGetters.vid">
           <div id="player"></div>
         </div>
       </div>
