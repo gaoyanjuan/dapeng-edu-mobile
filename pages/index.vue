@@ -220,7 +220,7 @@ export default {
         this.$router.replace({
           path: '/small-video',
           query: {
-            ...this.$route.query,
+            college: '',
             type: this.videoMenuValue
           }
         })
@@ -236,7 +236,7 @@ export default {
         this.$router.replace({
           path: '/homework',
           query: {
-            ...this.$route.query,
+            college: '',
             courseType: this.homeworkMenuValue
           }
         })

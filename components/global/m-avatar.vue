@@ -5,7 +5,7 @@
     <div class="avatar-left-side-wrap" @click.stop>
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
-        <span class="info-nickname">{{ userInfo ? (userInfo.nickname ? userInfo.nickname : userInfo.dpAccount) : '佚名' }}</span>
+        <span class="info-nickname">{{ userNickname }}</span>
         <span class="info-date">
           {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
         </span>
@@ -106,6 +106,13 @@ export default {
     ...mapGetters('user',[
       'userInfoGetters',
     ]),
+    userNickname () {
+      if (this.userInfo) {
+        return this.userInfo.nickname ? this.userInfo.nickname : this.userInfo.dpAccount
+      } else {
+        return '佚名'
+      }
+    },
     showFollowBtn () {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
       return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention'

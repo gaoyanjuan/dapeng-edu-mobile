@@ -75,7 +75,6 @@ export default {
       const res = await this.$axios.get('/dynamic/newest', {
         params: {
           ...params,
-          lifeType: 'TEXT',
           size: process.env.global.pageSize,
           page: state.newDynamicList.page
         }
@@ -89,7 +88,6 @@ export default {
       const res = await this.$axios.get('/dynamic/hot', {
         params: {
           ...params,
-          contentType: 'TEXT',
           size: process.env.global.pageSize,
           page: state.hotDynamicList.page
         }
