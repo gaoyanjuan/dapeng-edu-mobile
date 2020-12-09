@@ -57,7 +57,7 @@
             v-for="(item, idx) in requirementList"
             :key="idx"
             :isRequirement="true"
-            :commentList="item.commentList"
+            :commentList="item.comments"
             :dataType="item.type"
             :imgInfo="item.imgSmall"
             :courseType="item.courseType"
