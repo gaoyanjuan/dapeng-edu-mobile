@@ -242,6 +242,7 @@ export default {
   line-height: 24px;
   word-break: break-all;
   word-wrap: break-word;
+  min-height: 24px;
 }
 
 .inner-content-txt /deep/ .emotion {
