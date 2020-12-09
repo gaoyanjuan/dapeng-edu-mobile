@@ -57,7 +57,9 @@ export default {
         if (this.$route.query[this.menusType]) {
           if (element.id === this.$route.query[this.menusType]) {
             this.cindex = index
-            this.$store.commit('video/changeActiveCollege', element.id)
+            if (this.$route.name === 'index-small-video') {
+              this.$store.commit('video/changeActiveCollege', element.id)
+            }
             break
           }
         } else if (element.id === activeValue) {
@@ -91,7 +93,9 @@ export default {
       if (this.$route.query[this.menusType]) {
         if (element.id === this.$route.query[this.menusType]) {
           this.cindex = index
-          this.$store.commit('video/changeActiveCollege', element.id)
+          if (this.$route.name === 'index-small-video') {
+            this.$store.commit('video/changeActiveCollege', element.id)
+          }
           break
         }
       } else if (element.id === activeValue) {
