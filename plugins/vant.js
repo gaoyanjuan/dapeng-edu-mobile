@@ -5,7 +5,6 @@ import {
   TabbarItem,
   List,
   NavBar,
-  Skeleton,
   Empty,
   Popup,
   ActionSheet,
@@ -31,7 +30,6 @@ Vue.use(Button)
   .use(TabbarItem)
   .use(List)
   .use(NavBar)
-  .use(Skeleton)
   .use(Empty)
   .use(Popup)
   .use(ActionSheet)

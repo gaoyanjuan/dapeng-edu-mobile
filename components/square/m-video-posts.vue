@@ -1,39 +1,37 @@
 <template>
-  <van-skeleton title :row="8" :loading="loading">
-    <div class="video-posts-wrap">
+  <div class="video-posts-wrap">
 
-      <nuxt-link tag="div" class="video-posts-content" :to="`/details/video?id=${item.id}`">
-        {{ item.title }}
-      </nuxt-link>
+    <nuxt-link tag="div" class="video-posts-content" :to="`/details/video?id=${item.id}`">
+      {{ item.title }}
+    </nuxt-link>
 
-      <nuxt-link tag="div" class="video-posts-cover" :to="`/details/video?id=${item.id}`">
-        <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
-        <img v-else class="video-cover" v-lazy="cover" alt="" />
-        <img class="video-play" :src="playBtn" alt="" />
-        <span class="video-duration"> {{ item.video.duration }} </span>
-      </nuxt-link>
+    <nuxt-link tag="div" class="video-posts-cover" :to="`/details/video?id=${item.id}`">
+      <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
+      <img v-else class="video-cover" v-lazy="cover" alt="" />
+      <img class="video-play" :src="playBtn" alt="" />
+      <span class="video-duration"> {{ item.video.duration }} </span>
+    </nuxt-link>
 
-      <div class="video-posts-info">
-        <div class="video-posts-label">视频·{{ item.college.name.replace(/学院/, '') }}</div>
-        <span class="video-posts-nickname">{{ item.user.nickname }}</span>
-        <span class="video-posts-date">{{ item.createTime | commonDate }}</span>
+    <div class="video-posts-info">
+      <div class="video-posts-label">视频·{{ item.college.name.replace(/学院/, '') }}</div>
+      <span class="video-posts-nickname">{{ item.user.nickname }}</span>
+      <span class="video-posts-date">{{ item.createTime | commonDate }}</span>
+    </div>
+
+    <div class="video-posts-interaction">
+      <div class="video-posts-comment" @click="toDetail">
+        <img :src="comment" alt="" />
+        <span>{{ item.commentCount | studentsCount }}</span>
       </div>
-
-      <div class="video-posts-interaction">
-        <div class="video-posts-comment" @click="toDetail">
-          <img :src="comment" alt="" />
-          <span>{{ item.commentCount | studentsCount }}</span>
-        </div>
-        <div class="video-posts-like" @click="onLove">
-          <img :src="isPraise ? like : unLike" alt="" />
-          <span>{{ praiseCount | studentsCount}}</span>
-        </div>
-        <div class="video-posts-star" @click="onCollect">
-          <img :src="isCollection ? unStar : star" alt="star" />
-        </div>
+      <div class="video-posts-like" @click="onLove">
+        <img :src="isPraise ? like : unLike" alt="" />
+        <span>{{ praiseCount | studentsCount}}</span>
+      </div>
+      <div class="video-posts-star" @click="onCollect">
+        <img :src="isCollection ? unStar : star" alt="star" />
       </div>
     </div>
-  </van-skeleton>
+  </div>
 </template>
 
 <script>
@@ -170,10 +168,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-.van-skeleton {
-  padding-top: 20px;
-}
 
 .video-posts-wrap {
   width: 100%;

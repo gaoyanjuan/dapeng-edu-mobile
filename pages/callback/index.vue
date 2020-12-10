@@ -42,10 +42,10 @@ export default {
   left: 0;
   top: 0;
   z-index: 1;
-  background: url("~@/assets/icons/loading.svg") center center no-repeat #fff;
+  background: url("~@/assets/icons/loading.gif") center center no-repeat #fff;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 50px 80px;
+  background-size: 172px 36px;
   animation: load 1.04s ease infinite;
   -webkit-animation: load 1.04s ease infinite;
 }
