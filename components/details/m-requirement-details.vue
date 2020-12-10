@@ -119,6 +119,9 @@ export default {
     immediate: true,
     deep: true
   },
+  destroyed () {
+    this.$store.commit('homework/clearRequirementDetails')
+  },
   methods: {
     ...mapActions('homework', [
       'appendRequirementList'

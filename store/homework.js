@@ -87,6 +87,9 @@ export default {
         }
       }
     },
+    clearRequirementDetails (state) {
+      state.requirementDetails = null
+    },
     // 作业要求下作业任务列表
     appendRequirementList(state, payload) {
       state.requirementList.list = state.requirementList.list.concat(payload.data)
