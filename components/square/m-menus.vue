@@ -61,48 +61,16 @@ export default {
     this.cacheCollege()
   },
   methods: {
-
     cacheCollege() {
-
-      let activeValue = null
-
-      if (this.$route.name === 'index-small-video') {
-        activeValue = this.$store.state.video.activeCollegeId
-      }
-
       for (let index = 0; index < this.menus.length; index++) {
         const element = this.menus[index]
-        
         /** 路由存在学院 */
         const college = this.$route.query[this.menusType]
-
         if (college && college === element.id) {
           this.cindex = index
-          this.smallVideoStore(element)
-        }
-        
-        /** 学院切换，对小视频列表的缓存 */
-        if (element.id === activeValue) {
-          this.cindex = index
-          this.routeReplace(activeValue)
         }
       }
     },
-
-    routeReplace(activeValue) {
-      if (this.$route.query[this.menusType] !== activeValue) {
-        this.$router.replace({ 
-          query: { ...this.$route.query, [this.menusType]: activeValue }
-        })
-      }
-    },
-
-    smallVideoStore (element) {
-      if (this.$route.name === 'index-small-video') {
-        this.$store.commit('video/changeActiveCollege', element.id)
-      }
-    },
-
     changeCollege(index, item) {
       // 禁止路由重复点击
       if (this.$route.query[this.menusType] === item.id) return

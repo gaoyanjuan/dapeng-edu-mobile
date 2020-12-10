@@ -4,7 +4,7 @@
     <m-swipe />
 
     <section class="recommend-wrap">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
         <template v-if="recommendListGetters.list.length">
           <div v-for="(res, i) in recommendListGetters.list" :key="i">
             <m-posts

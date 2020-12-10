@@ -178,9 +178,8 @@ export default {
 .works-photos-wrap-one {
   width: 100%;
   .photos-one {
-    width: 100%;
-    max-height: 457px;
-    min-height: 169px;
+    max-width: 100%;
+    height: 300px;
     border-radius: 5px;
   }
 }

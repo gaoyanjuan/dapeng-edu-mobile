@@ -44,7 +44,7 @@ export default {
     ]),
   },
   destroyed () {
-    this.clearRecommendList()
+    // this.clearRecommendList()
   },
 }
 </script>
