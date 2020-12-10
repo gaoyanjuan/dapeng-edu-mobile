@@ -115,6 +115,9 @@ export default {
       }
     })
   },
+  destroyed () {
+    this.$store.commit('homework/clearRequirementDetails')
+  },
   methods: {
     ...mapActions('homework', [
       'appendRequirementList'
