@@ -16,6 +16,6 @@ function isDetails (name) {
 }
 
 import Vue from 'vue'
-Vue.prototype.isDetails = isDetails
+Vue.prototype.$isDetails = isDetails
 
 export default isDetails

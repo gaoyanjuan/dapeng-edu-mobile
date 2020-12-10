@@ -43,8 +43,12 @@ export default {
       'appendRecommendList'
     ]),
   },
-  destroyed () {
-    // this.clearRecommendList()
+  beforeRouteLeave (to, from, next) {
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearRecommendList()
+    }
+    next()
   },
 }
 </script>
