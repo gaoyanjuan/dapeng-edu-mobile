@@ -1,78 +1,76 @@
 <template>
   <div class="m-works" @click="toDetail">
-    <van-skeleton title avatar :row="8" :loading="loading">
-      <!-- header -->
-      <m-avatar
-        avatar-style="width:40px; height:40px;"
-        :submit-time="modifiedTime"
-        :userInfo="user"
-        :square-type="squareType"
-        :attention="listItemData.isAttention"
-        v-on:onOpenMenus="onShowMenus"
-        :pageName="pageName"
-        :listItemData="listItemData"
+    <!-- header -->
+    <m-avatar
+      avatar-style="width:40px; height:40px;"
+      :submit-time="modifiedTime"
+      :userInfo="user"
+      :square-type="squareType"
+      :attention="listItemData.isAttention"
+      v-on:onOpenMenus="onShowMenus"
+      :pageName="pageName"
+      :listItemData="listItemData"
+    />
+
+    <!-- content -->
+    <div class="works__cot">
+      <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
+      <div class="work__row__photos--group">
+        <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
+        <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData && listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
+        <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
+      </div>
+    </div>
+
+    <!-- classification -->
+    <div class="works__class">
+      <m-posts-class :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`" />
+    </div>
+
+    <!-- Label -->
+    <div class="works__lab">
+      <m-label
+        v-if="listItemData.task || listItemData.activity"
+        :labelData="listItemData.task"
+        :activityData="listItemData.activity"
+        :isRequirement="listItemData.isRequirement"
       />
+    </div>
 
-      <!-- content -->
-      <div class="works__cot">
-        <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
-        <div class="work__row__photos--group">
-          <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
-          <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData && listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
-          <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
+    <!-- comment 体验课不展示讲师评论 -->
+    <div class="works__comment" v-if="commentList && courseType && courseType !=='TEST'" @click.stop="">
+      <m-teacher-audio
+        :teacherName="commentList.user ? commentList.user.nickname : ''"
+        :teacherType="courseType"
+        :time="commentList.createTime"
+        :audioUrl="commentList.ext ? commentList.ext.approvedAudioUrl : ''"
+        :content="commentList.content"
+        :audioCount="commentList.ext ? commentList.ext.approvedAudioLength : 0"
+        :isAudio="commentList.ext ? commentList.ext.approvedType === 'AUDIO' : false"
+        :propIndex="propIndex"
+      />
+    </div>
+    
+    <!-- footer -->
+    <div class="works__fot">
+      <div class="fot__rh--wrap">
+        <!-- 评论 -->
+        <div class="fot__rh__commernt--wrap" @click="toDetail">
+          <img class="fot__comment" :src="comment" alt="comment" />
+          <span class="fot__nums">{{ commentCount | studentsCount }}</span>
+        </div>
+        <!-- 喜欢 -->
+        <div class="fot__rh__love--wrap" @click.stop="onLove">
+          <img class="fot__love" v-if="isPraise" :src="unLove" alt="love" />
+          <img class="fot__love" v-else :src="love" alt="unlove" />
+          <span class="fot__nums">{{ praiseCount | studentsCount }}</span>
+        </div>
+        <!-- 收藏 -->
+        <div class="fot__rh__star--wrap" @click.stop="onCollect">
+          <img class="fot__star" :src="isCollection ? unStar : star" alt="star" />
         </div>
       </div>
-
-      <!-- classification -->
-      <div class="works__class">
-        <m-posts-class :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`" />
-      </div>
-
-      <!-- Label -->
-      <div class="works__lab">
-        <m-label
-          v-if="listItemData.task || listItemData.activity"
-          :labelData="listItemData.task"
-          :activityData="listItemData.activity"
-          :isRequirement="listItemData.isRequirement"
-        />
-      </div>
-
-      <!-- comment 体验课不展示讲师评论 -->
-      <div class="works__comment" v-if="commentList && courseType && courseType !=='TEST'" @click.stop="">
-        <m-teacher-audio
-          :teacherName="commentList.user ? commentList.user.nickname : ''"
-          :teacherType="courseType"
-          :time="commentList.createTime"
-          :audioUrl="commentList.ext ? commentList.ext.approvedAudioUrl : ''"
-          :content="commentList.content"
-          :audioCount="commentList.ext ? commentList.ext.approvedAudioLength : 0"
-          :isAudio="commentList.ext ? commentList.ext.approvedType === 'AUDIO' : false"
-          :propIndex="propIndex"
-        />
-      </div>
-      
-      <!-- footer -->
-      <div class="works__fot">
-        <div class="fot__rh--wrap">
-          <!-- 评论 -->
-          <div class="fot__rh__commernt--wrap" @click="toDetail">
-            <img class="fot__comment" :src="comment" alt="comment" />
-            <span class="fot__nums">{{ commentCount | studentsCount }}</span>
-          </div>
-          <!-- 喜欢 -->
-          <div class="fot__rh__love--wrap" @click.stop="onLove">
-            <img class="fot__love" v-if="isPraise" :src="unLove" alt="love" />
-            <img class="fot__love" v-else :src="love" alt="unlove" />
-            <span class="fot__nums">{{ praiseCount | studentsCount }}</span>
-          </div>
-          <!-- 收藏 -->
-          <div class="fot__rh__star--wrap" @click.stop="onCollect">
-            <img class="fot__star" :src="isCollection ? unStar : star" alt="star" />
-          </div>
-        </div>
-      </div>
-    </van-skeleton>
+    </div>
 
     <div @click.stop="">
       <!-- 帖子 菜单弹层 -->
@@ -170,7 +168,6 @@ export default {
   },
   data: () => ({
     commentPop: { show: false },
-    loading: true,
     showMenusPopup:false,
     isPraise: false,
     isCollection: false,
@@ -257,11 +254,6 @@ export default {
       this.isPraise = newVal.isPraise
       this.isCollection = newVal.isCollection
     },
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false
-    }, 500)
   },
   methods: {
     ...mapActions({

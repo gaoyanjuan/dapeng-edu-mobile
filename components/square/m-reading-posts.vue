@@ -1,53 +1,50 @@
 <template>
   <div v-if="item" class="m-reading">
+    <div class="reading-posts-card">
 
-    <van-skeleton title :row="6" :loading="loading">
-      <div class="reading-posts-card">
+      <!-- Header Block -->
+      <template v-if="item.coverImgSmall.length === 1">
+        <nuxt-link tag="div" class="reading-header-row" :to="`/details/reading?id=${item.id}`">
+          <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
+          <div class="posts-right-side-wrap">
+            <span class="posts-title">{{ item.title }}</span>
+            <span class="posts-content">{{ content }}</span>
+          </div>
+        </nuxt-link>
+      </template>
 
-        <!-- Header Block -->
-        <template v-if="item.coverImgSmall.length === 1">
-          <nuxt-link tag="div" class="reading-header-row" :to="`/details/reading?id=${item.id}`">
-            <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
-            <div class="posts-right-side-wrap">
-              <span class="posts-title">{{ item.title }}</span>
-              <span class="posts-content">{{ content }}</span>
-            </div>
-          </nuxt-link>
-        </template>
+      <template v-else>
+        <nuxt-link tag="div" class="reading-header-row-more" :to="`/details/reading?id=${item.id}`">
+          <div class="posts-title"> {{ item.title }} </div>
+          <div class="posts-content"> {{ content }} </div>
+          <div class="posts-photos-wrap" v-if="item.coverImgSmall">
+            <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
+          </div>
+        </nuxt-link>
+      </template>
 
-        <template v-else>
-          <nuxt-link tag="div" class="reading-header-row-more" :to="`/details/reading?id=${item.id}`">
-            <div class="posts-title"> {{ item.title }} </div>
-            <div class="posts-content"> {{ content }} </div>
-            <div class="posts-photos-wrap" v-if="item.coverImgSmall">
-              <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
-            </div>
-          </nuxt-link>
-        </template>
+      <!-- Body Block -->
+      <div class="reading-body-row">
+        <div class="posts-label">阅读 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}</div>
+        <div class="posts-author"> {{ item.user.nickname }} </div>
+        <div class="posts-date"> {{ item.createTime | commonDate }} </div>
+      </div>
 
-        <!-- Body Block -->
-        <div class="reading-body-row">
-          <div class="posts-label">阅读 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}</div>
-          <div class="posts-author"> {{ item.user.nickname }} </div>
-          <div class="posts-date"> {{ item.createTime | commonDate }} </div>
+      <!-- Footer Block -->
+      <div class="reading-footer-row">
+        <div class="posts-commernt-wrap" @click="toDetail">
+          <img class="posts-comment" :src="comment" alt="comment" />
+          <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
         </div>
-
-        <!-- Footer Block -->
-        <div class="reading-footer-row">
-          <div class="posts-commernt-wrap" @click="toDetail">
-            <img class="posts-comment" :src="comment" alt="comment" />
-            <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
-          </div>
-          <div class="posts-love-wrap" @click="onLove">
-            <img class="posts-love" :src="isPraise ? unLove : love" alt="love" />
-            <span class="posts-nums">{{ praiseCount | studentsCount }}</span>
-          </div>
-          <div class="posts-star-wrap" @click="onCollect">
-            <img class="posts-star" :src="isCollection ? unStar : star" alt="star" />
-          </div>
+        <div class="posts-love-wrap" @click="onLove">
+          <img class="posts-love" :src="isPraise ? unLove : love" alt="love" />
+          <span class="posts-nums">{{ praiseCount | studentsCount }}</span>
+        </div>
+        <div class="posts-star-wrap" @click="onCollect">
+          <img class="posts-star" :src="isCollection ? unStar : star" alt="star" />
         </div>
       </div>
-    </van-skeleton>
+    </div>
   </div>
 </template>
 
@@ -73,7 +70,6 @@ export default {
     }
   },
   data:() => ({
-    loading: true,
     isPraise: false,
     isCollection: false,
     praiseCount: 0,
@@ -101,11 +97,6 @@ export default {
       this.isPraise = newVal.isPraise
       this.isCollection = newVal.isCollection
     },
-  },
-  mounted(){
-    setTimeout(() => {
-      this.loading = false
-    }, 500)
   },
 
   methods:{
@@ -192,10 +183,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
-.van-skeleton {
-  padding-top: 20px;
-}
 
 .m-reading:not(:first-child) {
   margin-top: 12px;
