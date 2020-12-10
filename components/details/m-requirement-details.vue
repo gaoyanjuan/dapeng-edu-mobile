@@ -102,18 +102,22 @@ export default {
       'requirementListGetters'
     ])
   },
-  mounted() {
-    this.$nextTick(() => {
-      if (this.requirementDetailsGetters && this.requirementDetailsGetters.vid) {
-        this.player = polyvPlayer({
-          wrap: '#player',
-          hideSwitchPlayer: true,
-          width: '100%',
-          height: '198px',
-          vid: this.requirementDetailsGetters.vid
-        })
-      }
-    })
+  watch: {
+    'requirementDetailsGetters': function (params) {
+      this.$nextTick(() => {
+        if (params && params.vid) {
+          this.player = polyvPlayer({
+            wrap: '#player',
+            hideSwitchPlayer: true,
+            width: '100%',
+            height: '198px',
+            vid: params.vid
+          })
+        }
+      })
+    },
+    immediate: true,
+    deep: true
   },
   methods: {
     ...mapActions('homework', [
