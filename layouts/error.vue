@@ -1,6 +1,5 @@
 <template>
   <div class="error-page">
-    <m-navbar/>
     <van-empty class="error-image" :image="error" description="你要找的页面走丢了～">
       <van-button round type="primary" class="bottom-button" to="/">返回广场</van-button>
     </van-empty>

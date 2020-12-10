@@ -23,8 +23,8 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 172px 36px;
-  animation: load 2.04s ease infinite;
-  -webkit-animation: load 2.04s ease infinite;
+  // animation: load 2.04s ease infinite;
+  // -webkit-animation: load 2.04s ease infinite;
 }
 
 @keyframes load {
