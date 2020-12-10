@@ -102,18 +102,15 @@ export default {
       'requirementListGetters'
     ])
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.showPolyvPlayer()
+    })
+  },
   watch: {
     'requirementDetailsGetters': function (params) {
       this.$nextTick(() => {
-        if (params && params.vid) {
-          this.player = polyvPlayer({
-            wrap: '#player',
-            hideSwitchPlayer: true,
-            width: '100%',
-            height: '198px',
-            vid: params.vid
-          })
-        }
+        this.showPolyvPlayer()
       })
     },
     immediate: true,
@@ -141,6 +138,17 @@ export default {
         }
       })
     },
+    showPolyvPlayer() {
+      if (this.requirementDetailsGetters && this.requirementDetailsGetters.vid) {
+        this.player = polyvPlayer({
+          wrap: '#player',
+          hideSwitchPlayer: true,
+          width: '100%',
+          height: '198px',
+          vid: this.requirementDetailsGetters.vid
+        })
+      }
+    }
   }
 }
 </script>
