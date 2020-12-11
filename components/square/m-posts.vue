@@ -344,7 +344,7 @@ export default {
         if (status === 201) {
           this.commentFlag = true
           this.$refs.commentPopup.resetPopup()
-          if (!res.data.highRisk) {
+          if (!data.highRisk) {
             this.$toast('评论成功')
           }
           this.commentCount += 1
