@@ -11,7 +11,6 @@ export default {
   layout:'navbar',
   methods: {
     ...mapActions('homework', [
-      'appendRequirementDetails',
       'appendRequirementList'
     ]),
   },
@@ -20,7 +19,6 @@ export default {
       isServiceload: false
     }
     try {
-      await store.dispatch('homework/appendRequirementDetails', { id: route.query.taskId })
       await store.dispatch('homework/appendRequirementList', {
         page: 1,
         size: 10,
@@ -35,7 +33,6 @@ export default {
   },
   created () {
     if (process.browser && !this.isServiceload) {
-      this.$store.dispatch('homework/appendRequirementDetails', { id: this.$route.query.taskId })
       this.$store.dispatch('homework/appendRequirementList', {
         page: 1,
         size: 10,

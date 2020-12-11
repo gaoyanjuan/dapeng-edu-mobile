@@ -1,44 +1,44 @@
 <template>
-  <div class="p-requirement" v-if="requirementDetailsGetters">
+  <div class="p-requirement" v-if="requirementDetails">
     <!-- Back last page -->
     <m-navbar title="作业要求" />
 
     <!-- Main Block -->
     <div class="requirement-content-wrap">
-      <div class="requirement-content-title">{{ requirementDetailsGetters.title }}</div>
+      <div class="requirement-content-title">{{ requirementDetails.title }}</div>
       <div class="requirement-content-title-line"></div>
       <div class="requirement-content-info-wrap">
         <div class="content-info-row">
           <div>课程名称：</div>
-          <div>{{ requirementDetailsGetters.courseTitle }}</div>
+          <div>{{ requirementDetails.courseTitle }}</div>
         </div>
         <div class="content-info-row">
           <div><span>讲</span><span>师：</span></div>
-          <div>{{ requirementDetailsGetters.user && requirementDetailsGetters.user.nickname }}</div>
+          <div>{{ requirementDetails.user && requirementDetails.user.nickname }}</div>
         </div>
         <div class="content-info-row">
           <div>作业要求：</div>
-          <div v-html="requirementDetailsGetters.content"></div>
+          <div v-html="requirementDetails.content"></div>
         </div>
         <div class="content-info-row">
           <div>授课时间：</div>
-          <div>{{ requirementDetailsGetters.teachingTime | requireDataH5 }}</div>
+          <div>{{ requirementDetails.teachingTime | requireDataH5 }}</div>
         </div>
         <div class="content-info-row">
           <div>截止时间：</div>
-          <div>{{ requirementDetailsGetters.startDate | requireDataH5 }}</div>
+          <div>{{ requirementDetails.startDate | requireDataH5 }}</div>
         </div>
       </div>
       <div class="requirement-content-example">
         <div class="example-txt">
           <span>作业案例：</span>
-          <span>已提交：{{ requirementDetailsGetters.total | studentsCount }}份</span>
+          <span>已提交：{{ requirementDetails.total | studentsCount }}份</span>
         </div>
         <img class="example-photo"
-          v-if="requirementDetailsGetters.coverImg"
-          :src="requirementDetailsGetters.coverImg"
-          :alt="requirementDetailsGetters.title" />
-        <div class="player-box" v-if="requirementDetailsGetters && requirementDetailsGetters.vid">
+          v-if="requirementDetails.coverImg"
+          :src="requirementDetails.coverImg"
+          :alt="requirementDetails.title" />
+        <div class="player-box" v-if="requirementDetails && requirementDetails.vid">
           <div id="player"></div>
         </div>
       </div>
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Footer Button -->
-    <div v-if="requirementDetailsGetters.submitStatus === 'SUBMIT'" class="requirement-btn-wrap">
+    <div v-if="requirementDetails.submitStatus === 'SUBMIT'" class="requirement-btn-wrap">
       <nuxt-link tag="img" class="publish" :src="submit" alt="submit" :to="`/submit?type=${$route.query.type}`" />
     </div>
   </div>
@@ -91,6 +91,7 @@ export default {
     return{
       page: 1,
       requirementList: [],
+      requirementDetails: null,
       loading: false,
       finished: false,
       submit: require('@/assets/icons/common/requirement-submit.png')
@@ -98,30 +99,22 @@ export default {
   },
   computed: {
     ...mapGetters('homework', [
-      'requirementDetailsGetters',
       'requirementListGetters'
     ])
   },
   mounted() {
-    this.$nextTick(() => {
-      this.showPolyvPlayer()
-    })
-  },
-  watch: {
-    'requirementDetailsGetters': function (params) {
+    this.appendRequirementDetails({ id: this.$route.query.taskId })
+    .then(({ data }) => {
+      this.requirementDetails = data
       this.$nextTick(() => {
         this.showPolyvPlayer()
       })
-    },
-    immediate: true,
-    deep: true
-  },
-  destroyed () {
-    this.$store.commit('homework/clearRequirementDetails')
+    })
   },
   methods: {
     ...mapActions('homework', [
-      'appendRequirementList'
+      'appendRequirementList',
+      'appendRequirementDetails'
     ]),
     onLoad() {
       let params = {
@@ -139,13 +132,13 @@ export default {
       })
     },
     showPolyvPlayer() {
-      if (this.requirementDetailsGetters && this.requirementDetailsGetters.vid) {
+      if (this.requirementDetails && this.requirementDetails.vid) {
         this.player = polyvPlayer({
           wrap: '#player',
           hideSwitchPlayer: true,
           width: '100%',
           height: '198px',
-          vid: this.requirementDetailsGetters.vid
+          vid: this.requirementDetails.vid
         })
       }
     }
