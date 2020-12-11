@@ -1,12 +1,15 @@
 <template>
-  <iframe
-    id="iframe-wrap"
-    :src="src"
-    :width="width"
-    :height="height"
-    frameborder="0"
-    sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation allow-pointer-lock allow-popups"
-  ></iframe>
+  <div class="login-wrap">
+    <iframe
+      id="iframe-wrap"
+      :src="src"
+      :width="width"
+      :height="height"
+      frameborder="0"
+      sandbox="allow-scripts allow-same-origin allow-forms allow-top-navigation allow-pointer-lock allow-popups"
+    >
+    </iframe>
+  </div>
 </template>
 
 <script>
@@ -38,15 +41,16 @@ export default {
   mounted () {
     this.width = document.body.clientWidth
     const ifm = document.getElementById('iframe-wrap')
-    this.height = document.documentElement.clientHeight
+    this.height = document.body.scrollHeight
     this.config.clientId = this.validateSystemHostName().client_id
     this.config.clientSecret = this.validateSystemHostName().client_secret
     this.config.redirect_uri = `${this.validateSystemHostName().host}/callback`
 
-    document.body.style.overflow = 'hidden'
+    // document.body.style.overflow = 'hidden'
     this.src = this.getLoginUrl()
     const clientData = `${this.config.clientId}:${this.config.clientSecret}`
     this.$cookiz.set('client', `${btoa(clientData)}`)
+
     // postMessage事件对接 （注册、用户协议、隐私政策）
     window.addEventListener('message', (e) => {
       // "reg" 表示跳转注册页
@@ -102,4 +106,9 @@ export default {
 </script>
 
 <style>
+.login-wrap {
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
 </style>

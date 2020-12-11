@@ -233,6 +233,7 @@ export default {
       if (res.status === 200) {
         commit('appendRequirementDetails', res)
       }
+      return res
     },
     // 作业要求下作业任务列表
     async appendRequirementList({ commit }, params) {
