@@ -1,5 +1,5 @@
 <template>
-  <div class="course-chapter-wrap">
+  <div class="course-chapter-wrap" @click="submitHomework">
     <div class="course-img-wrap">
       <img v-lazy="chapter.coverImg ? chapter.coverImg[0] : blank" alt="课程封面" />
     </div>
@@ -15,7 +15,7 @@
         授课老师：{{  chapter.teachNickname }}
       </div>
     </div>
-    <div class="submit-button-group" @click="submitHomework">
+    <div class="submit-button-group">
       <div v-if="!chapter.isSubmit" class="submit-button">
         <img :src="submitImg" />
       </div>
