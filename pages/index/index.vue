@@ -49,6 +49,6 @@ export default {
       this.clearRecommendList()
     }
     next()
-  },
+  }
 }
 </script>

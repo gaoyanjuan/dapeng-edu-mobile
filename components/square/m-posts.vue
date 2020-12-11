@@ -55,19 +55,19 @@
     <div class="works__fot">
       <div class="fot__rh--wrap">
         <!-- 评论 -->
-        <div class="fot__rh__commernt--wrap" @click="toDetail">
+        <div class="fot__rh__commernt--wrap" @click.stop="openComment">
           <img class="fot__comment" :src="comment" alt="comment" />
-          <span class="fot__nums">{{ commentCount | studentsCount }}</span>
+          <span class="fot__nums">{{ listItemData.commentCount | studentsCount }}</span>
         </div>
         <!-- 喜欢 -->
         <div class="fot__rh__love--wrap" @click.stop="onLove">
-          <img class="fot__love" v-if="isPraise" :src="unLove" alt="love" />
+          <img class="fot__love" v-if="listItemData.isPraise" :src="unLove" alt="love" />
           <img class="fot__love" v-else :src="love" alt="unlove" />
-          <span class="fot__nums">{{ praiseCount | studentsCount }}</span>
+          <span class="fot__nums">{{ listItemData.praiseCount | studentsCount }}</span>
         </div>
         <!-- 收藏 -->
         <div class="fot__rh__star--wrap" @click.stop="onCollect">
-          <img class="fot__star" :src="isCollection ? unStar : star" alt="star" />
+          <img class="fot__star" :src="listItemData.isCollection ? unStar : star" alt="star" />
         </div>
       </div>
     </div>
@@ -107,7 +107,7 @@
     />
 
     <!-- 评论框弹层 -->
-    <m-comment-popup ref="commentPopup" :comment="commentPop" @sendComment="sendComment"/>
+    <m-comment-popup ref="commentPopup" :comment="commentPop" @sendComment="sendComment" @click.native.stop="stop"/>
   </div>
 </template>
 
@@ -121,6 +121,10 @@ export default {
       default: 0
     },
     path:{
+      type: String,
+      default: ''
+    },
+    listType: {
       type: String,
       default: ''
     },
@@ -169,10 +173,6 @@ export default {
   data: () => ({
     commentPop: { show: false },
     showMenusPopup:false,
-    isPraise: false,
-    isCollection: false,
-    praiseCount: 0,
-    commentCount: 0,
     showCopyCode: { show: false, jobNummer: null },
     // 图片预览
     imagePreview: {
@@ -238,24 +238,14 @@ export default {
       }else {
         return false
       }
-    }
-  },
-  created () {
-    if (this.listItemData) {
-      this.commentCount = this.listItemData.commentCount
-      this.praiseCount = this.listItemData.praiseCount
-      this.isPraise = this.listItemData.isPraise
-      this.isCollection = this.listItemData.isCollection
-    }
-  },
-  watch: {
-    'listItemData': function (newVal, oldVal) {
-      this.praiseCount = newVal.praiseCount
-      this.isPraise = newVal.isPraise
-      this.isCollection = newVal.isCollection
     },
+    functionName () {
+      return this.$getFunctionName(this.listType)
+    }
   },
+  created () {},
   methods: {
+    stop () {},
     ...mapActions({
       queryLike: 'comment/queryLike',
       queryUnLike: 'comment/queryUnLike',
@@ -302,10 +292,10 @@ export default {
       this.imagePreview = {
         images: this.handleFilterImage(this.listItemData.imgInfo),
         startPosition: index,
-        isPraise: this.isPraise,
-        isCollection: this.isCollection,
-        praiseCount: this.praiseCount,
-        commentCount: this.commentCount,
+        isPraise: this.listItemData.isPraise,
+        isCollection: this.listItemData.isCollection,
+        praiseCount: this.listItemData.praiseCount,
+        commentCount: this.listItemData.commentCount,
         show: true
       }
     },
@@ -344,10 +334,14 @@ export default {
         if (status === 201) {
           this.commentFlag = true
           this.$refs.commentPopup.resetPopup()
-          if (!res.data.highRisk) {
+          if (!data.highRisk) {
             this.$toast('评论成功')
           }
-          this.commentCount += 1
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'comment',
+            value: 1
+          })
         } else {
           this.commentFlag = true
           if (data && data.message) {
@@ -368,11 +362,15 @@ export default {
       if(!this.$login()) {
         return 
       }
-      if (this.isCollection) {
-        this.isCollection = false
+      if (this.listItemData.isCollection) {
+        this.$store.commit(`${this.functionName}`, {
+          index: this.propIndex,
+          type: 'collect',
+          value: false
+        })
         this.imagePreview = {
           ...this.imagePreview,
-          isCollection: this.isCollection
+          isCollection: this.listItemData.isCollection
         }
         this.queryDeleteCollection({
           id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
@@ -388,13 +386,21 @@ export default {
           
         })
         .catch(() => {
-          this.isCollection = true
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'collect',
+            value: true
+          })
         })
       } else {
-        this.isCollection = true
+        this.$store.commit(`${this.functionName}`, {
+          index: this.propIndex,
+          type: 'collect',
+          value: true
+        })
         this.imagePreview = {
           ...this.imagePreview,
-          isCollection: this.isCollection
+          isCollection: this.listItemData.isCollection
         }
         this.queryCollection({
           id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
@@ -402,7 +408,11 @@ export default {
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
         }).catch(() => {
-          this.isCollection = false
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'collect',
+            value: false
+          })
         })
       }
     },
@@ -411,13 +421,19 @@ export default {
       if(!this.$login()) {
         return 
       }
-      if (this.isPraise) {
-        this.isPraise = false
-        this.praiseCount -= 1
+      if (this.listItemData.isPraise) {
+        this.$store.commit(`${this.functionName}`, {
+          index: this.propIndex,
+          type: 'love',
+          value: {
+            praise: false,
+            count: -1
+          }
+        })
         this.imagePreview = {
           ...this.imagePreview,
-          praiseCount: this.praiseCount,
-          isPraise: this.isPraise
+          praiseCount: this.listItemData.praiseCount,
+          isPraise: this.listItemData.isPraise
         }
         this.queryUnLike({
           id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
@@ -432,16 +448,28 @@ export default {
           }
         })
         .catch(() => {
-          this.isPraise = true
-          this.praiseCount += 1
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'love',
+            value: {
+              praise: true,
+              count: 1
+            }
+          })
         })
       } else {
-        this.isPraise = true
-        this.praiseCount += 1
+        this.$store.commit(`${this.functionName}`, {
+          index: this.propIndex,
+          type: 'love',
+          value: {
+            praise: true,
+            count: 1
+          }
+        })
         this.imagePreview = {
           ...this.imagePreview,
-          praiseCount: this.praiseCount,
-          isPraise: this.isPraise
+          praiseCount: this.listItemData.praiseCount,
+          isPraise: this.listItemData.isPraise
         }
         this.queryLike({
           id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
@@ -449,13 +477,24 @@ export default {
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
         }).catch(() => {
-          this.isPraise = false
-          this.praiseCount -= 1
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'love',
+            value: {
+              praise: false,
+              count: -1
+            }
+          })
         })
       }
     },
     /** 进入详情 */
     toDetail () {
+      window.anchorId = this.listItemData.id
+      this.$store.commit('changeListData', {
+        listType: this.listType,
+        propIndex: this.propIndex
+      })
       if (this.propSquareType) {
         if (this.listItemData.tagsId) {
           this.$router.push({

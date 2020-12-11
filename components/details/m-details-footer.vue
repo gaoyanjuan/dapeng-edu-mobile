@@ -71,7 +71,10 @@ export default {
       detailsGetters: 'details/detailsGetters',
       userinfo: 'user/userInfoGetters',
       commentListGetters: 'comment/commentListGetters'
-    })
+    }),
+    functionName () {
+      return this.$getFunctionName(this.$store.state.listType)
+    }
   },
   methods: {
     ...mapActions({
@@ -102,6 +105,14 @@ export default {
       if (this.detailsGetters.isPraise) {
         this.changeIsPraise(false)
         this.changePraiseCount(this.detailsGetters.praiseCount - 1)
+        this.$store.commit(`${this.functionName}`, {
+          index: this.$store.state.propIndex,
+          type: 'love',
+          value: {
+            praise: false,
+            count: -1
+          }
+        })
         this.queryUnLike({
           id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType,
@@ -109,6 +120,14 @@ export default {
         }).catch(() => {
           this.changeIsPraise(true)
           this.changePraiseCount(this.detailsGetters.praiseCount + 1)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'love',
+            value: {
+              praise: true,
+              count: 1
+            }
+          })
         })
         this.deleteLike({
           userId: this.userinfo.userId
@@ -116,6 +135,14 @@ export default {
       } else {
         this.changeIsPraise(true)
         this.changePraiseCount(this.detailsGetters.praiseCount + 1)
+        this.$store.commit(`${this.functionName}`, {
+          index: this.$store.state.propIndex,
+          type: 'love',
+          value: {
+            praise: true,
+            count: 1
+          }
+        })
         this.queryLike({
           id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType,
@@ -125,6 +152,14 @@ export default {
         }).catch(() => {
           this.changeIsPraise(false)
           this.changePraiseCount(this.detailsGetters.praiseCount - 1)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'love',
+            value: {
+              praise: false,
+              count: -1
+            }
+          })
         })
         this.addNewLike({
           createTime: new Date().getTime(),
@@ -142,14 +177,29 @@ export default {
       }
       if (this.detailsGetters.isCollection) {
         this.changeIsCollection(false)
+        this.$store.commit(`${this.functionName}`, {
+          index: this.$store.state.propIndex,
+          type: 'collect',
+          value: false
+        })
         this.queryDeleteCollection({
           id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType
         }).catch(() => {
           this.changeIsCollection(true)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'collect',
+            value: true
+          })
         })
       } else {
         this.changeIsCollection(true)
+        this.$store.commit(`${this.functionName}`, {
+          index: this.$store.state.propIndex,
+          type: 'collect',
+          value: true
+        })
         this.queryCollection({
           id: this.isGrowth === 'growth' ? this.detailData.tagsId : this.detailData.id,
           type: this.topicType,
@@ -157,6 +207,11 @@ export default {
           contentType: this.contentType
         }).catch(() => {
           this.changeIsCollection(false)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'collect',
+            value: false
+          })
         })
       }
     },
@@ -180,6 +235,11 @@ export default {
           if (!data.highRisk) {
             this.$toast('评论成功')
             this.changeCommentCount(this.detailsGetters.commentCount + 1)
+            this.$store.commit(`${this.functionName}`, {
+              index: this.$store.state.propIndex,
+              type: 'comment',
+              value: 1
+            })
           }
         } else {
           this.commentFlag = true

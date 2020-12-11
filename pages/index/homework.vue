@@ -41,8 +41,12 @@ export default {
       this.appendHomeworkList({ categoryIds: newQuery.college, courseType: newQuery.courseType, page: 1 })
     }
   },
-  destroyed () {
-    this.clearHomeworkList()
+  beforeRouteLeave (to, from, next) {
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearHomeworkList()
+    }
+    next()
   },
   methods:{
     ...mapActions('homework', [

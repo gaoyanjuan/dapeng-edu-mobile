@@ -15,6 +15,21 @@ export default {
     }
   },
   mutations: {
+    changeGrowthList (state, payload) {
+      const { index, type, value } = payload
+      if (state.growthList.list[index]) {
+        if (type === 'comment') { 
+          state.growthList.list[index].commentCount += value
+        } else if (type === 'collect') {
+          state.growthList.list[index].isCollection = value
+        } else if (type === 'love') {
+          state.growthList.list[index].isPraise = value.praise
+          state.growthList.list[index].praiseCount += value.count
+        } else if (type === 'attention') {
+          state.growthList.list[index].isAttention = value
+        }
+      }
+    },
     /** * 添加数据至成长详情  */
     appendGrowthDetails (state, payload) {
       state.growthDetails = payload.data

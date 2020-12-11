@@ -58,9 +58,13 @@ export default {
       }
     }
   },
-  destroyed() {
-    this.clearAttentionLiAst()
-    this.clearPopularUsers()
+  beforeRouteLeave (to, from, next) {
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearAttentionLiAst()
+      this.clearPopularUsers()
+    }
+    next()
   }
 }
 </script>

@@ -11,16 +11,12 @@
         <template v-if="workListGetters.list.length">
           <m-posts 
             v-for="(item, index) in workListGetters.list"
-            :key="index" 
-            :dataType="item.type"
-            :imgInfo="item.imgSmall"
+            :id="item ? item.id: ''"
+            :key="index"
+            listType="work"
+            :propIndex="index"
             :courseType="item.courseType"
-            :user="item.user"
-            :activity="item.activity"
-            :college="item.college"
-            :content="item.content"
             :listItemData="item"
-            :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/works"
             propSquareType="WORKS"
@@ -72,6 +68,15 @@ export default {
     if(!this.workListGetters.list.length) {
       this.finishedTxt = ''
     }
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('work', [

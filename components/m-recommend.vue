@@ -8,7 +8,10 @@
         <template v-if="recommendListGetters.list.length">
           <div v-for="(res, i) in recommendListGetters.list" :key="i">
             <m-posts
+              :id="res.recommendTopic ? res.recommendTopic.id : ''"
               :propSquareType="res.hotType"
+              listType="recommend"
+              :propIndex="i"
               :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
               :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
               :listItemData="res.recommendTopic ? res.recommendTopic : {}"
@@ -64,6 +67,17 @@ export default {
         this.finishedTxt ='没有更多了'
       }
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('recommend', [

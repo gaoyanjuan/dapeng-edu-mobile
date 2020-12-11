@@ -9,7 +9,7 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="videoListGetters.list.length">
-          <m-video-posts v-for="(item, i) in videoListGetters.list" :key="i" :item="item"/>
+          <m-video-posts v-for="(item, i) in videoListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="i" :item="item"/>
         </template>
         <template v-if="!videoListGetters.list.length && finished">
           <div class="works-blank-wrap">
@@ -60,6 +60,17 @@ export default {
     ...mapGetters('video', [
       'videoListGetters'
     ])
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('video', [

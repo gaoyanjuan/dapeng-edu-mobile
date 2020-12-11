@@ -159,6 +159,7 @@ export default {
       }
     },
     toDetail() {
+      window.anchorId = this.listItemData.id
       this.$router.push({
         path: `/details/video?id=${this.item.id}`
       })

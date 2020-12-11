@@ -174,6 +174,7 @@ export default {
       }
     },
     toDetail() {
+      window.anchorId = this.listItemData.id
       this.$router.push({
         path: `/details/reading?id=${this.item.id}`
       })

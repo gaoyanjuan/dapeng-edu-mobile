@@ -11,18 +11,12 @@
         <template v-if="homeworkListGetters.list.length">
           <m-posts
             v-for="(item, index) in homeworkListGetters.list"
-            :key="index"
+            :id="item ? item.id: ''"
+            listType="homework"
+            :key="item ? item.id: ''"
             propSquareType="HOMEWORK"
             :commentList="item.comments"
-            :dataType="item.type"
-            :imgInfo="item.imgSmall"
             :courseType="item.courseType"
-            :user="item.user"
-            :college="item.college"
-            :recommendType="item.recommendType"
-            :task="item.task"
-            :content="item.content"
-            :isAttention="item.isAttention"
             :modifiedTime="item.lastModifiedTime"
             :listItemData="item"
             :path="navRoute"
@@ -84,6 +78,16 @@ export default {
     if(!this.homeworkListGetters.list.length) {
       this.finishedTxt = ''
     }
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        console.log(element)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('homework', [

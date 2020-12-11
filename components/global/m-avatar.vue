@@ -123,6 +123,9 @@ export default {
     showMySubmit() {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
       return this.userInfo && this.userInfo.userId === currentUserId && this.pageName === 'requirement'
+    },
+    functionName () {
+      return this.$getFunctionName(this.$store.state.listType)
     }
   },
   created () {
@@ -165,11 +168,21 @@ export default {
       }
       if (this.isAttention) {
         this.isAttention = false
+        this.$store.commit(`${this.functionName}`, {
+          index: this.$store.state.propIndex,
+          type: 'attention',
+          value: false
+        })
         this.cancelFollowingUser({
           id: this.userInfo.userId
         })
       } else {
         this.isAttention = true
+        this.$store.commit(`${this.functionName}`, {
+          index: this.$store.state.propIndex,
+          type: 'attention',
+          value: true
+        })
         this.followingUser({
           id: this.userInfo.userId
         })

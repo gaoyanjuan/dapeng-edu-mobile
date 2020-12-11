@@ -52,6 +52,21 @@ export default {
     }
   },
   mutations: {
+    changeHomeworkList (state, payload) {
+      const { index, type, value } = payload
+      if (state.homeworkList.list[index]) {
+        if (type === 'comment') { 
+          state.homeworkList.list[index].commentCount += value
+        } else if (type === 'collect') {
+          state.homeworkList.list[index].isCollection = value
+        } else if (type === 'love') {
+          state.homeworkList.list[index].isPraise = value.praise
+          state.homeworkList.list[index].praiseCount += value.count
+        } else if (type === 'attention') {
+          state.homeworkList.list[index].isAttention = value
+        }
+      }
+    },
     clearHomeworkList (state) {
       state.homeworkList.list = []
       state.homeworkList.pageInfo.pages = 1

@@ -23,9 +23,9 @@
       </div>
 
       <div class="info-right-side" @click.stop="changeLike">
-        <img class="icon-love" v-if="isPraise" src="@/assets/icons/posts/small-unlove.png" alt="">
+        <img class="icon-love" v-if="videoItem.isPraise" src="@/assets/icons/posts/small-unlove.png" alt="">
         <img class="icon-love" v-else src="@/assets/icons/posts/small-love.png" alt="">
-        <span class="love-nums"> {{ praiseCount | studentsCount }} </span>
+        <span class="love-nums"> {{ videoItem.praiseCount | studentsCount }} </span>
       </div>
     </div>
   </div>
@@ -37,6 +37,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'M-Small-Video',
   props:{
+    propIndex:{
+      type: Number,
+      default: 0
+    },
     /** 
      * 数据对象 
     * */
@@ -48,14 +52,9 @@ export default {
     }
   },
   data:() => ({
-    defaultImg: require('@/assets/icons/common/photos-bg.png'),
-    isPraise: false,
-    praiseCount: 0
+    defaultImg: require('@/assets/icons/common/photos-bg.png')
   }),
-  created () {
-    this.praiseCount = this.videoItem.praiseCount
-    this.isPraise = this.videoItem.isPraise
-  },
+  created () {},
   mounted () {
     if (this.$refs.coverImg) {
       this.$refs.coverImg.onerror = function () {
@@ -71,16 +70,28 @@ export default {
     changeLike () {
       if(!this.$login()) return
       
-      if (this.isPraise) {
-        this.isPraise = false
-        this.praiseCount -= 1
+      if (this.videoItem.isPraise) {
+        this.$store.commit('video/changeSmallVideoList', {
+          index: this.propIndex,
+          type: 'love',
+          value: {
+            praise: false,
+            count: -1
+          }
+        })
         this.queryUnLike({
           id: this.videoItem.id,
           type: this.videoItem.type
         })
       } else {
-        this.isPraise = true
-        this.praiseCount += 1
+        this.$store.commit('video/changeSmallVideoList', {
+          index: this.propIndex,
+          type: 'love',
+          value: {
+            praise: true,
+            count: 1
+          }
+        })
         this.queryLike({
           id: this.videoItem.id,
           type: this.videoItem.type,
@@ -90,6 +101,10 @@ export default {
       }
     },
     toDetail () {
+      this.$store.commit('changeListData', {
+        listType: 'small-video',
+        propIndex: this.propIndex
+      })
       if (this.videoItem.type === 'HOMEWORK') {
         this.$router.push({
           path: '/details/homework',

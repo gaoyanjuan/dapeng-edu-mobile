@@ -2,9 +2,23 @@ import { get_cookie } from '@/utils/cookie-tool';
 
 export default {
   state: () => {
-    return {}
+    return {
+      listType: '',
+      propIndex: 0
+    }
   },
-  mutations: {},
+  mutations: {
+    changeListData (state, payload) {
+      if (payload) {
+        if (payload.listType) {
+          state.listType = payload.listType
+        }
+        if (payload.propIndex) {
+          state.propIndex = payload.propIndex
+        }
+      }
+    }
+  },
   actions: {
     async nuxtServerInit({commit, dispatch}, {req, app}) {
       //获取服务端cookie

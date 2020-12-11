@@ -29,6 +29,30 @@ export default {
     }
   },
   mutations: {
+    changeSmallVideoList (state, payload) {
+      const { index, type, value } = payload
+      if (state.smallVideoList.list[index]) {
+        if (type === 'love') {
+          state.smallVideoList.list[index].isPraise = value.praise
+          state.smallVideoList.list[index].praiseCount += value.count
+        }
+      }
+    },
+    changeVideoList (state, payload) {
+      const { index, type, value } = payload
+      if (state.videoList.list[index]) {
+        if (type === 'comment') { 
+          state.videoList.list[index].commentCount += value
+        } else if (type === 'collect') {
+          state.videoList.list[index].isCollection = value
+        } else if (type === 'love') {
+          state.videoList.list[index].isPraise = value.praise
+          state.videoList.list[index].praiseCount += value.count
+        } else if (type === 'attention') {
+          state.videoList.list[index].isAttention = value
+        }
+      }
+    },
     changeScrollTop (state, payload) {
       state.scrollTop = payload
     },

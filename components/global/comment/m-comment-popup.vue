@@ -1,42 +1,42 @@
 <template>
-  <van-popup v-model="comment.show" class="comment-popup-wrap" :transition-appear="true" @click.stop="">
+  <div @click.stop="stop">
+    <van-popup v-model="comment.show" class="comment-popup-wrap" :transition-appear="true">
+      <!-- Comment Header Block -->
+      <section class="comment-popup-header">
+        <img class="header-icon-close" :src="close" alt="close" @click="comment.show = false"/>
+      </section>
 
-    <!-- Comment Header Block -->
-    <section class="comment-popup-header">
-      <img class="header-icon-close" :src="close" alt="close" @click="comment.show = false"/>
-    </section>
+      <!-- Comment Body Block -->
+      <section class="comment-popup-body">
+        <van-field v-model="content" rows="5" :border="false" type="textarea" maxlength="150" :placeholder="placeholderText"></van-field>
+      </section>
 
-    <!-- Comment Body Block -->
-    <section class="comment-popup-body">
-      <van-field v-model="content" rows="5" :border="false" type="textarea" maxlength="150" :placeholder="placeholderText"></van-field>
-    </section>
+      <!-- Comment Body Block -->
+      <section class="comment-popup-footer">
+        <span class="footer-word-nums">{{ content.length }} /150 </span>
+        <div class="footer-right-side">
+          <img class="footer-emoji-icon" :src="showEmoji ? emojiActive : emoji" alt="emoji" @click="openEmjoi"/>
+          <span :class="content.length ? 'footer-send-btn':'footer-send-btn-disabled'" @click="onSendClick">发送</span>
+        </div>
+      </section>
 
-    <!-- Comment Body Block -->
-    <section class="comment-popup-footer">
-      <span class="footer-word-nums">{{ content.length }} /150 </span>
-      <div class="footer-right-side">
-        <img class="footer-emoji-icon" :src="showEmoji ? emojiActive : emoji" alt="emoji" @click="openEmjoi"/>
-        <span :class="content.length ? 'footer-send-btn':'footer-send-btn-disabled'" @click="onSendClick">发送</span>
-      </div>
-    </section>
-
-    <!-- Comment emoji Block -->
-    <section class="comment-popup-emoji" v-show="showEmoji">
-      <client-only>
-        <swiper ref="mySwiper" :options="emojiSwiper" @ready="onSwiperRedied">
-          <!--swiperSlide-->
-          <swiperSlide v-for="(emoji, i) in emojiList" :key="i">
-            <div v-for="(item, j) in emoji" :key="j" class="emoji-item" @click.prevent.stop="writeEmoji(item)">
-              <img :src="item.url" :alt="item.title" />
-            </div>
-          </swiperSlide>
-          <!--分页-->
-          <div slot="pagination" class="swiper-pagination"></div>
-        </swiper>
-      </client-only>
-    </section>
-
-  </van-popup>
+      <!-- Comment emoji Block -->
+      <section class="comment-popup-emoji" v-show="showEmoji">
+        <client-only>
+          <swiper ref="mySwiper" :options="emojiSwiper" @ready="onSwiperRedied">
+            <!--swiperSlide-->
+            <swiperSlide v-for="(emoji, i) in emojiList" :key="i">
+              <div v-for="(item, j) in emoji" :key="j" class="emoji-item" @click.prevent.stop="writeEmoji(item)">
+                <img :src="item.url" :alt="item.title" />
+              </div>
+            </swiperSlide>
+            <!--分页-->
+            <div slot="pagination" class="swiper-pagination"></div>
+          </swiper>
+        </client-only>
+      </section>
+    </van-popup>
+  </div>
 </template>
 
 <script>
@@ -96,6 +96,7 @@ export default {
     }
   },
   methods:{
+    stop () {},
     // 打开表情轮播
     openEmjoi () {
       this.showEmoji = !this.showEmoji

@@ -77,9 +77,13 @@ export default {
       'hotDynamicListGetters'
     ])
   },
-  destroyed() {
-    this.clearNewDynamicList()
-    this.clearHotDynamicList()
+  beforeRouteLeave (to, from, next) {
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearNewDynamicList()
+      this.clearHotDynamicList()
+    }
+    next()
   }
 }
 </script>

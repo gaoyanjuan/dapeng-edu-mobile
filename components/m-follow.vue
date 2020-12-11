@@ -15,7 +15,10 @@
         <template v-if="attentionListGetters.list.length">
           <div v-for="(res, i) in attentionListGetters.list" :key="i">
             <m-posts
+              :id="res.topic ? res.topic.id: ''"
               v-if="res.topic"
+              listType="attention"
+              :propIndex="i"
               :propSquareType="res.topicType"
               :courseType="res.topic ? res.topic.courseType : ''"
               :modifiedTime="res.topic ? res.topic.createTime : 0"
@@ -69,6 +72,17 @@ export default {
         this.finishedTxt ='没有更多了'
       }
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('attention', [
