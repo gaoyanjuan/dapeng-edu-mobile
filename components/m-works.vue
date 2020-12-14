@@ -69,8 +69,8 @@ export default {
       this.finishedTxt = ''
     }
     this.$nextTick(() => {
-      if (window.anchorId) {
-        const element = document.getElementById(window.anchorId)
+      if (this.$store.state.anchorId) {
+        const element = document.getElementById(this.$store.state.anchorId)
         if (element)
         element.scrollIntoView({
           behavior: 'auto'

@@ -4,7 +4,8 @@ export default {
   state: () => {
     return {
       listType: '',
-      propIndex: 0
+      propIndex: 0,
+      anchorId: ''
     }
   },
   mutations: {
@@ -15,6 +16,9 @@ export default {
         }
         if (payload.propIndex) {
           state.propIndex = payload.propIndex
+        }
+        if (payload.anchorId) {
+          state.anchorId = payload.anchorId
         }
       }
     }
