@@ -35,11 +35,30 @@ function getFunctionName (name) {
   }
 }
 
+const saveList = [
+  'index',
+  'index-works',
+  'index-dynamic',
+  'index-attention',
+  'index-homework',
+  'index-growth',
+  'index-small-video'
+]
+
+function isSave (name) {
+  const result = saveList.some((element) => {
+    return element === name
+  })
+  return result
+}
+
 import Vue from 'vue'
 Vue.prototype.$isDetails = isDetails
 Vue.prototype.$getFunctionName = getFunctionName
+Vue.prototype.$isSave = isSave
 
 export default {
   isDetails,
-  getFunctionName
+  getFunctionName,
+  isSave
 }
