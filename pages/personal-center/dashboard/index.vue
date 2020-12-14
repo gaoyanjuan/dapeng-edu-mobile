@@ -8,10 +8,10 @@
       </van-sticky>
       <van-tabs v-model="activeName" sticky @click="onTabsClick">
         <van-tab title="关注" name="attention">
-          <m-followers />
+          <m-followers v-if="activeName === 'attention'" />
         </van-tab>
         <van-tab title="粉丝" name="fans">
-          <m-fans />
+          <m-fans v-if="activeName === 'fans'" />
         </van-tab>
       </van-tabs>
     </div>
