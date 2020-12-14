@@ -159,7 +159,11 @@ export default {
       }
     },
     toDetail() {
-      window.anchorId = this.listItemData.id
+      this.$store.commit('changeListData', {
+        listType: 'video',
+        propIndex: this.propIndex,
+        anchorId: this.listItemData.id
+      })
       this.$router.push({
         path: `/details/video?id=${this.item.id}`
       })

@@ -103,7 +103,8 @@ export default {
     toDetail () {
       this.$store.commit('changeListData', {
         listType: 'small-video',
-        propIndex: this.propIndex
+        propIndex: this.propIndex,
+        anchorId: this.videoItem.id
       })
       if (this.videoItem.type === 'HOMEWORK') {
         this.$router.push({
