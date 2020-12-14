@@ -41,8 +41,12 @@ export default {
       }
     }
   },
-  destroyed () {
-    this.clearGrowthList()
+  beforeRouteLeave (to, from, next) {
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearGrowthList()
+    }
+    next()
   },
   methods: {
     ...mapActions('growth', [

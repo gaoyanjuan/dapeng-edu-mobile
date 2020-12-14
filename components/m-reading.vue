@@ -9,7 +9,7 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="readingListGetters.list.length">
-          <m-reading-posts v-for="(item, i) in readingListGetters.list" :key="i" :item="item" />
+          <m-reading-posts v-for="(item, i) in readingListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="i" :item="item" />
         </template>
       </van-list>
     </section>
@@ -53,6 +53,17 @@ export default {
         this.finishedTxt ='没有更多了'
       }
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('reading', [

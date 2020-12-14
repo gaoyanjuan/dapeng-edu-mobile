@@ -14,6 +14,21 @@ export default {
     }
   },
   mutations: {
+    changeRecommendList (state, payload) {
+      const { index, type, value } = payload
+      if (state.recommendList.list[index] && state.recommendList.list[index].recommendTopic) {
+        if (type === 'comment') { 
+          state.recommendList.list[index].recommendTopic.commentCount += value
+        } else if (type === 'collect') {
+          state.recommendList.list[index].recommendTopic.isCollection = value
+        } else if (type === 'love') {
+          state.recommendList.list[index].recommendTopic.isPraise = value.praise
+          state.recommendList.list[index].recommendTopic.praiseCount += value.count
+        } else if (type === 'attention') {
+          state.recommendList.list[index].recommendTopic.isAttention = value
+        }
+      }
+    },
     clearRecommendList (state) {
       state.recommendList.list = []
       state.recommendList.status = 'loading'

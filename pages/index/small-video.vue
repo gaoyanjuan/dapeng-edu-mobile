@@ -25,8 +25,13 @@ export default {
       this.$store.dispatch('video/appendSmallVideoList', { type: newQuery.type, collegeId: newQuery.college, page: 1 })
     }
   },
-  destroyed () {
-    // this.$store.commit('video/clearSmallVideoList')
+  beforeRouteLeave (to, from, next) {
+    // 如果进入详情,就不清除数据
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.$store.commit('video/clearSmallVideoList')
+    }
+    next()
   }
 }
 </script>

@@ -42,8 +42,13 @@ export default {
       this.appendWorkList({ categoryIds: newQuery.college, page: 1 })
     }
   },
-  destroyed () {
-    this.clearWorkList()
+  beforeRouteLeave (to, from, next) {
+    // 如果进入详情,就不清除数据
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearWorkList()
+    }
+    next()
   },
   methods:{
     ...mapActions('work', [

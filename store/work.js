@@ -15,6 +15,21 @@ export default {
     }
   },
   mutations: {
+    changeWorkList (state, payload) {
+      const { index, type, value } = payload
+      if (state.workList.list[index]) {
+        if (type === 'comment') { 
+          state.workList.list[index].commentCount += value
+        } else if (type === 'collect') {
+          state.workList.list[index].isCollection = value
+        } else if (type === 'love') {
+          state.workList.list[index].isPraise = value.praise
+          state.workList.list[index].praiseCount += value.count
+        } else if (type === 'attention') {
+          state.workList.list[index].isAttention = value
+        }
+      }
+    },
     clearWorkList (state) {
       state.workList.list = []
       state.workList.status = 'loading'

@@ -15,6 +15,36 @@ export default {
     }
   },
   mutations: {
+    changeNewDynamicList (state, payload) {
+      const { index, type, value } = payload
+      if (state.newDynamicList.list[index]) {
+        if (type === 'comment') {
+          state.newDynamicList.list[index].commentCount += value
+        } else if (type === 'collect') {
+          state.newDynamicList.list[index].isCollection = value
+        } else if (type === 'love') {
+          state.newDynamicList.list[index].isPraise = value.praise
+          state.newDynamicList.list[index].praiseCount += value.count
+        } else if (type === 'attention') {
+          state.newDynamicList.list[index].isAttention = value
+        }
+      }
+    },
+    changeHotDynamicList (state, payload) {
+      const { index, type, value } = payload
+      if (state.hotDynamicList.list[index]) {
+        if (type === 'comment') {
+          state.hotDynamicList.list[index].commentCount += value
+        } else if (type === 'collect') {
+          state.hotDynamicList.list[index].isCollection = value
+        } else if (type === 'love') {
+          state.hotDynamicList.list[index].isPraise = value.praise
+          state.hotDynamicList.list[index].praiseCount += value.count
+        } else if (type === 'attention') {
+          state.hotDynamicList.list[index].isAttention = value
+        }
+      }
+    },
     changeNewDynamicListStatus (state, payload) {
       state.newDynamicList.status = payload
     },

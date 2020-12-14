@@ -11,7 +11,7 @@
         <template v-if="smallVideoList.list.length">
           <m-water-fall width="167px" gap="0" :data="smallVideoList.list" @complete="completeEvent">
             <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="index" :order="index">
-              <m-small-video-posts :videoItem="item" />
+              <m-small-video-posts :videoItem="item" :propIndex="index" />
             </m-water-fall-item>
           </m-water-fall>
         </template>

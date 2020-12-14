@@ -13,6 +13,21 @@ export const state = () => ({
 })
 
 export const mutations = {
+  changeReadingList (state, payload) {
+    const { index, type, value } = payload
+    if (state.readingList.list[index]) {
+      if (type === 'comment') { 
+        state.readingList.list[index].commentCount += value
+      } else if (type === 'collect') {
+        state.readingList.list[index].isCollection = value
+      } else if (type === 'love') {
+        state.readingList.list[index].isPraise = value.praise
+        state.readingList.list[index].praiseCount += value.count
+      } else if (type === 'attention') {
+        state.readingList.list[index].isAttention = value
+      }
+    }
+  },
   clearReadingList (state) {
     state.readingList.list = []
     state.readingList.status = 'loading'

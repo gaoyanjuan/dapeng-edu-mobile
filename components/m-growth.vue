@@ -24,14 +24,11 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <m-posts
           v-for="(item, index) in growthListGetters.list"
-          :key="index"
-          :dataType="item.contentType"
-          :imgInfo="item.imgSmall"
-          :user="item.user"
-          :activity="item.activityBaseDto"
-          :content="item.content"
+          :key="item ? item.id: ''"
+          :id="item ? item.id: ''"
+          listType="growth"
+          :propIndex="index"
           :listItemData="item"
-          :isAttention="item.isAttention"
           :modifiedTime="item.createTime"
           path="/details/growth"
           :propSquareType="item.topicType"
@@ -66,6 +63,17 @@ export default {
         this.finished = true
       }
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('growth', [

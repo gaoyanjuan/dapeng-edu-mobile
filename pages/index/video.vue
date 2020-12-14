@@ -24,8 +24,13 @@ export default {
     }
   },
   methods:{},
-  destroyed () {
-    this.$store.commit('video/clearVideoList')
-  },
+  beforeRouteLeave (to, from, next) {
+    // 如果进入详情,就不清除数据
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.$store.commit('video/clearVideoList')
+    }
+    next()
+  }
 }
 </script>

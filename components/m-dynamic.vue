@@ -11,14 +11,11 @@
         <template v-if="$route.query.type === 'hot'">
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
-            :key="index"
-            :dataType="item.type"
-            :imgInfo="item.imgSmall"
-            :user="item.user"
-            :activity="item.activity"
-            :content="item.content"
+            :id="item ? item.id: ''"
+            :key="item ? item.id: ''"
+            listType="dynamic-hot"
+            :propIndex="index"
             :listItemData="item"
-            :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/dynamic"
             propSquareType="LIFE"
@@ -27,14 +24,11 @@
         <template v-else-if="$route.query.type === 'new'">
           <m-posts 
             v-for="(item, index) in newDynamicListGetters.list"
-            :key="index"
-            :dataType="item.type"
-            :imgInfo="item.imgSmall"
-            :user="item.user"
-            :activity="item.activity"
-            :content="item.content"
+            :id="item ? item.id: ''"
+            :key="item ? item.id: ''"
+            listType="dynamic-new"
+            :propIndex="index"
             :listItemData="item"
-            :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/dynamic"
             propSquareType="LIFE"
@@ -43,14 +37,11 @@
         <template v-else>
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
-            :key="index"
-            :dataType="item.type"
-            :imgInfo="item.imgSmall"
-            :user="item.user"
-            :activity="item.activity"
-            :content="item.content"
+            :id="item ? item.id: ''"
+            :key="item ? item.id: ''"
+            listType="dynamic-hot"
+            :propIndex="index"
             :listItemData="item"
-            :isAttention="item.isAttention"
             :modifiedTime="item.createTime"
             path="/details/dynamic"
             propSquareType="LIFE"
@@ -94,6 +85,17 @@ export default {
         this.finished = true
       }
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      if (window.anchorId) {
+        const element = document.getElementById(window.anchorId)
+        if (element)
+        element.scrollIntoView({
+          behavior: 'auto'
+        })
+      }
+    })
   },
   methods:{
     ...mapActions('dynamic', [

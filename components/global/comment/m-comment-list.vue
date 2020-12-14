@@ -52,7 +52,9 @@ export default {
     return {
       loading: false,
       finished: false,
-      blank:require('@/assets/icons/blank/have-no-comment.png')
+      blank:require('@/assets/icons/blank/have-no-comment.png'),
+      recommendCommentIds: [],
+      haveRecommend: true
     }
   },
   computed: {
@@ -92,9 +94,21 @@ export default {
         return false
       }
       if (this.commentListGetters.status === 'loading') return false
+      if (this.haveRecommend) {
+          for (let index = 0; index < this.commentListGetters.data.length; index++) {
+          const element = this.commentListGetters.data[index]
+          if (element.isRecommend) {
+            this.recommendCommentIds.push(element.id)
+          } else {
+            this.haveRecommend = false
+            break
+          }
+        }
+      }
       const newStartTime = this.commentListGetters.data.slice(-1)[0].createTime
       this.queryCommentList({
         ...this.commentListGetters.params,
+        recommendCommentIds: this.recommendCommentIds + '',
         startTime: newStartTime
       })
     }

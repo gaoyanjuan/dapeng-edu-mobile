@@ -41,8 +41,13 @@ export default {
       this.appendReadingList({ collegeId: newQuery.college, page: 1 })
     }
   },
-  destroyed () {
-    this.clearReadingList()
+  beforeRouteLeave (to, from, next) {
+    // 如果进入详情,就不清除数据
+    const isDetails =  this.$isDetails(to.name)
+    if (!isDetails) {
+      this.clearReadingList()
+    }
+    next()
   },
   methods:{
     ...mapActions('reading', [

@@ -25,6 +25,21 @@ export default {
     }
   },
   mutations: {
+    changeAttentionList (state, payload) {
+      const { index, type, value } = payload
+      if (state.attentionList.list[index] && state.attentionList.list[index].topic) {
+        if (type === 'comment') { 
+          state.attentionList.list[index].topic.commentCount += value
+        } else if (type === 'collect') {
+          state.attentionList.list[index].topic.isCollection = value
+        } else if (type === 'love') {
+          state.attentionList.list[index].topic.isPraise = value.praise
+          state.attentionList.list[index].topic.praiseCount += value.count
+        } else if (type === 'attention') {
+          state.attentionList.list[index].topic.isAttention = value
+        }
+      }
+    },
     changePopularUsersListFollowStatus (state, payload) {
       state.popularUsersList.list[payload].isFlower = !state.popularUsersList.list[payload].isFlower
     },
