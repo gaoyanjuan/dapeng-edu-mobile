@@ -29,7 +29,11 @@ export default {
     this.$cookiz.set('refresh_token', data.refresh_token)
     this.$cookiz.set('isLogin', true)
     const redirectUrl = decodeURIComponent(localStorage.getItem('route'))
-    window.top.location.replace(this.validateSystemHostName().host + redirectUrl)
+    if (redirectUrl) {
+      window.top.location.replace(this.validateSystemHostName().host + redirectUrl)
+    }  else {
+      window.top.location.replace(this.validateSystemHostName().host)
+    }
   }
 }
 </script>
