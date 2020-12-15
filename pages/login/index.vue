@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     getLoginUrl () {
-      const url = `${this.authUrl}/oauth/authorize?response_type=code&client_id=`
+      const url = `${this.authUrl}/oauth/authorize?response_type=code&display=mobile&client_id=`
       return (
         url +
         this.config.clientId +

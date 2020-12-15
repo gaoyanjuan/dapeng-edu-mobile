@@ -25,6 +25,9 @@
       <template v-if="$route.query.type === 'task'">
         <publish-task />
       </template>
+      <template v-if="!$route.query.type">
+        <publish-homework />
+      </template>
     </div>
   </div>
 </template>
@@ -63,6 +66,8 @@ export default {
         case 'task':
           return '我的任务'
           break;
+        default:
+          return '我的作业'
       }
     }
   }
