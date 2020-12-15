@@ -1,18 +1,18 @@
 function validateSystemHostName () {
   const localPCParam = {
-    client_id: 'local-m5',
+    client_id: 'pc',
     token_name: 'access_token_t',
-    client_secret: 'secret'
+    client_secret: 'COm6AqoH'
   }
   const testPCParam = {
-    client_id: 'e36c78fd',
+    client_id: 'b4cd9c34',
     token_name: 'access_token_t',
-    client_secret: 'x8BS3cGDiz'
+    client_secret: 'VXAaTFh8yv'
   }
   const prodPCParam = {
-    client_id: '',
+    client_id: 'Dd8fbbB5',
     token_name: 'access_token',
-    client_secret: ''
+    client_secret: 'tz9Yfdtn6w'
   }
   if (process.browser) {
     localPCParam.host = `${location.protocol}//${location.host}`
