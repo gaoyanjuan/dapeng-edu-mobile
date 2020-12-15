@@ -9,11 +9,6 @@ import validateSystemHostName from '@/plugins/validate-system-hostname'
 
 export default {
   layout: 'navbar',
-  methods: {
-    ...mapActions('accesstoken', [
-      'getAuthToken'
-    ])
-  },
   async asyncData ({ redirect, app: { $cookiz } }) {
     if ($cookiz.get(validateSystemHostName().token_name)) {
       redirect('/')
@@ -36,12 +31,30 @@ export default {
     }
     // this.$cookiz.set('refresh_token', data.refresh_token)
     this.$cookiz.set('isLogin', true)
-    const route = localStorage.getItem('route')
-    if (route && route !== 'null') {
-      const redirectUrl = decodeURIComponent(route)
-      window.top.location.replace(this.validateSystemHostName().host + redirectUrl)
+    const query = this.getQuery(window.top.location.search)
+    const route = query.redirect
+    if (route) {
+      window.top.location.replace(this.validateSystemHostName().host + route)
     } else {
       window.top.location.replace(this.validateSystemHostName().host)
+    }
+  },
+  methods: {
+    ...mapActions('accesstoken', [
+      'getAuthToken'
+    ]),
+    getQuery (search) {
+      const url = decodeURI(search)
+      let query = {}
+      if (url.indexOf("?") != -1) {
+        const str = url.substr(1)
+        const pairs = str.split("&")
+        for(let i = 0; i < pairs.length; i ++) {
+            const pair = pairs[i].split("=")
+            query[pair[0]] = decodeURIComponent(pair[1])
+        }
+      }
+      return query
     }
   }
 }
