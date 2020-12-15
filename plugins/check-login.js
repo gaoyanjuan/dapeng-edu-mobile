@@ -1,8 +1,9 @@
 
 import Vue from 'vue'
+import validateSystemHostName from '@/plugins/validate-system-hostname'
 
 function login() {
-  if (!$nuxt.$cookiz.get('access_token')) {
+  if (!$nuxt.$cookiz.get(validateSystemHostName().token_name)) {
     localStorage.setItem('route', $nuxt.$route.fullPath)
     location.href="/login"
     return false

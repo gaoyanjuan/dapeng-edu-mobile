@@ -1,4 +1,5 @@
 import { get_cookie } from '@/utils/cookie-tool';
+import validateSystemHostName from '@/plugins/validate-system-hostname'
 
 export default {
   state: () => {
@@ -26,7 +27,7 @@ export default {
   actions: {
     async nuxtServerInit({commit, dispatch}, {req, app}) {
       //获取服务端cookie
-      const access_token = get_cookie(req.headers.cookie, 'access_token')
+      const access_token = get_cookie(req.headers.cookie, validateSystemHostName().token_name)
       if (access_token) {
         const userinfo = app.$cookiz.get('userinfo')
         if (userinfo) {

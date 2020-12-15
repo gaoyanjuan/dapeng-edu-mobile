@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import validateSystemHostName from '@/plugins/validate-system-hostname'
+
 export default {
   layout: 'navbar',
   data () {
@@ -34,7 +36,7 @@ export default {
     }
   },
   async asyncData ({ redirect, app: { $cookiz } }) {
-    if ($cookiz.get('access_token')) {
+    if ($cookiz.get(validateSystemHostName().token_name)) {
       redirect('/')
     }
   },
