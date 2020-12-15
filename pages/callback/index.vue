@@ -31,8 +31,9 @@ export default {
     }
     // this.$cookiz.set('refresh_token', data.refresh_token)
     this.$cookiz.set('isLogin', true)
-    const route = decodeURIComponent(window.top.location.search.split('redirect=')[1])
-    if (route) {
+    const query = window.top.location.search.split('redirect=')[1]
+    if (query) {
+      const route = decodeURIComponent(query)
       window.top.location.replace(this.validateSystemHostName().host + route)
     } else {
       window.top.location.replace(this.validateSystemHostName().host)
