@@ -165,7 +165,7 @@ export default {
     // 切换菜单时
     changeTab(name) {
       if(name === 'course') {
-        window.location.href = this.courseUrl
+        window.location.href = `${this.courseUrl}?r=${Math.random()}`
         return false
       }
       

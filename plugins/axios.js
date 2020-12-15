@@ -8,7 +8,6 @@ const HttpsAgent = require('agentkeepalive').HttpsAgent
 
 
 export default function ({ store, redirect, req, route, error, app: { $axios, $cookiz } }) {
-  
   $axios.defaults.httpAgent = new HttpAgent({
     keepAlive: true,
     freeSocketTimeout: 4000,
