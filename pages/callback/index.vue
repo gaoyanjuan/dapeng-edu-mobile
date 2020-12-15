@@ -25,8 +25,14 @@ export default {
       grant_type: 'authorization_code',
       redirect_uri: `${this.validateSystemHostName().host}/callback`
     })
-    this.$cookiz.set('access_token', data.access_token)
-    this.$cookiz.set('refresh_token', data.refresh_token)
+    if (process.env.mode === 'development') {
+      this.$cookiz.set('access_token', data.access_token)
+    } else {
+      this.$cookiz.set('access_token', data.access_token, {
+        domain: '.dapengjiaoyu.cn'
+      })
+    }
+    // this.$cookiz.set('refresh_token', data.refresh_token)
     this.$cookiz.set('isLogin', true)
     const redirectUrl = decodeURIComponent(localStorage.getItem('route'))
     if (redirectUrl) {
