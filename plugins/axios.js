@@ -140,7 +140,13 @@ function refreshToken (store, $cookiz) {
 
 function removeToken (store, $cookiz) {
   try {
-    $cookiz.remove(validateSystemHostName().token_name)
+    if (process.env.mode === 'development') {
+      $cookiz.remove(validateSystemHostName().token_name)
+    } else {
+      $cookiz.remove(validateSystemHostName().token_name, {
+        domain: '.dapengjiaoyu.cn'
+      })
+    }
     // $cookiz.remove('refresh_token')
     $cookiz.remove('userinfo')
     store.dispatch('user/appendUserInfo', null)
