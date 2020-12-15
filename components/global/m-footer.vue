@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 底部菜单 -->
-    <van-tabbar v-model="active" z-index="10">
+    <van-tabbar v-model="active" z-index="10" :before-change="changeTab">
 
       <!-- 广场 -->
       <van-tabbar-item name="square" :to="calcRoute">
@@ -160,6 +160,15 @@ export default {
     // 显示发布菜单
     showPublishMenus() {
       this.show = true
+    },
+
+    // 切换菜单时
+    changeTab(name) {
+      if(name === 'course') {
+        return false
+      }
+
+      this.active = name
     },
 
     // 进入发布页面
