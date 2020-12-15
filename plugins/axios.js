@@ -106,7 +106,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           }
         } else {
           // 用户未登录状态下,请求需要登录的接口
-          redirect('/login')
+          redirect(`/login?redirect=${route.fullPath}`)
         }
       } else if (error.response.status == 409) {
         // http状态500，请求API找不到，重定向到404页面   

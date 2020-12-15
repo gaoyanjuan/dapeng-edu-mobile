@@ -140,7 +140,6 @@ export default {
       }
       // this.$cookiz.remove('refresh_token')
       this.$cookiz.remove('userinfo')
-      localStorage.setItem('route', null)
       const redirectUrl = `${location.protocol}//${location.host}`
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
