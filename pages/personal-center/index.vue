@@ -130,8 +130,10 @@ export default {
 
     // 退出登录
     onLogoutEvent() {
-      this.$cookiz.remove('access_token')
-      this.$cookiz.remove('refresh_token')
+      this.$cookiz.remove('access_token', {
+        domain: '.dapengjiaoyu.cn'
+      })
+      // this.$cookiz.remove('refresh_token')
       this.$cookiz.remove('userinfo')
       localStorage.setItem('route', null)
       const redirectUrl = `${location.protocol}//${location.host}`
