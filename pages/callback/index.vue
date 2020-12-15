@@ -5,6 +5,8 @@
 <script>
 import { getUrlParam } from '@/plugins/assist'
 import { mapActions } from 'vuex'
+import validateSystemHostName from '@/plugins/validate-system-hostname'
+
 export default {
   layout: 'navbar',
   methods: {
@@ -13,7 +15,7 @@ export default {
     ])
   },
   async asyncData ({ redirect, app: { $cookiz } }) {
-    if ($cookiz.get('access_token')) {
+    if ($cookiz.get(validateSystemHostName().token_name)) {
       redirect('/')
     }
   },
@@ -26,9 +28,9 @@ export default {
       redirect_uri: `${this.validateSystemHostName().host}/callback`
     })
     if (process.env.mode === 'development') {
-      this.$cookiz.set('access_token', data.access_token)
+      this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token)
     } else {
-      this.$cookiz.set('access_token', data.access_token, {
+      this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
         domain: '.dapengjiaoyu.cn'
       })
     }

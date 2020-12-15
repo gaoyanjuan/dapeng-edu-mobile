@@ -130,9 +130,13 @@ export default {
 
     // 退出登录
     onLogoutEvent() {
-      this.$cookiz.remove('access_token', {
-        domain: '.dapengjiaoyu.cn'
-      })
+      if (process.env.mode === 'development') {
+        this.$cookiz.remove(this.validateSystemHostName().token_name)
+      } else {
+        this.$cookiz.remove(this.validateSystemHostName().token_name, {
+          domain: '.dapengjiaoyu.cn'
+        })
+      }
       // this.$cookiz.remove('refresh_token')
       this.$cookiz.remove('userinfo')
       localStorage.setItem('route', null)
