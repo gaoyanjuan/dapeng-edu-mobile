@@ -3,8 +3,9 @@ module.exports = {
     MODE: 'development',
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',
+    DP_COURSE_URL: 'https://test.dapengjiaoyu.cn/dp-course',
     BASE_URL: 'http://ag.kong.dapeng.lan/pcmove',
-    OLD_BASE_URL: 'http://192.168.1.62/pc/api', //oldpc接口
+    OLD_BASE_URL: 'http://192.168.1.62/pc/api',
     DP_AUTH_URL: 'http://passport.dapeng.lan',
     REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan',
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
@@ -17,8 +18,7 @@ module.exports = {
     REFRESH_TOKEN_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn',
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',
-    // BASE_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn/pcmove',
-    // OLD_BASE_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn/pc',
+    DP_COURSE_URL: 'https://test.dapengjiaoyu.cn/dp-course',
     BASE_URL: 'http://172.17.207.43:8000/pcmove',
     OLD_BASE_URL: 'http://172.17.207.43:8000/pc',
 
@@ -44,6 +44,7 @@ module.exports = {
     DP_M_URL: 'http://m.dapengjiaoyu.cn',
     BASE_URL: 'http://pc-move-appl.dev.dapengjiaoyu.cn', // 外网后端地址
     OSS_URL: 'https://image.dapengjiaoyu.com',
+    DP_COURSE_URL: 'https://www.dapengjiaoyu.cn/dp-course',
     PORT: 80,
     HOST: '0.0.0.0',
     FAILED_COLOR: '#0CB65B',

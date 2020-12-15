@@ -65,6 +65,13 @@ export default {
     }
   },
   mounted () {
+
+    this.menus.forEach( (item, inx) => {
+      if(item.id === this.$route.query.type) {
+        this.menusIndex = inx
+      }
+    })
+
     this.$nextTick(() => {
       if (window.anchorId) {
         const element = document.getElementById(window.anchorId)

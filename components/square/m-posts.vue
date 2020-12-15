@@ -290,8 +290,8 @@ export default {
      */
     openImagePreview(index) {
       this.imagePreview = {
-        images: this.handleFilterImage(this.listItemData.imgInfo),
         startPosition: index,
+        images: this.listItemData.img,
         isPraise: this.listItemData.isPraise,
         isCollection: this.listItemData.isCollection,
         praiseCount: this.listItemData.praiseCount,
@@ -299,14 +299,7 @@ export default {
         show: true
       }
     },
-    // 图片提取器
-    handleFilterImage(images) {
-      let gallery = []
-      images.forEach((item) => {
-        gallery.push(item.url)
-      })
-      return gallery
-    },
+
     /** 打开/关闭菜单 */
     onShowMenus() {
       if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
