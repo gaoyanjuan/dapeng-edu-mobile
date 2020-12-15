@@ -3,19 +3,20 @@
     <!-- 底部菜单 -->
     <van-tabbar v-model="active" z-index="10">
 
-      <!-- 返回官网 -->
-      <van-tabbar-item name="home" :url="mBaseUrl">
-        <span class="tabbar-btn-text-active">返回官网</span>
-        <template #icon="props">
-          <img :src="props.active ? home.active : home.active" />
-        </template>
-      </van-tabbar-item>
-
       <!-- 广场 -->
       <van-tabbar-item name="square" :to="calcRoute">
         <span>广场</span>
         <template #icon="props">
           <img :src="props.active ? square.active : square.inactive" />
+        </template>
+      </van-tabbar-item>
+
+      <!-- 课程 -->
+      <van-tabbar-item name="course" :url="courseUrl">
+        <!--class="tabbar-btn-text-active"-->
+        <span>课程</span>
+        <template #icon="props">
+          <img :src="props.active ? course.active : course.inactive" />
         </template>
       </van-tabbar-item>
 
@@ -97,13 +98,14 @@ export default {
   data: () => ({
     show: false,
     active: 'square',
-    mBaseUrl : process.env.mBaseUrl,
-    home: {
-      active: require('@/assets/icons/tabbar/bar-home.png'),
-    },
+    courseUrl: process.env.courseUrl,
     square: {
       active: require('@/assets/icons/tabbar/bar-square-active.png'),
       inactive: require('@/assets/icons/tabbar/bar-square.png'),
+    },
+    course: {
+      active: require('@/assets/icons/tabbar/bar-course-active.png'),
+      inactive: require('@/assets/icons/tabbar/bar-course.png'),
     },
     upload: {
       active: require('@/assets/icons/tabbar/bar-submit.png'),
@@ -147,8 +149,8 @@ export default {
     const to = this.$route || { name: 'index' }
     if (to.name === 'index') {
       this.active = 'square'
-    } else if (to.name === 'home') {
-      this.active = 'home'
+    } else if (to.name === 'course') {
+      this.active = 'course'
     } else if (to.name === 'activities') {
       this.active = 'activities'
     } else if (to.name === 'personal-center') {

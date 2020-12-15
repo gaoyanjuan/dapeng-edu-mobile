@@ -13,6 +13,11 @@
           <nuxt-child />
         </template>
       </van-tab>
+      <van-tab title="成长" name="growth" to="/growth">
+        <template v-if="$route.name === 'index-growth'">
+          <nuxt-child />
+        </template>
+      </van-tab>
       <van-tab title="作业" name="homework">
         <template #title>
           <div class="tab-drop-menus-wrap">
@@ -31,11 +36,6 @@
       </van-tab>
       <van-tab title="动态" name="dynamic" to="/dynamic">
         <template v-if="$route.name === 'index-dynamic'">
-          <nuxt-child />
-        </template>
-      </van-tab>
-      <van-tab title="成长" name="growth" to="/growth">
-        <template v-if="$route.name === 'index-growth'">
           <nuxt-child />
         </template>
       </van-tab>
