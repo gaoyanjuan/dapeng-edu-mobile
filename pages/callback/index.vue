@@ -36,10 +36,11 @@ export default {
     }
     // this.$cookiz.set('refresh_token', data.refresh_token)
     this.$cookiz.set('isLogin', true)
-    const redirectUrl = decodeURIComponent(localStorage.getItem('route'))
-    if (redirectUrl !== 'null') {
+    const route = localStorage.getItem('route')
+    if (route) {
+      const redirectUrl = decodeURIComponent(route)
       window.top.location.replace(this.validateSystemHostName().host + redirectUrl)
-    }  else {
+    } else {
       window.top.location.replace(this.validateSystemHostName().host)
     }
   }
