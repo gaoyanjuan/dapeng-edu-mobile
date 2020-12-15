@@ -11,8 +11,8 @@
         </template>
       </van-tabbar-item>
 
-      <!-- 课程 -->
-      <van-tabbar-item name="course" :url="courseUrl">
+      <!-- 课程 :url="courseUrl"-->
+      <van-tabbar-item name="course">
         <span class="tabbar-btn-text-active">课程</span>
         <template #icon="props">
           <img :src="props.active ? course.inactive : course.inactive" />
@@ -165,9 +165,10 @@ export default {
     // 切换菜单时
     changeTab(name) {
       if(name === 'course') {
+        window.location.href = this.courseUrl
         return false
       }
-
+      
       this.active = name
     },
 
