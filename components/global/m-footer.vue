@@ -13,10 +13,9 @@
 
       <!-- 课程 -->
       <van-tabbar-item name="course" :url="courseUrl">
-        <!--class="tabbar-btn-text-active"-->
-        <span>课程</span>
+        <span class="tabbar-btn-text-active">课程</span>
         <template #icon="props">
-          <img :src="props.active ? course.active : course.inactive" />
+          <img :src="props.active ? course.inactive : course.inactive" />
         </template>
       </van-tabbar-item>
 
@@ -210,7 +209,8 @@ export default {
 }
 
 .tabbar-btn-text-active {
-  color: #0CB65B;
+  // color: #0CB65B;
+  color: #d1d3d5;
 }
 
 /deep/ .van-overlay {
