@@ -31,8 +31,7 @@ export default {
     }
     // this.$cookiz.set('refresh_token', data.refresh_token)
     this.$cookiz.set('isLogin', true)
-    const query = this.getQuery(window.top.location.search)
-    const route = query.redirect
+    const route = decodeURIComponent(window.top.location.search.split('redirect=')[1])
     if (route) {
       window.top.location.replace(this.validateSystemHostName().host + route)
     } else {
@@ -42,20 +41,7 @@ export default {
   methods: {
     ...mapActions('accesstoken', [
       'getAuthToken'
-    ]),
-    getQuery (search) {
-      const url = decodeURI(search)
-      let query = {}
-      if (url.indexOf("?") != -1) {
-        const str = url.substr(1)
-        const pairs = str.split("&")
-        for(let i = 0; i < pairs.length; i ++) {
-            const pair = pairs[i].split("=")
-            query[pair[0]] = decodeURIComponent(pair[1])
-        }
-      }
-      return query
-    }
+    ])
   }
 }
 </script>
