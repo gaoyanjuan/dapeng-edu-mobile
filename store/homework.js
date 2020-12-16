@@ -274,10 +274,18 @@ export default {
               courseType: params.type
             }
           }).then(res => {
-            course.data.forEach((item, index) => {
-              item.published = res.data[index].published
-              item.submit = res.data[index].submit
-            })
+            
+            // 两个数据结构，拼装为需要的数据结构，有更好方法可以优化
+            for (let i = 0; i < res.data.length; i++) {
+              for (let j = 0; j < course.data.length; j++) { 
+                if (course.data[j].id === res.data[i].courseId) { 
+                  course.data[j].published = res.data[i].published
+                  course.data[j].submit = res.data[i].submit
+                  break
+                }
+              }
+            }
+
             const pageInfo = { pages: params.page, size: 10 }
             commit('appendOpenCourses', { data: course.data, pageInfo, clear: params.clear })
             return course.data

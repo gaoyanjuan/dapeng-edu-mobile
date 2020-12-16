@@ -115,7 +115,6 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Client from '@/utils/client'
-import { randomFileName } from '@/utils/util'
 import { formatSlashDate } from '@/plugins/filters'
 export default {
   name:'Submit',
@@ -571,10 +570,7 @@ export default {
         stsToken: securityToken
       }
 
-      const date = formatSlashDate(new Date())
-      const random = randomFileName(8)
-      const fileName = date + '/' + random + '.' + file.file.name.split('.').pop()
-
+      const fileName = this.generateFileName(file)
       const render = new FileReader()
       render.readAsDataURL(file.file)
       render.onload = (event) => {
@@ -595,8 +591,21 @@ export default {
       }
     },
 
+    /**
+     * 生成OSS图片文件名
+     * 域名/年-月-日/userId/反转时间戳_SDU=
+    */
+    generateFileName(file) {
+      const userId = this.userInfo.userId
+      const date = formatSlashDate(new Date())
+      let reverseDate = Math.round(new Date() / 1000).toString()
+      reverseDate = reverseDate.split('').reverse().join('')
+      return date + '/' + userId +'/'+ reverseDate + '_SDU=.' + file.file.name.split('.').pop()
+    },
+
     /* 创造图片对象 */
     handleMakeImage(e, url) {
+      console.log(url)
       const _this = this
       const img = window.URL.createObjectURL(e.file)
       const imgObj = new Image()
