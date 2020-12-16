@@ -12,7 +12,7 @@
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: ''"
+            :key="item ? item.id: index"
             listType="dynamic-hot"
             :propIndex="index"
             :listItemData="item"
