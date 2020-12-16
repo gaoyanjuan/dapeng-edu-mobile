@@ -171,7 +171,7 @@ export function formatSlashDate(date) {
   if (!date) {
     return '---'
   }
-  return dayjs(date).format('YYYY/MM') // 使用 dayjs 格式化时间
+  return dayjs(date).format('YYYY-MM-DD') // 使用 dayjs 格式化时间
 }
 
 const filter = {

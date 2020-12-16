@@ -71,9 +71,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Client from '@/utils/client'
-import { randomFileName } from '@/utils/util'
 import { formatSlashDate } from '@/plugins/filters'
 
 export default {
@@ -105,6 +104,7 @@ export default {
       startPosition: 1,
     },
   }),
+
   watch: {
     content(n, o) {
       if (n.trim().length !== 0) {
@@ -114,6 +114,13 @@ export default {
       }
     },
   },
+
+  computed: {
+    ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    })
+  },
+
   mounted() {
     this.$nextTick(() => { 
       this.listenHight()
@@ -179,10 +186,7 @@ export default {
         stsToken: securityToken
       }
 
-      const date = formatSlashDate(new Date())
-      const random = randomFileName(8)
-      const fileName = date + '/' + random + '.' + file.file.name.split('.').pop()
-
+      const fileName = this.generateFileName(file)
       const render = new FileReader()
       render.readAsDataURL(file.file)
       render.onload = (event) => {
@@ -201,6 +205,18 @@ export default {
           _this.uploadStatus = true
         })
       }
+    },
+
+    /**
+     * 生成OSS图片文件名
+     * 域名/年-月-日/userId/反转时间戳_SDU=
+    */
+    generateFileName(file) {
+      const userId = this.userInfo.userId
+      const date = formatSlashDate(new Date())
+      let reverseDate = Math.round(new Date() / 1000).toString()
+      reverseDate = reverseDate.split('').reverse().join('')
+      return date + '/' + userId +'/'+ reverseDate + '_SDU=.' + file.file.name.split('.').pop()
     },
 
     // 创造图片对象 */

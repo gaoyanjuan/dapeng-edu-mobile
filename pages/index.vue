@@ -132,6 +132,12 @@ export default {
     tabDown: require('@/assets/icons/navbar/nav-arrow-down.png'),
   }),
 
+  watch:{
+    $route (to,from){
+      this.setRoutePosition(to)
+    }
+  },
+
   computed: {
     ...mapGetters({
       userInfo: 'user/userInfoGetters'
@@ -149,34 +155,13 @@ export default {
   },
 
   mounted () {
+
+    const to = this.$route
+    
     /**
      * 路由定位
      */
-    const to = this.$route
-    if (to.name === 'index') {
-      this.activeName = 'recommend'
-    } else if (to.name === 'index-attention') {
-      this.activeName = 'attention'
-    } else if (to.name === 'index-homework') {
-      this.activeName = 'homework'
-    } else if (to.name === 'index-growth') {
-      this.activeName = 'growth'
-    } else if (to.name === 'index-dynamic') {
-      this.activeName = 'dynamic'
-    } else if (to.name === 'index-works') {
-      this.activeName = 'works'
-    } else if (to.name === 'index-small-video') {
-      this.activeName = 'small-video'
-    }
-    // else if (to.name === 'index-video') {
-    //   this.activeName = 'video'
-    // } 
-    // else if (to.name === 'index-reading') {
-    //   this.activeName = 'reading'
-    // } 
-    // else if (to.name === 'index-part-time-task') {
-    //   this.activeName = 'part-time-task'
-    // }
+    this.setRoutePosition(to)
 
     /***
      * 下拉菜单选择定位
@@ -281,6 +266,34 @@ export default {
         // this.scrollTop = 'top:'+ (88 - params.scrollTop) +'px;'
         this.scrollTop = `top:${(88 - params.scrollTop) / 37.5}rem;`
       }
+    },
+
+    /** 路由定位 */
+    setRoutePosition(to) {
+      if (to.name === 'index') {
+        this.activeName = 'recommend'
+      } else if (to.name === 'index-attention') {
+        this.activeName = 'attention'
+      } else if (to.name === 'index-homework') {
+        this.activeName = 'homework'
+      } else if (to.name === 'index-growth') {
+        this.activeName = 'growth'
+      } else if (to.name === 'index-dynamic') {
+        this.activeName = 'dynamic'
+      } else if (to.name === 'index-works') {
+        this.activeName = 'works'
+      } else if (to.name === 'index-small-video') {
+        this.activeName = 'small-video'
+      }
+      // else if (to.name === 'index-video') {
+      //   this.activeName = 'video'
+      // } 
+      // else if (to.name === 'index-reading') {
+      //   this.activeName = 'reading'
+      // } 
+      // else if (to.name === 'index-part-time-task') {
+      //   this.activeName = 'part-time-task'
+      // }
     },
 
     /***下拉菜单选择定位 */
