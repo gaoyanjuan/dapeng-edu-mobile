@@ -7,22 +7,18 @@
     "build:local": "cross-env MODE=dev nuxt build && npm start",
     "dev": "cross-env MODE=dev nuxt",
     "start": "cross-env MODE=dev nuxt start",
-    "test": "cross-env MODE=test nuxt build && ENABLE_NODE_LOG=YES pm2 start --only M-5.1-test",
     "dev:spa": "cross-env MODE=dev nuxt build  --spa",
     "test:spa": "cross-env MODE=test nuxt build  --spa",
     "pro:spa": "cross-env MODE=pro nuxt build  --spa",
-    "pro": "cross-env MODE=pro nuxt build && ENABLE_NODE_LOG=YES pm2 start --only M-5.1-pro",
-    "build:test": "cross-env MODE=test nuxt build && pm2 restart all",
-    "build": "cross-env MODE=pro nuxt build && pm2 restart all",
-    "an": "cross-env MODE=dev nuxt build --analyze"
+    "build:test": "cross-env MODE=test nuxt build",
+    "build:pro": "cross-env MODE=pro nuxt build",
+    "pm2:test": "ENABLE_NODE_LOG=YES pm2 start --only wap-test",
+    "pm2:pro": "ENABLE_NODE_LOG=YES pm2 start --only wap-pro",
+    "pm2:restart": "pm2 restart all"
   },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
-    },
-    "nuxt": {
-      "port": "3000",
-      "host": "127.0.0.1"
     }
   },
   "dependencies": {
