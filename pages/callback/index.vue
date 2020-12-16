@@ -25,6 +25,7 @@ export default {
     })
     const token = jwtDecode(data.refresh_token)
     const expiresTime = new Date(token.exp * 1000)
+    console.log(expiresTime)
     if (process.env.mode === 'development') {
       this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
         expires: expiresTime
