@@ -121,10 +121,15 @@ export default {
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
+            const token = jwtDecode(res.data.refresh_token)
+            const expiresTime = new Date(token.exp * 1000)
             if (process.env.mode === 'development') {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token)
+              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
+                expires: expiresTime
+              })
             } else {
               this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
+                expires: expiresTime,
                 domain: '.dapengjiaoyu.cn'
               })
             }

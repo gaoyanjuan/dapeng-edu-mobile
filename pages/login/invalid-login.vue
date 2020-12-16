@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     toQuit () {
-      this.$router.replace('/')
+      location.href = '/'
     },
     toLogin () {
       this.$router.replace('/login')
