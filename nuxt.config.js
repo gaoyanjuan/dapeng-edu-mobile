@@ -1,6 +1,11 @@
 import path from 'path'
 const env = require('./env')
 const global = require('./plugins/global')
+const timestamp = new Date().getTime()
+let isDev = true
+if (process.env.MODE === 'pro' || process.env.MODE === 'test') {
+  isDev = false
+}
 
 export default {
   target: 'server',
@@ -40,8 +45,8 @@ export default {
       { property: 'og:site_name', content: '大鹏教育职业技能培训' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: 'https://image.dapengjiaoyu.cn/ijjctyun.png' },
+      { rel: 'shortcut icon', type: 'image/x-icon', href: 'https://image.dapengjiaoyu.cn/ijjctyun.png' }
     ],
     script: [
       {
@@ -149,7 +154,14 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
-    filenames: process.env.MODE !== 'dev' ? { css: '[contenthash].css' } : { css: '[name].css' } ,
+    filenames: {
+      app: ({ isDev }) => isDev ? '[name].js' : '[contenthash].' + timestamp + '.js',
+      chunk: ({ isDev }) => isDev ? '[name].js' : '[contenthash].' + timestamp + '.js',
+      css: ({ isDev }) => isDev ? '[name].css' : '[contenthash].' + timestamp + '.css',
+      img: ({ isDev }) => isDev ? '[path][name].[ext]' : 'img/[contenthash:7].' + timestamp + '.[ext]',
+      font: ({ isDev }) => isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].' + timestamp + '.[ext]',
+      video: ({ isDev }) => isDev ? '[path][name].[ext]' : 'videos/[contenthash:7].' + timestamp + '.[ext]'
+    },
     postcss: {
       preset: {
         autoprefixer: true

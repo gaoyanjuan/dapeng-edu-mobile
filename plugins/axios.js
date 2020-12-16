@@ -163,6 +163,6 @@ function login(params, redirect) {
   }).then(() => {
     redirect('/login')
   }).catch(() => {
-    redirect('/')
+    location.href = '/'
   })
 }

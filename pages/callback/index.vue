@@ -6,6 +6,7 @@
 import { getUrlParam } from '@/plugins/assist'
 import { mapActions } from 'vuex'
 import validateSystemHostName from '@/plugins/validate-system-hostname'
+import jwtDecode from 'jwt-decode'
 
 export default {
   layout: 'navbar',
@@ -22,10 +23,16 @@ export default {
       grant_type: 'authorization_code',
       redirect_uri: `${this.validateSystemHostName().host}/callback`
     })
+    const token = jwtDecode(data.refresh_token)
+    const expiresTime = new Date(token.exp * 1000)
+    console.log(expiresTime)
     if (process.env.mode === 'development') {
-      this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token)
+      this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
+        expires: expiresTime
+      })
     } else {
       this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
+        expires: expiresTime,
         domain: '.dapengjiaoyu.cn'
       })
     }
