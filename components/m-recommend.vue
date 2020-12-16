@@ -4,21 +4,21 @@
     <m-swipe />
 
     <section class="recommend-wrap">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" :immediate-check="false">
+      <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="recommendListGetters.list.length">
-          <div v-for="(res, i) in recommendListGetters.list" :key="i">
-            <m-posts
-              :id="res.recommendTopic ? res.recommendTopic.id : ''"
-              :propSquareType="res.hotType"
-              listType="recommend"
-              :propIndex="i"
-              :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
-              :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
-              :listItemData="res.recommendTopic ? res.recommendTopic : {}"
-              :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
-              :path="`/details/${pathType(res)}`"
-            />
-          </div>
+          <m-posts
+            v-for="(res, i) in recommendListGetters.list"
+            :key="i"
+            :id="res.recommendTopic ? res.recommendTopic.id : ''"
+            :propSquareType="res.hotType"
+            listType="recommend"
+            :propIndex="i"
+            :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
+            :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
+            :listItemData="res.recommendTopic ? res.recommendTopic : {}"
+            :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
+            :path="`/details/${pathType(res)}`"
+          />
         </template>
         <template v-if="!recommendListGetters.list.length && finished">
           <div class="works-blank-wrap">
@@ -40,7 +40,8 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      navRoute:'/details/homework'
+      finishedTxt: '没有更多了',
+      blank:require('@/assets/icons/blank/have-no-homework.png')
     }
   },
   computed: {
