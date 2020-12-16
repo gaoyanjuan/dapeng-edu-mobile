@@ -24,7 +24,7 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <m-posts
           v-for="(item, index) in growthListGetters.list"
-          :key="item ? item.id: ''"
+          :key="item ? item.id: index"
           :id="item ? item.id: ''"
           listType="growth"
           :propIndex="index"
