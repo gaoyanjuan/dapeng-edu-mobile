@@ -70,6 +70,10 @@ export default {
     }
   },
   mounted () {
+    if(!this.recommendListGetters.list.length) {
+      this.finishedTxt = ''
+    }
+
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
@@ -131,4 +135,30 @@ export default {
   padding-bottom: 65px;
   background-color: #f8f8f8;
 }
+
+
+.recommend-wrap .works-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.recommend-wrap .works-blank-wrap .blank-img {
+  width: 240px;
+  height: 126px;
+  margin-top: 24px;
+}
+
+.recommend-wrap .works-blank-wrap .blank-txt {
+  margin-top: 12px;
+  width: max-content;
+  height: 20px;
+  font-size: 14px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: #8D8E8E;
+  line-height: 20px;
+}
+
 </style>
