@@ -605,7 +605,6 @@ export default {
 
     /* 创造图片对象 */
     handleMakeImage(e, url) {
-      console.log(url)
       const _this = this
       const img = window.URL.createObjectURL(e.file)
       const imgObj = new Image()
