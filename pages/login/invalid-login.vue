@@ -40,10 +40,13 @@ export default {
       this.$cookiz.remove(validateSystemHostName().token_name)
     } else {
       this.$cookiz.remove(validateSystemHostName().token_name, {
+        path: '/',
         domain: '.dapengjiaoyu.cn'
       })
     }
-    this.$cookiz.remove('userinfo')
+    this.$cookiz.remove('userinfo', {
+      path: '/'
+    })
     store.dispatch('user/appendUserInfo', null)
     if (this.$route.query.type === 'failure') {
       this.content = '登录失效'

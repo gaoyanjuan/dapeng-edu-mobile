@@ -103,6 +103,13 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
+    '/api/token/check_token': {
+      target: env[process.env.MODE].REFRESH_TOKEN_URL, // 验证token
+      pathRewrite: {
+        '^/api/token/check_token': '/jti',
+        changeOrigin: true
+      }
+    },
     '/api/token/get_token': {
       target: env[process.env.MODE].DP_AUTH_URL, // 目标接口域名
       pathRewrite: {

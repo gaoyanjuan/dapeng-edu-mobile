@@ -144,14 +144,23 @@ function removeToken (store, $cookiz) {
         $cookiz.remove(validateSystemHostName().token_name)
       } else {
         $cookiz.remove(validateSystemHostName().token_name, {
+          path: '/',
           domain: '.dapengjiaoyu.cn'
         })
       }
       // $cookiz.remove('refresh_token')
-      $cookiz.remove('userinfo')
-      store.dispatch('user/appendUserInfo', null)
+      $cookiz.remove('userinfo', {
+        path: '/'
+      })
+      store.commit('user/appendUserInfo', null)
     }
-  } catch (error) {}
+  } catch (error) {
+    if (!process.browser) {
+      if (error) {
+        console.error(filter.formatDate(new Date()), '删除token错误', error)
+      }
+    }
+  }
 }
 
 function login(params, redirect) {

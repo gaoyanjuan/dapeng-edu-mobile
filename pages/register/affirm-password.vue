@@ -130,6 +130,7 @@ export default {
             } else {
               this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
                 expires: expiresTime,
+                path: '/',
                 domain: '.dapengjiaoyu.cn'
               })
             }
