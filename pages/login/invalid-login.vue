@@ -37,13 +37,13 @@ export default {
   },
   mounted () {
     if (process.env.mode === 'development') {
-      this.$cookiz.remove(validateSystemHostName().token_name)
+      this.$cookiz.remove(this.validateSystemHostName().token_name)
     } else {
-      this.$cookiz.remove(validateSystemHostName().token_name, {
+      this.$cookiz.remove(this.validateSystemHostName().token_name, {
         path: '/',
         domain: '.dapengjiaoyu.cn'
       })
-      this.$cookiz.remove(validateSystemHostName().token_name)
+      this.$cookiz.remove(this.validateSystemHostName().token_name)
     }
     this.$cookiz.remove('userinfo', {
       path: '/'

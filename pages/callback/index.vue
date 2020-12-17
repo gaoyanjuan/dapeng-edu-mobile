@@ -16,6 +16,9 @@ export default {
     }
   },
   async mounted () {
+    if (this.$cookiz.get(this.validateSystemHostName().token_name) && window.top) {
+      window.top.location.replace(this.validateSystemHostName().host)
+    }
     const fullPath = this.$route.fullPath
     const code = getUrlParam(fullPath, '?', 'code')
     const { data } = await this.getAuthToken({

@@ -41,6 +41,9 @@ export default {
     }
   },
   mounted () {
+    if (this.$cookiz.get(this.validateSystemHostName().token_name) && window.top) {
+      window.top.location.replace(this.validateSystemHostName().host)
+    }
     this.width = document.body.clientWidth
     const ifm = document.getElementById('iframe-wrap')
     this.height = document.body.scrollHeight
