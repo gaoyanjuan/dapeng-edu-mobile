@@ -1,5 +1,6 @@
 import { get_cookie } from '@/utils/cookie-tool';
 import validateSystemHostName from '@/plugins/validate-system-hostname'
+import filter from '@/plugins/filters'
 
 export default {
   state: () => {
@@ -29,6 +30,16 @@ export default {
       //获取服务端cookie
       const access_token = get_cookie(req.headers.cookie, validateSystemHostName().token_name)
       if (access_token) {
+        await dispatch('user/checkToken', access_token)
+        .catch((error) => {
+          if (error) {
+            if (error.response) {
+              console.error(filter.formatDate(new Date()), error.config.url, error.response.status, error.response.data)
+            } else {
+              console.error(filter.formatDate(new Date()), error.config.url, error)
+            }
+          }
+        })
         const userinfo = app.$cookiz.get('userinfo')
         if (userinfo) {
           commit('user/appendUserInfo', userinfo)
@@ -39,13 +50,17 @@ export default {
               const userinfo = {
                 userId, nickname, avatar, dpAccount, mobile, loginName
               }
-              app.$cookiz.set('userinfo', userinfo)
+              app.$cookiz.set('userinfo', userinfo, {
+                path: '/'
+              })
             }
           })
         }
       } else {
         commit('user/appendUserInfo', null)
-        app.$cookiz.remove('userinfo')
+        app.$cookiz.remove('userinfo', {
+          path: '/'
+        })
       }
     }
   },

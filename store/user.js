@@ -472,6 +472,14 @@ export const mutations = {
 }
 
 export const actions = {
+  async checkToken ({ commit }, params) {
+    const res = await this.$axios.get('token/check_token', {
+      params: {
+        access_token: params
+      }
+    })
+    return res
+  },
   async getUserDetails ({ commit, state }) {
     const res = await this.$axios.get('old/users/details')
     .catch((error) => {})

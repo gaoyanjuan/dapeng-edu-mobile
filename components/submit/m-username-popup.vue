@@ -58,7 +58,9 @@ export default {
           this.editUserInfo({...this.showPopup.info,loginName: this.username}).then( res => {
             if(res.status === 200) {
               this.$emit('submit')
-              this.$cookiz.remove('userinfo')
+              this.$cookiz.remove('userinfo', {
+                path: '/'
+              })
             } else {
               this.$toast(res.data.message)
             }

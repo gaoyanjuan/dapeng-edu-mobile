@@ -135,11 +135,14 @@ export default {
         this.$cookiz.remove(this.validateSystemHostName().token_name)
       } else {
         this.$cookiz.remove(this.validateSystemHostName().token_name, {
+          path: '/',
           domain: '.dapengjiaoyu.cn'
         })
       }
       // this.$cookiz.remove('refresh_token')
-      this.$cookiz.remove('userinfo')
+      this.$cookiz.remove('userinfo', {
+        path: '/'
+      })
       const redirectUrl = `${location.protocol}//${location.host}`
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
