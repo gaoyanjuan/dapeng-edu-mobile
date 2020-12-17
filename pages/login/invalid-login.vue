@@ -43,6 +43,7 @@ export default {
         path: '/',
         domain: '.dapengjiaoyu.cn'
       })
+      this.$cookiz.remove(validateSystemHostName().token_name)
     }
     this.$cookiz.remove('userinfo', {
       path: '/'
