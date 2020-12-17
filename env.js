@@ -38,7 +38,7 @@ module.exports = {
     DP_M_URL: 'http://m.dapengjiaoyu.cn', // 老m站地址
     BASE_URL: 'http://172.17.255.64:8000/pcmove-v1', // 内网网关广场模块地址
     OLD_BASE_URL: 'http://172.17.255.64:8000/pc', // 内网网关课程模块地址
-    DP_AUTH_URL: 'http://passport.dapengjiaoyu.cn', // 认证中心获取token地址
+    DP_AUTH_URL: 'https://passport.dapengjiaoyu.cn', // 认证中心获取token地址
     OSS_URL: 'https://image.dapengjiaoyu.com', // oss资源地址
     TAPI_URL: 'http://api-appl.vpc.dapengjiaoyu.cn', // 获取订单token地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
