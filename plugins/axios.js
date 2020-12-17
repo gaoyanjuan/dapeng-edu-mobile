@@ -147,6 +147,7 @@ function removeToken (store, $cookiz) {
           path: '/',
           domain: '.dapengjiaoyu.cn'
         })
+        $cookiz.remove(validateSystemHostName().token_name)
       }
       // $cookiz.remove('refresh_token')
       $cookiz.remove('userinfo', {
