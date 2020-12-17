@@ -36,6 +36,15 @@ export default {
     }
   },
   mounted () {
+    if (process.env.mode === 'development') {
+      this.$cookiz.remove(validateSystemHostName().token_name)
+    } else {
+      this.$cookiz.remove(validateSystemHostName().token_name, {
+        domain: '.dapengjiaoyu.cn'
+      })
+    }
+    this.$cookiz.remove('userinfo')
+    store.dispatch('user/appendUserInfo', null)
     if (this.$route.query.type === 'failure') {
       this.content = '登录失效'
     } else if (this.$route.query.type === 'displacement') {
