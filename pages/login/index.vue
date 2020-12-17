@@ -1,6 +1,7 @@
 <template>
   <div class="login-wrap">
     <iframe
+      v-if="showIframe"
       id="iframe-wrap"
       :src="src"
       :width="width"
@@ -19,6 +20,7 @@ export default {
   layout: 'navbar',
   data () {
     return {
+      showIframe: false,
       config: {
         // oauth2相关
         clientId: '',
@@ -43,47 +45,49 @@ export default {
   mounted () {
     if (this.$cookiz.get(this.validateSystemHostName().token_name) && window.top) {
       window.top.location.replace(this.validateSystemHostName().host)
-    }
-    this.width = document.body.clientWidth
-    const ifm = document.getElementById('iframe-wrap')
-    this.height = document.body.scrollHeight
-    this.config.clientId = this.validateSystemHostName().client_id
-    this.config.clientSecret = this.validateSystemHostName().client_secret
-    this.config.redirect_uri = `${this.validateSystemHostName().host}/callback`
+    } else {
+      this.showIframe = true
+      this.width = document.body.clientWidth
+      const ifm = document.getElementById('iframe-wrap')
+      this.height = document.body.scrollHeight
+      this.config.clientId = this.validateSystemHostName().client_id
+      this.config.clientSecret = this.validateSystemHostName().client_secret
+      this.config.redirect_uri = `${this.validateSystemHostName().host}/callback`
 
-    // document.body.style.overflow = 'hidden'
-    this.src = this.getLoginUrl()
-    const clientData = `${this.config.clientId}:${this.config.clientSecret}`
-    this.$cookiz.set('client', `${btoa(clientData)}`)
+      // document.body.style.overflow = 'hidden'
+      this.src = this.getLoginUrl()
+      const clientData = `${this.config.clientId}:${this.config.clientSecret}`
+      this.$cookiz.set('client', `${btoa(clientData)}`)
 
-    // postMessage事件对接 （注册、用户协议、隐私政策）
-    window.addEventListener('message', (e) => {
-      // "reg" 表示跳转注册页
-      // "1" 表示跳转  用户协议
-      // "2" 表示跳转  隐私协议
-      // "forget_pw" 表示弹出找回密码
-      const event = e.data
-      if (event.type === 'url_click') {
-        switch (event.target) {
-          case 'reg':
-            _this.modifyType('Register')
-            break
-          case '1':
-            _this.toNavigate('AGREE')
-            break
-          case '2':
-            _this.toNavigate('CONCEAL')
-            break
-          case 'forget_pw':
-            _this.forgetPwd()
-            break
-          default:
-            break
+      // postMessage事件对接 （注册、用户协议、隐私政策）
+      window.addEventListener('message', (e) => {
+        // "reg" 表示跳转注册页
+        // "1" 表示跳转  用户协议
+        // "2" 表示跳转  隐私协议
+        // "forget_pw" 表示弹出找回密码
+        const event = e.data
+        if (event.type === 'url_click') {
+          switch (event.target) {
+            case 'reg':
+              _this.modifyType('Register')
+              break
+            case '1':
+              _this.toNavigate('AGREE')
+              break
+            case '2':
+              _this.toNavigate('CONCEAL')
+              break
+            case 'forget_pw':
+              _this.forgetPwd()
+              break
+            default:
+              break
+          }
+        } else if(event.type === 'go_back') {
+          window.history.back(-1)
         }
-      } else if(event.type === 'go_back') {
-        window.history.back(-1)
-      }
-    })
+      })
+    }
   },
   beforeDestroy () {
     window.frames['iframe-wrap'].contentWindow.postMessage({ type: 'clearStore' }, '*')
