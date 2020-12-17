@@ -37,7 +37,9 @@
         <img class="example-photo"
           v-if="requirementDetails.coverImg"
           :src="requirementDetails.coverImg"
-          :alt="requirementDetails.title" />
+          :alt="requirementDetails.title"
+          @click="openImagePreview" 
+        />
         <div class="player-box" v-if="requirementDetails && requirementDetails.vid">
           <div id="player"></div>
         </div>
@@ -131,6 +133,12 @@ export default {
         }
       })
     },
+
+    openImagePreview() {
+      if( !this.requirementDetails.coverImg) return
+      this.ImagePreview([this.requirementDetails.coverImg])
+    },
+    
     showPolyvPlayer() {
       if (this.requirementDetails && this.requirementDetails.vid) {
         this.player = polyvPlayer({
