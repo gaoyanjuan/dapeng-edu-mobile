@@ -259,7 +259,7 @@ export default {
       await this.$axios.get('/courses/open', {
         params: {
           ...params,
-          size: process.env.global.pageSize
+          size: 8
         }
       }).then(course => {
         if (course.status === 200 && course.data.length) {
@@ -286,12 +286,12 @@ export default {
               }
             }
 
-            const pageInfo = { pages: params.page, size: 10 }
+            const pageInfo = { pages: params.page, size: 8 }
             commit('appendOpenCourses', { data: course.data, pageInfo, clear: params.clear })
             return course.data
           })
         } else {
-          const pageInfo = { pages: params.page, size: 10 }
+          const pageInfo = { pages: params.page, size: 8 }
           commit('appendOpenCourses', { data: course.data, pageInfo, clear: params.clear })
           return course.data
         }
