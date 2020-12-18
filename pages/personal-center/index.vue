@@ -135,15 +135,11 @@ export default {
         this.$cookiz.remove(this.validateSystemHostName().token_name)
       } else {
         this.$cookiz.remove(this.validateSystemHostName().token_name, {
-          path: '/',
           domain: '.dapengjiaoyu.cn'
         })
-        this.$cookiz.remove(this.validateSystemHostName().token_name)
       }
       // this.$cookiz.remove('refresh_token')
-      this.$cookiz.remove('userinfo', {
-        path: '/'
-      })
+      this.$cookiz.remove('userinfo')
       const redirectUrl = `${location.protocol}//${location.host}`
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
@@ -169,7 +165,7 @@ export default {
       if (!this.$login()) return
 
       if(params.name === 'course') {
-        const url = process.env.courseUrl
+        const url = `${process.env.courseUrl}/secure/my/course/learning/live/courseId?r=${Math.random()}`
         location.href = url
         return
       }
