@@ -59,7 +59,9 @@ export default {
       const isLogin = this.$cookiz.get('isLogin')
       if (isLogin) {
         const isDetails = this.$isDetails(this.$route.name)
-        this.$cookiz.set('isLogin', false)
+        this.$cookiz.set('isLogin', false, {
+          path: '/'
+        })
         if (isDetails) {
           this.$router.go(-4)
         } else {

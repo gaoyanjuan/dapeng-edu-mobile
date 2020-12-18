@@ -48,7 +48,7 @@ export default {
     this.$cookiz.remove('userinfo', {
       path: '/'
     })
-    store.dispatch('user/appendUserInfo', null)
+    this.$store.commit('user/appendUserInfo', null)
     if (this.$route.query.type === 'failure') {
       this.content = '登录失效'
     } else if (this.$route.query.type === 'displacement') {

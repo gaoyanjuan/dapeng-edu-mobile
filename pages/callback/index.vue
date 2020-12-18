@@ -41,7 +41,9 @@ export default {
       })
     }
     // this.$cookiz.set('refresh_token', data.refresh_token)
-    this.$cookiz.set('isLogin', true)
+    this.$cookiz.set('isLogin', true, {
+      path: '/'
+    })
     const query = window.top.location.search.split('redirect=')[1]
     if (query) {
       const route = decodeURIComponent(query)

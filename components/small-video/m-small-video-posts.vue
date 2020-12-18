@@ -101,6 +101,9 @@ export default {
       }
     },
     toDetail () {
+      this.$cookiz.set('isLogin', false, {
+        path: '/'
+      })
       this.$store.commit('changeListData', {
         listType: 'small-video',
         propIndex: this.propIndex,

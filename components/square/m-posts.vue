@@ -331,10 +331,10 @@ export default {
       this.imagePreview = {
         startPosition: index,
         images: this.listItemData.img,
-        isPraise: this.listItemData.isPraise,
-        isCollection: this.listItemData.isCollection,
-        praiseCount: this.listItemData.praiseCount,
-        commentCount: this.listItemData.commentCount,
+        isPraise: this.isPraise,
+        isCollection: this.isCollection,
+        praiseCount: this.praiseCount,
+        commentCount: this.commentCount,
         show: true
       }
     },
@@ -580,6 +580,9 @@ export default {
     },
     /** 进入详情 */
     toDetail () {
+      this.$cookiz.set('isLogin', false, {
+        path: '/'
+      })
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,
