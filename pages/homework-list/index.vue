@@ -118,6 +118,8 @@ export default {
       })
     }
 
+    this.$store.commit('homework/clearOpenCourses')
+
     if(this.course.list.length === 0) {
       this.appendOpenCourses({
         collegeId: this.$route.query.college || '',
