@@ -147,16 +147,15 @@ export default {
 
     // 协议
     onToProtocol() {
-      const href = "https://h5-static.dapengjiaoyu.cn/h5-protocol/#/zcyhxy?platform=wap&entrance=common&from=REGISTER&userid="
-      window.open(href,'_blank')
+      const href =  process.env.protocol + "zcyhxy?platform=wap&entrance=common&from=REGISTER&userid="
+      location.href = href
     },
 
     // 隐私政策
     onTopolicy() {
-      const href = "https://h5-static.dapengjiaoyu.cn/h5-protocol/#/yszc?platform=wap&entrance=common"
-      window.open(href,'_blank')
+      const href = process.env.protocol + "yszc?platform=wap&entrance=common"
+      location.href = href
     }
-
   }
 }
 </script>
