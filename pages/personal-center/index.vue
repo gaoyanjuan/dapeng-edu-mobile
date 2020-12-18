@@ -169,7 +169,7 @@ export default {
       if (!this.$login()) return
 
       if(params.name === 'course') {
-        const url = 'https://test.dapengjiaoyu.cn/dp-course/secure/my/course/learning/live/courseId'
+        const url = process.env.courseUrl
         location.href = url
         return
       }
