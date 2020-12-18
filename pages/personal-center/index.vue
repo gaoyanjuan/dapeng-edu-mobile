@@ -169,7 +169,7 @@ export default {
       if (!this.$login()) return
 
       if(params.name === 'course') {
-        const url = process.env.courseUrl
+        const url = `${process.env.courseUrl}/secure/my/course/learning/live/courseId?r=${Math.random()}`
         location.href = url
         return
       }
