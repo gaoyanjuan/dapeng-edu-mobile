@@ -22,6 +22,7 @@ export default {
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
     orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
     mode: env[process.env.MODE].MODE,
+    protocol: env[process.env.MODE].PROTOCOL, //协议地址
     ossBucket: env[process.env.MODE].OSS_BUCKET // oss的bucket
   },
   head: {

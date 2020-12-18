@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     toActivitiesDetail() {
-      const url = this.cardData.activityDisplay.detailPagesURL
+      const url = this.cardData.activityDisplay.detailPagesURL || this.cardData.activityDisplay.rankingListDetailPagesURL
       window.open(url, '_blank')
     }
   }
