@@ -20,7 +20,8 @@ export default {
     show: false,
   }),
   mounted() {
-    
+    this.$cookiz.remove('refresh_token')
+
     /*** 
      * 【刷新或者首次加载】
      * 等待文档树渲染完毕后，再放开显示

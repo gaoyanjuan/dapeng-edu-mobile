@@ -149,7 +149,7 @@ function removeToken (store, $cookiz) {
         })
         $cookiz.remove(validateSystemHostName().token_name)
       }
-      // $cookiz.remove('refresh_token')
+      $cookiz.remove('refresh_token')
       $cookiz.remove('userinfo', {
         path: '/'
       })
