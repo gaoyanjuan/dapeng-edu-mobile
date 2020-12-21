@@ -71,6 +71,7 @@ export default {
   ],
 
   plugins: [
+    { src: '~/plugins/baidutj.js', ssr: false },
     { src: '~/plugins/axios' },
     { src: '~/plugins/loading.js', ssr: false },
     { src: '~/plugins/clipboard.js', ssr: false },
