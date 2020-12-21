@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="videoBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
@@ -40,6 +40,9 @@ export default {
     blank:require('@/assets/icons/blank/have-no-video.png')
   }),
   computed: {
+    ...mapGetters('banner', [
+      'videoBannerListGetters'
+    ]),
     ...mapGetters({
       colleges: 'colleges/smallVideoCollegesGetters',
       smallVideoList: 'video/smallVideoListGetters'

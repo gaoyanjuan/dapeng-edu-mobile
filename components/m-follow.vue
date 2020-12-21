@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="attentionBannerListGetters"/>
 
     <!-- 关注画廊 -->
     <m-follow-gallery />
@@ -49,6 +49,9 @@ export default {
     navRoute:'/details/homework',
   }),
   computed: {
+    ...mapGetters('banner', [
+      'attentionBannerListGetters'
+    ]),
     ...mapGetters('attention', [
       'attentionListGetters'
     ])

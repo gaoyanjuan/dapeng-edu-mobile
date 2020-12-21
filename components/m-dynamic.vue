@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="lifeBannerListGetters"/>
     
     <!-- 二级菜单 -->
     <m-menus menus-type="type" :menus="menus" :automatic="true"/>
@@ -135,6 +135,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('banner', [
+      'lifeBannerListGetters'
+    ]),
     ...mapGetters('dynamic', [
       'newDynamicListGetters',
       'hotDynamicListGetters'

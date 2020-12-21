@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="movieBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="videoCollegesGetters" />
@@ -54,6 +54,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('banner', [
+      'movieBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'videoCollegesGetters'
     ]),

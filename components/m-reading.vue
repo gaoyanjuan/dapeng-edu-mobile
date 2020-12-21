@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="articleBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="readingCollegesGetters" />
@@ -27,6 +27,9 @@ export default {
     finishedTxt: '没有更多了',
   }),
   computed:{
+    ...mapGetters('banner', [
+      'articleBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'readingCollegesGetters'
     ]),

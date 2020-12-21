@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="postBannerListGetters"/>
     
     <!-- 二级菜单 -->
     <van-sticky :offset-top="`1.1733rem`">
@@ -125,6 +125,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('banner', [
+      'postBannerListGetters'
+    ]),
     ...mapGetters('growth', [
       'growthListGetters'
     ])
