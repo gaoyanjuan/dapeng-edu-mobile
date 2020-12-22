@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="recommendBannerListGetters"/>
 
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -45,6 +45,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('banner', [
+      'recommendBannerListGetters'
+    ]),
     ...mapGetters('recommend', [
       'recommendListGetters'
     ])

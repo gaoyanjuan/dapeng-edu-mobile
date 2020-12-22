@@ -8,6 +8,9 @@ export default {
   created () {
     if (process.browser) {
       try {
+        if(this.$store.getters['banner/movieBannerListGetters'].length === 0) {
+          this.$store.dispatch('banner/appendBannerList', { channel: 'MOVIE' })
+        }
         if (this.$store.getters['colleges/videoCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_MOVIE' })
         }

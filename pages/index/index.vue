@@ -23,9 +23,12 @@ export default {
   created () {
     if (process.browser) {
       try {
+        if(this.$store.getters['banner/recommendBannerListGetters'].length === 0) {
+          this.$store.dispatch('banner/appendBannerList', { channel: 'RECOMMEND' })
+        }
         if (this.$store.getters['recommend/recommendListGetters'].list.length === 0) {
           this.$store.dispatch('recommend/appendRecommendList', { page : 1 })
-        } 
+        }
       } catch (error) {}
     }
   },
