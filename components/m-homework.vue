@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="homeworkBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="[{ id:'', name: '全部' }].concat(taskCollegesGetters)" />
@@ -47,6 +47,9 @@ export default {
     blank:require('@/assets/icons/blank/have-no-homework.png')
   }),
   computed:{
+    ...mapGetters('banner', [
+      'homeworkBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'taskCollegesGetters'
     ]),

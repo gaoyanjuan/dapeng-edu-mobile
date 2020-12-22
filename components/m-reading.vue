@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="articleBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="readingCollegesGetters" />
@@ -34,6 +34,9 @@ export default {
     blank:require('@/assets/icons/blank/have-no-reading.png')
   }),
   computed:{
+    ...mapGetters('banner', [
+      'articleBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'readingCollegesGetters'
     ]),

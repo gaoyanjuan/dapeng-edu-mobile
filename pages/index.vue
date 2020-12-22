@@ -144,16 +144,6 @@ export default {
     })
   },
 
-  async asyncData ({route, store, error}) {
-    try {
-      if (store.getters['banner/bannerListGetters'].length === 0) {
-        await store.dispatch('banner/appendBannerList', { collegeId: 'j5m484vz' })
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  },
-
   mounted () {
 
     const to = this.$route
