@@ -1,5 +1,5 @@
 <template>
-  <div v-if="imagePreview.images" @click.stop="onClose">
+  <div v-if="imagePreview.images" @click.stop>
 
     <!-- Images Preview Block -->
     <van-image-preview

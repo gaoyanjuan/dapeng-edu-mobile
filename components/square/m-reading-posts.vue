@@ -193,7 +193,7 @@ export default {
 <style lang="less" scoped>
 
 .m-reading:not(:first-child) {
-  margin-top: 12px;
+  margin-top: 1px;
 }
 
 .reading-posts-card {
@@ -309,12 +309,13 @@ export default {
 .reading-body-row {
   width: 100%;
   height: 24px;
+  line-height: 24px;
   margin-top: 12px;
   .l-flex-row-def();
 }
 
 .reading-body-row .posts-label {
-  padding: 4px 8px;
+  padding: 0 8px;
   background: #F7F7F7;
   border-radius: 12px;
   font-size: 12px;

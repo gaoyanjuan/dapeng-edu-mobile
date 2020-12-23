@@ -274,12 +274,11 @@ export default {
         this.activeName = 'works'
       } else if (to.name === 'index-small-video') {
         this.activeName = 'small-video'
-      }
+      } else if (to.name === 'index-reading') {
+        this.activeName = 'reading'
+      } 
       // else if (to.name === 'index-video') {
       //   this.activeName = 'video'
-      // } 
-      // else if (to.name === 'index-reading') {
-      //   this.activeName = 'reading'
       // } 
       // else if (to.name === 'index-part-time-task') {
       //   this.activeName = 'part-time-task'
