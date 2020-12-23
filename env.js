@@ -10,6 +10,8 @@ module.exports = {
     DP_AUTH_URL: 'http://passport.dapeng.lan', // 中台登录地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com', // oss地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
+    MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
     OSS_BUCKET: 'dapeng-test-image'
@@ -27,6 +29,8 @@ module.exports = {
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
+    MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
     FAILED_COLOR: '#0CB65B',
@@ -45,9 +49,11 @@ module.exports = {
     OSS_URL: 'https://image.dapengjiaoyu.com', // oss资源地址
     TAPI_URL: 'http://api-appl.vpc.dapengjiaoyu.cn', // 获取订单token地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
+    MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    MATOMO_SITEID: 14,
     PORT: 3000,
     HOST: '0.0.0.0',
     FAILED_COLOR: '#0CB65B',
-    OSS_BUCKET: 'dapeng-image'  
+    OSS_BUCKET: 'dapeng-image'
   },
 }
