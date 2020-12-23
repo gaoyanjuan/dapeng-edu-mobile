@@ -37,7 +37,7 @@ export default {
     // 路由定位
     let query = this.$route.query.type || 'homework'
     let tabs = ['dynamic','homework','works','growth','reading','video']
-    this.active = tabs.findIndex(tab => tab === query)
+    this.activeName = tabs.findIndex(tab => tab === query)
   },
   methods: {
     onTabsClick(index) {
