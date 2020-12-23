@@ -1,3 +1,4 @@
+import { truncate } from 'fs'
 import path from 'path'
 const env = require('./env')
 const global = require('./plugins/global')
@@ -23,7 +24,7 @@ export default {
     orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
     mode: env[process.env.MODE].MODE,
     protocol: env[process.env.MODE].PROTOCOL, //协议地址
-    ossBucket: env[process.env.MODE].OSS_BUCKET // oss的bucket
+    ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
@@ -87,7 +88,7 @@ export default {
     { src: '~/plugins/toast.js', ssr: true },
     { src: '~/plugins/animate.js', ssr: true },
     { src: '~/plugins/check-login.js', ssr: true },
-    { src: '~/plugins/anchor-utils.js', ssr: true },
+    { src: '~/plugins/anchor-utils.js', ssr: true }
   ],
 
   components: true,
@@ -97,8 +98,18 @@ export default {
   modules: [
     '@nuxtjs/style-resources',
     '@nuxtjs/axios',
-    ['cookie-universal-nuxt', { alias: 'cookiz' }]
+    ['cookie-universal-nuxt', { alias: 'cookiz' }],
+    ['nuxt-matomo', {
+      matomoUrl: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',
+      siteId: 19,
+      debug: true
+    }],
   ],
+
+  router: {
+    middleware: ['matomo'],
+  },
+
   axios: {
     proxy: true, // 表示开启代理
     prefix: '/api', // 表示给请求url加个前缀 /api

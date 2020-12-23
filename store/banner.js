@@ -59,6 +59,7 @@ export const actions = {
   async appendBannerList({ commit }, params) {
     const res = await this.$axios.get('/common/banners', {
       params: {
+        terminalType: 'H5',
         ...params
       }
     })
