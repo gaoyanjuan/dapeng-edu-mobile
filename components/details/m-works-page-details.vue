@@ -55,7 +55,7 @@
 
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="作品" :activityData="works.activity" />
+          <m-topic-label label-type="作品" :activityData="works.activity" />
         </div>
       </div>
     </div>

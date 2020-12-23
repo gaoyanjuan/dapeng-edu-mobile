@@ -24,12 +24,15 @@
 
     <!-- classification -->
     <div class="works__class">
-      <m-posts-class :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`" />
+      <m-posts-class
+        :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`"
+        :labels="listItemData.labels"
+      />
     </div>
 
     <!-- Label -->
     <div class="works__lab">
-      <m-label
+      <m-topic-label
         v-if="listItemData.task || listItemData.activity"
         :labelData="listItemData.task"
         :activityData="listItemData.activity"
@@ -242,6 +245,10 @@ export default {
         return '动态'
       } else if (this.propSquareType === 'ACTIVITY_POST') {
         return '活动'
+      } else if (this.propSquareType === 'ARTICLE') {
+        return '阅读'
+      } else if (this.propSquareType === 'MOVIE') {
+        return '长视频'
       }
     },
     typePath () {

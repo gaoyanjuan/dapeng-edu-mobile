@@ -39,11 +39,11 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <!-- <van-tab title="阅读" name="reading" to="/reading">
+      <van-tab title="阅读" name="reading" to="/reading">
         <template v-if="$route.name === 'index-reading'">
           <nuxt-child />
         </template>
-      </van-tab> -->
+      </van-tab>
       <!-- <van-tab title="视频" name="video" to="/video">
         <template v-if="$route.name === 'index-video'">
           <nuxt-child />

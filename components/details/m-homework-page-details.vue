@@ -55,7 +55,7 @@
 
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="作业" :label-data="homework.task" />
+          <m-topic-label label-type="作业" :label-data="homework.task" />
         </div>
       </div>
     </div>

@@ -16,16 +16,22 @@ export default {
   },
   mutations: {
     changeLabelListStatus (state, payload) {
-      state.labelList.list = state.labelList.list.concat(payload.data)
+      
+    },
+    appendLabelData (state, payload) {
+      state.labelData = {
+        id: payload.data.id,
+        name: payload.data.name
+      }
+    },
+    appendLabelList (state, payload) {
+      state.labelList.list = state.labelList.list.concat(payload.data.labelInfo)
       state.labelList.pageInfo = payload.pageInfo
-      if (payload.data.length < state.labelList.pageInfo.size) {
+      if (payload.data.labelInfo.length < state.labelList.pageInfo.size) {
         state.labelList.status = 'over'
       } else {
         state.labelList.status = 'load'
       }
-    },
-    appendLabelList (state, payload) {
-
     },
     clearLabelList (state) {
       state.labelList.list = []
@@ -47,7 +53,10 @@ export default {
         pages: params.page,
         size: process.env.global.pageSize
       }
-      commit('appendLabelList', { data: res.data, pageInfo })
+      if (res.data) {
+        commit('appendLabelList', { data: res.data, pageInfo })
+      }
+      commit('appendLabelData', res)
       return res
     }
   },

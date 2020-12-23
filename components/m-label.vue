@@ -5,7 +5,7 @@
         <img @click="back" src="@/assets/icons/navbar/nav-arrow-back.png" alt="">
       </div>
       <div class="label-navbar-title">
-        #第一次画画第一次画画第一次画画第一次画画#
+        {{ labelDataGetters && labelDataGetters.name }}
       </div>
       <div class="label-navbar-footer">
         <div>5677人参与</div><div>6.89万人浏览</div>
@@ -16,13 +16,25 @@
       <m-label-menus :menus="menus" />
     </van-sticky>
     <div>
-      <div v-for="(item, i) in menus" class="list-item" :key="i">
-      </div>
+      <m-posts 
+        v-for="(item, index) in labelListGetters.list"
+        :id="item ? item.id: ''"
+        :key="index"
+        listType="label"
+        :propIndex="index"
+        :courseType="item.courseType"
+        :listItemData="item"
+        :modifiedTime="item.createTime"
+        :path="`/details/${pathType(item)}`"
+        :propSquareType="item && item.topicType"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
 export default {
   title: '成长详情页',
   data () {
@@ -37,6 +49,15 @@ export default {
         { name: '小视频', topicType: 'VIDEO' }
       ]
     }
+  },
+  computed: {
+    ...mapGetters('label', [
+      'labelListGetters',
+      'labelDataGetters'
+    ])
+  },
+  mounted () {
+
   },
   methods: {
     back () {
@@ -57,6 +78,32 @@ export default {
       } else {
         this.$router.go(-1)
       }
+    },
+    pathType(item){
+      console.log(item)
+      switch (item.topicType) {
+        case 'HOMEWORK':
+          return 'homework'
+          break;
+        case 'WORKS':
+          return 'works'
+          break;
+        case 'LIFE':
+          return 'dynamic'
+          break;
+        case 'ARTICLE':
+          return 'reading'
+          break;
+        case 'MOVIE':
+          return 'video'
+          break;
+        case 'video':
+          return 'VIDEO'
+          break;
+        default:
+          return '111'
+          break;
+      }
     }
   }
 }
@@ -64,7 +111,7 @@ export default {
 
 <style lang="less" scoped>
 .label-navbar {
-  background-image: url('~@/assets/icons/navbar/navbar-background.png');
+  background-image: url('~@/assets/icons/navbar/navbar-background-label.png');
   background-size: 100% 140px;
   height: 140px;
   width: 100%;
@@ -80,7 +127,11 @@ export default {
   }
   .label-navbar-title {
     margin-top: 8px;
-    height: 50px;
+    max-height: 50px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
     font-size: 18px;
     font-family: @dp-font-medium;
     font-weight: 500;

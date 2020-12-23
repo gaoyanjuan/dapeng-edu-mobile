@@ -52,7 +52,7 @@
         </div>
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="动态" :activityData="dynamic.activity" />
+          <m-topic-label label-type="动态" :activityData="dynamic.activity" />
         </div>
       </div>
     </div>
