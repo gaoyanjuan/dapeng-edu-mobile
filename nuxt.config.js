@@ -105,6 +105,13 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
+    '/api/part_job': {
+      target: 'https://m.680.com/api',
+      pathRewrite: {
+        '^/api/part_job': '/',
+        changeOrigin: true
+      }
+    },
     '/api/token/check_token': {
       target: env[process.env.MODE].REFRESH_TOKEN_URL, // 验证token
       pathRewrite: {

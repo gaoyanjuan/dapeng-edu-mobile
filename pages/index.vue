@@ -60,11 +60,11 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <!-- <van-tab title="兼职任务" name="part-time-task" to="/part-time-task">
+      <van-tab title="兼职任务" name="part-time-task" to="/part-time-task">
         <template v-if="$route.name === 'index-part-time-task'">
           <nuxt-child />
         </template>
-      </van-tab> -->
+      </van-tab>
     </van-tabs>
 
     <!-- 作业栏目-下拉菜单筛选 -->

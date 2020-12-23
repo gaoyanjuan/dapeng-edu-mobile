@@ -1,15 +1,24 @@
 <template>
   <div>
-    <section class="works-wrap"></section>
+    <!-- Swiper -->
+    <m-swipe />
+
+    <!-- 二级菜单 -->
+    <part-time-jobs />
+    <section class="works-wrap">
+      <template>
+      <short-shift-content />
+      </template>
+    </section>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'M-Part-Time-Task',
+  name: "M-Part-Time-Task",
   data: () => ({}),
-  methods:{}
-}
+  methods: {},
+};
 </script>
 
 <style lang="less" scoped>
