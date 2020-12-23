@@ -7,10 +7,10 @@
         <img class="navbar-back-icon" :src="back" @click="onBackEvent"/>
       </van-sticky>
       <van-tabs v-model="activeName" sticky @click="onTabsClick">
-        <van-tab :title=" myFollow ? '关注' : 'TA的关注'" name="attention">
+        <van-tab :title=" interactionNews ? '关注' : 'TA的关注'" name="attention">
           <m-followers v-if="activeName === 'attention'" />
         </van-tab>
-        <van-tab :title="myFans ? '粉丝' : 'TA的粉丝'" name="fans">
+        <van-tab :title="interactionNews ? '粉丝' : 'TA的粉丝'" name="fans">
           <m-fans v-if="activeName === 'fans'" />
         </van-tab>
       </van-tabs>
@@ -31,8 +31,7 @@ export default {
   data: () => ({
     activeName:'attention',
     back: require('@/assets/icons/navbar/nav-arrow-back.png'),
-    myFans: true,
-    myFollow: true
+   interactionNews: true
   }),
   mounted(){
     /**
@@ -40,11 +39,9 @@ export default {
      */
     this.activeName = this.$route.query.type || 'attention'
     if (this.$route.query.userId === this.userInfoGetters.userId) {
-      this.myFans = true
-      this.myFollow = true
+      this.interactionNews = true
     } else {
-      this.myFans = false
-      this.myFollow = false
+      this.interactionNews = false
     }
   },
   computed: {
