@@ -765,6 +765,16 @@ export const actions = {
     const res = await this.$axios.put('/messages/read')
     return res
   },
+   // 查询其他用户的信息
+   async queryUserData ({ commit }, params) {
+    const res = await this.$axios.get(`old/users/${params.userId}/part`)
+    return res.data
+  },
+  // 查询用户的关注状态
+  async appendFollowingStatus(store, params) {
+    const res = await this.$axios.get(`/users/${params.id}/follow-status`)
+    return res.data
+  }
 }
 
 export const getters = {
