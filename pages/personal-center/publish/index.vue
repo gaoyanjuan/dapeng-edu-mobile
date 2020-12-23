@@ -92,7 +92,8 @@ export default {
       'appendUserTrends',
       'appendFollowingStatus',
       'followingUser',
-      'cancelFollowingUser'
+      'cancelFollowingUser',
+      'getUserDetails'
     ]),
     // 返回
     onClickBack() {
@@ -101,7 +102,7 @@ export default {
     // 滚动吸顶
     watchScroll() {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-      if (scrollTop > 100) {
+      if (scrollTop > 160) {
         this.navBar = true
       } else {
         this.navBar = false
@@ -160,28 +161,34 @@ export default {
     }
   },
   mounted() {
-    // 判断我的或TA的个人主页是否显示关注按钮
-    if (this.userInfoGetters) {
-      if (this.$route.query.userId === this.userInfoGetters.userId) {
+    // 判断我的或TA的个人主页是否显示关注按钮以及用户信息的赋值
+    if (this.$route.query.userId === this.userInfoGetters.userId) {
+      if (this.userInfoGetters.introduction) {
         this.userInfo = this.userInfoGetters
-        this.showAttention = false
       } else {
-        this.queryUserData({userId: this.$route.query.userId})
-        .then((data) => {
-          this.userInfo = data
-          this.showAttention = true
+        this.getUserDetails().then((res) => {
+          this.userInfo = res.data
         })
       }
-      // 判断我是否关注TA的个人主页的关注按钮展示（关注/已关注）
-      if (!this.$route.query.userId || this.$route.query.userId === this.userInfoGetters.userId) {
-          this.appendUserTrends({ userId: this.userInfoGetters.userId })
-        } else {
-          this.appendUserTrends({ userId: this.$route.query.userId })
-          this.appendFollowingStatus({ id: this.$route.query.userId })
-          .then((data) => {
-            this.attentionState = data
-          })
-        }
+      this.showAttention = false
+    } else {
+      this.queryUserData({userId: this.$route.query.userId})
+      .then((data) => {
+        this.userInfo = data
+        this.showAttention = true
+      })
+    }
+    // 判断我是否关注TA的个人主页的关注按钮展示（关注/已关注）
+    if (!this.$route.query.userId || this.$route.query.userId === this.userInfoGetters.userId) {
+      this.appendUserTrends({ userId: this.userInfoGetters.userId })
+    } else {
+      //用户的互动数据（关注、粉丝等）
+      this.appendUserTrends({ userId: this.$route.query.userId })
+      //查询用户的关注状态
+      this.appendFollowingStatus({ id: this.$route.query.userId })
+      .then((data) => {
+        this.attentionState = data
+      })
     }
     // 监听调用滚动事件
     window.addEventListener('scroll', this.watchScroll)
