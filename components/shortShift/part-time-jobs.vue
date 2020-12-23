@@ -23,7 +23,7 @@
           <div class="box">
             <van-button
               size="small"
-              v-for="(item, index) in tagsList"
+              v-for="(item, index) in getTagsList"
               :key="index"
               @click="handlePart()"
             >
@@ -35,7 +35,7 @@
           <div class="box">
             <van-button
               size="small"
-              v-for="(item, index) in sortList"
+              v-for="(item, index) in getSortList"
               :key="index"
             >
               <p>{{ item.name }}</p>
@@ -48,30 +48,19 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: "FollowGallery",
+   computed: {
+    ...mapGetters([
+      'getTagsList',
+      'getSortList'
+    ])
+  },
   data: () => ({
     show: false,
     active: 2,
     change: require("@/assets/icons/common/drop.png"),
-    tagsList: [
-      { name: "名片设计" },
-      { name: "VI设计" },
-      { name: "卡通吉祥物" },
-      { name: "包装设计" },
-      { name: "海报设计" },
-      { name: "名片设计" },
-      { name: "名片设计" },
-      { name: "名片设计" },
-    ],
-    sortList: [
-      { name: "名片设计" },
-      { name: "VI设计" },
-      { name: "海报设计" },
-      { name: "名片设计" },
-      { name: "名片设计" },
-      { name: "名片设计" },
-    ],
   }),
 
   methods: {

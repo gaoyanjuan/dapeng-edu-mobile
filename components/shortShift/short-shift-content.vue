@@ -3,6 +3,7 @@
     <div
       class="short-shift"
       v-for="(item, i) in list"
+      :key="i"
       @click="handelDetals"
     >
       <h1>{{ item.itemname }}</h1>
@@ -27,10 +28,10 @@ export default {
     };
   },
 
-  mounted () {
-    this.appendTaskPartList().then(res=>{
-      this.list = res.data.list
-    })
+  mounted() {
+    this.appendTaskPartList().then((res) => {
+      this.list = res.data.list;
+    });
   },
   methods: {
     ...mapActions("task-part", ["appendTaskPartList"]),
@@ -57,6 +58,10 @@ export default {
       font-weight: 600;
       color: #18252c;
       margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+      overflow: hidden;
     }
   }
   .shift-box {

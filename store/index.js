@@ -1,4 +1,5 @@
 import { get_cookie } from '@/utils/cookie-tool';
+import logo from './modules/logo'
 import validateSystemHostName from '@/plugins/validate-system-hostname'
 import filter from '@/plugins/filters'
 
@@ -64,5 +65,17 @@ export default {
       }
     }
   },
-  getters: {}
+  getters: {
+    getTagsList: (state) => {
+      console.log(111111111111111111);
+      console.log(state.logo.tagsList);
+      return state.logo.tagsList
+    },
+    getSortList: (state) => {
+      return state.logo.sortList
+    }
+  },
+  modules: {
+    logo
+  }
 }
