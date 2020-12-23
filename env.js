@@ -9,6 +9,7 @@ module.exports = {
     OLD_BASE_URL: 'http://192.168.1.62/pc/api', // 网关课程模块地址
     DP_AUTH_URL: 'http://passport.dapeng.lan', // 中台登录地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com', // oss地址
+    TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -48,6 +49,6 @@ module.exports = {
     PORT: 3000,
     HOST: '0.0.0.0',
     FAILED_COLOR: '#0CB65B',
-    OSS_BUCKET: 'dapeng-image'  
+    OSS_BUCKET: 'dapeng-image'
   },
 }
