@@ -53,8 +53,7 @@ export default {
       const res = await this.$axios.get('/recommend', {
         params: {
           ...params,
-          size: process.env.global.pageSize,
-          hotTypes: 'JOB,WORK,LIFE'
+          size: process.env.global.pageSize
         }
       })
       const pageInfo = {

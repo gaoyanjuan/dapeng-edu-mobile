@@ -9,7 +9,7 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="readingListGetters.list.length">
-          <m-reading-posts v-for="(item, i) in readingListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="i" :item="item" />
+          <m-reading-posts v-for="(item, i) in readingListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="item ? item.id: ''" :item="item" />
         </template>
         <template v-if="!readingListGetters.list.length && finished">
           <div class="works-blank-wrap">
@@ -66,8 +66,10 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
+      console.log(this.$store.state.anchorId)
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
+        console.log(element)
         if (element) {
           element.scrollIntoView({
             behavior: 'auto'

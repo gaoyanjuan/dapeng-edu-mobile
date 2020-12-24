@@ -73,6 +73,7 @@ export default {
       commentListGetters: 'comment/commentListGetters'
     }),
     functionName () {
+      console.console.log(this.$store.state.listType)
       return this.$getFunctionName(this.$store.state.listType)
     }
   },

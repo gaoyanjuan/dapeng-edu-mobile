@@ -6,19 +6,28 @@
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="recommendListGetters.list.length">
-          <m-posts
-            v-for="(res, i) in recommendListGetters.list"
-            :key="i"
-            :id="res.recommendTopic ? res.recommendTopic.id : ''"
-            :propSquareType="res.hotType"
-            listType="recommend"
-            :propIndex="i"
-            :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
-            :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
-            :listItemData="res.recommendTopic ? res.recommendTopic : {}"
-            :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
-            :path="`/details/${pathType(res)}`"
-          />
+          <div v-for="(res, i) in recommendListGetters.list" :key="i">
+            <m-reading-posts
+              v-if="res && res.hotType === 'ARTICLE'"
+              :id="res.recommendTopic ? res.recommendTopic.id: ''"
+              listType="recommend"
+              :propIndex="i"
+              :key="res.recommendTopic ? res.recommendTopic.id: ''"
+              :item="res.recommendTopic"
+            />
+            <m-posts
+              v-else
+              :id="res.recommendTopic ? res.recommendTopic.id : ''"
+              :propSquareType="res.hotType"
+              listType="recommend"
+              :propIndex="i"
+              :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
+              :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
+              :listItemData="res.recommendTopic ? res.recommendTopic : {}"
+              :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
+              :path="`/details/${pathType(res)}`"
+            />
+          </div>
         </template>
         <template v-if="!recommendListGetters.list.length && finished">
           <div class="works-blank-wrap">

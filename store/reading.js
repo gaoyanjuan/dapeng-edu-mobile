@@ -76,12 +76,7 @@ export const actions = {
     const res = await this.$axios.get(`/articles/${params.id}`)
     commit('appendReadingDetails', res)
     return res
-  },
-   // 新增阅读浏览量
-  async appendReadingBrowse({ commit }, params) {
-    const res = await this.$axios.put(`/articles/${params.id}`)
-    return res
-  },
+  }
 }
 
 export const getters = {

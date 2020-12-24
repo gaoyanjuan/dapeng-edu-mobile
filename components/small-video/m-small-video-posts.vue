@@ -19,7 +19,7 @@
           imgWidth="24px"
           imgHeight="24px"
         />
-        <span class="nickname van-ellipsis"> {{ videoItem.user ? videoItem.user.nickname : '佚名' }} </span>
+        <span @click.stop="toPersonalCenter">{{ videoItem.user ? (videoItem.user.nickname ? videoItem.user.nickname : videoItem.user.dpAccount) : '佚名' }}</span>
       </div>
 
       <div class="info-right-side" @click.stop="changeLike">

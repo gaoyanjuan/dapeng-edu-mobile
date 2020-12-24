@@ -17,20 +17,33 @@
     </van-sticky>
     <section class="label-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
-        <template v-if="labelListGetters.list.length">
-          <m-posts
-            class="list-item"
-            v-for="(item, index) in labelListGetters.list"
-            :id="item ? item.contentId: ''"
-            :key="item.id"
-            listType="label"
-            :propIndex="index"
-            :courseType="item.courseType"
-            :listItemData="item"
-            :modifiedTime="item.createTime"
-            :path="`/details/${pathType(item)}`"
-            :propSquareType="item && item.topicType"
-          />
+        <template v-if="labelListGetters.list.length && $route.query.topicType === 'VIDEO'">
+          <m-water-fall width="167px" gap="0" :data="labelListGetters.list" @complete="completeEvent">
+            <m-water-fall-item v-for="(item, index) in labelListGetters.list" :key="index" :order="index">
+              <m-small-video-posts :videoItem="item" :propIndex="index" />
+            </m-water-fall-item>
+          </m-water-fall>
+        </template>
+        <template v-if="labelListGetters.list.length && $route.query.topicType !== 'VIDEO'">
+          <div v-for="(item, index) in labelListGetters.list" :key="item ? item.id: ''" :id="item ? item.id: ''">
+            <m-reading-posts
+              v-if="item && item.topicType === 'ARTICLE'"
+              listType="label"
+              :propIndex="index"
+              :item="item"
+            />
+            <m-posts
+              v-else
+              class="list-item"
+              listType="label"
+              :propIndex="index"
+              :courseType="item.courseType"
+              :listItemData="item"
+              :modifiedTime="item.createTime"
+              :path="`/details/${pathType(item)}`"
+              :propSquareType="item && item.topicType"
+            />
+          </div>
         </template>
         <template v-if="!labelListGetters.list.length && finished">
           <div class="label-blank-wrap">

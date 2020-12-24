@@ -1,26 +1,26 @@
 <template>
   <div v-if="item" class="m-reading">
-    <div class="reading-posts-card">
+    <div class="reading-posts-card" @click="toDetail">
 
       <!-- Header Block -->
-      <template v-if="item.coverImgSmall.length === 1">
-        <nuxt-link tag="div" class="reading-header-row" :to="`/details/reading?id=${item.id}`">
+      <template v-if="item.coverImgSmall && item.coverImgSmall.length === 1">
+        <div class="reading-header-row">
           <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
           <div class="posts-right-side-wrap">
             <span class="posts-title">{{ item.title }}</span>
             <span class="posts-content">{{ content }}</span>
           </div>
-        </nuxt-link>
+        </div>
       </template>
 
       <template v-else>
-        <nuxt-link tag="div" class="reading-header-row-more" :to="`/details/reading?id=${item.id}`">
+        <div class="reading-header-row-more">
           <div class="posts-title"> {{ item.title }} </div>
           <div class="posts-content"> {{ content }} </div>
           <div class="posts-photos-wrap" v-if="item.coverImgSmall">
             <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
           </div>
-        </nuxt-link>
+        </div>
       </template>
 
       <!-- Body Block -->
@@ -32,15 +32,15 @@
 
       <!-- Footer Block -->
       <div class="reading-footer-row">
-        <div class="posts-commernt-wrap" @click="toDetail">
+        <div class="posts-commernt-wrap">
           <img class="posts-comment" :src="comment" alt="comment" />
           <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
         </div>
-        <div class="posts-love-wrap" @click="onLove">
+        <div class="posts-love-wrap" @click.stop="onLove">
           <img class="posts-love" :src="isPraise ? unLove : love" alt="love" />
           <span class="posts-nums">{{ praiseCount | studentsCount }}</span>
         </div>
-        <div class="posts-star-wrap" @click="onCollect">
+        <div class="posts-star-wrap" @click.stop="onCollect">
           <img class="posts-star" :src="isCollection ? unStar : star" alt="star" />
         </div>
       </div>
@@ -64,15 +64,20 @@ export default {
       type: String,
       default: ''
     },
+    listType: {
+      type: String,
+      default: ''
+    },
     propIndex:{
       type: Number,
       default: 0
     }
   },
   data:() => ({
-    isPraise: false,
-    isCollection: false,
-    praiseCount: 0,
+    popisPraise: false,
+    popIsCollection: false,
+    popCommentCount: 0,
+    popPraiseCount: 0,
     comment: require('@/assets/icons/posts/posts-comment.png'),
     love: require('@/assets/icons/posts/posts-love.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
@@ -80,23 +85,49 @@ export default {
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
   }),
   computed:{
+    functionName () {
+      return this.$getFunctionName(this.listType)
+    },
+    // 是否需要回显
+    praiseCount () {
+      if (this.$isSave(this.$route.name)) {
+        return this.item.praiseCount
+      } else {
+        return this.popPraiseCount
+      }
+    },
+    isPraise () {
+      if (this.$isSave(this.$route.name)) {
+        return this.item.isPraise
+      } else {
+        return this.popIsPraise
+      }
+    },
+    isCollection () {
+      if (this.$isSave(this.$route.name)) {
+        return this.item.isCollection
+      } else {
+        return this.popIsCollection
+      }
+    },
+    commentCount () {
+      if (this.$isSave(this.$route.name)) {
+        return this.item.commentCount
+      } else {
+        return this.popCommentCount
+      }
+    },
     content() {
       return this.item.content.replace(/<[^>]+>/g, "").replace(/&nbsp;/gi, '')
     }
   },
   created() {
-    if (this.item) {
-      this.praiseCount = this.item.praiseCount
-      this.isPraise = this.item.isPraise
-      this.isCollection = this.item.isCollection
+    if (!this.$isSave(this.$route.name)) {
+      this.popCommentCount = this.item.commentCount
+      this.popPraiseCount = this.item.praiseCount
+      this.popIsPraise = this.item.isPraise
+      this.popIsCollection = this.item.isCollection
     }
-  },
-  watch: {
-    'item': function (newVal, oldVal) {
-      this.praiseCount = newVal.praiseCount
-      this.isPraise = newVal.isPraise
-      this.isCollection = newVal.isCollection
-    },
   },
 
   methods:{
@@ -118,8 +149,19 @@ export default {
         return 
       }
       if (this.isPraise) {
-        this.isPraise = false
-        this.praiseCount -= 1
+        if (this.$isSave(this.$route.name)) {
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'love',
+            value: {
+              praise: false,
+              count: -1
+            }
+          })
+        } else {
+          this.popIsPraise = false
+          this.popPraiseCount -= 1
+        }
         this.queryUnLike({
           id: this.item.id,
           type: 'ARTICLE'
@@ -133,8 +175,19 @@ export default {
           }
         })
       } else {
-        this.isPraise = true
-        this.praiseCount += 1
+        if (this.$isSave(this.$route.name)) {
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'love',
+            value: {
+              praise: true,
+              count: 1
+            }
+          })
+        } else {
+          this.popIsPraise = true
+          this.popPraiseCount += 1
+        }
         this.queryLike({
           id: this.item.id,
           type: 'ARTICLE',
@@ -149,7 +202,15 @@ export default {
         return 
       }
       if (this.isCollection) {
-        this.isCollection = false
+        if (this.$isSave(this.$route.name)) {
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'collect',
+            value: false
+          })
+        } else {
+          this.popIsCollection = false
+        }
         this.queryDeleteCollection({
           id: this.item.id,
           type: 'ARTICLE'
@@ -164,7 +225,15 @@ export default {
         })
 
       } else {
-        this.isCollection = true
+        if (this.$isSave(this.$route.name)) {
+          this.$store.commit(`${this.functionName}`, {
+            index: this.propIndex,
+            type: 'collect',
+            value: true
+          })
+        } else {
+          this.popIsCollection = true
+        }
         this.queryCollection({
           id: this.item.id,
           type: 'ARTICLE',
@@ -177,10 +246,11 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
+      console.log(this.item.id)
       this.$store.commit('changeListData', {
         listType: 'arttcle',
         propIndex: this.propIndex,
-        anchorId: this.listItemData.id
+        anchorId: this.item.id
       })
       this.$router.push({
         path: `/details/reading?id=${this.item.id}`
@@ -193,7 +263,7 @@ export default {
 <style lang="less" scoped>
 
 .m-reading:not(:first-child) {
-  margin-top: 1px;
+  margin-top: 16px;
 }
 
 .reading-posts-card {

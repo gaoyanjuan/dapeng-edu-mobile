@@ -19,7 +19,6 @@ export default {
       this.$store.commit('label/clearLabelList')
       this.$store.dispatch('label/appendLabelList', { id: newQuery.id, topicType: newQuery.topicType, page: 1 })
       if (newQuery.id !== oldQuery.id) {
-        this.$store.commit('label/clearLabelData')
         this.$store.commit('label/clearLabelCount')
         this.$store.dispatch('label/appendLabelCount', { id: newQuery.id })
       }
@@ -31,7 +30,6 @@ export default {
     // 如果进入详情,就不清除数据
     const isDetails =  this.$isDetails(to.name)
     if (!isDetails) {
-      this.$store.commit('label/clearLabelData')
       this.$store.commit('label/clearLabelCount')
       this.$store.commit('label/clearLabelList')
     }
