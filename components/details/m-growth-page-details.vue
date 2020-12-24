@@ -31,9 +31,10 @@
 
         <!-- classification -->
         <div class="inner-content-class">
-          <div class="inner-content-class-wrap">
-            <span>{{ growth.topicType === 'LIFE' ? '动态' : '活动' }}</span>
-          </div>
+          <m-posts-class
+            :remark="growth.topicType === 'LIFE' ? '动态' : '活动'"
+            :labels="growth.labels"
+          />
         </div>
 
         <!-- Label -->

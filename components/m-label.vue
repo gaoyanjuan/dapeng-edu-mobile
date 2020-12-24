@@ -7,28 +7,39 @@
       <div class="label-navbar-title">
         {{ labelDataGetters && labelDataGetters.name }}
       </div>
-      <div class="label-navbar-footer">
-        <div>5677人参与</div><div>6.89万人浏览</div>
+      <div class="label-navbar-footer" v-if="labelCountGetters">
+        <div>{{ labelCountGetters.participationCount | studentsCount }}参与</div><div>{{ labelCountGetters.browseCount | studentsCount }}人浏览</div>
       </div>
     </div>
     <!-- 二级菜单 -->
     <van-sticky class="the-menus">
       <m-label-menus :menus="menus" />
     </van-sticky>
-    <div>
-      <m-posts 
-        v-for="(item, index) in labelListGetters.list"
-        :id="item ? item.id: ''"
-        :key="index"
-        listType="label"
-        :propIndex="index"
-        :courseType="item.courseType"
-        :listItemData="item"
-        :modifiedTime="item.createTime"
-        :path="`/details/${pathType(item)}`"
-        :propSquareType="item && item.topicType"
-      />
-    </div>
+    <section class="label-wrap">
+      <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
+        <template v-if="labelListGetters.list.length">
+          <m-posts
+            class="list-item"
+            v-for="(item, index) in labelListGetters.list"
+            :id="item ? item.contentId: ''"
+            :key="item.id"
+            listType="label"
+            :propIndex="index"
+            :courseType="item.courseType"
+            :listItemData="item"
+            :modifiedTime="item.createTime"
+            :path="`/details/${pathType(item)}`"
+            :propSquareType="item && item.topicType"
+          />
+        </template>
+        <template v-if="!labelListGetters.list.length && finished">
+          <div class="label-blank-wrap">
+            <img class="blank-img" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
+        </template>
+      </van-list>
+    </section>
   </div>
 </template>
 
@@ -39,6 +50,10 @@ export default {
   title: '成长详情页',
   data () {
     return {
+      loading: false,
+      finished: false,
+      finishedTxt: '没有更多了',
+      blank: require('@/assets/icons/blank/have-no-homework.png'),
       menus: [
         { name: '全部', topicType: '' },
         { name: '成长', topicType: 'POST' },
@@ -53,13 +68,62 @@ export default {
   computed: {
     ...mapGetters('label', [
       'labelListGetters',
+      'labelCountGetters',
       'labelDataGetters'
     ])
   },
+  watch: {
+    'labelListGetters.status': function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    },
+    'labelListGetters.list': function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
+      }
+    }
+  },
   mounted () {
-
+    if(!this.labelListGetters.list.length) {
+      this.finishedTxt = ''
+    }
+    this.$nextTick(() => {
+      if (this.$store.state.anchorId) {
+        const element = document.getElementById(this.$store.state.anchorId)
+        if (element) {
+           element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
+      }
+    })
   },
   methods: {
+    ...mapActions('label', [
+      'appendLabelList'
+    ]),
+    onLoad () {
+      if (this.labelListGetters.status === 'over') {
+        this.finished = true
+        return false
+      }
+      if (this.labelListGetters.status === 'loading') return false
+      const newPage = this.labelListGetters.pageInfo.pages + 1
+      this.appendLabelList({
+        id: this.$route.query.id,
+        topicType: this.$route.query.topicType, 
+        page: newPage
+      })
+    },
     back () {
       const route = 'personal-center-publish'
       const isLogin = this.$cookiz.get('isLogin')
@@ -80,7 +144,6 @@ export default {
       }
     },
     pathType(item){
-      console.log(item)
       switch (item.topicType) {
         case 'HOMEWORK':
           return 'homework'
@@ -154,8 +217,35 @@ export default {
 }
 
 .list-item {
-  margin-bottom: 8px;
-  height: 150px;
-  background-color: #18252C;
+  margin-bottom: 12px;
+}
+
+.label-wrap {
+  background-color: #f8f8f8;
+  width: 100%;
+  min-height: calc(100vh - 185px);
+  padding-bottom: 65px;
+}
+
+.label-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .blank-img {
+    width: 240px;
+    height: 126px;
+    margin-top: 24px;
+  }
+  .blank-txt {
+    margin-top: 12px;
+    width: max-content;
+    height: 20px;
+    font-size: 14px;
+    font-family: @dp-font-semibold;
+    font-weight: 600;
+    color: #8D8E8E;
+    line-height: 20px;
+  }
 }
 </style>

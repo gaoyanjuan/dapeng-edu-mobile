@@ -203,6 +203,17 @@ export default {
     commentFlag: true
   }),
   computed: {
+    // 主体id
+    mainId () {
+      if (this.isGrowth) {
+        return this.listItemData.tagsId
+      } else if (this.listType === 'label') {
+        return this.listItemData.contentId
+      } else {
+        return this.listItemData.id
+      }
+    },
+    // 是否需要回显
     praiseCount () {
       if (this.$isSave(this.$route.name)) {
         return this.listItemData.praiseCount
@@ -362,7 +373,7 @@ export default {
       if(!this.commentFlag) return false
       this.commentFlag = false
       this.appendNewComment({
-        topicId: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+        topicId: this.mainId,
         topicType: this.propSquareType,
         content: text,
         label: {
@@ -420,7 +431,7 @@ export default {
           isCollection: this.isCollection
         }
         this.queryDeleteCollection({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userCollection') {
@@ -462,7 +473,7 @@ export default {
           isCollection: this.isCollection
         }
         this.queryCollection({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
@@ -508,7 +519,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryUnLike({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userLike') {
@@ -559,7 +570,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryLike({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
@@ -590,44 +601,45 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
+      console.log(this.mainId)
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,
-        anchorId: this.listItemData.id
+        anchorId: this.mainId
       })
       if (this.propSquareType) {
         if (this.listItemData.tagsId) {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
             }
           })
         } else {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
             }
           })
         }
       } else {
         if (this.listItemData.tagsId) {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
             }
           })
         } else {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
             }
           })
         }

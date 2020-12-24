@@ -4,7 +4,13 @@
     <span>{{ remark }} {{ college ? `· ${college.name}` : '' }}</span>
   </div>
   <template v-for="(item, index) in labels" >
-    <div class="label" :class="{ 'active-label': labelDataGetters ? item.labelId === labelDataGetters.id : false }" :key="index" v-if="item.labelCategoryProperty === 'SHOW_TAG'">
+    <div
+      @click.stop="toLabel(item)"
+      class="label"
+      :class="{ 'active-label': labelDataGetters ? item.labelId === labelDataGetters.id : false }"
+      :key="getKey(index)"
+      v-if="item.labelCategoryProperty === 'SHOW_TAG'"
+    >
       <span>{{ item.labelName }}</span>
     </div>
   </template>
@@ -36,7 +42,21 @@ export default {
       'labelDataGetters',
     ])
   },
-  mounted () {}
+  mounted () {},
+  methods: {
+    toLabel (item) {
+      console.log(item)
+      this.$router.push({
+        path: '/label',
+        query: {
+          id: item.labelId
+        }
+      })
+    },
+    getKey (index) {
+      return `${index}${new Date().getTime()}`
+    }
+  }
 }
 </script>
 
@@ -74,6 +94,6 @@ export default {
 }
 
 .active-label {
-
+  font-weight: 600;
 }
 </style>
