@@ -46,13 +46,14 @@
         </div>
         <!-- classification -->
         <div class="inner-content-class">
-          <div class="inner-content-class-wrap">
-            <span>动态</span>
-          </div>
+          <m-posts-class
+            :remark="'动态'"
+            :labels="dynamic.labels"
+          />
         </div>
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="动态" :activityData="dynamic.activity" />
+          <m-topic-label label-type="动态" :activityData="dynamic.activity" />
         </div>
       </div>
     </div>

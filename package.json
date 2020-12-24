@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
+    "@nuxtjs/device": "^1.2.7",
     "@vant/touch-emulator": "^1.2.0",
     "ali-oss": "^6.11.2",
     "amfe-flexible": "^2.2.1",

@@ -38,7 +38,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Works',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedTxt:'没有更多了',
@@ -71,10 +70,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },

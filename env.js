@@ -9,6 +9,7 @@ module.exports = {
     OLD_BASE_URL: 'http://192.168.1.62/pc/api', // 网关课程模块地址
     DP_AUTH_URL: 'http://passport.dapeng.lan', // 中台登录地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com', // oss地址
+    TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     MATOMO_SITEID: 19,

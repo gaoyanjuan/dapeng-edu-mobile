@@ -7,10 +7,10 @@
         <img class="navbar-back-icon" :src="back" @click="onBackEvent"/>
       </van-sticky>
       <van-tabs v-model="activeName" sticky @click="onTabsClick">
-        <van-tab title="关注" name="attention">
+        <van-tab :title=" interactionNews ? '关注' : 'TA的关注'" name="attention">
           <m-followers v-if="activeName === 'attention'" />
         </van-tab>
-        <van-tab title="粉丝" name="fans">
+        <van-tab :title="interactionNews ? '粉丝' : 'TA的粉丝'" name="fans">
           <m-fans v-if="activeName === 'fans'" />
         </van-tab>
       </van-tabs>
@@ -24,18 +24,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name:'Dashboard',
   layout:'navbar',
   data: () => ({
     activeName:'attention',
     back: require('@/assets/icons/navbar/nav-arrow-back.png'),
+   interactionNews: true
   }),
   mounted(){
     /**
      * 路由定位
      */
     this.activeName = this.$route.query.type || 'attention'
+    if (this.$route.query.userId === this.userInfoGetters.userId) {
+      this.interactionNews = true
+    } else {
+      this.interactionNews = false
+    }
+  },
+  computed: {
+    ...mapGetters('user',[
+      'userInfoGetters'
+    ])
   },
   methods:{
     /** 监听回退 */
@@ -100,4 +112,9 @@ export default {
   border-radius: 2px;
   background-image: none;
 }
+/deep/ .van-tab__text--ellipsis {
+  width: 60px;
+  text-align: center;
+}
+
 </style>

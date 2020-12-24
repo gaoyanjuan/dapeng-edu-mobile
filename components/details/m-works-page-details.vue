@@ -48,14 +48,15 @@
 
         <!-- classification -->
         <div class="inner-content-class">
-          <div class="inner-content-class-wrap">
-            <span>作品 {{ works.college ? `·${works.college.name.replace(/学院/, '')}` : '' }}</span>
-          </div>
+          <m-posts-class
+            :remark="works.college ? `作品·${ works.college ? `·${works.college.name.replace(/学院/, '')}` : '' }` : '作品'"
+            :labels="works.labels"
+          />
         </div>
 
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="作品" :activityData="works.activity" />
+          <m-topic-label label-type="作品" :activityData="works.activity" />
         </div>
       </div>
     </div>

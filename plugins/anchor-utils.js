@@ -32,6 +32,8 @@ function getFunctionName (name) {
     return 'work/changeWorkList'
   } else if (name === 'small-video') {
     return 'video/changeSmallVideoList'
+  } else if (name === 'label') {
+    return 'label/changeLabelList'
   }
 }
 
