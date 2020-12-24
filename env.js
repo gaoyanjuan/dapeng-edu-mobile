@@ -10,6 +10,7 @@ module.exports = {
     DP_AUTH_URL: 'http://passport.dapeng.lan', // 中台登录地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com', // oss地址
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
+    LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -27,6 +28,7 @@ module.exports = {
     DP_AUTH_URL: 'https://auth-test.dapengjiaoyu.cn',
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
+    LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -45,6 +47,7 @@ module.exports = {
     DP_AUTH_URL: 'https://passport.dapengjiaoyu.cn', // 认证中心获取token地址
     OSS_URL: 'https://image.dapengjiaoyu.com', // oss资源地址
     TAPI_URL: 'http://api-appl.vpc.dapengjiaoyu.cn', // 获取订单token地址
+    LOG_API_URL: 'https://api.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     PORT: 3000,
     HOST: '0.0.0.0',
