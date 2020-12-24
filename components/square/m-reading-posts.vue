@@ -3,53 +3,42 @@
     <div class="reading-posts-card" @click="toDetail">
 
       <!-- Header Block -->
-      <template v-if="item.coverImgSmall && item.coverImgSmall.length === 1">
-        <div class="reading-header-row">
-          <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
-          <div class="posts-right-side-wrap">
-            <span class="posts-title">{{ item.title }}</span>
-            <span class="posts-content">{{ content }}</span>
-          </div>
-        </div>
-      </template>
+      <div v-if="item.coverImgSmall.length === 1" class="reading-header-row" @click="toDetail">
+        <div class="posts-title van-multi-ellipsis--l2">{{ item.title }}</div>
+        <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
+      </div>
 
-      <template v-else>
-        <div class="reading-header-row-more">
-          <div class="posts-title"> {{ item.title }} </div>
-          <div class="posts-content"> {{ content }} </div>
-          <div class="posts-photos-wrap" v-if="item.coverImgSmall">
-            <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
-          </div>
+      <div v-else class="reading-header-row-more" @click="toDetail">
+        <div class="posts-title van-multi-ellipsis--l2"> {{ item.title }} </div>
+        <div class="posts-photos-wrap" v-if="item.coverImgSmall">
+          <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
         </div>
-      </template>
+      </div>
 
       <!-- Body Block -->
       <div class="reading-body-row">
-        <div class="posts-label">阅读 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}</div>
-        <div class="posts-author"> {{ item.user.nickname }} </div>
-        <div class="posts-date"> {{ item.createTime | commonDate }} </div>
+        <div class="posts-label">
+          阅读 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}
+        </div>
+        
+        <div v-for="item in item.labels" :key="item.labelId" class="posts-label-other">
+          {{ item.labelName }}
+        </div>
       </div>
 
       <!-- Footer Block -->
       <div class="reading-footer-row">
-        <div class="posts-commernt-wrap">
-          <img class="posts-comment" :src="comment" alt="comment" />
-          <span class="posts-nums">{{ item.commentCount | studentsCount }}</span>
+        <div class="footer-left-side">
+          <span class="posts-author"> {{ item.user.nickname }} </span>
+          <span class="posts-date"> {{ item.createTime | commonDate }} </span>
         </div>
-        <div class="posts-love-wrap" @click.stop="onLove">
-          <img class="posts-love" :src="isPraise ? unLove : love" alt="love" />
-          <span class="posts-nums">{{ praiseCount | studentsCount }}</span>
-        </div>
-        <div class="posts-star-wrap" @click.stop="onCollect">
-          <img class="posts-star" :src="isCollection ? unStar : star" alt="star" />
-        </div>
+        <span class="posts-comment"> {{ item.commentCount | studentsCount }}评论 </span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
 export default {
   name:'M-Reading-Posts',
   props:{
@@ -73,188 +62,18 @@ export default {
       default: 0
     }
   },
-  data:() => ({
-    popisPraise: false,
-    popIsCollection: false,
-    popCommentCount: 0,
-    popPraiseCount: 0,
-    comment: require('@/assets/icons/posts/posts-comment.png'),
-    love: require('@/assets/icons/posts/posts-love.png'),
-    unLove: require('@/assets/icons/posts/posts-unlove.png'),
-    star: require('@/assets/icons/posts/posts-star.png'),
-    unStar: require('@/assets/icons/posts/posts-unstar.png'),
-  }),
-  computed:{
-    functionName () {
-      return this.$getFunctionName(this.listType)
-    },
-    // 是否需要回显
-    praiseCount () {
-      if (this.$isSave(this.$route.name)) {
-        return this.item.praiseCount
-      } else {
-        return this.popPraiseCount
-      }
-    },
-    isPraise () {
-      if (this.$isSave(this.$route.name)) {
-        return this.item.isPraise
-      } else {
-        return this.popIsPraise
-      }
-    },
-    isCollection () {
-      if (this.$isSave(this.$route.name)) {
-        return this.item.isCollection
-      } else {
-        return this.popIsCollection
-      }
-    },
-    commentCount () {
-      if (this.$isSave(this.$route.name)) {
-        return this.item.commentCount
-      } else {
-        return this.popCommentCount
-      }
-    },
-    content() {
-      return this.item.content.replace(/<[^>]+>/g, "").replace(/&nbsp;/gi, '')
-    }
-  },
-  created() {
-    if (!this.$isSave(this.$route.name)) {
-      this.popCommentCount = this.item.commentCount
-      this.popPraiseCount = this.item.praiseCount
-      this.popIsPraise = this.item.isPraise
-      this.popIsCollection = this.item.isCollection
-    }
-  },
 
   methods:{
-    ...mapActions({
-      queryLike: 'comment/queryLike',
-      queryUnLike: 'comment/queryUnLike',
-      queryCollection: 'comment/queryCollection',
-      queryDeleteCollection: 'comment/queryDeleteCollection',
-    }),
-    ...mapMutations('user', [
-      'deleteUserLikes',
-      'deleteUserFavorites'
-    ]),
-
-    onComment() {},
-
-    onLove() {
-      if(!this.$login()) {
-        return 
-      }
-      if (this.isPraise) {
-        if (this.$isSave(this.$route.name)) {
-          this.$store.commit(`${this.functionName}`, {
-            index: this.propIndex,
-            type: 'love',
-            value: {
-              praise: false,
-              count: -1
-            }
-          })
-        } else {
-          this.popIsPraise = false
-          this.popPraiseCount -= 1
-        }
-        this.queryUnLike({
-          id: this.item.id,
-          type: 'ARTICLE'
-        }).then(()=>{
-          if (this.pageName === 'userLike') {
-            let payload = {
-              type: 'ARTICLE',
-              index: this.propIndex
-            }
-            this.deleteUserLikes(payload)
-          }
-        })
-      } else {
-        if (this.$isSave(this.$route.name)) {
-          this.$store.commit(`${this.functionName}`, {
-            index: this.propIndex,
-            type: 'love',
-            value: {
-              praise: true,
-              count: 1
-            }
-          })
-        } else {
-          this.popIsPraise = true
-          this.popPraiseCount += 1
-        }
-        this.queryLike({
-          id: this.item.id,
-          type: 'ARTICLE',
-          createdId: this.item.user.userId,
-          contentType: 'TEXT'
-        })
-      }
-    },
-
-    onCollect() {
-      if(!this.$login()) {
-        return 
-      }
-      if (this.isCollection) {
-        if (this.$isSave(this.$route.name)) {
-          this.$store.commit(`${this.functionName}`, {
-            index: this.propIndex,
-            type: 'collect',
-            value: false
-          })
-        } else {
-          this.popIsCollection = false
-        }
-        this.queryDeleteCollection({
-          id: this.item.id,
-          type: 'ARTICLE'
-        }).then(()=>{
-          if (this.pageName === 'userCollection') {
-            let payload = {
-              type: 'ARTICLE',
-              index: this.propIndex
-            }
-            this.deleteUserFavorites(payload)
-          }
-        })
-
-      } else {
-        if (this.$isSave(this.$route.name)) {
-          this.$store.commit(`${this.functionName}`, {
-            index: this.propIndex,
-            type: 'collect',
-            value: true
-          })
-        } else {
-          this.popIsCollection = true
-        }
-        this.queryCollection({
-          id: this.item.id,
-          type: 'ARTICLE',
-          createdId: this.item.user.userId,
-          contentType: 'TEXT'
-        })
-      }
-    },
     toDetail() {
-      this.$cookiz.set('isLogin', false, {
-        path: '/'
-      })
-      console.log(this.item.id)
+      this.$cookiz.set('isLogin', false, { path: '/' })
+
       this.$store.commit('changeListData', {
         listType: 'arttcle',
         propIndex: this.propIndex,
         anchorId: this.item.id
       })
-      this.$router.push({
-        path: `/details/reading?id=${this.item.id}`
-      })
+
+      this.$router.push({ path: `/details/reading?id=${this.item.id}` })
     }
   }
 }
@@ -268,12 +87,13 @@ export default {
 
 .reading-posts-card {
   width: 100%;
-  max-height: 266px;
-  min-height: 182px;
+  max-height: 228px;
+  min-height: 142px;
   padding: 16px;
   background-color: @dp-white;
 }
 
+// 单张图片
 .reading-header-row {
   width: 100%;
   height: 74px;
@@ -289,74 +109,32 @@ export default {
   cursor: pointer;
 }
 
-.reading-header-row .posts-right-side-wrap {
+.reading-header-row .posts-title {
   width: 220px;
-  height: 74px;
-  margin-left: 12px;
-  cursor: pointer;
-  .l-flex-column();
-  
-  & .posts-title {
-    width: 220px;
-    height:48px;
-    font-size: 16px;
-    font-family: @dp-font-regular;
-    font-weight: 400;
-    color: #18252C;
-    line-height: 24px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-
-  & .posts-content {
-    width: 220px;
-    height: 20px;
-    font-size: 14px;
-    font-family: @dp-font-regular;
-    font-weight: 400;
-    color: #A3A8AB;
-    line-height: 20px;
-    margin-top: 4px;
-    word-wrap: break-word;
-    word-break: break-all;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
-  }
+  height:48px;
+  font-size: 16px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #18252C;
+  line-height: 24px;
+  margin-right: 12px;
+  word-break: break-all;
+  word-wrap: break-word;
+  align-self: flex-start;
 }
 
+// 多张题图
 .reading-header-row-more .posts-title {
   width: 343px;
   max-height: 48px;
   min-height: 24px;
   font-size: 16px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #18252C;
   line-height: 24px;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.reading-header-row-more .posts-content {
-  width: 343px;
-  height: 20px;
-  font-size: 14px;
-  font-family: @dp-font-regular;
-  font-weight: 400;
-  color: #A3A8AB;
-  line-height: 20px;
-  margin-top: 4px;
-  word-wrap: break-word;
   word-break: break-all;
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
   cursor: pointer;
 }
 
@@ -382,27 +160,60 @@ export default {
   line-height: 24px;
   margin-top: 12px;
   .l-flex-row-def();
+
+  & > div:not(:last-child) {
+    margin-right: 8px;
+  }
 }
 
 .reading-body-row .posts-label {
+  width: auto;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
   padding: 0 8px;
   background: #F7F7F7;
   border-radius: 12px;
   font-size: 12px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #465156;
   text-align: center;
-  cursor: pointer;
+}
+
+.reading-body-row .posts-label-other {
+  width: auto;
+  height: 24px;
+  line-height: 24px;
+  padding: 0 8px;
+  background: #E6F7EE;
+  border-radius: 12px;
+  font-size: 12px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #0CB65B;
+  text-align: center;
+}
+
+.reading-footer-row {
+  width: 100%;
+  height: 24px;
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reading-footer-row .footer-left-side {
   display: flex;
   align-items: center;
 }
 
-.reading-body-row .posts-author {
+.footer-left-side .posts-author {
   max-width: 160px;
   height: 16px;
   font-size: 12px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #A3A8AB;
   line-height: 16px;
@@ -410,61 +221,24 @@ export default {
   margin-right: 8px;
 }
 
-.reading-body-row .posts-date {
+.footer-left-side .posts-date {
   width: fit-content;
   height: 16px;
   font-size: 12px;
-  font-family: @dp-font-regular;
+  font-family: @regular;
   font-weight: 400;
   color: #A3A8AB;
   line-height: 16px;
 }
 
-.reading-footer-row {
-  width: 100%;
-  height: 24px;
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-
-.reading-footer-row .posts-comment,
-.reading-footer-row .posts-love,
-.reading-footer-row .posts-star {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-}
-
-.reading-footer-row .posts-nums {
+.reading-footer-row .posts-comment {
+  width: auto;
+  height: 16px;
   font-size: 12px;
-  font-family: @dp-font-medium;
-  font-weight: 500;
-  color: #747C80;
+  font-family: @regular;
+  font-weight: 400;
+  color: #A3A8AB;
+  line-height: 16px;
+  justify-self: flex-end;
 }
-
-.reading-footer-flex-style {
-  width: 57px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-}
-
-.reading-footer-row .posts-commernt-wrap,
-.reading-footer-row .posts-love-wrap {
-  margin-right: 17px;
-  .reading-footer-flex-style()
-}
-
-.reading-footer-row .posts-star-wrap {
-  width: 24px;
-  height: 24px;
-}
-
-.reading-footer-row .posts-nums {
-  margin-left: 4px;
-}
-
 </style>

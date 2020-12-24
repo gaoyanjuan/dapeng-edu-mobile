@@ -1,6 +1,22 @@
-export const state = () => ({})
+export const state = () => ({
+  // 热门标签
+  hotLabel: {
+    list: [],
+    pageInfo: {
+      pages: 1,
+      size: 20
+    }
+  }
+})
 
-export const mutations = {}
+export const mutations = {
+  clearhotLabel (state) {
+    state.hotLabel.list = []
+  },
+  appendHotLabel (state, payload) {
+    state.hotLabel.list = payload.data
+  },
+}
 
 export const actions = {
   // 获取OSS的sts临时授权
@@ -38,6 +54,23 @@ export const actions = {
     const res = await this.$axios.put(`/homes/${params.id}`, params)
     return res
   },
+
+  // 热门标签
+  async getHotLabel({ commit, state }, params) {
+    const res = await this.$axios.get(`/labels`, {
+      params: {
+        ...params,
+        page: 1,
+        size: 20
+      }
+    })
+    commit('appendHotLabel', res)
+    return res
+  },
 }
 
-export const getters = {}
+export const getters = {
+  hotLabelGetters (state) {
+    return state.hotLabel
+  },
+}
