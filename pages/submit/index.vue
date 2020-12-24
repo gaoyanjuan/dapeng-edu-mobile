@@ -96,10 +96,31 @@
       <!-- 生活动态标签 -->
       <section v-if="submitType === 'LIFE'" class="dynamic-label-row">动态</section>
 
+      <!-- 添加标签 -->
+      <section class="homework-label-select-row">
+
+        <div class="label-select-header" @click="openLabelPop">
+          <div class="label-left-side">
+            <img class="label-row" :src="label_row" />
+            <span class="label-title">添加标签</span>
+          </div>
+          <img class="label-arrow" :src="label_arrow" />
+        </div>
+
+        <div class="label-select-wrap">
+          <van-tag v-for="item in labelList" :key="item.labelId" round closeable plain @close="cancelLabel(item)">
+            {{ item.labelName }}
+          </van-tag>
+        </div>
+      </section>
+
     </div>
 
     <!-- 底部唤起APP -->
     <m-submit-open-app :show-footer="openAppPop" @closeFooter="onCloseFooter"/>
+
+    <!-- 添加标签 -->
+    <m-label-popup :show-popup="labelPop" :labels="hotLabel" @append-labels="appendLabels"/>
 
     <!-- 图片预览 -->
     <m-upload-image-preview :image-preview="imagePreview" @onDelete="onDelete"/>
@@ -148,6 +169,8 @@ export default {
     usernamePop:{ show: false, info: null},
     // 作业号弹窗状态
     homeworkNumberPop: { show: false, jobNummer: null },
+    // 添加标签
+    labelPop: { show: false },
     // 唤起APP
     openAppPop: { show: false },
     // 图片预览
@@ -160,10 +183,15 @@ export default {
     collegeIndex: null,
     // 成长下-活动数据
     activityData: null,
+    // 标签
+    labelList: [],
     // label 背景
     label:require('@/assets/icons/submit/college-label.png'),
     // 活动 label
-    activity: require('@/assets/icons/label/label-topic.png')
+    activity: require('@/assets/icons/label/label-topic.png'),
+    // label 添加标签
+    label_row:require('@/assets/icons/submit/label.png'),
+    label_arrow:require('@/assets/icons/submit/label-arrow.png'),
   }),
 
   watch: {
@@ -219,6 +247,8 @@ export default {
       collegeList: 'colleges/submitWorkCollegesGetters',
       // 用户信息
       userInfo: 'user/userInfoGetters',
+      // 推荐标签
+      hotLabel: 'publish/hotLabelGetters'
     }),
 
     // 当前发布类型
@@ -317,6 +347,9 @@ export default {
       this.dynamicNums = '只能输入60个字哦'
       this.openAppPop.show = false
     }
+
+    // 查询热门标签
+    this.getHotLabelList()
   },
 
   methods:{
@@ -337,6 +370,8 @@ export default {
       publishWorks:'publish/addNewWorks',
       // 发布动态
       publishDynamic: 'publish/addNewDynamic',
+      // 推荐标签
+      getHotLabel: 'publish/getHotLabel',
       // 查询活动详情
       getActivitiesDetails: 'activities/appendActivitiesDetail',
       // 获取用户发布的作业
@@ -346,7 +381,8 @@ export default {
     ...mapMutations({
       // 清空作业详情
       clearHomeworkDetails:'homework/clearHomeworkDetails',
-      clearPublishHomework: 'user/clearPublishHomework'
+      clearPublishHomework: 'user/clearPublishHomework',
+      clearhotLabel: 'publish/clearhotLabel'
     }),
 
     // 提交前确认
@@ -473,7 +509,8 @@ export default {
         imgInfo: this.imageInfo,
         content: this.content,
         source: 'MOBILE',
-        id: this.homeworkDetails.id
+        id: this.homeworkDetails.id,
+        labels: this.labelList
       }).then( res => {
         return res
       }).catch( err => {
@@ -488,6 +525,7 @@ export default {
         content: this.content,
         source: 'PC',
         type: 'TEXT',
+        labels: this.labelList,
         title: this.requirement.title,
         taskId: this.requirement.taskId
       }).then( res => {
@@ -504,6 +542,7 @@ export default {
         imgInfo: this.imageInfo,
         content: this.content,
         source: 'MOBILE',
+        labels: this.labelList,
         collegeId: this.collegeList[index].id
       }).then( res => {
         return res
@@ -517,6 +556,7 @@ export default {
       let params = {
         imgInfo: this.imageInfo,
         content: this.content,
+        labels: this.labelList,
         source: 'MOBILE',
         type: 'TEXT',
       }
@@ -552,6 +592,12 @@ export default {
           this.activityData = res
         })
       }
+    },
+
+    /** 获取热门标签 */
+    getHotLabelList() {
+      let channel = this.submitType === ('VIP' || 'TEST') ? 'HOMEWORK': this.submitType
+      this.getHotLabel({ topicType: channel })
     },
 
     /** 图片文件上传至服务器 */
@@ -755,9 +801,28 @@ export default {
       this.collegeIndex = index
     },
 
+    /*** 添加标签 */
+    appendLabels(params) {
+      this.labelList = params
+    },
+
     /** 关闭底部唤起 */
     onCloseFooter() {
       this.openAppPop.show = false
+    },
+
+    /** 打开标签弹层 */
+    openLabelPop() {
+      this.labelPop.show = true
+    },
+
+    /** 关闭标签 */
+    cancelLabel(params) {
+      this.labelList.forEach((item, index) => {
+        if(item.labelId === params.labelId) {
+          this.labelList.splice(index, 1)
+        }
+      })
     },
     
     /** 关闭弹窗，跳转我的作业 */
@@ -767,6 +832,7 @@ export default {
   },
 
   destroy() {
+    this.clearhotLabel()
     this.clearHomeworkDetails()
   },
 }
@@ -1035,4 +1101,56 @@ export default {
   background-position: center;
   cursor: pointer;
 }
+
+/** 添加标签 */
+.homework-label-select-row {
+  width: 100%;
+  margin-top: 15px;
+  padding-bottom: 80px;
+}
+
+.homework-label-select-row .label-select-header {
+  height: 24px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:active {
+    background-color:#f2f3f5;
+  }
+
+  .label-left-side {
+    display: flex;
+    align-items: center;
+
+    .label-row {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+    }
+
+    .label-title {
+      font-size: 14px;
+      font-family: @semibold;
+      font-weight: 600;
+      color: #36404A;
+    }
+  }
+
+  .label-arrow {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.homework-label-select-row .label-select-wrap {
+  width: 100%;
+  margin-top: 10px;
+
+  & > span {
+    margin-right: 10px;
+  }
+}
+
 </style>
