@@ -31,14 +31,15 @@
 
         <!-- classification -->
         <div class="inner-content-class">
-          <div class="inner-content-class-wrap">
-            <span>{{ growth.topicType === 'LIFE' ? '动态' : '活动' }}</span>
-          </div>
+          <m-posts-class
+            :remark="growth.topicType === 'LIFE' ? '动态' : '活动'"
+            :labels="growth.labels"
+          />
         </div>
 
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="成长" :activityData="growth.activity"/>
+          <m-topic-label label-type="成长" :activityData="growth.activity"/>
         </div>
       </div>
     </div>
