@@ -107,7 +107,7 @@ export default {
   },
   proxy: {
     '/api/buriedPoint/log': {
-      target: env[process.env.MODE].TAPI_URL, // 获取订单token
+      target: env[process.env.MODE].LOG_API_URL, // 获取订单token
       pathRewrite: {
         '^/api/buriedPoint/log': '/api/buriedPoint/log',
         changeOrigin: true
