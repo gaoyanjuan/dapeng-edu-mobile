@@ -95,6 +95,7 @@ export default {
   buildModules: [],
 
   modules: [
+    '@nuxtjs/device',
     '@nuxtjs/style-resources',
     '@nuxtjs/axios',
     ['cookie-universal-nuxt', { alias: 'cookiz' }]
@@ -105,6 +106,13 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
+    '/api/buriedPoint/log': {
+      target: env[process.env.MODE].TAPI_URL, // 获取订单token
+      pathRewrite: {
+        '^/api/buriedPoint/log': '/api/buriedPoint/log',
+        changeOrigin: true
+      }
+    },
     '/api/token/check_token': {
       target: env[process.env.MODE].REFRESH_TOKEN_URL, // 验证token
       pathRewrite: {
