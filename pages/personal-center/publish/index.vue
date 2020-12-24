@@ -76,7 +76,7 @@ export default {
       navBar: false,
       lovePopup: { show: false },
       userInfo: {},
-      showAttention: true,
+      showAttention: false,
       attentionState: null
     }
   },
@@ -175,7 +175,6 @@ export default {
       this.queryUserData({userId: this.$route.query.userId})
       .then((data) => {
         this.userInfo = data
-        this.showAttention = true
       })
     }
     // 判断我是否关注TA的个人主页的关注按钮展示（关注/已关注）
@@ -188,6 +187,7 @@ export default {
       this.appendFollowingStatus({ id: this.$route.query.userId })
       .then((data) => {
         this.attentionState = data
+        this.showAttention = true
       })
     }
     // 监听调用滚动事件
