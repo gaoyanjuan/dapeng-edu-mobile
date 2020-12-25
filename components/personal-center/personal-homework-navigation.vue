@@ -35,7 +35,7 @@ export default {
   },
   mounted() {
     // 路由定位
-    let query = this.$route.query.type || 'homework'
+    let query = this.$route.query.type || 'dynamic'
     let tabs = ['dynamic','homework','works','growth','reading','video']
     this.activeName = tabs.findIndex(tab => tab === query)
   },
