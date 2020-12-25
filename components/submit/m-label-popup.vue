@@ -50,6 +50,11 @@ export default {
     labels:{
       type: Object,
       default: {}
+    },
+    // 已选列表
+    labelSelProp:{
+      type: Array,
+      default:[]
     }
   },
   data:() => ({
@@ -71,6 +76,10 @@ export default {
         }, 500)
       }
     }
+  },
+
+  mounted() {
+    this.labelSel = this.labelSelProp
   },
 
   methods:{
