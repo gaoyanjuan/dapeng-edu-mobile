@@ -7,7 +7,7 @@
       </div>
       <div class="user-info">
         <div class="user-avatar">
-          <img ref="headerImg" :src="userInfo.avatar" alt="头像">
+          <img :src="userInfo.avatar || defaultImg" alt="头像">
         </div>
         <div class="info-box">
           <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
@@ -194,10 +194,6 @@ export default {
     }
     // 监听调用滚动事件
     window.addEventListener('scroll', this.watchScroll)
-    // 挂载完成后，判断图片是否显示成功，若失败，则替换为默认图片
-    this.$refs.headerImg.onerror = () => {
-      this.$refs.headerImg.src = this.defaultImg
-    }
   }
 }
 </script>
