@@ -10,6 +10,7 @@ module.exports = {
     DP_AUTH_URL: 'http://passport.dapeng.lan', // 中台登录地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com', // oss地址
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
+    LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     MATOMO_SITEID: 19,
@@ -29,6 +30,7 @@ module.exports = {
     DP_AUTH_URL: 'https://auth-test.dapengjiaoyu.cn',
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
+    LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     MATOMO_SITEID: 19,
@@ -44,11 +46,12 @@ module.exports = {
     DP_ZHIFU: 'https://zhifu.dapengjiaoyu.cn/#/quickPayMent', // 快捷支付链接地址
     DP_M_URL: 'http://m.dapengjiaoyu.cn', // 老m站地址
     PROTOCOL: 'https://h5.dapengjiaoyu.cn/#/', //协议地址
-    BASE_URL: 'http://172.17.255.64:8000/pcmove-v1', // 内网网关广场模块地址
-    OLD_BASE_URL: 'http://172.17.255.64:8000/pc', // 内网网关课程模块地址
+    BASE_URL: 'http://172.17.255.95/pcmove-v1', // 内网网关广场模块地址
+    OLD_BASE_URL: 'http://172.17.255.95/pc', // 内网网关课程模块地址
     DP_AUTH_URL: 'https://passport.dapengjiaoyu.cn', // 认证中心获取token地址
     OSS_URL: 'https://image.dapengjiaoyu.com', // oss资源地址
     TAPI_URL: 'http://api-appl.vpc.dapengjiaoyu.cn', // 获取订单token地址
+    LOG_API_URL: 'https://api.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     MATOMO_SITEID: 14,
