@@ -207,8 +207,6 @@ export default {
     mainId () {
       if (this.isGrowth) {
         return this.listItemData.tagsId
-      } else if (this.listType === 'label') {
-        return this.listItemData.contentId
       } else {
         return this.listItemData.id
       }
@@ -533,7 +531,6 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
-      console.log(this.mainId)
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,

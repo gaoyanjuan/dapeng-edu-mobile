@@ -47,7 +47,8 @@ const saveList = [
   'index-homework',
   'index-growth',
   'index-reading',
-  'index-small-video'
+  'index-small-video',
+  'label'
 ]
 
 function isSave (name) {

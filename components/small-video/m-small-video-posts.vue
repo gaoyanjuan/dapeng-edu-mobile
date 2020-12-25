@@ -27,10 +27,12 @@
         </div>
       </div>
     </div>
-    <m-posts-class
-      :remark="videoItem.college && videoItem.college.name ? `作品·${videoItem.college.name.replace(/学院/, '')}` : '作品'"
-      :labels="videoItem.labels"
-    />
+    <div class="">
+      <m-posts-class
+        :remark="videoItem.college && videoItem.college.name ? `作品·${videoItem.college.name.replace(/学院/, '')}` : '作品'"
+        :labels="videoItem.labels"
+      />
+    </div>
   </div>
 </template>
 
@@ -43,6 +45,14 @@ export default {
     propIndex:{
       type: Number,
       default: 0
+    },
+    listType: {
+      type: String,
+      default: ''
+    },
+    propSquareType: {
+      type: String,
+      default: 'HOMEWORK'
     },
     /** 
      * 数据对象 
@@ -57,6 +67,11 @@ export default {
   data:() => ({
     defaultImg: require('@/assets/icons/common/photos-bg.png')
   }),
+  computed: {
+    functionName () {
+      return this.$getFunctionName(this.listType)
+    }
+  },
   created () {},
   mounted () {
     if (this.$refs.videoImg) {
@@ -74,7 +89,7 @@ export default {
       if(!this.$login()) return
       
       if (this.videoItem.isPraise) {
-        this.$store.commit('video/changeSmallVideoList', {
+        this.$store.commit(`${this.functionName}`, {
           index: this.propIndex,
           type: 'love',
           value: {
@@ -84,10 +99,10 @@ export default {
         })
         this.queryUnLike({
           id: this.videoItem.id,
-          type: this.videoItem.type
+          type: this.propSquareType
         })
       } else {
-        this.$store.commit('video/changeSmallVideoList', {
+        this.$store.commit(`${this.functionName}`, {
           index: this.propIndex,
           type: 'love',
           value: {
@@ -97,9 +112,9 @@ export default {
         })
         this.queryLike({
           id: this.videoItem.id,
-          type: this.videoItem.type,
+          type: this.propSquareType,
           createdId: this.videoItem.user.userId,
-          contentType: 'TEXT'
+          contentType: 'VIDEO'
         })
       }
     },
@@ -107,26 +122,27 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
+      console.log(this.videoItem)
       this.$store.commit('changeListData', {
-        listType: 'small-video',
+        listType: this.listType,
         propIndex: this.propIndex,
         anchorId: this.videoItem.id
       })
-      if (this.videoItem.type === 'HOMEWORK') {
+      if (this.propSquareType === 'HOMEWORK') {
         this.$router.push({
           path: '/details/homework',
           query: {
             id: this.videoItem.id
           }
         })
-      } else if (this.videoItem.type === 'WORKS') {
+      } else if (this.propSquareType === 'WORKS') {
         this.$router.push({
           path: '/details/works',
           query: {
             id: this.videoItem.id
           }
         })
-      } else if (this.videoItem.type === 'LIFE') {
+      } else if (this.propSquareType === 'LIFE') {
         this.$router.push({
           path: '/details/dynamic',
           query: {
@@ -147,6 +163,7 @@ export default {
 }
 
 .small-video-wrapper {
+  margin-top: 14px;
   width: 167px;
   border-radius: 8px;
   background-color: @dp-white;
@@ -214,7 +231,7 @@ export default {
         font-size: 10px;
         font-family:@regular;
         font-weight: 400;
-        color: #747C80;
+        color: #FFFFFF;
         margin-left: 4px;
       }
     }
