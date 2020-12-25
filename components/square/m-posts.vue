@@ -16,7 +16,7 @@
     <div class="works__cot">
       <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
       <div class="work__row__photos--group">
-        <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
+        <m-photos v-if="listItemData.type === 'TEXT' && listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
         <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData && listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
         <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
       </div>
@@ -25,7 +25,7 @@
     <!-- classification -->
     <div class="works__class">
       <m-posts-class
-        :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`"
+        :remark="listItemData.college && listItemData.college.name ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`"
         :labels="listItemData.labels"
       />
     </div>
@@ -207,8 +207,6 @@ export default {
     mainId () {
       if (this.isGrowth) {
         return this.listItemData.tagsId
-      } else if (this.listType === 'label') {
-        return this.listItemData.contentId
       } else {
         return this.listItemData.id
       }
@@ -443,21 +441,6 @@ export default {
           }
           
         })
-        .catch(() => {
-          if (this.$isSave(this.$route.name)) {
-          this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'collect',
-              value: true
-            })
-          } else {
-            this.popIsCollection = true
-          }
-          this.imagePreview = {
-            ...this.imagePreview,
-            isCollection: this.isCollection
-          }
-        })
       } else {
         if (this.$isSave(this.$route.name)) {
           this.$store.commit(`${this.functionName}`, {
@@ -477,20 +460,6 @@ export default {
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
-        }).catch(() => {
-          if (this.$isSave(this.$route.name)) {
-            this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'collect',
-              value: false
-            })
-          } else {
-            this.popIsCollection = false
-          }
-          this.imagePreview = {
-            ...this.imagePreview,
-            isCollection: this.isCollection
-          }
         })
       }
     },
@@ -530,26 +499,6 @@ export default {
             this.deleteUserLikes(payload)
           }
         })
-        .catch(() => {
-          if (this.$isSave(this.$route.name)) {
-             this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'love',
-              value: {
-                praise: true,
-                count: 1
-              }
-            })
-          } else {
-            this.popIsPraise = true
-            this.popPraiseCount += 1
-          }
-          this.imagePreview = {
-            ...this.imagePreview,
-            praiseCount: this.praiseCount,
-            isPraise: this.isPraise
-          }
-        })
       } else {
         if (this.$isSave(this.$route.name)) {
           this.$store.commit(`${this.functionName}`, {
@@ -574,25 +523,6 @@ export default {
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
-        }).catch(() => {
-          if (this.$isSave(this.$route.name)) {
-            this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'love',
-              value: {
-                praise: false,
-                count: -1
-              }
-            })
-          } else {
-            this.popIsPraise = false
-            this.popPraiseCount -= 1
-          }
-           this.imagePreview = {
-            ...this.imagePreview,
-            praiseCount: this.praiseCount,
-            isPraise: this.isPraise
-          }
         })
       }
     },
@@ -601,7 +531,6 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
-      console.log(this.mainId)
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,

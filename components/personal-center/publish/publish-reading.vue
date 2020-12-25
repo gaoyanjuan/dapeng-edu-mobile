@@ -1,7 +1,12 @@
 <template class="reading-wrap">
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
     <template v-if="publishReadingGetters.list.length">
-      <m-reading-posts v-for="(item, index) in publishReadingGetters.list" :key="index" :item="item" />
+      <m-reading-posts
+        v-for="(item, index) in publishReadingGetters.list"
+        :key="index"
+        :item="item"
+        :imgSmall="item.coverImgSmall"
+      />
     </template>
     <template v-if="!publishReadingGetters.list.length && finished">
       <div class="have-no-posts-wrap">

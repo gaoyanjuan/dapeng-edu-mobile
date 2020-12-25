@@ -19,8 +19,8 @@ export default {
       this.$store.commit('label/clearLabelList')
       this.$store.dispatch('label/appendLabelList', { id: newQuery.id, topicType: newQuery.topicType, page: 1 })
       if (newQuery.id !== oldQuery.id) {
-        this.$store.commit('label/clearLabelData')
         this.$store.commit('label/clearLabelCount')
+        this.$store.commit('label/clearLabelData')
         this.$store.dispatch('label/appendLabelCount', { id: newQuery.id })
       }
     }

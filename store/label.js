@@ -67,7 +67,23 @@ export default {
   actions: {
     async appendLabelCount({ commit }, params) {
       const res = await this.$axios.get(`/labels/${params.id}/count`)
-      commit('appendLabelCount', res)
+      if (res.status === 200) {
+        commit('appendLabelCount', res)
+        commit('appendLabelData', res)
+      } else {
+        commit('appendLabelCount', {
+          data: {
+            participationCount: 0,
+            browseCount: 0
+          }
+        })
+        commit('appendLabelData', {
+          data: {
+            id: '0',
+            name: '佚名'
+          }
+        })
+      }
       return res
     },
     async appendLabelList ({ commit }, params) {
@@ -85,7 +101,6 @@ export default {
       if (res.data) {
         commit('appendLabelList', { data: res.data, pageInfo })
       }
-      commit('appendLabelData', res)
       return res
     }
   },

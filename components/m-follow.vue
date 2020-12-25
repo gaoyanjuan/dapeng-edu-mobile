@@ -13,10 +13,19 @@
     <div class="follow-wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <template v-if="attentionListGetters.list.length">
-          <div v-for="(res, i) in attentionListGetters.list" :key="i">
-            <m-posts
+          <div v-for="(res, i) in attentionListGetters.list" class="list-item" :key="i">
+            <m-reading-posts
+              v-if="res && res.topicType === 'ARTICLE'"
               :id="res.topic ? res.topic.id: ''"
-              v-if="res.topic"
+              listType="attention"
+              :propIndex="i"
+              :imgSmall="res.topic.coverImgSmall"
+              :key="res.topic ? res.topic.id: ''"
+              :item="res.topic"
+            />
+            <m-posts
+              v-else
+              :id="res.topic ? res.topic.id: ''"
               listType="attention"
               :propIndex="i"
               :propSquareType="res.topicType"
@@ -133,6 +142,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.list-item {
+  margin-bottom: 12px;
+}
 
 .follow-section-line {
   width: 100%;

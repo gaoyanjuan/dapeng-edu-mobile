@@ -39,7 +39,7 @@ export function waterFallImgPromise(data, index, defaultWidth = 167) {
   return new Promise((resolve) => {
     if (process.browser) {
       const img = new Image()
-      img.src = data[index].coverImg
+      img.src = data[index].videoImg
       if (img.complete) {
         data[index].width = defaultWidth
         const ratio = img.width / defaultWidth
@@ -54,14 +54,14 @@ export function waterFallImgPromise(data, index, defaultWidth = 167) {
         resolve(true)
       }
       img.onerror = function () {
-        data[index].coverImg = defaultImg
+        data[index].videoImg = defaultImg
         data[index].width = defaultWidth
         data[index].height = defaultHeight
         resolve(false)
       }
     } else {
-      const coverImg = data[index].coverImg
-      const options = url.parse(coverImg)
+      const videoImg = data[index].videoImg
+      const options = url.parse(videoImg)
       http.get(options, function (response) {
         const chunks = []
         response.on('data', function (chunk) {
@@ -80,7 +80,7 @@ export function waterFallImgPromise(data, index, defaultWidth = 167) {
           }
         })
       }).on('error', (e) => {
-        data[index].coverImg = defaultImg
+        data[index].videoImg = defaultImg
         data[index].width = defaultWidth
         data[index].height = defaultHeight
         resolve(false)

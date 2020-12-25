@@ -34,6 +34,8 @@ function getFunctionName (name) {
     return 'video/changeSmallVideoList'
   } else if (name === 'label') {
     return 'label/changeLabelList'
+  } else if (name === 'article')  {
+    return 'reading/changeReadingList'
   }
 }
 
@@ -44,7 +46,9 @@ const saveList = [
   'index-attention',
   'index-homework',
   'index-growth',
-  'index-small-video'
+  'index-reading',
+  'index-small-video',
+  'label'
 ]
 
 function isSave (name) {
