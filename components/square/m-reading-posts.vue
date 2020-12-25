@@ -3,27 +3,24 @@
     <div class="reading-posts-card" @click="toDetail">
 
       <!-- Header Block -->
-      <div v-if="item.coverImgSmall.length === 1" class="reading-header-row" @click="toDetail">
+      <div v-if="imgSmall && imgSmall.length === 1" class="reading-header-row" @click="toDetail">
         <div class="posts-title van-multi-ellipsis--l2">{{ item.title }}</div>
-        <img class="posts-cover" :src="item.coverImgSmall[0]" alt="" />
+        <img class="posts-cover" :src="imgSmall[0]" alt="" />
       </div>
 
       <div v-else class="reading-header-row-more" @click="toDetail">
         <div class="posts-title van-multi-ellipsis--l2"> {{ item.title }} </div>
-        <div class="posts-photos-wrap" v-if="item.coverImgSmall">
-          <img class="posts-photo" v-for="(ele, j) in item.coverImgSmall" :key="j" :src="ele" alt="" />
+        <div class="posts-photos-wrap" v-if="imgSmall">
+          <img class="posts-photo" v-for="(ele, j) in imgSmall" :key="j" :src="ele" alt="" />
         </div>
       </div>
 
       <!-- Body Block -->
       <div class="reading-body-row">
-        <div class="posts-label">
-          阅读 {{ item.college.name ? '· ' :'' }}{{ item.college | filterCollageName }}
-        </div>
-        
-        <div v-for="item in item.labels" :key="item.labelId" class="posts-label-other">
-          {{ item.labelName }}
-        </div>
+        <m-posts-class
+          :remark="item.college && item.college.name ? `阅读·${ item.college.name.replace(/学院/, '') }` : '阅读'"
+          :labels="item.labels"
+        />
       </div>
 
       <!-- Footer Block -->
@@ -48,6 +45,12 @@ export default {
     item:{
       type:Object,
       default:{}
+    },
+    imgSmall: {
+      type: Array,
+      default: () => {
+        return []
+      }
     },
     pageName: {
       type: String,

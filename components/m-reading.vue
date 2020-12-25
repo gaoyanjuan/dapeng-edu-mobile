@@ -9,7 +9,14 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="readingListGetters.list.length">
-          <m-reading-posts v-for="(item, i) in readingListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="item ? item.id: ''" :item="item" />
+          <m-reading-posts
+            v-for="(item, i) in readingListGetters.list"
+            :imgSmall="item.coverImgSmall"
+            :id="item ? item.id: ''"
+            :propIndex="i"
+            :key="item ? item.id: ''"
+            :item="item"
+          />
         </template>
         <template v-if="!readingListGetters.list.length && finished">
           <div class="works-blank-wrap">

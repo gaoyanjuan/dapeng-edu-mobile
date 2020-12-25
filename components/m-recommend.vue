@@ -12,6 +12,7 @@
               :id="res.recommendTopic ? res.recommendTopic.id: ''"
               listType="recommend"
               :propIndex="i"
+              :imgSmall="res.recommendTopic.coverImgSmall"
               :key="res.recommendTopic ? res.recommendTopic.id: ''"
               :item="res.recommendTopic"
             />

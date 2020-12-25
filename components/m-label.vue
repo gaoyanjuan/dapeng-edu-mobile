@@ -15,7 +15,7 @@
     <van-sticky class="the-menus">
       <m-label-menus :menus="menus" />
     </van-sticky>
-    <section class="label-wrap">
+    <section class="label-wrap" :class="{ '' : $route.query.topicType === 'VIDEO' }">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="labelListGetters.list.length && $route.query.topicType === 'VIDEO'">
           <m-water-fall width="167px" gap="0" :data="labelListGetters.list" @complete="completeEvent">
@@ -30,6 +30,7 @@
               v-if="item && item.topicType === 'ARTICLE'"
               listType="label"
               :propIndex="index"
+              :imgSmall="item.imgSmall"
               :item="item"
             />
             <m-posts
@@ -238,6 +239,10 @@ export default {
   width: 100%;
   min-height: calc(100vh - 185px);
   padding-bottom: 65px;
+}
+
+.label-wrap-background {
+  background-color: #ffffff;
 }
 
 .label-blank-wrap {

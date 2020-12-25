@@ -25,7 +25,7 @@
     <!-- classification -->
     <div class="works__class">
       <m-posts-class
-        :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`"
+        :remark="listItemData.college && listItemData.college.name ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`"
         :labels="listItemData.labels"
       />
     </div>

@@ -49,7 +49,7 @@
         <!-- classification -->
         <div class="inner-content-class">
           <m-posts-class
-            :remark="homework.college ? `作业·${homework.college.name.replace(/学院/, '')}` : '作业'"
+            :remark="homework.college && homework.college.name ? `作业·${homework.college.name.replace(/学院/, '')}` : '作业'"
             :labels="homework.labels"
           />
         </div>

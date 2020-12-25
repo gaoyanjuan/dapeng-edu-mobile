@@ -19,6 +19,7 @@
               :id="res.topic ? res.topic.id: ''"
               listType="attention"
               :propIndex="i"
+              :imgSmall="res.topic.coverImgSmall"
               :key="res.topic ? res.topic.id: ''"
               :item="res.topic"
             />
