@@ -101,6 +101,7 @@ export default {
   align-items: center;
   flex-direction: column;
   margin-top: 50%;
+  transform: translateY(-50%);
 
   & .icon {
     width: 240px;

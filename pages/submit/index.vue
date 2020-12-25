@@ -119,9 +119,6 @@
     <!-- 底部唤起APP -->
     <m-submit-open-app :show-footer="openAppPop" @closeFooter="onCloseFooter"/>
 
-    <!-- 添加标签 -->
-    <m-label-popup :show-popup="labelPop" :labels="hotLabel" @append-labels="appendLabels"/>
-
     <!-- 图片预览 -->
     <m-upload-image-preview :image-preview="imagePreview" @onDelete="onDelete"/>
 
@@ -130,6 +127,10 @@
 
     <!-- 作业号&联系客服 -->
     <m-homework-number-popup :show-popup="homeworkNumberPop" @closed="onClosed"/>
+
+    <!-- 添加标签 -->
+    <m-label-popup :show-popup="labelPop" :labels="hotLabel" :labelSelProp="labelList" @append-labels="appendLabels"/>
+
   </div>
 </template>
 
@@ -325,6 +326,7 @@ export default {
       
       if (this.homeworkDetails) {
         this.content = this.homeworkDetails.content
+        this.labelList = this.homeworkDetails.labels
         this.homeworkDetails.imgInfo.forEach( ele => {
           _this.fileList.push(ele)
           _this.imageInfo.push(ele)

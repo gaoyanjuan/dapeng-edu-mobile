@@ -7,11 +7,12 @@
       </div>
       <div class="user-info">
         <div class="user-avatar">
-          <img :src="userInfo.avatar" alt="头像">
+          <img ref="headerImg" :src="userInfo.avatar" alt="头像">
         </div>
         <div class="info-box">
           <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
-          <div class="personalized-signature">{{userInfo.introduction}}</div>
+          <div v-if="userInfo.introduction!== '' && userInfo.introduction!== null" class="personalized-signature">{{userInfo.introduction}}</div>
+          <div v-else class="personalized-signature">这个人很懒，什么都没有写~</div>
         </div>
         <!-- 个人主页右侧右侧关注按钮 -->
         <div class="avatar-follow" v-if="showAttention" @click="handelAttention">
@@ -73,6 +74,7 @@ export default {
       follow: require('@/assets/icons/mine/posts-follow.png'),
       topfollow: require('@/assets/icons/posts/posts-follow.png'),
       unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
+      defaultImg: require('@/assets/icons/common/dp_default_headImg.jpg'),
       navBar: false,
       lovePopup: { show: false },
       userInfo: {},
@@ -192,13 +194,17 @@ export default {
     }
     // 监听调用滚动事件
     window.addEventListener('scroll', this.watchScroll)
-
+    // 挂载完成后，判断图片是否显示成功，若失败，则替换为默认图片
+    this.$refs.headerImg.onerror = () => {
+      this.$refs.headerImg.src = this.defaultImg
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 .personal-homepage {
   & > .personal-homepage-top {
+    position: relative;
     width: 375px;
     height: 190px;
     background: url('~@/assets/icons/mine/personal-homepage-bg.png') no-repeat;
@@ -254,6 +260,8 @@ export default {
       }
     }
     & > .content-box {
+      position: absolute;
+      bottom: -10px;
       width: 100%;
       height: 82px;
       padding: 20px 2px;
@@ -333,10 +341,27 @@ export default {
 /deep/ .van-tabs__line {
   width: 28px;
   height: 4px;
+  top: 38px;
   background: #0CB65B;
   border-radius: 2px;
 }
 /deep/ .van-tab--active {
+  font-size: 14px;
+  font-weight: 400;
   color: #0CB65B;
+}
+/deep/.van-tab {
+  width: 45px;
+  text-align: center;
+  flex: 0;
+  -webkit-flex: 0;
+}
+/deep/ .van-tab__text--ellipsis  {
+  width: 45px;
+}
+
+/deep/ .van-tabs__nav--line {
+  padding-left: 35px;
+  padding-right: 35px;
 }
 </style>

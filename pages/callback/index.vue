@@ -24,7 +24,10 @@ export default {
     }
     const fullPath = this.$route.fullPath
     const code = getUrlParam(fullPath, '?', 'code')
-    // const state = getUrlParam(fullPath, '?', 'state')
+    const state = getUrlParam(fullPath, '?', 'state')
+    let login_way = decodeURIComponent(state).split('*')[1]
+    this.state = login_way ? login_way : 'AUTOLOGIN'
+    // return
     const { data } = await this.getAuthToken({
       code,
       grant_type: 'authorization_code',
