@@ -3,11 +3,11 @@
     <!-- 个人主页顶部背景及内容 -->
     <div class="personal-homepage-top">
       <div class="left-arrow-back" @click="onClickBack">
-        <img ref="headerImg" src="~@/assets/icons/mine/icon-left-arrow.png" alt="">
+        <img src="~@/assets/icons/mine/icon-left-arrow.png" alt="">
       </div>
       <div class="user-info">
         <div class="user-avatar">
-          <img :src="userInfo.avatar || defaultImg" alt="头像">
+          <img ref="headerImg" :src="userInfo.avatar || defaultImg" alt="头像">
         </div>
         <div class="info-box">
           <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
@@ -48,7 +48,7 @@
         <img src="~@/assets/icons/navbar/nav-arrow-back.png" alt="">
       </div>
       <div class="user-avatar">
-        <img :src="userInfo.avatar" alt="头像">
+        <img ref="headerImg" :src="userInfo.avatar || defaultImg" alt="头像">
         <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
       </div>
       <!-- 固定顶部--右侧关注按钮 -->
