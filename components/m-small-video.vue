@@ -98,9 +98,6 @@ export default {
         timestamp: newStartTime
       })
     }
-  },
-  destroyed () {
-    this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
   }
 }
 </script>

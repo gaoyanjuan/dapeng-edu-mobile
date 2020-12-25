@@ -122,6 +122,7 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
+      this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,
