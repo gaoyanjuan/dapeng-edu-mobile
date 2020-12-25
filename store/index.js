@@ -67,8 +67,6 @@ export default {
   },
   getters: {
     getTagsList: (state) => {
-      console.log(111111111111111111);
-      console.log(state.logo.tagsList);
       return state.logo.tagsList
     },
     getSortList: (state) => {

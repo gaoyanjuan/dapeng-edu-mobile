@@ -1,14 +1,14 @@
 <template>
   <div class="task-part-details">
-    <div class="details">
-      <img src="../../assets/icons/common/left.png" @click="goBack" alt="" />
-      <p>任务详情</p>
-    </div>
+    <van-nav-bar title="任务详情" left-arrow @click-left="onClickLeft" />
     <div class="task-hander" v-for="item in taskList">
       <p>{{ item.title }}</p>
       <div class="details-time">
+        <img src="../../assets/icons/common/time.png" alt="" />
         <span>{{ item.day }}</span>
+        <img src="../../assets/icons/common/edit.png" alt="" />
         <span>{{ item.limite }}</span>
+        <img src="../../assets/icons/common/sand-clock.png" alt="" />
         <span>{{ item.time }}</span>
       </div>
       <h3 class="task-money">￥{{ item.money }}</h3>
@@ -39,61 +39,87 @@
       <img src="../../assets/icons/common/green-bj.png" alt="" />
       <span>我要申请此任务</span>
     </div>
+    <van-popup v-model="showPopup" style="border-radius: 8px">
+      <div class="footer-popup">
+        <img
+          src="../../assets/icons/common/service.png"
+          alt=""
+          @click="handService"
+        />
+        <p>兼职任务面向正式课程学员！如果您想开通正式课程，请联系客服老师！</p>
+      </div>
+      <!-- <div class="ellipse"></div> -->
+    </van-popup>
+    <van-popup v-model="showTeacher" style="border-radius: 8px">
+      <div class="footer-teacher">
+        <img src="../../assets/icons/common/teacher.png" alt="" srcset="" />
+        <h2>同学您好</h2>
+        <p>
+          咱们的兼职任务服务是面向正式课程学员的！如果您想开通正式课程，可以联系您的班主任~
+        </p>
+        <img
+          class="teach-rectang"
+          src="../../assets/icons/common/rectang.png"
+          alt=""
+        />
+        <img
+          class="teach-bitmap"
+          src="../../assets/icons/common/bitmap.png"
+          alt=""
+          srcset=""
+        />
+        <p class="class-teacher">请您加入班主任QQ群：2384619287</p>
+        <img
+          class="teach-orthogon"
+          src="../../assets/icons/common/orthogon.png"
+          alt=""
+          srcset=""
+        />
+        <span>点击进入班主任QQ群</span>
+      </div>
+      <!-- <div class="ellipse"></div> -->
+    </van-popup>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      showPopup: false,
+      showTeacher: false,
       taskList: [
         {
-          title: "做一个甲烷的公司LOGO，主要得好看",
+          title: "做一个甲烷的公司LOGO，主要得好看,",
           day: "20分钟前",
           limite: "进行中",
           time: "剩余 3 天 22 小时",
           money: "1000元-1.5万",
         },
       ],
-      times: require("@/assets/icons/common/time.png"),
-      limite: require("@/assets/icons/common/edit.png"),
-      poson: require("@/assets/icons/common/sand-clock.png"),
     };
   },
+  mounted() {
+    // this.appendTaskPartList().then((res) => {
+    //   this.taskList = res.data.list;
+    // });
+  },
   methods: {
-    goBack() {
+    onClickLeft() {
       this.$router.push({ path: "/part-time-task" });
     },
     handerApply() {
-      this.$router.push({ path: "/task-centered/task-part-centered" });
-    }
+      this.showPopup = true;
+      // this.$router.push({ path: "/task-centered/task-part-centered" });
+    },
+    handService() {
+      this.showTeacher = true;
+    },
   },
 };
 </script>
 <style lang="less" scoped>
 .task-part-details {
   background: #f5f5f5;
-  .details {
-    background: #ffffff;
-    height: 44px;
-    display: flex;
-    & > img {
-      width: 20px;
-      height: 20px;
-      flex: 1;
-      line-height: 27px;
-      margin: 14px 0 0 17px;
-    }
-    & > P {
-      flex: 10;
-      text-align: center;
-      margin-left: -22px;
-      font-size: 16px;
-      font-weight: 500;
-      color: #18252c;
-      line-height: 46px;
-    }
-  }
-
   .task-hander {
     height: 149px;
     background: #ffffff;
@@ -107,7 +133,12 @@ export default {
     }
     .details-time {
       display: flex;
-      margin: 0 32px 0 10px;
+      margin-left: 12px;
+      & > img {
+        width: 14px;
+        height: 14px;
+        margin: 1px 6px 0 0;
+      }
       & > span {
         font-size: 12px;
         margin-right: 28px;
@@ -192,6 +223,74 @@ export default {
       bottom: 20px;
       left: 130px;
     }
+  }
+  .footer-popup {
+    position: relative;
+    & > p {
+      position: absolute;
+      top: 116px;
+      margin: 0 20px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #36404a;
+      line-height: 24px;
+    }
+  }
+  .footer-teacher {
+    position: relative;
+    top: 10px;
+    & > h2 {
+      position: absolute;
+      top: 10px;
+      left: 70px;
+      font-size: 28px;
+      font-weight: 600;
+      color: #36404a;
+    }
+    & > p {
+      position: absolute;
+      top: 50px;
+      margin: 0 30px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #5a5a5a;
+    }
+    & > .teach-rectang {
+      position: absolute;
+      bottom: 90px;
+      left: 46px;
+    }
+    & > .teach-bitmap {
+      position: absolute;
+      bottom: 114px;
+      left: 67px;
+    }
+    & > .class-teacher {
+      position: absolute;
+      top: 290px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #f5f5f5;
+    }
+    & > .teach-orthogon {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+    }
+    & > span {
+      position: absolute;
+      bottom: 30px;
+      left: 55px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #36404a;
+    }
+  }
+  .ellipse {
+    width: 50px;
+    height: 50px;
+    background-color: #ff3510;
+    border-radius: 50%;
   }
 }
 </style>

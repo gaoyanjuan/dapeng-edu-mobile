@@ -7,7 +7,11 @@
         <img :src="change" alt="" />
       </div>
       <div class="nav-change">
-        <span @click="changeLimited">不限</span>
+        <span
+          @click="changeLimited"
+          :class="btnLimited === true ? 'newest' : ''"
+          >不限</span
+        >
         <span class="newest">最新</span>
       </div>
     </div>
@@ -48,16 +52,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
   name: "FollowGallery",
-   computed: {
-    ...mapGetters([
-      'getTagsList',
-      'getSortList'
-    ])
+  computed: {
+    ...mapGetters(["getTagsList", "getSortList"]),
   },
   data: () => ({
+    btnLimited: false,
     show: false,
     active: 2,
     change: require("@/assets/icons/common/drop.png"),
@@ -67,12 +69,10 @@ export default {
     showPopup() {
       this.show = true;
     },
-    handlePart() {
-      console.log(12222222222222);
-    },
+    handlePart() {},
     changeLimited() {
-      
-    }
+      this.btnLimited = true;
+    },
   },
 };
 </script>

@@ -4,19 +4,20 @@ export default {
       taskPartList: {
         list: [],
         status: 'loading',
-      
+
       },
     }
   },
-  mutations: {
-  },
+  mutations: {},
   actions: {
-    async appendTaskPartList({ commit, state }, params) { 
+    async appendTaskPartList({
+      commit,
+      state
+    }, params) {
       const res = await this.$axios.get('part_job/get_item_list.ashx')
       // commit('appendTaskPartList', res)
       return res
-    }
+    },
   },
-  getters: {
-  }
+  getters: {}
 }

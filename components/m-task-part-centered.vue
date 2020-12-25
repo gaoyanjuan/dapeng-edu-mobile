@@ -1,24 +1,35 @@
 <template>
   <div class="task-centered">
-    <div class="task-hander">
-      <img src="../assets/icons/common/left.png" @click="goBack" alt="" />
-      <p>我的任务</p>
-      <span>清空</span>
-    </div>
+      <van-nav-bar
+        title="我的任务"
+        right-text="清空"
+        left-arrow
+        @click-left="onClickLeft"
+      />
     <div>
       <van-tabs v-model="active">
         <van-tab title="我的浏览">
-          <div class="short-shift" v-for="(item, index) in shortList">
-            <h1>{{ item.title }}</h1>
-            <div class="shift-box">
-              <p class="box-left">{{ item.day }}</p>
-              <p>{{ item.time }}</p>
+          <van-swipe-cell>
+            <div class="short-shift" v-for="(item, index) in shortList">
+              <h1>{{ item.title }}</h1>
+              <div class="shift-box">
+                <p class="box-left">{{ item.day }}</p>
+                <p>{{ item.time }}</p>
+              </div>
+              <div class="shift-right">
+                <p class="box-left">{{ item.underway }}</p>
+                <p>￥{{ item.money }}</p>
+              </div>
             </div>
-            <div class="shift-right">
-              <p class="box-left">{{ item.underway }}</p>
-              <p>￥{{ item.money }}</p>
-            </div>
-          </div>
+            <template #right>
+              <van-button
+                square
+                text="删除"
+                type="danger"
+                class="delete-button"
+              />
+            </template>
+          </van-swipe-cell>
         </van-tab>
         <van-tab title="我的收藏"
           ><div class="short-shift" v-for="(item, index) in shortList">
@@ -68,7 +79,7 @@ export default {
     };
   },
   methods: {
-    goBack() {
+    onClickLeft() {
       this.$router.push({ path: "/details/part-task" });
     },
   },
@@ -76,24 +87,6 @@ export default {
 </script>
 <style lang="less" scoped>
 .task-centered {
-  // background: red;
-  .task-hander {
-    display: flex;
-    background: #ffffff;
-    border-bottom: 1px solid #ccc;
-    line-height: 44px;
-    padding: 0 16px;
-    & > img {
-      position: absolute;
-      top: 13px;
-      width: 20px;
-      height: 20px;
-    }
-    & > P {
-      flex: 1;
-      text-align: center;
-    }
-  }
   .short-shift {
     width: 343px;
     height: 105px;
@@ -102,10 +95,14 @@ export default {
     border-radius: 8px;
     margin: 12px 16px;
     padding: 0 16px;
+    .delete-button {
+      height: 100%;
+    }
     & > h1 {
       font-size: 14px;
       font-weight: 600;
       color: #18252c;
+      padding-top: 16px;
       margin-bottom: 12px;
     }
   }
