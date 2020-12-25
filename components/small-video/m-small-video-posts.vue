@@ -152,6 +152,17 @@ export default {
       } else {
         this.$toast('错误')
       }
+    },
+    toPersonalCenter() {
+      if (this.videoItem && this.videoItem.user && this.videoItem.user.userId) {
+        this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
+        this.$router.push({
+          path: '/personal-center/publish',
+          query: {
+            userId: this.videoItem.user.userId
+          }
+        })
+      }
     }
   }
 }
