@@ -18,12 +18,14 @@
       <div class="modified-address-box">
         <div class="left-title">地址</div>
         <div class="detail-address">
-          <textarea
-           v-model="familyAddress"
-           :maxlength="maxCount"
-           placeholder="请输入您的详细地址"
-           @input="onChangeInput"
-          ></textarea>
+          <van-field
+            v-model.trim="familyAddress"
+            :autosize="autosize"
+            type="textarea"
+            :maxlength="maxCount"
+            placeholder="请输入您的详细地址"
+            @input="onChangeInput"
+          />
         </div>
       </div>
       <!-- 字数限制 -->
@@ -55,9 +57,11 @@ export default {
       areaList,
       addressArea: '',
       /** 字数限制 */
-      wordsLimit: true,
+      wordsLimit: false,
       /** 动态文字 */
-      dynamicNums:''
+      dynamicNums:'',
+      /** 描述框大小*/
+      autosize: { maxHeight: 100, minHeight: 100},
     }
   },
   computed: {
@@ -132,7 +136,6 @@ export default {
       }
     }
     & > .modified-address-box {
-      position: relative;
       overflow: hidden;
       margin-top: 24px;
        & > .left-title {
@@ -152,36 +155,38 @@ export default {
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        & > textarea {
-          overflow-y: hidden;
-          border: none;
-          outline: none;
-          width: 90%;
-          height: 100px;
-          font-size: 14px;
-          resize: none;
-        }
       }
     }
     & > .show-word-limit {
-      width: 100%;
-      height: 17px;
-      font-family: @regular;
+      // width: 100%;
+      font-family: @dp-font-regular;
       font-weight: 400;
+      overflow: hidden;
       & > span:first-child {
+        float: left;
         font-size: 12px;
         color: #FF3510;
       }
 
       & > span:last-child {
+        float: right;
         font-size: 14px;
         color: #D1D3D5;
       }
 
       & > span.warning-num {
+        float: right;
         color: #FF3510;
       }
     }
   }
+}
+/deep/ .van-cell {
+  padding: 0;
+}
+/deep/ .van-popup {
+  width: 375px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>

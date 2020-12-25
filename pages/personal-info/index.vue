@@ -47,7 +47,7 @@
         <span class="right-content">北京市</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
-      <nuxt-link class="form-item" tag="div" to=''>
+      <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/personalized-signature'>
         <div class="left-text">个性签名</div>
         <span class="right-content">限制30字</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
@@ -99,6 +99,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .personal-info {
+  overflow: hidden;
   position: relative;
   background: @dp-white;
   & > .info-header {
