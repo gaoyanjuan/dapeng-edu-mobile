@@ -7,7 +7,8 @@
       </div>
       <div class="user-info">
         <div class="user-avatar">
-          <img ref="headerImg" :src="userInfo.avatar || defaultImg" alt="头像">
+          <img ref="headerImg" v-if="userInfo.avatar" :src="userInfo.avatar" alt="头像">
+          <img ref="headerImg" v-if="!userInfo.avatar && !loadAvatar" :src="defaultImg" alt="头像">
         </div>
         <div class="info-box">
           <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
@@ -78,6 +79,7 @@ export default {
       navBar: false,
       lovePopup: { show: false },
       userInfo: {},
+      loadAvatar: true,
       showAttention: false,
       attentionState: null
     }
@@ -177,6 +179,7 @@ export default {
       this.queryUserData({userId: this.$route.query.userId})
       .then((data) => {
         this.userInfo = data
+        this.loadAvatar = false
       })
     }
     // 判断我是否关注TA的个人主页的关注按钮展示（关注/已关注）
