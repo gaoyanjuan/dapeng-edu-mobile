@@ -122,7 +122,6 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
-      console.log(this.videoItem)
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,

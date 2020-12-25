@@ -45,7 +45,6 @@ export default {
   mounted () {},
   methods: {
     toLabel (item) {
-      console.log(item)
       this.$router.push({
         path: '/label',
         query: {

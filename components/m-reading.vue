@@ -73,10 +73,8 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      console.log(this.$store.state.anchorId)
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        console.log(element)
         if (element) {
           element.scrollIntoView({
             behavior: 'auto'
