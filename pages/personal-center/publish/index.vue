@@ -3,7 +3,7 @@
     <!-- 个人主页顶部背景及内容 -->
     <div class="personal-homepage-top">
       <div class="left-arrow-back" @click="onClickBack">
-        <img src="~@/assets/icons/mine/icon-left-arrow.png" alt="">
+        <img ref="headerImg" src="~@/assets/icons/mine/icon-left-arrow.png" alt="">
       </div>
       <div class="user-info">
         <div class="user-avatar">
@@ -194,6 +194,10 @@ export default {
     }
     // 监听调用滚动事件
     window.addEventListener('scroll', this.watchScroll)
+    // 挂载完成后，判断图片是否显示成功，若失败，则替换为默认图片
+    this.$refs.headerImg.onerror = () => {
+      this.$refs.headerImg.src = this.defaultImg
+    }
   }
 }
 </script>
