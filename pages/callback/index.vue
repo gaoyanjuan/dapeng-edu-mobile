@@ -26,7 +26,7 @@ export default {
     const code = getUrlParam(fullPath, '?', 'code')
     const state = getUrlParam(fullPath, '?', 'state')
     let login_way = decodeURIComponent(state).split('*')[1]
-    this.state = login_way ? login_way : 'AUTO'
+    this.state = login_way ? login_way : 'AUTOLOGIN'
     // return
     const { data } = await this.getAuthToken({
       code,
