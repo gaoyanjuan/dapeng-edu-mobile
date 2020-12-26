@@ -89,7 +89,8 @@
       <!-- 顶部Navbar  菜单弹层 -->
       <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
         <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
-        <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
+        <div v-if="showonCollect" class="menus__popup__item" @click.stop="onCollect">{{ isCollection ? '取消收藏' : '收藏' }}</div>
+        <div v-else class="menus__popup__item" @click.stop="deleteItem">删除</div>
         <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
       </van-popup>
@@ -289,6 +290,9 @@ export default {
         return false
       }
     },
+    showonCollect () {
+     return this.$route.query.userId !== this.userInfoGetters.userId
+    },
     functionName () {
       return this.$getFunctionName(this.listType)
     }
@@ -441,7 +445,7 @@ export default {
             }
             this.deleteUserFavorites(payload)
           }
-          
+
         })
         .catch(() => {
           if (this.$isSave(this.$route.name)) {
@@ -458,6 +462,7 @@ export default {
             isCollection: this.isCollection
           }
         })
+        this.showPublishMenusPopup = false
       } else {
         if (this.$isSave(this.$route.name)) {
           this.$store.commit(`${this.functionName}`, {
@@ -492,6 +497,7 @@ export default {
             isCollection: this.isCollection
           }
         })
+        this.showPublishMenusPopup = false
       }
     },
     //喜欢操作
