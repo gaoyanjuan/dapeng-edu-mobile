@@ -74,14 +74,12 @@ export const actions = {
   /** * 查询作品详情 */
   async appendReadingDetails({ commit }, params) {
     const res = await this.$axios.get(`/articles/${params.id}`)
+    try {
+      this.$axios.put(`/articles/browse/${params.id}`)
+    } catch (error) {}
     commit('appendReadingDetails', res)
     return res
-  },
-   // 新增阅读浏览量
-  async appendReadingBrowse({ commit }, params) {
-    const res = await this.$axios.put(`/articles/${params.id}`)
-    return res
-  },
+  }
 }
 
 export const getters = {

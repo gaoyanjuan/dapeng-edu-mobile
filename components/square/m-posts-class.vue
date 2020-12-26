@@ -45,7 +45,6 @@ export default {
   mounted () {},
   methods: {
     toLabel (item) {
-      console.log(item)
       this.$router.push({
         path: '/label',
         query: {
@@ -63,9 +62,14 @@ export default {
 <style lang="less" scoped>
 .works__wrap {
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding: 0 4px;
+  min-width: 167px;
 }
 
 .works__class--wrap {
+  margin-top: 6px;
   width: max-content;
   height: 24px;
   display: flex;
@@ -82,6 +86,7 @@ export default {
 }
 
 .label {
+  margin-top: 6px;
   margin-left: 8px;
   height: 24px;
   padding: 4px 8px;

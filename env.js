@@ -21,10 +21,10 @@ module.exports = {
   test: {
     MODE: 'test',
     REFRESH_TOKEN_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn',
-    DP_COURSE_URL: 'https://test.dapengjiaoyu.cn/dp-course', // 4.0地址
+    DP_COURSE_URL: 'https://test.dapengjiaoyu.com/dp-course', // 4.0地址
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',  // m站地址 (没用了)
-    PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
+    PROTOCOL: 'https://h5-static.dapengjiaoyu.com/h5-protocol/#/', //协议地址
     BASE_URL: 'http://172.17.207.43:8000/pcmove', // 网关广场模块地址
     OLD_BASE_URL: 'http://172.17.207.43:8000/pc', // 网关课程模块地址
     DP_AUTH_URL: 'https://auth-test.dapengjiaoyu.cn',

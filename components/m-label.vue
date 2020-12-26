@@ -15,22 +15,43 @@
     <van-sticky class="the-menus">
       <m-label-menus :menus="menus" />
     </van-sticky>
-    <section class="label-wrap">
+    <section class="label-wrap" :class="{ 'label-wrap-background' : $route.query.topicType === 'VIDEO' }">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
-        <template v-if="labelListGetters.list.length">
-          <m-posts
-            class="list-item"
-            v-for="(item, index) in labelListGetters.list"
-            :id="item ? item.contentId: ''"
-            :key="item.id"
-            listType="label"
-            :propIndex="index"
-            :courseType="item.courseType"
-            :listItemData="item"
-            :modifiedTime="item.createTime"
-            :path="`/details/${pathType(item)}`"
-            :propSquareType="item && item.topicType"
-          />
+        <template v-if="labelListGetters.list.length && $route.query.topicType === 'VIDEO'">
+          <div class="water-fall-warp">
+            <m-water-fall width="167px" gap="0" :data="labelListGetters.list" @complete="completeEvent">
+              <m-water-fall-item v-for="(item, index) in labelListGetters.list" :key="index" :order="index">
+                <m-small-video-posts
+                  :propSquareType="item && item.topicType"
+                  listType="label"
+                  :videoItem="item"
+                  :propIndex="index"
+                />
+              </m-water-fall-item>
+            </m-water-fall>
+          </div>
+        </template>
+        <template v-if="labelListGetters.list.length && $route.query.topicType !== 'VIDEO'">
+          <div v-for="(item, index) in labelListGetters.list" :key="item ? item.id: ''" :id="item ? item.id: ''">
+            <m-reading-posts
+              v-if="item && item.topicType === 'ARTICLE'"
+              listType="label"
+              :propIndex="index"
+              :imgSmall="item.imgSmall"
+              :item="item"
+            />
+            <m-posts
+              v-else
+              class="list-item"
+              listType="label"
+              :propIndex="index"
+              :courseType="item.courseType"
+              :listItemData="item"
+              :modifiedTime="item.createTime"
+              :path="`/details/${pathType(item)}`"
+              :propSquareType="item && item.topicType"
+            />
+          </div>
         </template>
         <template v-if="!labelListGetters.list.length && finished">
           <div class="label-blank-wrap">
@@ -50,6 +71,7 @@ export default {
   title: '成长详情页',
   data () {
     return {
+      waterFallComplete: false,
       loading: false,
       finished: false,
       finishedTxt: '没有更多了',
@@ -111,7 +133,17 @@ export default {
     ...mapActions('label', [
       'appendLabelList'
     ]),
+    completeEvent () {
+      if (!this.waterFallComplete) {
+        this.waterFallComplete = true
+        this.loading = false
+        document.documentElement.scrollTop = this.$store.state.video.scrollTop
+      }
+    },
     onLoad () {
+      if (this.$route.query.topicType === 'VIDEO') {
+        if (!this.waterFallComplete) return false
+      }
       if (this.labelListGetters.status === 'over') {
         this.finished = true
         return false
@@ -225,6 +257,15 @@ export default {
   width: 100%;
   min-height: calc(100vh - 185px);
   padding-bottom: 65px;
+}
+
+.label-wrap-background {
+  background-color: #ffffff;
+}
+
+.water-fall-warp {
+  width: 100%;
+  padding: 0 16px;
 }
 
 .label-blank-wrap {
