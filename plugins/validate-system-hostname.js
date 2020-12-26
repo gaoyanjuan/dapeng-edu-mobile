@@ -16,7 +16,7 @@ function validateSystemHostName () {
   }
   if (process.browser) {
     localPCParam.host = `${location.protocol}//${location.host}`
-    testPCParam.host = `//${location.host}`
+    testPCParam.host = `${location.protocol}//${location.host}`
     prodPCParam.host = `${location.protocol}//${location.host}`
   }
   if (process.env.mode === 'test') {
