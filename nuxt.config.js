@@ -121,7 +121,7 @@ export default {
       }
     },
     '/api/token/get_token': {
-      target: env[process.env.MODE].DP_AUTH_URL, // 目标接口域名
+      target: env[process.env.MODE].DP_AUTH_TOKEN_URL, // 目标接口域名
       pathRewrite: {
         '^/api/token/get_token': '/oauth/token',
         changeOrigin: true
