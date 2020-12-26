@@ -29,7 +29,7 @@ module.exports = {
     BASE_URL: 'http://172.17.207.43:8000/pcmove', // 网关广场模块地址
     OLD_BASE_URL: 'http://172.17.207.43:8000/pc', // 网关课程模块地址
     DP_AUTH_URL: 'https://auth-test.dapengjiaoyu.cn', // 认证中心外网地址
-    DP_AUTH_TOKEN_URL: 'http:// 172.17.207.43:8081', // 认证中心内网地址
+    DP_AUTH_TOKEN_URL: 'http://172.17.207.43:8081', // 认证中心内网地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com',
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
