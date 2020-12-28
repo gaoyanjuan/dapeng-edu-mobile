@@ -598,7 +598,18 @@ export default {
 
     /** 获取热门标签 */
     getHotLabelList() {
-      let channel = this.submitType === ('VIP' || 'TEST') ? 'HOMEWORK': this.submitType
+      let channel = null
+
+      if(this.submitType === 'VIP') {
+        channel = 'HOMEWORK'
+      } else if (this.submitType === 'TEST') {
+        channel = 'HOMEWORK'
+      } else if (this.submitType === 'LIFE' && this.$route.query.contentType) {
+        channel = 'POST'
+      } else {
+        channel = this.submitType
+      }
+
       this.getHotLabel({ topicType: channel })
     },
 
