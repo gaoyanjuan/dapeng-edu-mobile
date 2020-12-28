@@ -11,7 +11,7 @@
     
     <!-- 关注帖子列表 -->
     <div class="follow-wrap">
-      <van-list v-model="loading" :finished="finished" :error="error" finished-text="没有更多了" @load="onLoad">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <template v-if="attentionListGetters.list.length">
           <div v-for="(res, i) in attentionListGetters.list" class="list-item" :key="i">
             <m-reading-posts
