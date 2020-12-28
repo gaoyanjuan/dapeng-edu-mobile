@@ -1,6 +1,6 @@
 <template>
   <div class="navigation">
-    <van-tabs v-model="activeName" sticky offset-top='44px' @click="onTabsClick">
+    <van-tabs v-model="activeName" sticky :offset-top="'1.17333rem'" @click="onTabsClick">
       <van-tab title= '动态'>
         <publish-dynamic />
       </van-tab>
