@@ -288,9 +288,7 @@ export default {
           }
         })
       } else {
-         this.$router.push({
-          path: '/personal-center/publish'
-        })
+         this.$toast('该用户已注销')
       }
     }
   }

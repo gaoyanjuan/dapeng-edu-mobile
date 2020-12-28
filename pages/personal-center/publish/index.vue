@@ -5,7 +5,7 @@
       <div class="left-arrow-back" @click="onClickBack">
         <img src="~@/assets/icons/mine/icon-left-arrow.png" alt="">
       </div>
-      <div class="user-info" v-if="userInfo.userId">
+      <div class="user-info">
         <div class="user-avatar">
           <img ref="headerImg" v-if="userInfo.avatar" :src="userInfo.avatar" alt="头像">
           <img ref="headerImg" v-if="!userInfo.avatar && !loadAvatar" :src="defaultImg" alt="头像">
@@ -16,7 +16,7 @@
           <div v-else class="personalized-signature">这个人很懒，什么都没有写~</div>
         </div>
         <!-- 个人主页右侧右侧关注按钮 -->
-        <div class="avatar-follow" v-if="showAttention && userInfo" @click="handelAttention">
+        <div class="avatar-follow" v-if="showAttention" @click="handelAttention">
           <img :src="attentionState ? unfollow : follow" alt="">
         </div>
       </div>
