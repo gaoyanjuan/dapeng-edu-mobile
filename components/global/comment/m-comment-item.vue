@@ -280,12 +280,18 @@ export default {
     },
     toPersonalCenter(item) {
       if (!this.$login()) return
-      this.$router.push({
-        path: '/personal-center/publish',
-        query:{ 
-          userId: item.userId
-        }
-      })
+      if (item) {
+        this.$router.push({
+          path: '/personal-center/publish',
+          query:{ 
+            userId: item.userId
+          }
+        })
+      } else {
+         this.$router.push({
+          path: '/personal-center/publish'
+        })
+      }
     }
   }
 }
