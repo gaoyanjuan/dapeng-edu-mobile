@@ -6,6 +6,7 @@
         class="swiper"
         :options="swiperOptions"
         @slideChange="slideChange()"
+        v-if="banner.length > 0"
       >
         <swiper-slide v-for="(item, i) in banner" :key="i">
           <a :href="item.url" target="_blank">
