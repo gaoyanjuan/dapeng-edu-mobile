@@ -1,5 +1,5 @@
 <template>
-  <div class="like-item">
+  <div class="like-item" @click="toPersonalCenter(user)">
     <headImage
       :headImg="headImg"
       imgWidth="40px"
@@ -26,6 +26,25 @@ export default {
     time: {
       type: Number,
       default: 0
+    },
+    user: {
+      type: Object,
+      default: null
+    }
+  },
+  methods: {
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      if (item) {
+        this.$router.push({
+          path: '/personal-center/publish',
+          query:{ 
+            userId: item.userId
+          }
+        })
+      } else {
+        this.$toast('该用户已注销')
+      }
     }
   }
 }
