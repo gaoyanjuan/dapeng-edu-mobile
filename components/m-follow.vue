@@ -55,7 +55,6 @@ export default {
     list: [],
     loading: false,
     finished: false,
-    error: false,
     navRoute:'/details/homework',
   }),
   computed: {
