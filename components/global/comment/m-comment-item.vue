@@ -1,7 +1,7 @@
 <template>
   <div class="comment" @click="onShowMenus">
     <div class="comment-header">
-      <div class="comment-header-left">
+      <div class="comment-header-left" @click="toPersonalCenter(user)">
         <headImage
           :headImg="user ? user.avatar : ''"
           imgWidth="40px"
@@ -276,6 +276,19 @@ export default {
     onShowMenus () {
       if (this.userinfo && this.user && this.user.userId === this.userinfo.userId) {
         this.showPopup = !this.showPopup
+      }
+    },
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      if (item) {
+        this.$router.push({
+          path: '/personal-center/publish',
+          query:{ 
+            userId: item.userId
+          }
+        })
+      } else {
+         this.$toast('该用户已注销')
       }
     }
   }

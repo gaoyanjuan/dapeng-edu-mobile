@@ -9,6 +9,7 @@
       <template v-for="(item, index) in likesListGetters.data">
         <m-like-item
           :key="index"
+          :user="item.user"
           :userName="item.user ? item.user.nickname : '佚名'"
           :headImg="item.user ? item.user.avatar : ''"
           :time="item.createTime"

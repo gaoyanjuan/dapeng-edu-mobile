@@ -15,7 +15,7 @@
         <swiper class="swiper" :options="swiperOptions">
           <swiper-slide v-for="(item, index) in popularUsersGetters" :key="index">
             <div class="user-card">
-              <img class="avatar" v-lazy="item.avatar" />
+              <img class="avatar" v-lazy="item.avatar" @click="toPersonalCenter(item)"/>
               <span class="nickname">{{ item.nickname }}</span>
               <span :class="item.isFlower ? 'btn-unfollow': 'btn-follow'" @click="handleFollow(item, index)"></span>
             </div>
@@ -69,6 +69,15 @@ export default {
           id: item.userId
         })
       }
+    },
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/publish',
+        query:{ 
+          userId: item.userId
+        }
+      })
     }
   }
 }
