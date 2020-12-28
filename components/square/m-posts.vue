@@ -289,7 +289,9 @@ export default {
       }
     },
     showonCollect () {
-     return this.$route.query.userId !== this.userInfoGetters.userId
+      if (this.userInfoGetters) {
+        return this.$route.query.userId !== this.userInfoGetters.userId
+      }
     },
     functionName () {
       return this.$getFunctionName(this.listType)

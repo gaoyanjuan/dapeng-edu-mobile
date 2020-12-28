@@ -2,7 +2,7 @@
   <section class="m-avatar">
 
     <!-- 左边用户信息 -->
-    <div class="avatar-left-side-wrap" @click.stop>
+    <div class="avatar-left-side-wrap" @click.stop="toPersonalCenter">
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userNickname }}</span>
@@ -139,6 +139,15 @@ export default {
       'followingUser',
       'cancelFollowingUser'
     ]),
+    toPersonalCenter() {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/publish',
+        query:{ 
+          userId: this.userInfo.userId
+        }
+      })
+    },
     // toPersonalCenter() {
     //   if(!this.$login()) {
     //     return 
