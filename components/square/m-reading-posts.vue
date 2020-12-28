@@ -26,7 +26,7 @@
       <!-- Footer Block -->
       <div class="reading-footer-row">
         <div class="footer-left-side">
-          <span class="posts-author"> {{ item.user.nickname }} </span>
+          <span class="posts-author"> {{ nickname }} </span>
           <span class="posts-date"> {{ item.createTime | commonDate }} </span>
         </div>
         <span class="posts-comment"> {{ item.commentCount | studentsCount }}评论 </span>
@@ -65,7 +65,15 @@ export default {
       default: 0
     }
   },
-
+  computed: {
+    nickname () {
+      if (this.item &&  this.item.user && this.item.user.nickname) {
+        return this.item.user.nickname
+      } else {
+        return '佚名'
+      }
+    }
+  },
   methods:{
     toDetail() {
       this.$cookiz.set('isLogin', false, { path: '/' })

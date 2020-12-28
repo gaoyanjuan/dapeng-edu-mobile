@@ -20,8 +20,20 @@ export default {
   data: () => ({
     activeName: ''
   }),
+  computed: {
+    topicType () {
+      return this.$route.query.topicType
+    }
+  },
   mounted () {
     this.cacheActive()
+  },
+  watch: {
+    topicType (newVal) {
+      if (!this.cacheActive()) {
+        this.activeName = ''
+      }
+    }
   },
   methods: {
     cacheActive() {
@@ -29,6 +41,7 @@ export default {
         const element = this.menus[index]
         if (this.$route.query.topicType === element.topicType) {
           this.activeName = element.topicType
+          return true
         }
       }
     },

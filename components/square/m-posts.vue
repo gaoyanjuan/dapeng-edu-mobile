@@ -255,6 +255,8 @@ export default {
         return '动态'
       } else if (this.propSquareType === 'ACTIVITY_POST') {
         return '活动'
+      } else if (this.propSquareType === 'POST') {
+        return '动态'
       } else if (this.propSquareType === 'ARTICLE') {
         return '阅读'
       } else if (this.propSquareType === 'MOVIE') {

@@ -8,7 +8,7 @@
         {{ labelDataGetters && labelDataGetters.name }}
       </div>
       <div class="label-navbar-footer" v-if="labelCountGetters">
-        <div>{{ labelCountGetters.participationCount | studentsCount }}参与</div><div>{{ labelCountGetters.browseCount | studentsCount }}人浏览</div>
+        <div>{{ labelCountGetters.participationCount | studentsCount }}人参与</div><div>{{ labelCountGetters.browseCount | studentsCount }}人浏览</div>
       </div>
     </div>
     <!-- 二级菜单 -->
