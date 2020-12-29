@@ -6,8 +6,6 @@
       :showRightText = true
       @onClickRight="onSaveHandle"
     />
-    <!-- 分割线 -->
-    <div class="cut-off-line"></div>
     <!-- 修改真实姓名内容 -->
     <div class="modified-content">
       <div class="modified-name-box">
@@ -72,15 +70,16 @@ export default {
 .true-name {
   width: 100%;
   position: relative;
-  background: @dp-white;
+  background: @dp-app-bgc;
+  overflow: hidden;
   & > .modified-content {
-    margin-top: 44px;
-    padding: 0 32px;
+    margin: 56px 0 12px 0;
     & > .modified-name-box {
       width: 100%;
       height: 52px;
-      line-height: 52px;
-      border-bottom: 1px solid #f5f5f5;
+      line-height: 40px;
+      padding: 0 32px;
+      background: @dp-white;
       & > .modified-name {
         line-height: 32px;
         font-size: 14px;
@@ -111,10 +110,5 @@ export default {
       }
     }
   }
-}
-.cut-off-line {
-  width: 100%;
-  height:12px;
-  background: @dp-app-bgc;
 }
 </style>

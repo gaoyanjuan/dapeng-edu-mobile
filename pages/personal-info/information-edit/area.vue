@@ -110,17 +110,17 @@ export default {
 .area {
   overflow: hidden;
   position: relative;
-  background: @dp-white;
+  background: @dp-app-bgc;
   & > .modified-content {
-    margin-top: 44px;
-    padding: 0 32px;
+    margin-top: 56px;
     & > .modified-area-box {
       height: 52px;
       line-height: 52px;
-      padding: 12px 0 13px 0;
+      padding: 12px 32px 13px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: @dp-white;
       & > .left-title {
         font-size: 14px;
         font-family: @dp-font-regular;
@@ -137,7 +137,9 @@ export default {
     }
     & > .modified-address-box {
       overflow: hidden;
-      margin-top: 24px;
+      margin-top: 12px;
+      background: @dp-white;
+      padding: 12px 32px 13px 32px;
        & > .left-title {
         float: left;
         font-size: 14px;
@@ -158,9 +160,11 @@ export default {
       }
     }
     & > .show-word-limit {
-      // width: 100%;
+      background: @dp-white;
       font-family: @dp-font-regular;
       font-weight: 400;
+      padding: 0 32px 12px 32px;
+      margin-bottom: 12px;
       overflow: hidden;
       & > span:first-child {
         float: left;

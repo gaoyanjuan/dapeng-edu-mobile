@@ -71,19 +71,19 @@ export default {
 .personalized-signature {
   overflow: hidden;
   position: relative;
-  background: @dp-white;
+  background: @dp-app-bgc;
   & > .modified-content {
     margin-top: 44px;
-    padding: 0 32px;
     & > .modified-name-box {
-      padding: 17px 0 0;
+      padding: 8px 0 0;
       position: relative;
       box-sizing: border-box;
-      border-bottom: 1px solid #f5f5f5;
+      margin-bottom: 8px;
       & > .show-word-limit {
-        // width: 100%;
+        background: @dp-white;
         font-family: @dp-font-regular;
         font-weight: 400;
+        padding: 12px 32px 12px 32px;
         overflow: hidden;
         & > span:first-child {
           float: left;
