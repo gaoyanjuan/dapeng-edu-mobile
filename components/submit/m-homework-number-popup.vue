@@ -1,7 +1,7 @@
 <template>
   <van-popup v-model="showPopup.show" round @closed="closed" :transition-appear="true">
     <div class="popup-warp">
-      <div class="popup-head">您还未有专属班主任，请复制作业号联系客服老师呦~</div>
+      <div class="popup-head">您未有此课程专属班主任，请先复制作业号，然后联系客服老师为您安排专属班主任批改作业哦~</div>
       <div class="popup-body">作业号：{{ showPopup.jobNummer }}</div>
       <div class="popup-footer btn-active" @click.stop="onCustomer">联系客服</div>
       <div class="popup-copy-row" @click.stop="onCopy">复制作业号</div>
@@ -66,13 +66,13 @@ export default {
 
   & .popup-head {
     width: 220px;
-    height: 48px;
-    font-size: 18px;
+    height: 60px;
+    font-size: 14px;
     font-family: @semibold;
     font-weight: 600;
     color: #FFFFFF;
-    line-height: 24px;
-    margin-top: 18px;
+    line-height: 20px;
+    margin-top: 12px;
   }
 
   & .popup-body {

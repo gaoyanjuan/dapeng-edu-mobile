@@ -6,16 +6,33 @@ export const state = () => ({
       pages: 1,
       size: 20
     }
-  }
+  },
+  // 已选标签
+  selLabel: []
 })
 
 export const mutations = {
   clearhotLabel (state) {
     state.hotLabel.list = []
   },
+  clearSelLabel(state) {
+    state.selLabel = []
+  },
   appendHotLabel (state, payload) {
     state.hotLabel.list = payload.data
   },
+  appendSelLabel(state, payload) {
+    payload.forEach(item => {
+      state.selLabel.push(item)
+    })
+  },
+  delSelLabel(state, payload) {
+    state.selLabel.forEach((item, index) => { 
+      if (item.labelId === payload.labelId) { 
+        state.selLabel.splice(index, 1)
+      }
+    })
+  }
 }
 
 export const actions = {
@@ -67,10 +84,23 @@ export const actions = {
     commit('appendHotLabel', res)
     return res
   },
+
+  // 已选标签--添加
+  appendSelLabel({ commit, state }, params) { 
+    commit('appendSelLabel', params)
+  },
+
+  // 已选标签--删除
+  delSelLabel({ commit, state }, params) { 
+    commit('delSelLabel', params)
+  },
 }
 
 export const getters = {
   hotLabelGetters (state) {
     return state.hotLabel
   },
+  selLabelGetters(state) { 
+    return state.selLabel
+  }
 }

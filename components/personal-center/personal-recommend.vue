@@ -1,6 +1,6 @@
 <template>
   <div>
-    <m-navbar title="我的推荐" />
+    <m-navbar :title=" interactionNews ? '我的推荐' : '他的推荐'" />
 
     <div class="recommend-list-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
@@ -29,7 +29,7 @@
       <template v-if="userHomesRecommendGetters.list.length === 0 && finished">
         <div class="blank-no-data-wrap">
           <img class="blank-icon" :src="blank" alt="" />
-          <span class="blank-txt">您暂无推荐作业哦～</span>
+          <span class="blank-txt">{{ interactionNews ? '您暂无推荐作业哦～': '他还没有被推荐的作业哦~' }}</span>
         </div>
       </template>
       </van-list>
@@ -45,11 +45,17 @@ export default {
   data: () => ({
     loading: false,
     finished: false,
+    interactionNews: true,
     navRoute:'/details/homework',
     finishedText: '没有更多了',
     blank: require('@/assets/icons/blank/have-no-homework.png'),
   }),
   mounted() {
+    if (this.userInfoGetters && this.$route.query.userId === this.userInfoGetters.userId) {
+      this.interactionNews = true
+    } else {
+      this.interactionNews = false
+    }
     if(this.userHomesRecommendGetters.list.length === 0) {
       this.appendUserHomesRecommend({
         userId: this.$route.query.userId,
