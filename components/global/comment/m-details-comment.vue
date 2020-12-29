@@ -1,7 +1,7 @@
 <template>
   <div class="comment" @click="onShowMenus" >
     <div class="comment-header">
-      <div class="comment-header-left">
+      <div class="comment-header-left" @click.stop="toPersonalCenter(user)">
         <headImage
           :headImg="user ? user.avatar : ''"
           imgWidth="33px"
@@ -270,6 +270,19 @@ export default {
     },
     showDialogEvent (img) {
       this.ImagePreview([img])
+    },
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      if (item) {
+        this.$router.push({
+          path: '/personal-center/publish',
+          query:{ 
+            userId: item.userId
+          }
+        })
+      } else {
+         this.$toast('该用户已注销')
+      }
     }
   }
 }
