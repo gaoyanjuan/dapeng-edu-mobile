@@ -16,17 +16,27 @@
     <div class="task-content">
       <h3>任务要求</h3>
       <p>1.公司简介：</p>
-      <p>
-        大鹏教育创建于2015年，是中国在线教育的领航者之一，具备国际化的教研体系，专业化的作业系统，互联网与教师伴随相结合的教学模式。
-        大鹏教育提供在线学习服务，现自有版权课程百余门，业务涵盖平面设计、UI设计、美术、书法、国画、短视频等多个领域。成立多年来，大鹏教育利用丰富的教学经验、健全的辅导体系、专业的教研体系，为用户的学习提供有力的保障。2017年，大鹏教育成为国家级高新技术企业，并连续多年被腾讯网、新华网授予教育奖项。
-        截至2020年3月，大鹏教育已为数百万用户提供在线教育服务。
-      </p>
+      <div class="content">
+        <p>
+          大鹏教育创建于2015年，是中国在线教育的领航者之一，具备国际化的教研体系，专业化的作业系统，互联网与教师伴随相结合的教学模式。
+        </p>
+        <p>
+          大鹏教育提供在线学习服务，现自有版权课程百余门，业务涵盖平面设计、UI设计、美术、书法、国画、短视频等多个领域。成立多年来，大鹏教育利用丰富的教学经验、健全的辅导体系、专业的教研体系,为用户的学习提供有力的保障。2017年,大鹏教育成为国家级高新技术企业，并连续多年被腾讯网、新华网授予教育奖项。
+        </p>
+        <p>截至2020年3月,大鹏教育已为数百万用户提供在线教育服务。</p>
+      </div>
       <p>2.能接受改稿，改到满意为止~</p>
       <p>现LOGO或参考</p>
-      <div class="contentImg">
-        <img src="../../assets/icons/common/birdie.png" alt="" />
-        <img src="../../assets/icons/common/shadow.png" alt="" />
-      </div>
+      <template>
+        <div class="contentImg">
+          <img src="../../assets/icons/common/birdie.png" alt="" />
+          <img src="../../assets/icons/common/shadow.png" alt="" />
+        </div>
+        <!-- <div v-else>
+          <img src="../../assets/icons/common/birdiery.png" alt="" srcset="">
+        </div> -->
+      </template>
+
       <p>网址：<span>www.dapengjiaoyu.</span></p>
     </div>
     <div class="task-footer">
@@ -39,17 +49,23 @@
       <img src="../../assets/icons/common/green-bj.png" alt="" />
       <span>我要申请此任务</span>
     </div>
-    <van-popup v-model="showPopup" style="border-radius: 8px">
-      <div class="footer-popup">
-        <img
-          src="../../assets/icons/common/service.png"
-          alt=""
-          @click="handService"
-        />
-        <p>兼职任务面向正式课程学员！如果您想开通正式课程，请联系客服老师！</p>
-      </div>
-      <!-- <div class="ellipse"></div> -->
-    </van-popup>
+    <!-- <m-park-dialog  :visible.sync="visible"></m-park-dialog> -->
+    <van-overlay :show="show" @click="handClose">
+      <van-popup v-model="showPopup" style="border-radius: 8px">
+        <div class="footer-popup">
+          <img :src="service" alt="" @click="handService" />
+          <p>
+            兼职任务面向正式课程学员！如果您想开通正式课程，请联系客服老师！
+          </p>
+        </div>
+      </van-popup>
+      <img
+        class="popup-close"
+        src="../../assets/icons/common/toast-success.png"
+        alt=""
+        @click="handClose"
+      />
+    </van-overlay>
     <van-popup v-model="showTeacher" style="border-radius: 8px">
       <div class="footer-teacher">
         <img src="../../assets/icons/common/teacher.png" alt="" srcset="" />
@@ -75,18 +91,56 @@
           alt=""
           srcset=""
         />
-        <span>点击进入班主任QQ群</span>
+        <span @click="handbtn">点击进入班主任QQ群</span>
+      </div>
+      <!-- <div class="ellipse"></div> -->
+    </van-popup>
+    <van-popup v-model="isShow" style="border-radius: 8px">
+      <div class="footer-teacher">
+        <img src="../../assets/icons/common/teacher.png" alt="" srcset="" />
+        <h2>同学您好</h2>
+        <p>
+          咱们的兼职任务服务是面向正式课程学员的！如果您想开通正式课程，可以联系您的班主任~
+        </p>
+        <img
+          class="teach-rectang"
+          src="../../assets/icons/common/rectang.png"
+          alt=""
+        />
+        <img
+          class="teach-bitmap"
+          src="../../assets/icons/common/bitmap.png"
+          alt=""
+          srcset=""
+        />
+        <p class="wx-teacher">班主任微信：dpjyzxkf</p>
+        <img
+          class="teach-orthogon"
+          src="../../assets/icons/common/orthogon.png"
+          alt=""
+          srcset=""
+        />
+        <span>点击联系班主任微信</span>
       </div>
       <!-- <div class="ellipse"></div> -->
     </van-popup>
   </div>
 </template>
 <script>
+import parkDialog from "../global/m-park-dialog";
 export default {
+  components: {
+    parkDialog,
+  },
   data() {
     return {
       showPopup: false,
       showTeacher: false,
+      visible: false,
+      show: false,
+      popupClose: false,
+      service: require("@/assets/icons/common/service.png"),
+      isShow: false,
       taskList: [
         {
           title: "做一个甲烷的公司LOGO，主要得好看,",
@@ -108,11 +162,26 @@ export default {
       this.$router.push({ path: "/part-time-task" });
     },
     handerApply() {
+      // this.visible = true;
+      this.show = true;
       this.showPopup = true;
+      this.popupClose = true;
+      this.popupShow = true;
       // this.$router.push({ path: "/task-centered/task-part-centered" });
+    },
+    dialogChange() {
+      this.popupShow = true;
     },
     handService() {
       this.showTeacher = true;
+    },
+    handbtn() {
+      this.isShow = true;
+    },
+    handClose() {
+      this.show = false;
+      this.popupClose = false;
+      this.showPopup = false;
     },
   },
 };
@@ -154,7 +223,7 @@ export default {
     }
   }
   .task-content {
-    height: 540px;
+    // height: 540px;
     background: #ffffff;
     border-radius: 8px;
     margin: 12px 15px;
@@ -165,6 +234,12 @@ export default {
       font-weight: 600;
       color: #18252c;
     }
+    & > .content {
+      font-size: 14px;
+      font-weight: 400;
+      color: #18252c;
+      line-height: 22px;
+    }
     & > p {
       font-size: 14px;
       font-weight: 400;
@@ -172,6 +247,8 @@ export default {
       line-height: 22px;
     }
     :nth-child(4) {
+      // font-size: 14px;
+      // font-weight: 400;
       color: #0cb65b;
       margin-bottom: 20px;
     }
@@ -236,6 +313,13 @@ export default {
       line-height: 24px;
     }
   }
+  .popup-close {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 100px;
+    left: 160px;
+  }
   .footer-teacher {
     position: relative;
     top: 10px;
@@ -268,6 +352,14 @@ export default {
     & > .class-teacher {
       position: absolute;
       top: 290px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #f5f5f5;
+    }
+    & > .wx-teacher {
+      position: absolute;
+      top: 292px;
+      left: 35px;
       font-size: 12px;
       font-weight: 400;
       color: #f5f5f5;

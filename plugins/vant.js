@@ -12,10 +12,12 @@ import {
   Tabs,
   Uploader,
   ImagePreview,
+  Card ,
   Toast,
   Sticky,
   Overlay,
   Swipe,
+  SwipeCell,
   SwipeItem,
   Lazyload,
   Field,
@@ -36,11 +38,13 @@ Vue.use(Button)
   .use(Tab)
   .use(Tabs)
   .use(Uploader)
-  .use(ImagePreview)
+  .use(SwipeCell)
+  .use(Card )
   .use(Toast)
   .use(Sticky)
   .use(Overlay)
   .use(Swipe)
+  .use(Uploader)
   .use(SwipeItem)
   .use(Field)
   .use(Grid)
