@@ -90,7 +90,6 @@ export default {
   margin-left: 8px;
   height: 24px;
   padding: 4px 8px;
-  line-height: 24px;
   background: #E6F7EE;
   border-radius: 12px;
   font-size: 12px;
