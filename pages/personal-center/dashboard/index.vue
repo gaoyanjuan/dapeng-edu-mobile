@@ -6,14 +6,26 @@
       <van-sticky :offset-top="1" :z-index="100">
         <img class="navbar-back-icon" :src="back" @click="onBackEvent"/>
       </van-sticky>
-      <van-tabs v-model="activeName" sticky @click="onTabsClick">
-        <van-tab :title=" interactionNews ? '关注' : 'TA的关注'" name="attention">
-          <m-followers v-if="activeName === 'attention'" />
-        </van-tab>
-        <van-tab :title="interactionNews ? '粉丝' : 'TA的粉丝'" name="fans">
-          <m-fans v-if="activeName === 'fans'" />
-        </van-tab>
-      </van-tabs>
+      <template v-if="interactionNews">
+        <van-tabs v-model="activeName" sticky @click="onTabsClick">
+          <van-tab :title="'关注'" name="attention">
+            <m-followers v-if="activeName === 'attention'" />
+          </van-tab>
+          <van-tab :title="'粉丝'" name="fans">
+            <m-fans v-if="activeName === 'fans'" />
+          </van-tab>
+        </van-tabs>
+      </template>
+      <template v-else>
+        <van-tabs id="his" v-model="activeName" sticky @click="onTabsClick">
+          <van-tab :title="'TA的关注'" name="attention">
+            <m-followers v-if="activeName === 'attention'" />
+          </van-tab>
+          <van-tab :title="'TA的粉丝'" name="fans">
+            <m-fans v-if="activeName === 'fans'" />
+          </van-tab>
+        </van-tabs>
+      </template>
     </div>
 
     <!-- 我的推荐列表 -->
@@ -112,8 +124,13 @@ export default {
   border-radius: 2px;
   background-image: none;
 }
+
+#his /deep/ .van-tab__text--ellipsis {
+  width: 80px;
+  text-align: center;
+}
 /deep/ .van-tab__text--ellipsis {
-  width: 60px;
+  width: 30px;
   text-align: center;
 }
 

@@ -1,7 +1,11 @@
 <template>
-  <div>
+  <div class="p-details">
     <!-- Header Block -->
-    <m-navbar title="阅读详情" />
+    <m-navbar
+      :show-right-menu="showRightMenuFlag"
+      @onOpenMenus="onShowMenus"
+      title="阅读详情"
+    />
     
     <!-- Body Block -->
     <section v-if="reading" class="posts-details-wrap">
@@ -33,7 +37,14 @@
         :detailData="reading"
       />
     </section>
-
+    <!-- 菜单弹层 -->
+    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
+      <div class="menus__popup__item" @click="deleteRead">删除</div>
+      <div class="menus__popup__item" @click="onShowMenus">取消</div>
+    </van-popup>
+    
+    <!-- 删除二次确认弹窗 -->
+    <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
 </template>
 
@@ -43,16 +54,28 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'P-Reading-Details',
   layout:'navbar',
-  data:() => ({}),
+  data:() => ({
+    showMenusPopup: false,
+    deleteDialogParams: {
+      show: false
+    }
+  }),
 
   computed:{
     ...mapGetters({
       reading:'reading/readingDetailsGetters',
       commentList:'comment/commentListGetters',
-      likeList:'comment/likesListGetters'
-    })
+      likeList:'comment/likesListGetters',
+      userInfo: 'user/userInfoGetters'
+    }),
+    showRightMenuFlag() {
+      if(this.reading && this.reading.user && this.reading.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
-
   created () {
     
     if(!this.reading && this.$route.query.id) {
@@ -88,16 +111,31 @@ export default {
       getDetails: 'reading/appendReadingDetails',
       getComment: 'comment/queryCommentList',
       getLikes: 'comment/queryLikesList',
-      
+      deleteReading: 'user/deleteReading'
     }),
 
     ...mapMutations({
       clearDetails: 'reading/clearReadingDetails'
     }),
+    /** 打开/关闭菜单 */
+    onShowMenus() {
+      this.showMenusPopup = !this.showMenusPopup
+    },
+    // 删除作品
+    deleteRead() {
+      this.showMenusPopup = false
+      this.deleteDialogParams.show = true
+    },
+    confirmDelete() {
+      this.deleteReading({ id: this.reading.id }).then(()=>{
+        this.$toast('删除成功')
+        this.$router.go(-1)
+      })
+    }
   },
   destroyed () {
     this.clearDetails()
-  }
+  },
 }
 </script>
 
@@ -177,4 +215,25 @@ export default {
   padding: 16px 16px 45px;
 }
 
+/** menus-popup */
+.p-details /deep/.van-popup {
+  width: 284px;
+  // height: 92px;
+  overflow: hidden;
+}
+/deep/.van-popup--center.van-popup--round {
+  border-radius: 8px;
+}
+.van-popup .menus__popup__item {
+  width: 100%;
+  height: 46px;
+  line-height: 46px;
+  font-size: 16px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #18252C;
+  text-align: center;
+  border-bottom: 1px solid #F7F7F7;
+  cursor: pointer;
+}
 </style>

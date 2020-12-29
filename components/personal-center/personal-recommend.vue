@@ -50,6 +50,12 @@ export default {
     finishedText: '没有更多了',
     blank: require('@/assets/icons/blank/have-no-homework.png'),
   }),
+   computed: {
+    ...mapGetters('user', [
+      'userHomesRecommendGetters',
+      'userInfoGetters'
+    ])
+  },
   mounted() {
     if (this.userInfoGetters && this.$route.query.userId === this.userInfoGetters.userId) {
       this.interactionNews = true
@@ -106,11 +112,6 @@ export default {
         size: 10
       })
     }
-  },
-  computed: {
-    ...mapGetters('user', [
-      'userHomesRecommendGetters'
-    ])
   },
   destroyed () {
     this.clearUserHomesRecommend()

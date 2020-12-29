@@ -1,3 +1,5 @@
+import { waterFallImgPromise } from '@/utils/util.js'
+
 export default {
   state: () => {
     return {
@@ -44,9 +46,9 @@ export default {
       }
     },
     appendLabelList (state, payload) {
-      state.labelList.list = state.labelList.list.concat(payload.data.labelInfo)
+      state.labelList.list = state.labelList.list.concat(payload.data)
       state.labelList.pageInfo = payload.pageInfo
-      if (payload.data.labelInfo.length < state.labelList.pageInfo.size) {
+      if (payload.data.length < state.labelList.pageInfo.size) {
         state.labelList.status = 'over'
       } else {
         state.labelList.status = 'load'
@@ -99,6 +101,13 @@ export default {
         size: process.env.global.pageSize
       }
       if (res.data) {
+        const promiseList = []
+        if (params.topicType === 'VIDEO') {
+          for (let index = 0; index < res.data.length; index++) {
+            promiseList.push(waterFallImgPromise(res.data, index, 174))
+          }
+          await Promise.all(promiseList)
+        }
         commit('appendLabelList', { data: res.data, pageInfo })
       }
       return res
