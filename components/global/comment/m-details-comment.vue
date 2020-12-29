@@ -1,7 +1,7 @@
 <template>
   <div class="comment" @click="onShowMenus" >
     <div class="comment-header">
-      <div class="comment-header-left" @click="toPersonalCenter(user)">
+      <div class="comment-header-left" @click.stop="toPersonalCenter(user)">
         <headImage
           :headImg="user ? user.avatar : ''"
           imgWidth="33px"
