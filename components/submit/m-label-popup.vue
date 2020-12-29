@@ -10,13 +10,13 @@
         </div>
 
         <div class="label-body-row">
-          <template v-if="labelSel.length">
-            <van-tag v-for="item in labelSel" :key="item.labelId" @close="labelCancel(item)" round closeable plain>
+          <template v-if="selLabel.length">
+            <van-tag v-for="item in selLabel" :key="item.labelId" @close="labelCancel(item)" round closeable plain>
               {{ item.labelName }}
             </van-tag>
           </template>
 
-          <template v-if="!labelSel.length && !wait">
+          <template v-if="!selLabel.length && !wait">
             <div class="no-have-label">添加个性标签，找到更多合拍伙伴～</div>
           </template>
         </div>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'LabelPop',
   props:{
@@ -46,29 +47,18 @@ export default {
       default: {
         show:false
       }
-    },
-    labels:{
-      type: Object,
-      default: {}
-    },
-    // 已选列表
-    labelSelProp:{
-      type: Array,
-      default:[]
     }
   },
   data:() => ({
     // 当前选中的标签
     labelSelId: null,
-    // 已选中的标签
-    labelSel: [],
     // 解决标签消失延迟
     // 而产生的样式问题
     wait: false
   }),
 
   watch:{
-    labelSel(n, o){
+    selLabel(n, o){
       if(!n.length) {
         this.wait = true
         setTimeout(() => {
@@ -78,11 +68,23 @@ export default {
     }
   },
 
-  mounted() {
-    this.labelSel = this.labelSelProp
+  computed: {
+    ...mapGetters({
+      // 推荐标签
+      labels: 'publish/hotLabelGetters',
+      // 已选标签
+      selLabel: 'publish/selLabelGetters'
+    })
   },
 
   methods:{
+    ...mapActions({
+      // 已选标签--删除
+      delSelLabel: 'publish/delSelLabel',
+      // 已选标签--添加
+      appendSelLabel: 'publish/appendSelLabel',
+    }),
+
     onLabel(params) {
       this.labelSelId = params.labelId
 
@@ -90,12 +92,12 @@ export default {
         return item.labelId === params.labelId
       })
 
-      const labelSel = this.labelSel.filter( item => {
+      const labelSel = this.selLabel.filter( item => {
         return item.labelId === label[0].labelId
       })
       
       // 已选标签数量是否超过3
-      if(this.labelSel.length === 3) {
+      if(this.selLabel.length === 3) {
         this.$toast('选择标签数量已达上限 ~')
         return
       }
@@ -105,20 +107,15 @@ export default {
         this.$toast('不能选择已有的标签哦 ~')
         return
       }
-      
-      this.labelSel.push(label[0])
+
+      this.appendSelLabel(label)
     },
 
     labelCancel(params) {
-      this.labelSel.forEach((item, index) => {
-        if(item.labelId === params.labelId) {
-          this.labelSel.splice(index, 1)
-        }
-      })
+      this.delSelLabel(params)
     },
 
     onFinish() {
-      this.$emit('append-labels', this.labelSel)
       this.showPopup.show = false
     },
   }
