@@ -113,7 +113,7 @@ export default {
   background-image: none;
 }
 /deep/ .van-tab__text--ellipsis {
-  width: 60px;
+  min-width: 30px;
   text-align: center;
 }
 
