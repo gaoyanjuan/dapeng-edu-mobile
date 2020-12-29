@@ -25,7 +25,7 @@ function typeOf (obj) {
   return map[toString.call(obj)]
 }
 // deepCopy
-function deepCopy (data) {
+function deepCopy(data) {
   const t = typeOf(data)
   let o
 

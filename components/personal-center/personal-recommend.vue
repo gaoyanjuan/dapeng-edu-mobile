@@ -29,7 +29,7 @@
       <template v-if="userHomesRecommendGetters.list.length === 0 && finished">
         <div class="blank-no-data-wrap">
           <img class="blank-icon" :src="blank" alt="" />
-          <span class="blank-txt">您暂无推荐作业哦～</span>
+          <span class="blank-txt">{{ interactionNews ? '您暂无推荐作业哦～': '他还没有被推荐的作业哦~' }}</span>
         </div>
       </template>
       </van-list>

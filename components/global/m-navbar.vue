@@ -55,7 +55,6 @@ export default {
   }),
   methods: {
     onClickLeft() {
-      const route = 'personal-center-publish'
       const isLogin = this.$cookiz.get('isLogin')
       if (isLogin) {
         const isDetails = this.$isDetails(this.$route.name)
@@ -67,8 +66,6 @@ export default {
         } else {
           this.$router.go(-1)
         }
-      } else if(this.$route.name === route) {
-        this.$router.replace('/personal-center')
       } else {
         this.$router.go(-1)
       }

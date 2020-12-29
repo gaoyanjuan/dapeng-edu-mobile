@@ -108,7 +108,7 @@
         </div>
 
         <div class="label-select-wrap">
-          <van-tag v-for="item in labelList" :key="item.labelId" round closeable plain @close="cancelLabel(item)">
+          <van-tag v-for="item in selLabel" :key="item.labelId" round closeable plain @close="cancelLabel(item)">
             {{ item.labelName }}
           </van-tag>
         </div>
@@ -129,7 +129,7 @@
     <m-homework-number-popup :show-popup="homeworkNumberPop" @closed="onClosed"/>
 
     <!-- 添加标签 -->
-    <m-label-popup :show-popup="labelPop" :labels="hotLabel" :labelSelProp="labelList" @append-labels="appendLabels"/>
+    <m-label-popup :show-popup="labelPop" />
 
   </div>
 </template>
@@ -184,8 +184,6 @@ export default {
     collegeIndex: null,
     // 成长下-活动数据
     activityData: null,
-    // 标签
-    labelList: [],
     // label 背景
     label:require('@/assets/icons/submit/college-label.png'),
     // 活动 label
@@ -248,8 +246,8 @@ export default {
       collegeList: 'colleges/submitWorkCollegesGetters',
       // 用户信息
       userInfo: 'user/userInfoGetters',
-      // 推荐标签
-      hotLabel: 'publish/hotLabelGetters'
+      // 已选标签
+      selLabel: 'publish/selLabelGetters'
     }),
 
     // 当前发布类型
@@ -326,7 +324,7 @@ export default {
       
       if (this.homeworkDetails) {
         this.content = this.homeworkDetails.content
-        this.labelList = this.homeworkDetails.labels
+        this.appendSelLabel(this.homeworkDetails.labels)
         this.homeworkDetails.imgInfo.forEach( ele => {
           _this.fileList.push(ele)
           _this.imageInfo.push(ele)
@@ -348,6 +346,7 @@ export default {
     } else {
       this.dynamicNums = '只能输入60个字哦'
       this.openAppPop.show = false
+      this.getRequirement()
     }
 
     // 查询热门标签
@@ -374,8 +373,14 @@ export default {
       publishDynamic: 'publish/addNewDynamic',
       // 推荐标签
       getHotLabel: 'publish/getHotLabel',
+      // 已选标签--删除
+      delSelLabel: 'publish/delSelLabel',
+      // 已选标签--添加
+      appendSelLabel: 'publish/appendSelLabel',
       // 查询活动详情
       getActivitiesDetails: 'activities/appendActivitiesDetail',
+      // 查询作业要求
+      getRequirementDetails :'homework/appendRequirementDetails',
       // 获取用户发布的作业
       getUserPublished: 'user/appendPublishHomework'
     }),
@@ -384,7 +389,8 @@ export default {
       // 清空作业详情
       clearHomeworkDetails:'homework/clearHomeworkDetails',
       clearPublishHomework: 'user/clearPublishHomework',
-      clearhotLabel: 'publish/clearhotLabel'
+      clearhotLabel: 'publish/clearhotLabel',
+      clearSelLabel: 'publish/clearSelLabel'
     }),
 
     // 提交前确认
@@ -512,7 +518,7 @@ export default {
         content: this.content,
         source: 'MOBILE',
         id: this.homeworkDetails.id,
-        labels: this.labelList
+        labels: this.selLabel
       }).then( res => {
         return res
       }).catch( err => {
@@ -527,7 +533,7 @@ export default {
         content: this.content,
         source: 'PC',
         type: 'TEXT',
-        labels: this.labelList,
+        labels: this.selLabel,
         title: this.requirement.title,
         taskId: this.requirement.taskId
       }).then( res => {
@@ -544,7 +550,7 @@ export default {
         imgInfo: this.imageInfo,
         content: this.content,
         source: 'MOBILE',
-        labels: this.labelList,
+        labels: this.selLabel,
         collegeId: this.collegeList[index].id
       }).then( res => {
         return res
@@ -558,7 +564,7 @@ export default {
       let params = {
         imgInfo: this.imageInfo,
         content: this.content,
-        labels: this.labelList,
+        labels: this.selLabel,
         source: 'MOBILE',
         type: 'TEXT',
       }
@@ -593,6 +599,13 @@ export default {
         this.getActivitiesDetails(activityId).then((res) => {
           this.activityData = res
         })
+      }
+    },
+
+    /** 获取作业要求数据 */
+    getRequirement() {
+      if (!this.$route.query.action) {
+        this.getRequirementDetails({ id: this.$route.query.taskId })
       }
     },
 
@@ -814,11 +827,6 @@ export default {
       this.collegeIndex = index
     },
 
-    /*** 添加标签 */
-    appendLabels(params) {
-      this.labelList = params
-    },
-
     /** 关闭底部唤起 */
     onCloseFooter() {
       this.openAppPop.show = false
@@ -831,11 +839,7 @@ export default {
 
     /** 关闭标签 */
     cancelLabel(params) {
-      this.labelList.forEach((item, index) => {
-        if(item.labelId === params.labelId) {
-          this.labelList.splice(index, 1)
-        }
-      })
+      this.delSelLabel(params)
     },
     
     /** 关闭弹窗，跳转我的作业 */
@@ -844,7 +848,8 @@ export default {
     },
   },
 
-  destroy() {
+  beforeDestroy() {
+    this.clearSelLabel()
     this.clearhotLabel()
     this.clearHomeworkDetails()
   },

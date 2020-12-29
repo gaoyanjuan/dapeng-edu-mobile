@@ -102,7 +102,12 @@ export default {
     ]),
     // 返回
     onClickBack() {
-      this.$router.go(-1)
+      const route = 'personal-center-publish'
+      if(this.$route.name === route) {
+        this.$router.replace('/personal-center')
+      } else {
+        this.$router.go(-1)
+      }
     },
     // 滚动吸顶
     watchScroll() {
