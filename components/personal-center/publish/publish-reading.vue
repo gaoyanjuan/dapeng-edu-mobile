@@ -6,6 +6,7 @@
         :key="index"
         :item="item"
         :imgSmall="item.coverImgSmall"
+        :showPersonal="showPersonal"
       />
     </template>
     <template v-if="!publishReadingGetters.list.length && finished">
@@ -21,6 +22,13 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Reading',
+   props: {
+    // 是否是我的个人主页
+    showPersonal: {
+      type: Boolean,
+      default: true
+    }
+  },
   data: () => ({
     loading: false,
     finished: false,

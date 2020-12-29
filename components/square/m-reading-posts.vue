@@ -29,7 +29,14 @@
           <span class="posts-author"> {{ nickname }} </span>
           <span class="posts-date"> {{ item.createTime | commonDate }} </span>
         </div>
-        <span class="posts-comment"> {{ item.commentCount | studentsCount }}评论 </span>
+        <span v-if="operationBtn" class="posts-comment"> {{ item.commentCount | studentsCount }}评论 </span>
+        
+      <!-- 发布状态[DRAFT/草稿暂存,PENDING/审核中,PASS/通过,REBUT/驳回,REJECT/审核不通过,PUBLISHING/定时发布中,PUBLISHED/已发布] -->
+        <div class="publish-status" v-if="showPersonal">
+          <span class="publish-PENDING" v-if="item.publishStatus === 'PENDING'">审核中</span>
+          <span class="publish-REBUT" v-if="item.publishStatus === 'REBUT'">驳回</span>
+          <span class="publish-DRAFT" v-if="item.publishStatus === 'DRAFT'">草稿</span>
+        </div>
       </div>
     </div>
   </div>
@@ -63,6 +70,11 @@ export default {
     propIndex:{
       type: Number,
       default: 0
+    },
+    // 是否是我的个人主页
+    showPersonal: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -72,6 +84,16 @@ export default {
       } else {
         return '佚名'
       }
+    },
+    operationBtn() {
+      let publishStatus = this.item.publishStatus
+      if (!this.showPersonal) {
+        return true
+      }
+      if (this.showPersonal && publishStatus === 'PENDING' || publishStatus === 'REBUT' || publishStatus === 'DRAFT' ) {
+        return false
+      }
+      return true
     }
   },
   methods:{
@@ -207,6 +229,7 @@ export default {
 }
 
 .reading-footer-row {
+  position: relative;
   width: 100%;
   height: 24px;
   margin-top: 12px;
@@ -251,5 +274,23 @@ export default {
   color: #A3A8AB;
   line-height: 16px;
   justify-self: flex-end;
+}
+
+// 发布状态的样式
+.publish-status {
+  position: absolute;
+  right: 0px;
+  font-size: 12px;
+  font-family: @regular;
+  font-weight: 500;
+  .publish-PENDING {
+    color: #FF8000;
+  }
+  .publish-REBUT {
+    color: #E02020;
+  }
+  .publish-DRAFT {
+    color: #F7B500;
+  }
 }
 </style>
