@@ -678,6 +678,11 @@ export const actions = {
     const res = await this.$axios.delete(`/posts/${params.id}`)
     return res
   },
+  // 删除阅读
+  async deleteReading ({ commit }, params) {
+    const res = await this.$axios.delete(`/articles/${params.id}`)
+    return res
+  },
   // 查询用户的喜欢列表
   async appendUserLikes ({ commit }, params) {
     let statuParams = {
