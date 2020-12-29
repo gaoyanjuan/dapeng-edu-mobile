@@ -79,7 +79,9 @@ export default {
   },
 
   mounted() {
-    this.labelSel = this.labelSelProp
+    setTimeout(() => {
+      this.labelSel = this.labelSelProp
+    },500)
   },
 
   methods:{

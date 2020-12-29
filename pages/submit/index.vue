@@ -137,6 +137,7 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import Client from '@/utils/client'
+import { deepCopy } from '@/plugins/assist'
 import { formatSlashDate } from '@/plugins/filters'
 export default {
   name:'Submit',
@@ -326,7 +327,7 @@ export default {
       
       if (this.homeworkDetails) {
         this.content = this.homeworkDetails.content
-        this.labelList = this.homeworkDetails.labels
+        this.labelList = deepCopy(this.homeworkDetails.labels)
         this.homeworkDetails.imgInfo.forEach( ele => {
           _this.fileList.push(ele)
           _this.imageInfo.push(ele)
@@ -348,6 +349,7 @@ export default {
     } else {
       this.dynamicNums = '只能输入60个字哦'
       this.openAppPop.show = false
+      this.getRequirement()
     }
 
     // 查询热门标签
@@ -376,6 +378,8 @@ export default {
       getHotLabel: 'publish/getHotLabel',
       // 查询活动详情
       getActivitiesDetails: 'activities/appendActivitiesDetail',
+      // 查询作业要求
+      getRequirementDetails :'homework/appendRequirementDetails',
       // 获取用户发布的作业
       getUserPublished: 'user/appendPublishHomework'
     }),
@@ -593,6 +597,13 @@ export default {
         this.getActivitiesDetails(activityId).then((res) => {
           this.activityData = res
         })
+      }
+    },
+
+    /** 获取作业要求数据 */
+    getRequirement() {
+      if (!this.$route.query.action) {
+        this.getRequirementDetails({ id: this.$route.query.taskId })
       }
     },
 
