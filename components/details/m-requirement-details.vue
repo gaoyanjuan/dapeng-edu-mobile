@@ -80,7 +80,7 @@
 
     <!-- Footer Button -->
     <div v-if="requirementDetails.submitStatus === 'SUBMIT'" class="requirement-btn-wrap">
-      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" :to="`/submit?type=${$route.query.type}&taskId=${$route.query.taskId}`" />
+      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" :to="`/submit?type=${submitType}&taskId=${$route.query.taskId}`" />
     </div>
   </div>
 </template>
@@ -102,7 +102,14 @@ export default {
   computed: {
     ...mapGetters('homework', [
       'requirementListGetters'
-    ])
+    ]),
+    submitType: function () {
+      if(this.$route.query.type) {
+        return this.$route.query.type
+      } else {
+        return this.requirementDetails.courseType
+      }
+    }
   },
   mounted() {
     this.appendRequirementDetails({ id: this.$route.query.taskId })
