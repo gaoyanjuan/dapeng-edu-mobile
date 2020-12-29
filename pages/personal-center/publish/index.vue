@@ -59,7 +59,7 @@
     </div>
     <!-- 个人主页列表内容 -->
     <div class="content-list">
-      <personal-homework-navigation />
+      <personal-homework-navigation :showPersonal="showPersonal" />
     </div>
 
     <!-- 我的喜欢弹层 -->
@@ -81,7 +81,8 @@ export default {
       userInfo: {},
       loadAvatar: true,
       showAttention: false,
-      attentionState: null
+      attentionState: null,
+      showPersonal: true
     }
   },
   computed: {
@@ -180,12 +181,14 @@ export default {
         })
       }
       this.showAttention = false
+      this.showPersonal = true
     } else {
       this.queryUserData({userId: this.$route.query.userId})
       .then((data) => {
         this.userInfo = data
         this.loadAvatar = false
       })
+      this.showPersonal = false
     }
     // 判断我是否关注TA的个人主页的关注按钮展示（关注/已关注）
     if (!this.$route.query.userId || this.$route.query.userId === this.userInfoGetters.userId) {

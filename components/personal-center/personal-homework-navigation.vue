@@ -17,7 +17,7 @@
         
       </van-tab> -->
       <van-tab title= '阅读'>
-        <publish-reading/>
+        <publish-reading :showPersonal="showPersonal"/>
       </van-tab>
       <!-- <van-tab title= '视频'>
         <publish-video />
@@ -28,6 +28,13 @@
 <script>
 export default {
   name:'PersonalPublish',
+  props: {
+    // 是否是我的个人主页
+    showPersonal: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       activeName: 'dynamic'
