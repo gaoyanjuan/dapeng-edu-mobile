@@ -129,6 +129,10 @@ export default {
   width: 80px;
   text-align: center;
 }
+#his /deep/ .van-tabs__nav {
+  padding-left: 113px;
+  padding-right: 113px;
+}
 /deep/ .van-tab__text--ellipsis {
   width: 30px;
   text-align: center;
