@@ -29,7 +29,7 @@
     </div>
     <div class="">
       <m-posts-class
-        :remark="videoItem.college && videoItem.college.name ? `作品·${videoItem.college.name.replace(/学院/, '')}` : '作品'"
+        :remark="videoItem.college && videoItem.college.name ? `${squareType}·${videoItem.college.name.replace(/学院/, '')}` : squareType"
         :labels="videoItem.labels"
       />
     </div>
@@ -68,6 +68,23 @@ export default {
     defaultImg: require('@/assets/icons/common/photos-bg.png')
   }),
   computed: {
+    squareType () {
+      if (this.propSquareType === 'WORKS') {
+        return '作品'
+      } else if (this.propSquareType === 'HOMEWORK') {
+        return '作业'
+      } else if (this.propSquareType === 'LIFE') {
+        return '动态'
+      } else if (this.propSquareType === 'ACTIVITY_POST') {
+        return '活动'
+      } else if (this.propSquareType === 'POST') {
+        return '动态'
+      } else if (this.propSquareType === 'ARTICLE') {
+        return '阅读'
+      } else if (this.propSquareType === 'MOVIE') {
+        return '长视频'
+      }
+    },
     functionName () {
       return this.$getFunctionName(this.listType)
     }

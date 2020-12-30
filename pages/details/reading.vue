@@ -23,7 +23,10 @@
       <!-- Content -->
       <div class="posts-content">
         <div class="posts-inner-text" ref="richText" v-html="reading.content"></div>
-        <div class="posts-label">阅读·{{ reading.college.name.replace(/学院/, '') }}</div>
+        <m-posts-class
+          :remark="reading.college && reading.college.name ? `阅读·${ reading.college.name.replace(/学院/, '') }` : '阅读'"
+          :labels="reading.labels"
+        />
       </div>
     </section>
 
