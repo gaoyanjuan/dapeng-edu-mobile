@@ -20,7 +20,7 @@
         <template v-if="labelListGetters.list.length && $route.query.topicType === 'VIDEO'">
           <div class="water-fall-warp">
             <m-water-fall width="167px" gap="0" :data="labelListGetters.list" @complete="completeEvent">
-              <m-water-fall-item v-for="(item, index) in labelListGetters.list" :key="index" :order="index">
+              <m-water-fall-item v-for="(item, index) in labelListGetters.list" :key="item ? item.id + index: index" :order="index">
                 <m-small-video-posts
                   :propSquareType="item && item.topicType"
                   listType="label"
@@ -32,12 +32,12 @@
           </div>
         </template>
         <template v-if="labelListGetters.list.length && $route.query.topicType !== 'VIDEO'">
-          <div v-for="(item, index) in labelListGetters.list" :key="item ? item.id: ''" :id="item ? item.id: ''">
+          <div v-for="(item, index) in labelListGetters.list" :key="item ? item.id + index: index" :id="item ? item.id: ''">
             <m-reading-posts
               v-if="item && item.topicType === 'ARTICLE'"
               listType="label"
               :propIndex="index"
-              :imgSmall="item.imgSmall"
+              :imgSmall="item.coverImg"
               :item="item"
             />
             <m-posts

@@ -12,7 +12,7 @@
           <m-posts 
             v-for="(item, index) in workListGetters.list"
             :id="item ? item.id: ''"
-            :key="index"
+            :key="item ? item.id + index : index"
             listType="work"
             :propIndex="index"
             :courseType="item.courseType"

@@ -13,7 +13,7 @@
             v-for="(item, index) in homeworkListGetters.list"
             :id="item ? item.id: ''"
             listType="homework"
-            :key="item ? item.id: index"
+            :key="item ? item.id + index: index"
             propSquareType="HOMEWORK"
             :commentList="item.comments"
             :courseType="item.courseType"
