@@ -34,7 +34,7 @@
       audioType="mobile-list"
       :audioCount="audioCount" 
       :audioUrl="audioUrl"
-        >
+    >
     </the-audio>
     <div class="content" v-else>
       <template v-if="parentUser && replyUser && (parentUser.userId !== replyUser.userId)"><span class="black-text">回复</span><span class="reply-text">{{ parentUser.nickname }}：</span></template>
