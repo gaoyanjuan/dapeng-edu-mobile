@@ -13,33 +13,68 @@
         <p v-else class="not-login-wrap"><span @click="toLogin">登录</span><span>/</span><span @click="toLogin">注册</span></p>
         <span v-if="userInfoGetters && userInfoGetters.studentSatusId" class="user-code">学籍号：{{ userInfoGetters.studentSatusId }}</span>
       </div>
+      <div class="right-arrow">
+        <img src="@/assets/icons/mine/personal-center-right-arrow.png" alt="">
+      </div>
     </div>
 
     <!-- 用户数据：“关注、粉丝、推荐、喜欢” -->
     <div class="mine-user-data-wrap">
       <div class="data-item-column" @click="toAttention">
-        <span class="data-item-column-nums">{{ userTrendsGetters.followCount | studentsCount }}</span>
-        <span class="data-item-column-txt">关注</span>
+        <div class="data-item-column-nums">{{ userTrendsGetters.followCount | studentsCount }}</div>
+        <div class="data-item-column-txt">关注</div>
       </div>
 
       <div class="data-item-column" @click="toFans">
-        <span class="data-item-column-nums">{{ userTrendsGetters.fansCount | studentsCount }}</span>
-        <span class="data-item-column-txt">粉丝</span>
+        <div class="data-item-column-nums">{{ userTrendsGetters.fansCount | studentsCount }}</div>
+        <div class="data-item-column-txt">粉丝</div>
       </div>
 
       <div class="data-item-column" @click="toRecommend">
-        <span class="data-item-column-nums">{{ userTrendsGetters.recommendCount | studentsCount }}</span>
-        <span class="data-item-column-txt">推荐</span>
+        <div class="data-item-column-nums">{{ userTrendsGetters.recommendCount | studentsCount }}</div>
+        <div class="data-item-column-txt">推荐</div>
       </div>
 
       <div class="data-item-column" @click="openLovePopup">
-        <span class="data-item-column-nums">{{ userTrendsGetters.likeCount | studentsCount }}</span>
-        <span class="data-item-column-txt">喜欢</span>
+        <div class="data-item-column-nums">{{ userTrendsGetters.likeCount | studentsCount }}</div>
+        <div class="data-item-column-txt">喜欢</div>
       </div>
     </div>
-
+    <!-- 我的体验课、正式课、发布、订单导航 -->
+    <div class="mine-user-nav-wrap">
+      <div class="nav-item">
+        <div>
+          <img src="@/assets/icons/mine/icon-trial-course.png" alt="">
+        </div>
+        <div>我的体验课</div>
+      </div>
+      <div class="nav-item">
+        <div>
+          <img src="@/assets/icons/mine/icon-formal-course.png" alt="">
+        </div>
+        <div>我的正式课</div>
+      </div>
+      <div class="nav-item">
+        <div>
+          <img src="@/assets/icons/mine/icon-my-publish.png" alt="">
+        </div>
+        <div>我的发布</div>
+      </div>
+      <div class="nav-item">
+        <div>
+          <img src="@/assets/icons/mine/icon-my-order.png" alt="">
+        </div>
+        <div>我的订单</div>
+      </div>
+    </div>
+    <!-- 广告站位图 -->
+    <div class="advertising-picture">
+      <img src="@/assets/icons/mine/personal-homepage-bg.png" alt="">
+    </div>
+    <!-- 我的喜欢、我的收藏、学习荣誉等底部导航 -->
+  
     <!-- 用户数据：“我的喜欢和收藏” -->
-    <div class="mine-user-remark-wrap">
+    <!-- <div class="mine-user-remark-wrap">
       <div class="user-remark-left-side" @click="toMyLike">
         <img class="user-remark-icon" :src="navLike" alt="" />
         <span class="user-remark-txt">我的喜欢</span>
@@ -49,17 +84,17 @@
         <img class="user-remark-icon" :src="navStar" alt="" />
         <span class="user-remark-txt">我的收藏</span>
       </div>
-    </div>
+    </div> -->
 
     <!-- 用户数据：“作业、作品导航等……” -->
-    <div class="mine-nav-group-wrap">
+    <!-- <div class="mine-nav-group-wrap">
       <van-grid square :border="false" clickable>
         <van-grid-item v-for="(item ,i) in navList" :key="i" @click="enterPublishPage(item)">
           <img class="nav-icon" :src="item.icon" alt="" />
           <span class="nav-txt"> {{ item.txt }} </span>
         </van-grid-item>
       </van-grid>
-    </div>
+    </div> -->
 
     <!-- APP 引导下载 -->
     <div class="mine-app-download-wrap" @click="openAppEvent">
@@ -264,6 +299,7 @@ export default {
   background-size: 192px 106px;
   background-repeat: no-repeat;
   background-position: right;
+  position: relative;
   .l-flex-row-def();
 }
 
@@ -317,21 +353,27 @@ export default {
     margin-top: 6px;
   }
 }
-
+.right-arrow {
+  position: absolute;
+  right: 0;
+  & > img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+  }
+}
 .mine-user-data-wrap {
   width: 100%;
-  height: 17px;
-  padding-left: 82px;
   display: flex;
   align-items: center;
+  margin-top: 16px;
 }
 
 .mine-user-data-wrap .data-item-column {
-  // max-width: 60px;
-  height: 17px;
-  display: flex;
-  align-items: center;
-  line-height: 17px;
+  width: 92px;
+  text-align: center;
+  color: #BEC2C6;
+  line-height: 20px;
   cursor: pointer;
 
   &:not(:last-child) {
@@ -339,7 +381,6 @@ export default {
   }
 
   & .data-item-column-nums {
-    // max-width: 20px;
     font-size: 12px;
     font-family: @dp-font-semibold;
     font-weight: 600;
@@ -355,78 +396,112 @@ export default {
     color: #A6AEA9;
   }
 }
-
-.mine-user-remark-wrap {
+// 我的体验课、正式课等导航栏样式
+.mine-user-nav-wrap {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
   width: 100%;
-  height: 36px;
-  margin-top: 20px;
-  .l-flex-row();
-
-  & .user-remark-left-side,
-  & .user-remark-right-side {
-    width: 163px;
-    height: 36px;
-    background: #FFFFFF;
-    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-
-  & .user-remark-left-side,
-  & .user-remark-right-side {
-    & .user-remark-icon {
-      width: 18px;
-      height: 15px;
-      margin-right: 9px;
+  height: 87px;
+  & > .nav-item {
+    width: 100px;
+    text-align: center;
+    line-height: 20px;
+    & > :nth-child(1) {
+      & > img {
+        width: 30px;
+        height: 30px;
+      }
     }
-
-    & .user-remark-txt {
-      min-width: 56px;
-      height: 20px;
-      font-size: 14px;
+    &>:nth-child(2) {
+      font-size: 12px;
       font-family: @dp-font-regular;
       font-weight: 400;
-      color: #5A5A5A;
-      line-height: 20px;
-    }
-  }
-
-  & .user-remark-right-side {
-    & .user-remark-icon {
-      width: 18px;
-      height: 19px;
+      color: #18252C;
+      margin-top: 2px;
+      height: 20px;
     }
   }
 }
-
-.mine-nav-group-wrap {
-  width: 343px;
-  // min-height: 154px;
-  min-height: 77px;
-  background: #FFFFFF;
-  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
-  border-radius: 6px;
+.advertising-picture {
   margin-top: 12px;
-  padding:10px;
-
-  & .nav-icon {
-    width: 32px;
-    height: 32px;
-  }
-
-  & .nav-txt {
-    width: auto;
-    height: 17px;
-    font-size: 12px;
-    font-family: @dp-font-regular;
-    font-weight: 400;
-    color: #5A5A5A;
-    line-height: 17px;
+  & >img {
+    width: 343px;
+    height: 76px;
+    border-radius: 10px;
   }
 }
+// .mine-user-remark-wrap {
+//   width: 100%;
+//   height: 36px;
+//   margin-top: 20px;
+//   .l-flex-row();
+
+//   & .user-remark-left-side,
+//   & .user-remark-right-side {
+//     width: 163px;
+//     height: 36px;
+//     background: #FFFFFF;
+//     box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04);
+//     border-radius: 8px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     cursor: pointer;
+//   }
+
+//   & .user-remark-left-side,
+//   & .user-remark-right-side {
+//     & .user-remark-icon {
+//       width: 18px;
+//       height: 15px;
+//       margin-right: 9px;
+//     }
+
+//     & .user-remark-txt {
+//       min-width: 56px;
+//       height: 20px;
+//       font-size: 14px;
+//       font-family: @dp-font-regular;
+//       font-weight: 400;
+//       color: #5A5A5A;
+//       line-height: 20px;
+//     }
+//   }
+
+//   & .user-remark-right-side {
+//     & .user-remark-icon {
+//       width: 18px;
+//       height: 19px;
+//     }
+//   }
+// }
+
+// .mine-nav-group-wrap {
+//   width: 343px;
+//   // min-height: 154px;
+//   min-height: 77px;
+//   background: #FFFFFF;
+//   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
+//   border-radius: 6px;
+//   margin-top: 12px;
+//   padding:10px;
+
+//   & .nav-icon {
+//     width: 32px;
+//     height: 32px;
+//   }
+
+//   & .nav-txt {
+//     width: auto;
+//     height: 17px;
+//     font-size: 12px;
+//     font-family: @dp-font-regular;
+//     font-weight: 400;
+//     color: #5A5A5A;
+//     line-height: 17px;
+//   }
+// }
 
 .mine-app-download-wrap {
   width: 343px;
