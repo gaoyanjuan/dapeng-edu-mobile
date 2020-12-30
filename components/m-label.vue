@@ -45,6 +45,7 @@
               class="list-item"
               listType="label"
               :propIndex="index"
+              :commentList="item.comments"
               :courseType="item.courseType"
               :listItemData="item"
               :modifiedTime="item.createTime"
