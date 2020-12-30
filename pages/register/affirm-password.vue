@@ -29,7 +29,7 @@
       <div class="register-footer-protocol">
         <van-checkbox v-model="checked" shape="square" checked-color="#00B93B" icon-size="18px"/>
         <div class="protocol-txt">
-          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.2》</span>和
+          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.3》</span>和
           <span class="protocol-link" @click="onTopolicy">《隐私政策》</span>
         </div>
       </div>
