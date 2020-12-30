@@ -14,7 +14,7 @@
             :imgSmall="item.coverImgSmall"
             :id="item ? item.id: ''"
             :propIndex="i"
-            :key="item ? item.id + index: index"
+            :key="item ? item.id + i : i"
             :item="item"
           />
         </template>
