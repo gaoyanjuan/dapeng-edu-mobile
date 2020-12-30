@@ -358,7 +358,7 @@ export default {
         'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapeng.lan',  '*.127.0.0.1','*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net', '*.localhost'],
         'object-src': ["'none'"],
         'base-uri': ["'self'"],
-        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com','http:']
+        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', 'http:']
       }
     },
     addMeta: true
