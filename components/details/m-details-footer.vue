@@ -45,14 +45,6 @@ export default {
     courseType: {
       type: String,
       default: ''
-    },
-    propCommentCount: {
-      type: Number,
-      default: 0
-    },
-    propPraiseCount: {
-      type: Number,
-      default: 0
     }
   },
   data () {
@@ -75,6 +67,9 @@ export default {
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)
     }
+  },
+  mounted () {
+    console.log(this.$store.state.listType)
   },
   methods: {
     ...mapActions({
@@ -235,6 +230,7 @@ export default {
           if (!data.highRisk) {
             this.$toast('评论成功')
             this.changeCommentCount(this.detailsGetters.commentCount + 1)
+            console.log(this.functionName)
             this.$store.commit(`${this.functionName}`, {
               index: this.$store.state.propIndex,
               type: 'comment',

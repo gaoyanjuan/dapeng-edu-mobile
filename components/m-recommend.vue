@@ -6,7 +6,7 @@
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="recommendListGetters.list.length">
-          <div v-for="(res, i) in recommendListGetters.list" :key="i">
+          <div v-for="(res, i) in recommendListGetters.list" :key="res && res.recommendTopic ? res.recommendTopic.id + i: i">
             <m-reading-posts
               v-if="res && res.hotType === 'ARTICLE'"
               :id="res.recommendTopic ? res.recommendTopic.id: ''"

@@ -13,7 +13,10 @@
     <div class="follow-wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <template v-if="attentionListGetters.list.length">
-          <div v-for="(res, i) in attentionListGetters.list" class="list-item" :key="i">
+          <div
+            v-for="(res, i) in attentionListGetters.list"
+            class="list-item"
+            :key="res && res.topicType ? res.topicType.id + index: index">
             <m-reading-posts
               v-if="res && res.topicType === 'ARTICLE'"
               :id="res.topic ? res.topic.id: ''"
