@@ -138,7 +138,10 @@ export default {
     ...mapGetters({
       commentDetailsGetters: 'comment/commentDetailsGetters',
       userinfo: 'user/userInfoGetters'
-    })
+    }),
+    functionName () {
+      return this.$getFunctionName(this.$store.state.listType)
+    }
   },
   created () {
     this.isPraise = this.commentItem.isPraise
@@ -251,6 +254,11 @@ export default {
               }
             })
             this.changeReplyCount(1)
+            this.$store.commit(`${this.functionName}`, {
+              index: this.$store.state.propIndex,
+              type: 'comment',
+              value: 1
+            })
             this.$toast('评论成功')
           }
         } else {

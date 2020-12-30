@@ -167,7 +167,7 @@ export default {
 
 .posts-details-wrap .posts-content {
   width: 100%;
-  min-height: 300px;
+  min-height: 24px;
   background-color: @dp-white;
 }
 
@@ -175,6 +175,11 @@ export default {
   width: 343px;
   height: auto;
   margin-top: 12px;
+  font-size: 16px;
+  font-family: @regular;
+  font-weight: 400;
+  color: #36404A;
+  line-height: 24px;
 }
 
 .posts-content .posts-inner-text {

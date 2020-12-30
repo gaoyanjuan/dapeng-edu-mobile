@@ -101,7 +101,7 @@ export default {
       this.$cookiz.set('isLogin', false, { path: '/' })
 
       this.$store.commit('changeListData', {
-        listType: 'arttcle',
+        listType: 'article',
         propIndex: this.propIndex,
         anchorId: this.item.id
       })

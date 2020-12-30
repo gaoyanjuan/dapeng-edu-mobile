@@ -10,7 +10,7 @@
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="smallVideoList.list.length">
           <m-water-fall width="167px" gap="0" :data="smallVideoList.list" @complete="completeEvent">
-            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="index" :order="index">
+            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="item ? item.id + index : index" :order="index">
               <m-small-video-posts
                 :propSquareType="item && item.type"
                 listType="small-video"

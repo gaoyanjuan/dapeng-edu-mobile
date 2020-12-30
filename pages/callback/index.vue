@@ -38,7 +38,7 @@ export default {
     // ************* 登录埋点  Start*************
     this.$matomo.setUserId(token.sub)
     let userData = {'user_id':token.sub, 'ztxx_dl_dlfs': this.state}
-    this.$matomo.setCustomVariable(1, 'ztxx#ztxx_dl', JSON.stringify(userData))
+    this.$matomo.setCustomVariable(1, 'ztxx#ztxx_dl', JSON.stringify(userData), 'page')
     this.$matomo.trackPageView()
     // ************* 登录埋点 End*************
 

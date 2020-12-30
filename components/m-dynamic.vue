@@ -12,7 +12,7 @@
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: index"
+            :key="item ? item.id + index: index"
             listType="dynamic-hot"
             :propIndex="index"
             :listItemData="item"
@@ -25,7 +25,7 @@
           <m-posts 
             v-for="(item, index) in newDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: ''"
+            :key="item ? item.id + index: index"
             listType="dynamic-new"
             :propIndex="index"
             :listItemData="item"
@@ -38,7 +38,7 @@
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: ''"
+            :key="item ? item.id + index: index"
             listType="dynamic-hot"
             :propIndex="index"
             :listItemData="item"
