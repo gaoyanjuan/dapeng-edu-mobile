@@ -30,7 +30,12 @@ export default {
   },
   methods: {
     toActivitiesDetail() {
-      const url = this.cardData.activityDisplay.detailPagesURL || this.cardData.activityDisplay.rankingListDetailPagesURL
+      const activity = this.cardData.activityDisplay
+
+      this.$matomo.setDocumentTitle('活动/'+ activity.displayName )
+      this.$matomo.trackPageView()
+
+      const url = activity.detailPagesURL || activity.rankingListDetailPagesURL
       window.open(url, '_blank')
     }
   }
