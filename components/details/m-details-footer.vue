@@ -68,9 +68,6 @@ export default {
       return this.$getFunctionName(this.$store.state.listType)
     }
   },
-  mounted () {
-    console.log(this.$store.state.listType)
-  },
   methods: {
     ...mapActions({
       queryCollection: 'comment/queryCollection',
@@ -230,7 +227,6 @@ export default {
           if (!data.highRisk) {
             this.$toast('评论成功')
             this.changeCommentCount(this.detailsGetters.commentCount + 1)
-            console.log(this.functionName)
             this.$store.commit(`${this.functionName}`, {
               index: this.$store.state.propIndex,
               type: 'comment',

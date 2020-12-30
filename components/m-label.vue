@@ -37,7 +37,7 @@
               v-if="item && item.topicType === 'ARTICLE'"
               listType="label"
               :propIndex="index"
-              :imgSmall="item.imgSmall"
+              :imgSmall="item.coverImg"
               :item="item"
             />
             <m-posts

@@ -152,7 +152,6 @@ export default {
     // 新增评论
     async appendNewComment ({ commit }, params) {
       const res = await this.$axios.post('/comments', params)
-      console.log(res)
       if (res.status === 201) {
         commit('appendNewComment', { data: res.data, userData: params.user })
       }
