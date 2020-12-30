@@ -14,6 +14,7 @@
             :imgSmall="item.coverImgSmall"
             :id="item ? item.id: ''"
             :propIndex="i"
+            listType="article"
             :key="item ? item.id + i : i"
             :item="item"
           />

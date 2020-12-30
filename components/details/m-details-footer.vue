@@ -227,6 +227,7 @@ export default {
           if (!data.highRisk) {
             this.$toast('评论成功')
             this.changeCommentCount(this.detailsGetters.commentCount + 1)
+            console.log(this.functionName)
             this.$store.commit(`${this.functionName}`, {
               index: this.$store.state.propIndex,
               type: 'comment',
