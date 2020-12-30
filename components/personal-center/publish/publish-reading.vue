@@ -1,13 +1,15 @@
-<template class="reading-wrap">
+<template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
     <template v-if="publishReadingGetters.list.length">
-      <m-reading-posts
-        v-for="(item, index) in publishReadingGetters.list"
-        :key="index"
-        :item="item"
-        :imgSmall="item.coverImgSmall"
-        :showPersonal="showPersonal"
-      />
+      <div class="reading-wrap">
+        <m-reading-posts
+          v-for="(item, index) in publishReadingGetters.list"
+          :key="index"
+          :item="item"
+          :imgSmall="item.coverImgSmall"
+          :showPersonal="showPersonal"
+        />
+      </div>
     </template>
     <template v-if="!publishReadingGetters.list.length && finished">
       <div class="have-no-posts-wrap">
@@ -100,12 +102,9 @@ export default {
 
 <style lang="less" scoped>
 
-/deep/.m-reading:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
-
 .reading-wrap {
   position: relative;
+  background-color: #f5f5f5;
 }
 
 .have-no-posts-wrap {
