@@ -72,6 +72,7 @@ export default {
   layout: 'navbar',
   data() {
     return {
+      fromRouteName: null,
       follow: require('@/assets/icons/mine/posts-follow.png'),
       topfollow: require('@/assets/icons/posts/posts-follow.png'),
       unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
@@ -91,6 +92,11 @@ export default {
       'userTrendsGetters'
     ])
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.fromRouteName = from.name
+    })
+  },
   methods: {
     ...mapActions('user', [
       'queryUserData',
@@ -102,8 +108,7 @@ export default {
     ]),
     // 返回
     onClickBack() {
-      const route = 'personal-center-publish'
-      if(this.$route.name === route) {
+      if (this.fromRouteName === 'submit') {
         this.$router.replace('/personal-center')
       } else {
         this.$router.go(-1)
