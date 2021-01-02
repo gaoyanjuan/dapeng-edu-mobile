@@ -33,7 +33,7 @@ export default {
       grant_type: 'authorization_code',
       redirect_uri: `${this.validateSystemHostName().host}/callback`
     })
-    const token = jwtDecode(data.refresh_token)
+    const token = jwtDecode(data.access_token)
 
     // ************* 登录埋点  Start*************
     this.$matomo.setUserId(token.sub)
