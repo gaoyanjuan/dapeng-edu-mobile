@@ -356,7 +356,11 @@ export default {
         'connect-src': ["'self'", '*.aliyuncs.com', '*.polyv.net', '*.videocc.net', '*.baidu.com', '*.talk99.cn', '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com'],
         'form-action': ["'self'", '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com',],
         'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapeng.lan',  '*.127.0.0.1','*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net', '*.localhost'],
-        'object-src': ["'none'"],
+        'object-src': [
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          'http:'
+        ],
         'base-uri': ["'self'"],
         'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', 'http:']
       }
