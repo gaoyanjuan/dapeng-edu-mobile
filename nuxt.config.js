@@ -54,6 +54,11 @@ export default {
         hid: 'player',
         type: 'text/javascript',
         src: '//player.polyv.net/script/player.js'
+      },
+      {
+        hid: 'ncpc',
+        type: 'text/javascript',
+        src: 'https://g.alicdn.com/sd/ncpc/nc.js?t=2015052012'
       }
     ]
   },
@@ -300,13 +305,16 @@ export default {
           '*.videocc.net',
           '*.bdimg.com',
           '*.jiain.net',
+          '*.alicdn.com',
+          '*.aliyun.com',
           'http:'
         ],
         'font-src': [
           `data:`,
           '*.dapengjiaoyu.cn',
           '*.dapengjiaoyu.com',
-          '*.yzcdn.cn'
+          '*.yzcdn.cn',
+          '*.alicdn.com'
         ],
         'worker-src': [
           "'self'",
@@ -330,7 +338,11 @@ export default {
           '*.dapengjiaoyu.com',
           '*.sohu.com',
           "'unsafe-inline'",
-          '*.baidu.com'
+          '*.baidu.com',
+          '*.alicdn.com',
+          '*.aliyun.com',
+          '*.aliapp.org',
+          '*.taobao.com'
         ],
         'script-src': [
           "'self'",
@@ -341,9 +353,23 @@ export default {
           '*.polyv.net',
           '*.baidu.com',
           '*.jiain.net',
-          '*.talk99.cn'
+          '*.talk99.cn',
+          '*.alicdn.com',
+          '*.aliyun.com'
         ],
-        'connect-src': ["'self'", '*.aliyuncs.com', '*.polyv.net', '*.videocc.net', '*.baidu.com', '*.talk99.cn', '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com'],
+        'connect-src': [
+          "'self'",
+          '*.aliyuncs.com',
+          '*.polyv.net',
+          '*.videocc.net',
+          '*.baidu.com',
+          '*.talk99.cn',
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          '*.alicdn.com',
+          '*.aliyun.com',
+          '*.aliapp.org'
+        ],
         'form-action': ["'self'", '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com',],
         'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapeng.lan',  '*.127.0.0.1','*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net', '*.localhost'],
         'object-src': ["'none'"],
