@@ -54,7 +54,7 @@
         </div>
         <div>我的正式课</div>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" @click="toPersonalCenter">
         <div>
           <img src="@/assets/icons/mine/icon-my-publish.png" alt="">
         </div>
@@ -72,34 +72,13 @@
       <img src="@/assets/icons/mine/personal-homepage-bg.png" alt="">
     </div>
     <!-- 我的喜欢、我的收藏、学习荣誉等底部导航 -->
-  
-    <!-- 用户数据：“我的喜欢和收藏” -->
-    <!-- <div class="mine-user-remark-wrap">
-      <div class="user-remark-left-side" @click="toMyLike">
-        <img class="user-remark-icon" :src="navLike" alt="" />
-        <span class="user-remark-txt">我的喜欢</span>
-      </div>
-
-      <div class="user-remark-right-side" @click="toMyCollection">
-        <img class="user-remark-icon" :src="navStar" alt="" />
-        <span class="user-remark-txt">我的收藏</span>
-      </div>
-    </div> -->
-
-    <!-- 用户数据：“作业、作品导航等……” -->
-    <!-- <div class="mine-nav-group-wrap">
+    <div class="mine-nav-group-wrap">
       <van-grid square :border="false" clickable>
-        <van-grid-item v-for="(item ,i) in navList" :key="i" @click="enterPublishPage(item)">
+        <van-grid-item v-for="(item ,i) in navList" :key="i" @click="onNavGroupItem(item)">
           <img class="nav-icon" :src="item.icon" alt="" />
           <span class="nav-txt"> {{ item.txt }} </span>
         </van-grid-item>
       </van-grid>
-    </div> -->
-
-    <!-- APP 引导下载 -->
-    <div class="mine-app-download-wrap" @click="openAppEvent">
-      <img class="app-logo" :src="logo" alt="" />
-      <span class="app-txt">下载大鹏教育APP</span>
     </div>
 
     <!-- 退出登录 -->
@@ -122,18 +101,16 @@ export default {
     userRoute:'/personal-center/dashboard',
     avatar:require('@/assets/icons/common/avatar.png'),
     notLoginAvatar: require('@/assets/icons/mine/not-login.png'),
-    navLike: require('@/assets/icons/mine/nav-like.png'),
-    navStar: require('@/assets/icons/mine/nav-star.png'),
-    logo: require('@/assets/icons/mine/dapeng-logo.png'),
     navList:[
-      {txt:'作业',name:'homework',icon: require('@/assets/icons/mine/nav-homework.png')},
-      {txt:'作品',name:'works',icon: require('@/assets/icons/mine/nav-works.png')},
-      {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
-      {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
-      {txt:'我的课程',name:'course',icon: require('@/assets/icons/mine/nav-task.png')},
-      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
-      // {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
-      // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
+      {txt:'我的喜欢',name:'like',icon: require('@/assets/icons/mine/icon-my-like.png')},
+      {txt:'我的收藏',name:'collection',icon: require('@/assets/icons/mine/icon-my-collection.png')},
+      {txt:'学习荣誉',name:'learn-honor',icon: require('@/assets/icons/mine/icon-learn-honor.png')},
+      {txt:'快捷支付',name:'fast-payment',icon: require('@/assets/icons/mine/icon-fast-payment.png')},
+      {txt:'任务',name:'task',icon: require('@/assets/icons/mine/icon-task.png')},
+      {txt:'联系学管',name:'teacher',icon: require('@/assets/icons/mine/icon-contact-teacher.png')},
+      {txt:'建议与投诉',name:'suggest-complaint',icon: require('@/assets/icons/mine/icon-suggest-complaint .png')},
+      {txt:'设置',name:'setting',icon: require('@/assets/icons/mine/icon-seting.png')},
+      {txt:'下载APP',name:'download',icon: require('@/assets/icons/mine/icon-download.png')}
     ]
   }),
   mounted() {
@@ -183,11 +160,6 @@ export default {
       window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
 
-     /// 唤起APP
-    openAppEvent () {
-      openInApp()
-    },
-
     // 跳转登录页
     toLogin () {
       localStorage.setItem('route', $nuxt.$route.fullPath)
@@ -198,24 +170,51 @@ export default {
     toRegister () {
       this.$router.push('/register')
     },
+    // 进入我的喜欢、收藏等页面跳转
+    onNavGroupItem (params) {
+      switch (params.name) {
+        case 'like':
+          if (!this.$login()) return
+            this.$router.push({
+              path: '/personal-center/likes',
+              query: {
+                userId: this.userInfoGetters.userId
+              }
+            })
+          break;
+        case 'collection':
+          if (!this.$login()) return
+            this.$router.push({
+              path: '/personal-center/collection',
+              query: {
+                userId: this.userInfoGetters.userId
+              }
+            })
+          break;
+        case 'learn-honor':
 
-    // 进入发布页面
-    enterPublishPage(params) {
-      if (!this.$login()) return
+          break;
+        case 'fast-payment':
 
-      if(params.name === 'course') {
-        const url = `${process.env.courseUrl}/secure/my/course/learning/live/courseId?r=${Math.random()}`
-        location.href = url
-        return
+          break;
+        case 'task':
+
+          break;
+        case 'teacher':
+
+          break;
+        case 'suggest-complaint':
+
+          break;
+        case 'setting':
+
+          break;
+        case 'download':
+          openInApp()
+          break;
+        default:
+          break;
       }
-      
-      this.$router.push({
-        path: '/personal-center/publish',
-        query:{ 
-          type: params.name,
-          userId: this.userInfoGetters.userId
-        }
-      })
     },
     toPersonalCenter() {
       this.$router.push({
@@ -254,26 +253,6 @@ export default {
         path: '/personal-center/dashboard',
         query: {
           type: 'recommend',
-          userId: this.userInfoGetters.userId
-        }
-      })
-    },
-
-    toMyLike() {
-      if (!this.$login()) return
-      this.$router.push({
-        path: '/personal-center/likes',
-        query: {
-          userId: this.userInfoGetters.userId
-        }
-      })
-    },
-
-    toMyCollection() {
-      if (!this.$login()) return
-      this.$router.push({
-        path: '/personal-center/collection',
-        query: {
           userId: this.userInfoGetters.userId
         }
       })
@@ -431,103 +410,29 @@ export default {
     border-radius: 10px;
   }
 }
-// .mine-user-remark-wrap {
-//   width: 100%;
-//   height: 36px;
-//   margin-top: 20px;
-//   .l-flex-row();
 
-//   & .user-remark-left-side,
-//   & .user-remark-right-side {
-//     width: 163px;
-//     height: 36px;
-//     background: #FFFFFF;
-//     box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.04);
-//     border-radius: 8px;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     cursor: pointer;
-//   }
-
-//   & .user-remark-left-side,
-//   & .user-remark-right-side {
-//     & .user-remark-icon {
-//       width: 18px;
-//       height: 15px;
-//       margin-right: 9px;
-//     }
-
-//     & .user-remark-txt {
-//       min-width: 56px;
-//       height: 20px;
-//       font-size: 14px;
-//       font-family: @dp-font-regular;
-//       font-weight: 400;
-//       color: #5A5A5A;
-//       line-height: 20px;
-//     }
-//   }
-
-//   & .user-remark-right-side {
-//     & .user-remark-icon {
-//       width: 18px;
-//       height: 19px;
-//     }
-//   }
-// }
-
-// .mine-nav-group-wrap {
-//   width: 343px;
-//   // min-height: 154px;
-//   min-height: 77px;
-//   background: #FFFFFF;
-//   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
-//   border-radius: 6px;
-//   margin-top: 12px;
-//   padding:10px;
-
-//   & .nav-icon {
-//     width: 32px;
-//     height: 32px;
-//   }
-
-//   & .nav-txt {
-//     width: auto;
-//     height: 17px;
-//     font-size: 12px;
-//     font-family: @dp-font-regular;
-//     font-weight: 400;
-//     color: #5A5A5A;
-//     line-height: 17px;
-//   }
-// }
-
-.mine-app-download-wrap {
+.mine-nav-group-wrap {
   width: 343px;
-  height: 44px;
+  min-height: 77px;
   background: #FFFFFF;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
   border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 12px;
-  cursor: pointer;
+  margin-top: 10px;
 
-  & .app-logo {
-    width: 24px;
-    height: 24px;
-    border-radius: 8px;
+  & .nav-icon {
+    width: 32px;
+    height: 32px;
   }
 
-  & .app-txt {
+  & .nav-txt {
     width: auto;
+    height: 17px;
+    margin-top: 8px;
     font-size: 12px;
-    font-family: @dp-font-medium;
-    font-weight: 600;
-    color: #5A5A5A;
-    margin-left: 6px;
+    font-family: @dp-font-regular;
+    font-weight: 400;
+    color: #A3A8AB;
+    line-height: 17px;
   }
 }
 
