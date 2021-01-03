@@ -140,7 +140,6 @@ export default {
         })
         this.$cookiz.remove(this.validateSystemHostName().token_name)
       }
-      this.$cookiz.remove('refresh_token')
       this.$cookiz.remove('userinfo', {
         path: '/'
       })
