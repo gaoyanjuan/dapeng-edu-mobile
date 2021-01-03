@@ -3,7 +3,7 @@ const HttpAgent = require('agentkeepalive')
 const HttpsAgent = require('agentkeepalive').HttpsAgent
 
 const instance = axios.create({
-  timeout: 4000,
+  timeout: 20000,
   httpAgent: new HttpAgent({
     keepAlive: true,
     freeSocketTimeout: 4000,
