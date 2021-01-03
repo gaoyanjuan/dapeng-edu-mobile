@@ -31,9 +31,17 @@ export default function (req, res, next) {
       if (error.response && error.response.data && error.response.data.state === 1001) {
         type = 'displacement'
       }
-      res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
-        expires: new Date() 
-      }))
+      if (process.env.MODE === 'dev') {
+        res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
+          expires: new Date() 
+        }))
+      } else {
+        res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
+          path: '/',
+          domain: '.dapengjiaoyu.cn',
+          expires: new Date() 
+        }))
+      }
       const locationURL = `/login/invalid-login?type=${type}`
       res.statusCode = 302
       res.setHeader('Location', locationURL)
