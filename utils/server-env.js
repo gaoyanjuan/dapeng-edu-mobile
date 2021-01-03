@@ -14,7 +14,7 @@ function authEnv () {
   }
   if (process.env.MODE === 'test') {
     return testPCParam
-  } else if (process.env.MODE === 'production') {
+  } else if (process.env.MODE === 'pro') {
     return prodPCParam
   } else {
     return localPCParam
