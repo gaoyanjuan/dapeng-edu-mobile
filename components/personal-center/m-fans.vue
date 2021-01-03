@@ -59,26 +59,13 @@ export default {
           page: 1,
           size: 20
         })
-        .then(() => {
-          // 阅读消息逻辑
-          const list = []
-          this.userFansGetters.list.forEach((item,index) => {
-            if (!item.redDot) {
-              list.push(item.userId)
-            }
-          })
-          this.readMyMessages({
-            ids: list
-          })
-        })
       }
   },
   methods:{
     ...mapActions('user', [
       'appendUserFans',
       'followingUser',
-      'cancelFollowingUser',
-      'readMyMessages'
+      'cancelFollowingUser'
     ]),
     ...mapMutations('user', [
       'clearUserFans',
@@ -98,18 +85,6 @@ export default {
         page: newPage,
         size: 20
       })
-      .then(() => {
-        // 加载下一页阅读消息逻辑
-          const list = []
-          this.userFansGetters.list.forEach((item,index) => {
-            if (item.redDot) {
-              list.push(item.userId)
-            }
-          })
-          this.readMyMessages({
-            ids: list
-          })
-        })
     },
     /** 关注事件 */
     handleFollow(item, index){
