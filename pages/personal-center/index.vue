@@ -69,7 +69,11 @@
     </div>
     <!-- 广告站位图 -->
     <div class="advertising-picture">
-      <img src="@/assets/icons/mine/personal-homepage-bg.png" alt="">
+      <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
+        <van-swipe-item v-for="(item,index) in advertisBanner" :key='index'>
+          <img :src="item" alt="">
+        </van-swipe-item>
+      </van-swipe>
     </div>
     <!-- 我的喜欢、我的收藏、学习荣誉等底部导航 -->
     <div class="mine-nav-group-wrap">
@@ -111,6 +115,10 @@ export default {
       {txt:'建议与投诉',name:'suggest-complaint',icon: require('@/assets/icons/mine/icon-suggest-complaint .png')},
       {txt:'设置',name:'setting',icon: require('@/assets/icons/mine/icon-seting.png')},
       {txt:'下载APP',name:'download',icon: require('@/assets/icons/mine/icon-download.png')}
+    ],
+    advertisBanner:[
+      require('@/assets/icons/mine/personal-homepage-bg.png'),
+      require('@/assets/icons/mine/personal-homepage-bg.png')
     ]
   }),
   mounted() {
@@ -404,10 +412,12 @@ export default {
 }
 .advertising-picture {
   margin-top: 12px;
-  & >img {
-    width: 343px;
-    height: 76px;
-    border-radius: 10px;
+  .van-swipe-item {
+    & >img {
+      width: 343px;
+      height: 76px;
+      border-radius: 10px;
+    }
   }
 }
 
