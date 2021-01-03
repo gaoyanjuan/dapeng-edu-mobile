@@ -1,4 +1,3 @@
-const validateSystemHostName = require('../plugins/validate-system-hostname')
 const axios = require('axios')
 const HttpAgent = require('agentkeepalive')
 const HttpsAgent = require('agentkeepalive').HttpsAgent
