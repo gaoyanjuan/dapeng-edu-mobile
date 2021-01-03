@@ -3,7 +3,9 @@
     <m-navbar
       title="修改地址"
       right-text="完成"
-      :show-right-text="true"
+      :show-info-right-text="true"
+      :accomplish-status="accomplishStatus"
+      @onClickRight="onSaveHandle"
     />
     <!-- 修改地址内容 -->
     <div class="modified-content">
@@ -62,6 +64,8 @@ export default {
       dynamicNums:'',
       /** 描述框大小*/
       autosize: { maxHeight: 100, minHeight: 100},
+      // 完成的状态
+      accomplishStatus:false
     }
   },
   computed: {
@@ -81,6 +85,7 @@ export default {
       this.showAreaPopup = false
       const area = res[0].name + res[1].name + res[2].name
       this.addressArea = area
+      this.accomplishStatus = true
     },
     // 取消选中
     areaCancel() {
@@ -102,6 +107,19 @@ export default {
     // 字数监听
     onChangeInput(words) {
       this.calcContent(words ,60)
+      if (this.familyAddress) {
+        this.accomplishStatus = true
+      } else {
+        this.accomplishStatus = false
+      }
+    },
+    // 点击完成
+    onSaveHandle() {
+      this.$toast({
+        message: `保存成功`,
+        position: 'bottom',
+        duration: 2000
+      })
     }
   }
 }

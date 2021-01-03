@@ -3,7 +3,8 @@
     <m-navbar
       title="用户名"
       right-text="完成"
-      :show-right-text="true"
+      :show-info-right-text="true"
+      :accomplish-status="accomplishStatus"
       @onClickRight="onSaveHandle"
     />
     <!-- 修改用户名内容 -->
@@ -12,6 +13,7 @@
         <input
           v-model="UserNameModel"
           class="modified-name"
+          @input="changeInput()"
           placeholder="请输入用户名"
         >
         <span class="right-close">
@@ -31,7 +33,9 @@ export default {
   layout:'navbar',
   data() {
     return {
-      UserNameModel: ''
+      UserNameModel: '',
+      /** 头部完成的状态*/
+      accomplishStatus:false
     }
   },
   computed: {
@@ -63,6 +67,13 @@ export default {
           duration: 2000
         })
       }
+    },
+    changeInput() {
+      if (this.UserNameModel) {
+        this.accomplishStatus = true
+      } else {
+        this.accomplishStatus = false
+      }
     }
   }
 }
@@ -83,6 +94,7 @@ export default {
       align-items: center;
       background: @dp-white;
       & > .modified-name {
+        width: 80%;
         line-height: 32px;
         font-size: 14px;
         outline: none;

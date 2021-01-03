@@ -3,7 +3,8 @@
     <m-navbar
       title="真实姓名"
       right-text="完成"
-      :showRightText = true
+      :show-info-right-text="true"
+      :accomplish-status="accomplishStatus"
       @onClickRight="onSaveHandle"
     />
     <!-- 修改真实姓名内容 -->
@@ -12,6 +13,7 @@
         <input
           v-model="TreuNameModel"
           class="modified-name"
+          @input="changeInput()"
           placeholder="请输入您的真实姓名"
         >
         <span class="right-close">
@@ -31,7 +33,8 @@ export default {
   layout:'navbar',
   data() {
     return {
-      TreuNameModel: ''
+      TreuNameModel: '',
+      accomplishStatus:false
     }
   },
   computed: {
@@ -61,6 +64,13 @@ export default {
           position: 'bottom',
           duration: 2000
         })
+      }
+    },
+    changeInput() {
+      if (this.TreuNameModel) {
+        this.accomplishStatus = true
+      } else {
+        this.accomplishStatus = false
       }
     }
   }

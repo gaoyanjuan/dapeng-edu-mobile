@@ -3,7 +3,9 @@
     <m-navbar
       title="个性签名"
       right-text="完成"
-      :show-right-text="true"
+      :show-info-right-text="true"
+      :accomplish-status="accomplishStatus"
+      @onClickRight="onSaveHandle"
     />
     <!-- 修改个性签名 -->
     <div class="modified-content">
@@ -38,6 +40,8 @@ export default {
       dynamicNums:'',
       /** 描述框大小*/
       autosize: { maxHeight: 50, minHeight: 50},
+      /** 头部完成的状态*/
+      accomplishStatus:false
     }
   },
   computed: {
@@ -62,6 +66,19 @@ export default {
     // 字数监听
     onChangeInput(words) {
       this.calcContent(words ,30)
+      if (this.introduction) {
+        this.accomplishStatus = true
+      } else {
+        this.accomplishStatus = false
+      }
+    },
+    // 点击完成
+    onSaveHandle() {
+      this.$toast({
+        message: `保存成功`,
+        position: 'bottom',
+        duration: 2000
+      })
     }
   }
   

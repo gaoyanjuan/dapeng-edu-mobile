@@ -2,7 +2,7 @@
   <div class="mine">
 
     <!-- 顶部用户登录信息  -->
-    <div class="mine-header-wrap" @click="toPersonalInfo">
+    <div class="mine-header-wrap">
       <div class="header-left-side">
         <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" />
         <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" @click="toLogin" />
@@ -234,11 +234,6 @@ export default {
         query: {
           userId: this.userInfoGetters.userId
         }
-      })
-    },
-    toPersonalInfo() {
-      this.$router.push({
-        path: '/personal-info'
       })
     }
   }
