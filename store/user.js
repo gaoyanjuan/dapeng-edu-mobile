@@ -544,22 +544,31 @@ export const actions = {
     return res
   },
   // 用户粉丝列表
-  async appendUserFans ({ commit }, params) {
+  async appendUserFans ({ commit,dispatch }, params) {
     commit('changeUserFansStatus', 'loading')
-    const res = await this.$axios.get('/users/fans', {
+    await this.$axios.get('/users/fans', {
       params: {
         ...params
       }
-    })
-    let payload = {
-      data: res.data,
-      pageInfo: {
-        pages: params.page,
-        size: 20
+    }).then((res) => {
+      let list = []
+      res.data.forEach((item) => {
+        if (item.redDot) {
+          list.push(item.userId)
+        }
+      })
+      dispatch('readMyMessages', {
+        ids: list
+      })
+      let payload = {
+        data: res.data,
+        pageInfo: {
+          pages: params.page,
+          size: 20
+        }
       }
-    }
-    commit('appendUserFans', payload)
-    return res
+      commit('appendUserFans', payload)
+    })
   },
   // 用户推荐作业列表
   async appendUserHomesRecommend ({ commit }, params) {
@@ -767,7 +776,11 @@ export const actions = {
   },
   // 执行消息阅读操作
   async readMyMessages ({ commit }, params) {
-    const res = await this.$axios.put('/messages/read')
+    const res = await this.$axios.put('/messages/read', {
+      params: {
+        ...params
+      }
+    })
     return res
   },
    // 查询其他用户的信息

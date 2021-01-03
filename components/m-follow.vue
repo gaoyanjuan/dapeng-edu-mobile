@@ -16,7 +16,8 @@
           <div
             v-for="(res, i) in attentionListGetters.list"
             class="list-item"
-            :key="res && res.topicType ? res.topicType.id + index: index">
+            :key="res && res.topic ? res.topic.id + i : i"
+          >
             <m-reading-posts
               v-if="res && res.topicType === 'ARTICLE'"
               :id="res.topic ? res.topic.id: ''"
