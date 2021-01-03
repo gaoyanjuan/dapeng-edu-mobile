@@ -9,11 +9,7 @@ const tokenName = validateSystemHostName.default().token_name
 const dpAuthTokenUrl = authEnv().dp_auth_token_url
 
 export default function (req, res, next) {
-  let cookieStr = ''
-  if (req.headers.cookie) {
-    cookieStr = req.headers.cookie
-  }
-  const cookies = cookie.parse(cookieStr)
+  const cookies = cookie.parse(req.headers.cookie || '')
   console.log(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), req.url)
   if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && !excludeUrlList.some((ele) => req.url.indexOf(ele) !== -1)) {
     axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
