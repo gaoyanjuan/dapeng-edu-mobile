@@ -767,7 +767,11 @@ export const actions = {
   },
   // 执行消息阅读操作
   async readMyMessages ({ commit }, params) {
-    const res = await this.$axios.put('/messages/read')
+    const res = await this.$axios.put('/messages/read', {
+      params: {
+        ...params
+      }
+    })
     return res
   },
    // 查询其他用户的信息

@@ -59,6 +59,18 @@ export default {
           page: 1,
           size: 20
         })
+        .then(() => {
+          // 阅读消息逻辑
+          const list = []
+          this.userFansGetters.list.forEach((item,index) => {
+            if (!item.redDot) {
+              list.push(item.userId)
+            }
+          })
+          this.readMyMessages({
+            ids: list
+          })
+        })
       }
   },
   methods:{
@@ -86,6 +98,18 @@ export default {
         page: newPage,
         size: 20
       })
+      .then(() => {
+        // 加载下一页阅读消息逻辑
+          const list = []
+          this.userFansGetters.list.forEach((item,index) => {
+            if (item.redDot) {
+              list.push(item.userId)
+            }
+          })
+          this.readMyMessages({
+            ids: list
+          })
+        })
     },
     /** 关注事件 */
     handleFollow(item, index){
@@ -107,12 +131,6 @@ export default {
         })
         
       }else {
-        if(item.redDot) {
-          this.changeFansRedDot({
-            index
-          })
-          this.readMyMessages()
-        }
         this.setUserFollowStatus({
           index: index,
           flag: true,
