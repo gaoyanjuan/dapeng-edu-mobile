@@ -65,8 +65,7 @@ export default {
     ...mapActions('user', [
       'appendUserFans',
       'followingUser',
-      'cancelFollowingUser',
-      'readMyMessages'
+      'cancelFollowingUser'
     ]),
     ...mapMutations('user', [
       'clearUserFans',
@@ -107,12 +106,6 @@ export default {
         })
         
       }else {
-        if(item.redDot) {
-          this.changeFansRedDot({
-            index
-          })
-          this.readMyMessages()
-        }
         this.setUserFollowStatus({
           index: index,
           flag: true,
