@@ -1,7 +1,7 @@
 <template>
   <div class="comment" @click="onShowMenus">
     <div class="comment-header">
-      <div class="comment-header-left">
+      <div class="comment-header-left" @click.stop="toPersonalCenter(user)">
         <headImage
           :headImg="user ? user.avatar : ''"
           imgWidth="40px"
@@ -146,7 +146,10 @@ export default {
     ...mapGetters({
       detailsGetters: 'details/detailsGetters',
       userinfo: 'user/userInfoGetters'
-    })
+    }),
+    functionName () {
+      return this.$getFunctionName(this.$store.state.listType)
+    }
   },
   created () {
     this.isPraise = this.commentItem.isPraise
@@ -234,6 +237,11 @@ export default {
             this.$toast('评论成功')
             this.changeCommentCount(this.detailsGetters.commentCount + 1)
             this.replyCount += 1
+            this.$store.commit(`${this.functionName}`, {
+              index: this.$store.state.propIndex,
+              type: 'comment',
+              value: 1
+            })
             this.repliesList.unshift({
               ...data,
               isPraise: false,
@@ -276,6 +284,19 @@ export default {
     onShowMenus () {
       if (this.userinfo && this.user && this.user.userId === this.userinfo.userId) {
         this.showPopup = !this.showPopup
+      }
+    },
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      if (item) {
+        this.$router.push({
+          path: '/personal-center/publish',
+          query:{ 
+            userId: item.userId
+          }
+        })
+      } else {
+         this.$toast('该用户已注销')
       }
     }
   }

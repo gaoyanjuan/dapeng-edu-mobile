@@ -7,11 +7,13 @@
       </div>
       <div class="user-info">
         <div class="user-avatar">
-          <img :src="userInfo.avatar" alt="头像">
+          <img ref="headerImg" v-if="userInfo.avatar" :src="userInfo.avatar" alt="头像">
+          <img ref="headerImg" v-if="!userInfo.avatar && !loadAvatar" :src="defaultImg" alt="头像">
         </div>
         <div class="info-box">
           <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
-          <div class="personalized-signature">{{userInfo.introduction}}</div>
+          <div v-if="userInfo.introduction!== '' && userInfo.introduction!== null" class="personalized-signature">{{userInfo.introduction}}</div>
+          <div v-else class="personalized-signature">这个人很懒，什么都没有写~</div>
         </div>
         <!-- 个人主页右侧右侧关注按钮 -->
         <div class="avatar-follow" v-if="showAttention" @click="handelAttention">
@@ -47,7 +49,7 @@
         <img src="~@/assets/icons/navbar/nav-arrow-back.png" alt="">
       </div>
       <div class="user-avatar">
-        <img :src="userInfo.avatar" alt="头像">
+        <img ref="headerImg" :src="userInfo.avatar || defaultImg" alt="头像">
         <div class="user-name">{{ userInfo.loginName || userInfo.nickname || userInfo.dpAccount }}</div>
       </div>
       <!-- 固定顶部--右侧关注按钮 -->
@@ -57,7 +59,7 @@
     </div>
     <!-- 个人主页列表内容 -->
     <div class="content-list">
-      <personal-homework-navigation />
+      <personal-homework-navigation :showPersonal="showPersonal" />
     </div>
 
     <!-- 我的喜欢弹层 -->
@@ -70,14 +72,18 @@ export default {
   layout: 'navbar',
   data() {
     return {
+      fromRouteName: null,
       follow: require('@/assets/icons/mine/posts-follow.png'),
       topfollow: require('@/assets/icons/posts/posts-follow.png'),
       unfollow: require('@/assets/icons/posts/posts-unfollow.png'),
+      defaultImg: require('@/assets/icons/common/dp_default_headImg.jpg'),
       navBar: false,
       lovePopup: { show: false },
       userInfo: {},
-      showAttention: true,
-      attentionState: null
+      loadAvatar: true,
+      showAttention: false,
+      attentionState: null,
+      showPersonal: true
     }
   },
   computed: {
@@ -85,6 +91,11 @@ export default {
       'userInfoGetters',
       'userTrendsGetters'
     ])
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.fromRouteName = from.name
+    })
   },
   methods: {
     ...mapActions('user', [
@@ -97,7 +108,11 @@ export default {
     ]),
     // 返回
     onClickBack() {
-      this.$router.go(-1)
+      if (this.fromRouteName === 'submit') {
+        this.$router.replace('/personal-center')
+      } else {
+        this.$router.go(-1)
+      }
     },
     // 滚动吸顶
     watchScroll() {
@@ -171,12 +186,14 @@ export default {
         })
       }
       this.showAttention = false
+      this.showPersonal = true
     } else {
       this.queryUserData({userId: this.$route.query.userId})
       .then((data) => {
         this.userInfo = data
-        this.showAttention = true
+        this.loadAvatar = false
       })
+      this.showPersonal = false
     }
     // 判断我是否关注TA的个人主页的关注按钮展示（关注/已关注）
     if (!this.$route.query.userId || this.$route.query.userId === this.userInfoGetters.userId) {
@@ -188,17 +205,22 @@ export default {
       this.appendFollowingStatus({ id: this.$route.query.userId })
       .then((data) => {
         this.attentionState = data
+        this.showAttention = true
       })
     }
     // 监听调用滚动事件
     window.addEventListener('scroll', this.watchScroll)
-
+    // 挂载完成后，判断图片是否显示成功，若失败，则替换为默认图片
+    this.$refs.headerImg.onerror = () => {
+      this.$refs.headerImg.src = this.defaultImg
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 .personal-homepage {
   & > .personal-homepage-top {
+    position: relative;
     width: 375px;
     height: 190px;
     background: url('~@/assets/icons/mine/personal-homepage-bg.png') no-repeat;
@@ -254,6 +276,8 @@ export default {
       }
     }
     & > .content-box {
+      position: absolute;
+      bottom: -10px;
       width: 100%;
       height: 82px;
       padding: 20px 2px;
@@ -333,10 +357,27 @@ export default {
 /deep/ .van-tabs__line {
   width: 28px;
   height: 4px;
+  top: 38px;
   background: #0CB65B;
   border-radius: 2px;
 }
 /deep/ .van-tab--active {
+  font-size: 14px;
+  font-weight: 400;
   color: #0CB65B;
+}
+/deep/.van-tab {
+  width: 45px;
+  text-align: center;
+  flex: 0;
+  -webkit-flex: 0;
+}
+/deep/ .van-tab__text--ellipsis  {
+  width: 45px;
+}
+
+/deep/ .van-tabs__nav--line {
+  padding-left: 35px;
+  padding-right: 35px;
 }
 </style>

@@ -45,14 +45,6 @@ export default {
     courseType: {
       type: String,
       default: ''
-    },
-    propCommentCount: {
-      type: Number,
-      default: 0
-    },
-    propPraiseCount: {
-      type: Number,
-      default: 0
     }
   },
   data () {

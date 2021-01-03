@@ -1,6 +1,6 @@
 <template>
   <div class="navigation">
-    <van-tabs v-model="activeName" sticky offset-top='44px' @click="onTabsClick">
+    <van-tabs v-model="activeName" sticky :offset-top="'1.17333rem'" @click="onTabsClick">
       <van-tab title= '动态'>
         <publish-dynamic />
       </van-tab>
@@ -17,7 +17,7 @@
         
       </van-tab> -->
       <van-tab title= '阅读'>
-        <publish-reading/>
+        <publish-reading :showPersonal="showPersonal"/>
       </van-tab>
       <!-- <van-tab title= '视频'>
         <publish-video />
@@ -28,6 +28,13 @@
 <script>
 export default {
   name:'PersonalPublish',
+  props: {
+    // 是否是我的个人主页
+    showPersonal: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       activeName: 'dynamic'
@@ -35,7 +42,7 @@ export default {
   },
   mounted() {
     // 路由定位
-    let query = this.$route.query.type || 'homework'
+    let query = this.$route.query.type || 'dynamic'
     let tabs = ['dynamic','homework','works','growth','reading','video']
     this.activeName = tabs.findIndex(tab => tab === query)
   },

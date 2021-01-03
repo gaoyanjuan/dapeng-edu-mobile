@@ -1,4 +1,3 @@
-import { truncate } from 'fs'
 import path from 'path'
 const env = require('./env')
 const global = require('./plugins/global')
@@ -41,8 +40,8 @@ export default {
       },
       { property: 'og:title', content: ' 大鹏教育-高品质的设计师在线教育' },
       { property: 'og:type', content: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
-      { property: 'og:url', content: 'http://newpc.dapengjiaoyu.cn/' },
-      { property: 'og:image', content: 'http://newpc.dapengjiaoyu.cn/dapeng/img/wx-qr.af8e7b1.jpg' },
+      { property: 'og:url', content: 'http://www.dapengjiaoyu.cn/' },
+      { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/ijjctyun.png' },
       { property: 'og:description', content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业' },
       { property: 'og:site_name', content: '大鹏教育职业技能培训' }
     ],
@@ -96,6 +95,7 @@ export default {
   buildModules: [],
 
   modules: [
+    '@nuxtjs/device',
     '@nuxtjs/style-resources',
     '@nuxtjs/axios',
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
@@ -116,6 +116,13 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
+    '/api/buriedPoint/log': {
+      target: env[process.env.MODE].LOG_API_URL, // 日志接口调用地址
+      pathRewrite: {
+        '^/api/buriedPoint/log': '/api/buriedPoint/log',
+        changeOrigin: true
+      }
+    },
     '/api/token/check_token': {
       target: env[process.env.MODE].REFRESH_TOKEN_URL, // 验证token
       pathRewrite: {
@@ -124,7 +131,7 @@ export default {
       }
     },
     '/api/token/get_token': {
-      target: env[process.env.MODE].DP_AUTH_URL, // 目标接口域名
+      target: env[process.env.MODE].DP_AUTH_TOKEN_URL, // 目标接口域名
       pathRewrite: {
         '^/api/token/get_token': '/oauth/token',
         changeOrigin: true
@@ -349,9 +356,13 @@ export default {
         'connect-src': ["'self'", '*.aliyuncs.com', '*.polyv.net', '*.videocc.net', '*.baidu.com', '*.talk99.cn', '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com'],
         'form-action': ["'self'", '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com',],
         'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapeng.lan',  '*.127.0.0.1','*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net', '*.localhost'],
-        'object-src': ["'none'"],
+        'object-src': [
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          'http:'
+        ],
         'base-uri': ["'self'"],
-        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com']
+        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', 'http:']
       }
     },
     addMeta: true

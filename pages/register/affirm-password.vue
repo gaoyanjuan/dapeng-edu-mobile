@@ -29,7 +29,7 @@
       <div class="register-footer-protocol">
         <van-checkbox v-model="checked" shape="square" checked-color="#00B93B" icon-size="18px"/>
         <div class="protocol-txt">
-          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.2》</span>和
+          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.3》</span>和
           <span class="protocol-link" @click="onTopolicy">《隐私政策》</span>
         </div>
       </div>
@@ -121,12 +121,12 @@ export default {
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            const token = jwtDecode(res.data.refresh_token)
+            const token = jwtDecode(res.data.access_token)
 
             // ************* 注册埋点  Start*************
             this.$matomo.setUserId(token.sub)
             let userData = {'user_id':token.sub}
-            this.$matomo.setCustomVariable(1, 'ztxx#ztxx_zc', JSON.stringify(userData))
+            this.$matomo.setCustomVariable(1, 'ztxx#ztxx_zc', JSON.stringify(userData),'page')
             this.$matomo.trackPageView()
             // ************* 注册埋点 End*************
 

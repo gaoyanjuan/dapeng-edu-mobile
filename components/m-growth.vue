@@ -24,7 +24,7 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <m-posts
           v-for="(item, index) in growthListGetters.list"
-          :key="index"
+          :key="item ? item.id + index: index"
           :id="item ? item.id: ''"
           listType="growth"
           :propIndex="index"
@@ -75,10 +75,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },

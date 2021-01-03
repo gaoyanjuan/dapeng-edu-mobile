@@ -9,7 +9,7 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="videoListGetters.list.length">
-          <m-video-posts v-for="(item, i) in videoListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="i" :item="item"/>
+          <m-video-posts v-for="(item, i) in videoListGetters.list" :id="item ? item.id + i: i" :propIndex="i" :key="i" :item="item"/>
         </template>
         <template v-if="!videoListGetters.list.length && finished">
           <div class="works-blank-wrap">
@@ -68,10 +68,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },

@@ -16,7 +16,7 @@
     <div class="works__cot">
       <div class="work__row--txt" v-html="$options.filters.formatEmotions(listItemData.content)"></div>
       <div class="work__row__photos--group">
-        <m-photos v-if="listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
+        <m-photos v-if="listItemData.type === 'TEXT' && listItemData.imgInfo" :photos="listItemData.imgSmall" @openImagePreview="openImagePreview"></m-photos>
         <m-homework-video :videoImg="listItemData.videoImg" v-if="listItemData && listItemData.type === 'VIDEO'" @toDetail="toDetail"></m-homework-video>
         <m-posts-remark v-if="listItemData.recommendType" :label="listItemData.recommendType" source="listPage"/>
       </div>
@@ -24,12 +24,15 @@
 
     <!-- classification -->
     <div class="works__class">
-      <m-posts-class :remark="listItemData.college ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`" />
+      <m-posts-class
+        :remark="listItemData.college && listItemData.college.name ? `${squareType}·${listItemData.college.name.replace(/学院/, '')}` : `${squareType}`"
+        :labels="listItemData.labels"
+      />
     </div>
 
     <!-- Label -->
     <div class="works__lab">
-      <m-label
+      <m-topic-label
         v-if="listItemData.task || listItemData.activity"
         :labelData="listItemData.task"
         :activityData="listItemData.activity"
@@ -86,7 +89,8 @@
       <!-- 顶部Navbar  菜单弹层 -->
       <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
         <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
-        <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
+        <div v-if="showonCollect" class="menus__popup__item" @click.stop="onCollect">{{ isCollection ? '取消收藏' : '收藏' }}</div>
+        <div v-else class="menus__popup__item" @click.stop="deleteItem">删除</div>
         <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
       </van-popup>
@@ -200,6 +204,15 @@ export default {
     commentFlag: true
   }),
   computed: {
+    // 主体id
+    mainId () {
+      if (this.isGrowth) {
+        return this.listItemData.tagsId
+      } else {
+        return this.listItemData.id
+      }
+    },
+    // 是否需要回显
     praiseCount () {
       if (this.$isSave(this.$route.name)) {
         return this.listItemData.praiseCount
@@ -242,6 +255,12 @@ export default {
         return '动态'
       } else if (this.propSquareType === 'ACTIVITY_POST') {
         return '活动'
+      } else if (this.propSquareType === 'POST') {
+        return '动态'
+      } else if (this.propSquareType === 'ARTICLE') {
+        return '阅读'
+      } else if (this.propSquareType === 'MOVIE') {
+        return '长视频'
       }
     },
     typePath () {
@@ -269,6 +288,11 @@ export default {
         }
       }else {
         return false
+      }
+    },
+    showonCollect () {
+      if (this.userInfoGetters) {
+        return this.$route.query.userId !== this.userInfoGetters.userId
       }
     },
     functionName () {
@@ -355,7 +379,7 @@ export default {
       if(!this.commentFlag) return false
       this.commentFlag = false
       this.appendNewComment({
-        topicId: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+        topicId: this.mainId,
         topicType: this.propSquareType,
         content: text,
         label: {
@@ -413,7 +437,7 @@ export default {
           isCollection: this.isCollection
         }
         this.queryDeleteCollection({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userCollection') {
@@ -423,7 +447,7 @@ export default {
             }
             this.deleteUserFavorites(payload)
           }
-          
+
         })
         .catch(() => {
           if (this.$isSave(this.$route.name)) {
@@ -440,6 +464,7 @@ export default {
             isCollection: this.isCollection
           }
         })
+        this.showPublishMenusPopup = false
       } else {
         if (this.$isSave(this.$route.name)) {
           this.$store.commit(`${this.functionName}`, {
@@ -455,25 +480,12 @@ export default {
           isCollection: this.isCollection
         }
         this.queryCollection({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
-        }).catch(() => {
-          if (this.$isSave(this.$route.name)) {
-            this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'collect',
-              value: false
-            })
-          } else {
-            this.popIsCollection = false
-          }
-          this.imagePreview = {
-            ...this.imagePreview,
-            isCollection: this.isCollection
-          }
         })
+        this.showPublishMenusPopup = false
       }
     },
     //喜欢操作
@@ -501,7 +513,7 @@ export default {
           isPraise: this.isPraise
         }
         this.queryUnLike({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType
         }).then(()=>{
           if (this.pageName === 'userLike') {
@@ -510,26 +522,6 @@ export default {
               index: this.propIndex
             }
             this.deleteUserLikes(payload)
-          }
-        })
-        .catch(() => {
-          if (this.$isSave(this.$route.name)) {
-             this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'love',
-              value: {
-                praise: true,
-                count: 1
-              }
-            })
-          } else {
-            this.popIsPraise = true
-            this.popPraiseCount += 1
-          }
-          this.imagePreview = {
-            ...this.imagePreview,
-            praiseCount: this.praiseCount,
-            isPraise: this.isPraise
           }
         })
       } else {
@@ -552,29 +544,10 @@ export default {
           isPraise: this.isPraise
         }
         this.queryLike({
-          id: this.isGrowth === 'growth' ? this.listItemData.tagsId : this.listItemData.id,
+          id: this.mainId,
           type: this.propSquareType,
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
-        }).catch(() => {
-          if (this.$isSave(this.$route.name)) {
-            this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'love',
-              value: {
-                praise: false,
-                count: -1
-              }
-            })
-          } else {
-            this.popIsPraise = false
-            this.popPraiseCount -= 1
-          }
-           this.imagePreview = {
-            ...this.imagePreview,
-            praiseCount: this.praiseCount,
-            isPraise: this.isPraise
-          }
         })
       }
     },
@@ -586,41 +559,41 @@ export default {
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,
-        anchorId: this.listItemData.id
+        anchorId: this.mainId
       })
       if (this.propSquareType) {
         if (this.listItemData.tagsId) {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
             }
           })
         } else {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
             }
           })
         }
       } else {
         if (this.listItemData.tagsId) {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
             }
           })
         } else {
           this.$router.push({
-            path: this.path,
+            path: this.typePath,
             query: {
-              id: this.listItemData.id,
+              id: this.mainId,
             }
           })
         }

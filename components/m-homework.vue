@@ -13,7 +13,7 @@
             v-for="(item, index) in homeworkListGetters.list"
             :id="item ? item.id: ''"
             listType="homework"
-            :key="item ? item.id: index"
+            :key="item ? item.id + index: index"
             propSquareType="HOMEWORK"
             :commentList="item.comments"
             :courseType="item.courseType"
@@ -84,10 +84,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },

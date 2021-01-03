@@ -1,7 +1,15 @@
-<template class="reading-wrap">
+<template>
   <van-list v-model="loading" :finished="finished" :finished-text="finishedText" @load="onLoad">
     <template v-if="publishReadingGetters.list.length">
-      <m-reading-posts v-for="(item, index) in publishReadingGetters.list" :key="index" :item="item" />
+      <div class="reading-wrap">
+        <m-reading-posts
+          v-for="(item, index) in publishReadingGetters.list"
+          :key="index"
+          :item="item"
+          :imgSmall="item.coverImgSmall"
+          :showPersonal="showPersonal"
+        />
+      </div>
     </template>
     <template v-if="!publishReadingGetters.list.length && finished">
       <div class="have-no-posts-wrap">
@@ -16,6 +24,13 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Reading',
+   props: {
+    // 是否是我的个人主页
+    showPersonal: {
+      type: Boolean,
+      default: true
+    }
+  },
   data: () => ({
     loading: false,
     finished: false,
@@ -87,12 +102,9 @@ export default {
 
 <style lang="less" scoped>
 
-/deep/.m-reading:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
-
 .reading-wrap {
   position: relative;
+  background-color: #f5f5f5;
 }
 
 .have-no-posts-wrap {
@@ -100,6 +112,7 @@ export default {
   align-items: center;
   flex-direction: column;
   margin-top: 50%;
+  transform: translateY(-50%);
 
   & .icon {
     width: 240px;
