@@ -74,24 +74,18 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           removeToken(store, $cookiz)
           if (process.browser) {
             login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
-          } else {
-            redirect({ path: '/login/invalid-login', query: { type: 'displacement' } })
           }
           // 用户有登录状态,但是refresh_token已经失效
         } else if (error.response.data && error.response.data.error === 'invalid_token') {
           removeToken(store, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
-          } else {
-            redirect({ path: '/login/invalid-login', query: { type: 'failure' } })
           }
         } else {
            // 用户有登录状态,access_token已经失效
           removeToken(store, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
-          } else {
-            redirect({ path: '/login/invalid-login', query: { type: 'failure' } })
           }
         }
       } else if (error.response.status == 401) {
@@ -100,12 +94,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           removeToken(store, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
-          } else {
-            redirect({ path: '/login/invalid-login', query: { type: 'failure' } })
           }
-        } else {
-          // 用户未登录状态下,请求需要登录的接口
-          redirect('/')
         }
       } else if (error.response.status == 409) {
         // http状态500，请求API找不到，重定向到404页面   
@@ -149,7 +138,6 @@ function removeToken (store, $cookiz) {
         })
         $cookiz.remove(validateSystemHostName().token_name)
       }
-      $cookiz.remove('refresh_token')
       $cookiz.remove('userinfo', {
         path: '/'
       })
@@ -173,7 +161,7 @@ function login(params, redirect) {
     showCancelButton: true,
     message: params.message
   }).then(() => {
-    redirect('/login')
+    location.href = '/login'
   }).catch(() => {
     location.href = '/'
   })

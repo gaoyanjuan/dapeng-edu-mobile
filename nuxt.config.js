@@ -94,6 +94,10 @@ export default {
 
   buildModules: [],
 
+  serverMiddleware: [
+    '~/middleware/server/auth.js'
+  ],
+
   modules: [
     '@nuxtjs/device',
     '@nuxtjs/style-resources',
