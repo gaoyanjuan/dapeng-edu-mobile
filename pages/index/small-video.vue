@@ -8,6 +8,9 @@ export default {
   created () {
     if (process.browser) {
       try {
+        if(this.$store.getters['banner/videoBannerListGetters'].length === 0) {
+          this.$store.dispatch('banner/appendBannerList', { channel: 'VIDEO' })
+        }
         if (this.$store.getters['colleges/smallVideoCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_VIDEO' })
         }
@@ -19,7 +22,7 @@ export default {
   },
   watch: {
     '$route.query': function (newQuery, oldQuery) {
-      if (newQuery.college === this.$store.state.video.activeCollegeId && newQuery.type === oldQuery.type) return
+      // if (newQuery.college === this.$store.state.video.activeCollegeId && newQuery.type === oldQuery.type) return
       this.$store.commit('video/clearSmallVideoList')
       this.$store.commit('video/changeActiveCollege', newQuery.college)
       this.$store.dispatch('video/appendSmallVideoList', { type: newQuery.type, collegeId: newQuery.college, page: 1 })

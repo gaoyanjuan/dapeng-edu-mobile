@@ -2,7 +2,7 @@
   <section class="m-avatar">
 
     <!-- 左边用户信息 -->
-    <div class="avatar-left-side-wrap" @click.stop>
+    <div class="avatar-left-side-wrap" @click.stop="toPersonalCenter">
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userNickname }}</span>
@@ -24,7 +24,7 @@
       <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
       <span
         @click.stop="onOpenMenus"
-        v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )"
+        v-if="showMenus"
       >
         <img
           class="avatar-menus-more"
@@ -115,7 +115,10 @@ export default {
     },
     showFollowBtn () {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention'
+      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention' && this.pageName.indexOf('my') === -1
+    },
+    showMenus () {
+      return (this.squareType === '作业' && this.pageName !== 'myHomework') || (this.pageName === 'myHomework') || (this.pageName.indexOf('my') !== -1 && this.pageName !== 'myHomework' )
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
@@ -136,6 +139,15 @@ export default {
       'followingUser',
       'cancelFollowingUser'
     ]),
+    toPersonalCenter() {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/publish',
+        query:{ 
+          userId: this.userInfo.userId
+        }
+      })
+    },
     // toPersonalCenter() {
     //   if(!this.$login()) {
     //     return 

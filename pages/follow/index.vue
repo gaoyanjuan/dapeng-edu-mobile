@@ -4,7 +4,7 @@
     <div class="follow__wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <div v-for="(item, index) in popularUsersList.list" :key="index" class="follow__row">
-          <div class="follow__cloumn--left">
+          <div class="follow__cloumn--left" @click="toPersonalCenter(item)">
             <img class="avatar" :src="item.avatar" alt="avatar" />
             <div class="user__wrap">
               <span class="user__nickname">{{ item.nickname }}</span>
@@ -95,6 +95,15 @@ export default {
           id: item.userId
         })
       }
+    },
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/publish',
+        query:{ 
+          userId: item.userId
+        }
+      })
     }
   },
   destroyed () {

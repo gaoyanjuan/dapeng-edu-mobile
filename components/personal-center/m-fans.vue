@@ -5,7 +5,7 @@
         <template  v-for="(item, index) in userFansGetters.list" >
           <div :key="index" v-if="item.userId" class="m-avatar">  
             <!-- 左边用户信息 -->
-            <div class="avatar-left-side-wrap">
+            <div class="avatar-left-side-wrap" @click="toPersonalCenter(item)">
               <div v-if="item.redDot" class="red-dot"></div>
               <head-image :headImg="item ? item.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
               
@@ -65,8 +65,7 @@ export default {
     ...mapActions('user', [
       'appendUserFans',
       'followingUser',
-      'cancelFollowingUser',
-      'readMyMessages'
+      'cancelFollowingUser'
     ]),
     ...mapMutations('user', [
       'clearUserFans',
@@ -107,12 +106,6 @@ export default {
         })
         
       }else {
-        if(item.redDot) {
-          this.changeFansRedDot({
-            index
-          })
-          this.readMyMessages()
-        }
         this.setUserFollowStatus({
           index: index,
           flag: true,
@@ -127,6 +120,14 @@ export default {
         })
         
       }
+    },
+    toPersonalCenter(item) {
+      this.$router.push({
+        path: '/personal-center/publish',
+        query: {
+          userId: item.userId
+        }
+      })
     }
   },
   computed: {

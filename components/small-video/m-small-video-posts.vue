@@ -1,32 +1,37 @@
 <template>
   <div class="small-video-wrapper" @click="toDetail">
-    <img
-      ref="coverImg"
-      v-lazy="videoItem.coverImg"
-      class="small-video-cover"
-      :style="{ height: `${videoItem.height}px`}"
-    />
-
-    <div class="small-video-content van-multi-ellipsis--l3">
-      {{ videoItem.content }}
+    <div class="img-box" :style="{ height: `${videoItem.height}px`}">
+      <img
+        ref="videoImg"
+        v-lazy="videoItem.videoImg"
+        class="small-video-cover"
+        :style="{ height: `${videoItem.height}px`}"
+      />
+      <div class="small-video-content van-ellipsis">
+        {{ videoItem.content }}
+      </div>
+      <div class="bottom-box">
+        <div class="info-left-side" @click.stop="toPersonalCenter">
+          <img
+            class="avatar"
+            :src="videoItem.user ? videoItem.user.avatar : ''"
+            imgWidth="16px"
+            imgHeight="16px"
+          />
+          <span class="nickname">{{ videoItem.user ? (videoItem.user.nickname ? videoItem.user.nickname : videoItem.user.dpAccount) : '佚名' }}</span>
+        </div>
+        <div class="info-right-side" @click.stop="changeLike">
+          <img class="icon-love" v-if="videoItem.isPraise" src="@/assets/icons/posts/small-unlove.png" alt="">
+          <img class="icon-love" v-else src="@/assets/icons/posts/small-love.png" alt="">
+          <span class="love-nums"> {{ videoItem.praiseCount | studentsCount }} </span>
+        </div>
+      </div>
     </div>
-
-    <div class="small-video-info">
-      <div class="info-left-side">
-        <headImage
-          :userId="videoItem.user ? videoItem.user.userId : 'disable'"
-          :headImg="videoItem.user ? videoItem.user.avatar : ''"
-          imgWidth="24px"
-          imgHeight="24px"
-        />
-        <span class="nickname van-ellipsis"> {{ videoItem.user ? videoItem.user.nickname : '佚名' }} </span>
-      </div>
-
-      <div class="info-right-side" @click.stop="changeLike">
-        <img class="icon-love" v-if="videoItem.isPraise" src="@/assets/icons/posts/small-unlove.png" alt="">
-        <img class="icon-love" v-else src="@/assets/icons/posts/small-love.png" alt="">
-        <span class="love-nums"> {{ videoItem.praiseCount | studentsCount }} </span>
-      </div>
+    <div class="">
+      <m-posts-class
+        :remark="videoItem.college && videoItem.college.name ? `${squareType}·${videoItem.college.name.replace(/学院/, '')}` : squareType"
+        :labels="videoItem.labels"
+      />
     </div>
   </div>
 </template>
@@ -41,6 +46,14 @@ export default {
       type: Number,
       default: 0
     },
+    listType: {
+      type: String,
+      default: ''
+    },
+    propSquareType: {
+      type: String,
+      default: 'HOMEWORK'
+    },
     /** 
      * 数据对象 
     * */
@@ -54,11 +67,33 @@ export default {
   data:() => ({
     defaultImg: require('@/assets/icons/common/photos-bg.png')
   }),
+  computed: {
+    squareType () {
+      if (this.propSquareType === 'WORKS') {
+        return '作品'
+      } else if (this.propSquareType === 'HOMEWORK') {
+        return '作业'
+      } else if (this.propSquareType === 'LIFE') {
+        return '动态'
+      } else if (this.propSquareType === 'ACTIVITY_POST') {
+        return '活动'
+      } else if (this.propSquareType === 'POST') {
+        return '动态'
+      } else if (this.propSquareType === 'ARTICLE') {
+        return '阅读'
+      } else if (this.propSquareType === 'MOVIE') {
+        return '长视频'
+      }
+    },
+    functionName () {
+      return this.$getFunctionName(this.listType)
+    }
+  },
   created () {},
   mounted () {
-    if (this.$refs.coverImg) {
-      this.$refs.coverImg.onerror = function () {
-        this.$refs.coverImg.src = this.defaultImg
+    if (this.$refs.videoImg) {
+      this.$refs.videoImg.onerror = function () {
+        this.$refs.videoImg.src = this.defaultImg
       }
     }
   },
@@ -71,7 +106,7 @@ export default {
       if(!this.$login()) return
       
       if (this.videoItem.isPraise) {
-        this.$store.commit('video/changeSmallVideoList', {
+        this.$store.commit(`${this.functionName}`, {
           index: this.propIndex,
           type: 'love',
           value: {
@@ -81,10 +116,10 @@ export default {
         })
         this.queryUnLike({
           id: this.videoItem.id,
-          type: this.videoItem.type
+          type: this.propSquareType
         })
       } else {
-        this.$store.commit('video/changeSmallVideoList', {
+        this.$store.commit(`${this.functionName}`, {
           index: this.propIndex,
           type: 'love',
           value: {
@@ -94,9 +129,9 @@ export default {
         })
         this.queryLike({
           id: this.videoItem.id,
-          type: this.videoItem.type,
+          type: this.propSquareType,
           createdId: this.videoItem.user.userId,
-          contentType: 'TEXT'
+          contentType: 'VIDEO'
         })
       }
     },
@@ -104,26 +139,27 @@ export default {
       this.$cookiz.set('isLogin', false, {
         path: '/'
       })
+      this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
       this.$store.commit('changeListData', {
-        listType: 'small-video',
+        listType: this.listType,
         propIndex: this.propIndex,
         anchorId: this.videoItem.id
       })
-      if (this.videoItem.type === 'HOMEWORK') {
+      if (this.propSquareType === 'HOMEWORK') {
         this.$router.push({
           path: '/details/homework',
           query: {
             id: this.videoItem.id
           }
         })
-      } else if (this.videoItem.type === 'WORKS') {
+      } else if (this.propSquareType === 'WORKS') {
         this.$router.push({
           path: '/details/works',
           query: {
             id: this.videoItem.id
           }
         })
-      } else if (this.videoItem.type === 'LIFE') {
+      } else if (this.propSquareType === 'LIFE') {
         this.$router.push({
           path: '/details/dynamic',
           query: {
@@ -133,87 +169,101 @@ export default {
       } else {
         this.$toast('错误')
       }
+    },
+    toPersonalCenter() {
+      if (this.videoItem && this.videoItem.user && this.videoItem.user.userId) {
+        this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
+        this.$router.push({
+          path: '/personal-center/publish',
+          query: {
+            userId: this.videoItem.user.userId
+          }
+        })
+      }
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+.img-box {
+  position: relative;
+}
+
 .small-video-wrapper {
+  margin-top: 14px;
   width: 167px;
   border-radius: 8px;
   background-color: @dp-white;
   overflow: hidden;
-
   display: flex;
   align-items: center;
   flex-direction: column;
-}
-
-.small-video-wrapper .small-video-cover {
-  width: 167px;
-  border-radius: 8px ;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.small-video-wrapper .small-video-content {
-  width: 159px;
-  max-height: 60px;
-  font-size: 14px;
-  font-family: @regular;
-  font-weight: 400;
-  color: #18252C;
-  line-height: 20px;
-  margin-top: 6px;
-  cursor: pointer;
-}
-
-.small-video-wrapper .small-video-info {
-  width: 159px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-  margin-bottom: 15px;
-
-  .info-left-side {
-    display: flex;
-    align-items: center;
-
-    .avatar {
-      width: 24px;
-      height: 24px;
-    }
-
-    .nickname {
-      width: 80px;
-      line-height: 17px;
-      font-size: 12px;
-      font-family: @regular;
-      font-weight: 400;
-      color: #A3A8AB;
-      margin-left: 4px;
-    }
+  .small-video-cover {
+    z-index: 5;
+    width: 167px;
+    border-radius: 8px ;
+    object-fit: cover;
+    vertical-align: middle;
   }
-
-  .info-right-side {
+  .small-video-content {
+    z-index: 10;
+    position: absolute;
+    bottom: 24px;
+    width: 167px;
+    height: 20px;
+    font-size: 14px;
+    font-family: @regular;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 20px;
+    padding: 0 4px;
+  }
+  .bottom-box {
+    z-index: 10;
+    position: absolute;
+    bottom: 4px;
     display: flex;
-    align-items: center;
-
-    .icon-love {
-      width: 16px;
-      height: 16px;
+    justify-content: space-between;
+    width: 167px;
+    padding: 0 8px;
+    height: 16px;
+    .info-left-side {
+      display: flex;
+      align-items: center;
+      .avatar {
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        position: relative;
+      }
+      .nickname {
+        width: 80px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 12px;
+        font-family: @regular;
+        font-weight: 400;
+        color: #FFFFFF;
+        margin-left: 4px;
+      }
     }
-
-    .love-nums {
-      font-size: 10px;
-      font-family:@regular;
-      font-weight: 400;
-      color: #747C80;
-      margin-left: 4px;
+    .info-right-side {
+      display: flex;
+      align-items: center;
+      .icon-love {
+        width: 16px;
+        height: 16px;
+      }
+      .love-nums {
+        font-size: 10px;
+        font-family:@regular;
+        font-weight: 400;
+        color: #FFFFFF;
+        margin-left: 4px;
+      }
     }
   }
 }
+
 </style>

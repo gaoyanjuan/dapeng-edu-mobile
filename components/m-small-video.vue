@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="videoBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
@@ -10,8 +10,13 @@
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="smallVideoList.list.length">
           <m-water-fall width="167px" gap="0" :data="smallVideoList.list" @complete="completeEvent">
-            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="index" :order="index">
-              <m-small-video-posts :videoItem="item" :propIndex="index" />
+            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="item ? item.id + index : index" :order="index">
+              <m-small-video-posts
+                :propSquareType="item && item.type"
+                listType="small-video"
+                :videoItem="item"
+                :propIndex="index"
+              />
             </m-water-fall-item>
           </m-water-fall>
         </template>
@@ -40,6 +45,9 @@ export default {
     blank:require('@/assets/icons/blank/have-no-video.png')
   }),
   computed: {
+    ...mapGetters('banner', [
+      'videoBannerListGetters'
+    ]),
     ...mapGetters({
       colleges: 'colleges/smallVideoCollegesGetters',
       smallVideoList: 'video/smallVideoListGetters'
@@ -90,9 +98,6 @@ export default {
         timestamp: newStartTime
       })
     }
-  },
-  destroyed () {
-    this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
   }
 }
 </script>

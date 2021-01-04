@@ -96,6 +96,24 @@
       <!-- 生活动态标签 -->
       <section v-if="submitType === 'LIFE'" class="dynamic-label-row">动态</section>
 
+      <!-- 添加标签 -->
+      <section class="homework-label-select-row">
+
+        <div class="label-select-header" @click="openLabelPop">
+          <div class="label-left-side">
+            <img class="label-row" :src="label_row" />
+            <span class="label-title">添加标签</span>
+          </div>
+          <img class="label-arrow" :src="label_arrow" />
+        </div>
+
+        <div class="label-select-wrap">
+          <van-tag v-for="item in selLabel" :key="item.labelId" round closeable plain @close="cancelLabel(item)">
+            {{ item.labelName }}
+          </van-tag>
+        </div>
+      </section>
+
     </div>
 
     <!-- 底部唤起APP -->
@@ -109,6 +127,10 @@
 
     <!-- 作业号&联系客服 -->
     <m-homework-number-popup :show-popup="homeworkNumberPop" @closed="onClosed"/>
+
+    <!-- 添加标签 -->
+    <m-label-popup :show-popup="labelPop" />
+
   </div>
 </template>
 
@@ -148,6 +170,8 @@ export default {
     usernamePop:{ show: false, info: null},
     // 作业号弹窗状态
     homeworkNumberPop: { show: false, jobNummer: null },
+    // 添加标签
+    labelPop: { show: false },
     // 唤起APP
     openAppPop: { show: false },
     // 图片预览
@@ -163,7 +187,10 @@ export default {
     // label 背景
     label:require('@/assets/icons/submit/college-label.png'),
     // 活动 label
-    activity: require('@/assets/icons/label/label-topic.png')
+    activity: require('@/assets/icons/label/label-topic.png'),
+    // label 添加标签
+    label_row:require('@/assets/icons/submit/label.png'),
+    label_arrow:require('@/assets/icons/submit/label-arrow.png'),
   }),
 
   watch: {
@@ -219,6 +246,8 @@ export default {
       collegeList: 'colleges/submitWorkCollegesGetters',
       // 用户信息
       userInfo: 'user/userInfoGetters',
+      // 已选标签
+      selLabel: 'publish/selLabelGetters'
     }),
 
     // 当前发布类型
@@ -295,6 +324,7 @@ export default {
       
       if (this.homeworkDetails) {
         this.content = this.homeworkDetails.content
+        this.appendSelLabel(this.homeworkDetails.labels)
         this.homeworkDetails.imgInfo.forEach( ele => {
           _this.fileList.push(ele)
           _this.imageInfo.push(ele)
@@ -316,7 +346,11 @@ export default {
     } else {
       this.dynamicNums = '只能输入60个字哦'
       this.openAppPop.show = false
+      this.getRequirement()
     }
+
+    // 查询热门标签
+    this.getHotLabelList()
   },
 
   methods:{
@@ -337,8 +371,16 @@ export default {
       publishWorks:'publish/addNewWorks',
       // 发布动态
       publishDynamic: 'publish/addNewDynamic',
+      // 推荐标签
+      getHotLabel: 'publish/getHotLabel',
+      // 已选标签--删除
+      delSelLabel: 'publish/delSelLabel',
+      // 已选标签--添加
+      appendSelLabel: 'publish/appendSelLabel',
       // 查询活动详情
       getActivitiesDetails: 'activities/appendActivitiesDetail',
+      // 查询作业要求
+      getRequirementDetails :'homework/appendRequirementDetails',
       // 获取用户发布的作业
       getUserPublished: 'user/appendPublishHomework'
     }),
@@ -346,7 +388,9 @@ export default {
     ...mapMutations({
       // 清空作业详情
       clearHomeworkDetails:'homework/clearHomeworkDetails',
-      clearPublishHomework: 'user/clearPublishHomework'
+      clearPublishHomework: 'user/clearPublishHomework',
+      clearhotLabel: 'publish/clearhotLabel',
+      clearSelLabel: 'publish/clearSelLabel'
     }),
 
     // 提交前确认
@@ -473,7 +517,8 @@ export default {
         imgInfo: this.imageInfo,
         content: this.content,
         source: 'MOBILE',
-        id: this.homeworkDetails.id
+        id: this.homeworkDetails.id,
+        labels: this.selLabel
       }).then( res => {
         return res
       }).catch( err => {
@@ -488,6 +533,7 @@ export default {
         content: this.content,
         source: 'PC',
         type: 'TEXT',
+        labels: this.selLabel,
         title: this.requirement.title,
         taskId: this.requirement.taskId
       }).then( res => {
@@ -504,6 +550,7 @@ export default {
         imgInfo: this.imageInfo,
         content: this.content,
         source: 'MOBILE',
+        labels: this.selLabel,
         collegeId: this.collegeList[index].id
       }).then( res => {
         return res
@@ -517,6 +564,7 @@ export default {
       let params = {
         imgInfo: this.imageInfo,
         content: this.content,
+        labels: this.selLabel,
         source: 'MOBILE',
         type: 'TEXT',
       }
@@ -552,6 +600,30 @@ export default {
           this.activityData = res
         })
       }
+    },
+
+    /** 获取作业要求数据 */
+    getRequirement() {
+      if (!this.$route.query.action) {
+        this.getRequirementDetails({ id: this.$route.query.taskId })
+      }
+    },
+
+    /** 获取热门标签 */
+    getHotLabelList() {
+      let channel = null
+
+      if(this.submitType === 'VIP') {
+        channel = 'HOMEWORK'
+      } else if (this.submitType === 'TEST') {
+        channel = 'HOMEWORK'
+      } else if (this.submitType === 'LIFE' && this.$route.query.contentType) {
+        channel = 'POST'
+      } else {
+        channel = this.submitType
+      }
+
+      this.getHotLabel({ topicType: channel })
     },
 
     /** 图片文件上传至服务器 */
@@ -759,6 +831,16 @@ export default {
     onCloseFooter() {
       this.openAppPop.show = false
     },
+
+    /** 打开标签弹层 */
+    openLabelPop() {
+      this.labelPop.show = true
+    },
+
+    /** 关闭标签 */
+    cancelLabel(params) {
+      this.delSelLabel(params)
+    },
     
     /** 关闭弹窗，跳转我的作业 */
     onClosed() {
@@ -766,7 +848,9 @@ export default {
     },
   },
 
-  destroy() {
+  beforeDestroy() {
+    this.clearSelLabel()
+    this.clearhotLabel()
     this.clearHomeworkDetails()
   },
 }
@@ -1035,4 +1119,56 @@ export default {
   background-position: center;
   cursor: pointer;
 }
+
+/** 添加标签 */
+.homework-label-select-row {
+  width: 100%;
+  margin-top: 15px;
+  padding-bottom: 80px;
+}
+
+.homework-label-select-row .label-select-header {
+  height: 24px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &:active {
+    background-color:#f2f3f5;
+  }
+
+  .label-left-side {
+    display: flex;
+    align-items: center;
+
+    .label-row {
+      width: 24px;
+      height: 24px;
+      margin-right: 4px;
+    }
+
+    .label-title {
+      font-size: 14px;
+      font-family: @semibold;
+      font-weight: 600;
+      color: #36404A;
+    }
+  }
+
+  .label-arrow {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+.homework-label-select-row .label-select-wrap {
+  width: 100%;
+  margin-top: 10px;
+
+  & > span {
+    margin-right: 10px;
+  }
+}
+
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="postBannerListGetters"/>
     
     <!-- 二级菜单 -->
     <van-sticky :offset-top="`1.1733rem`">
@@ -24,7 +24,7 @@
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <m-posts
           v-for="(item, index) in growthListGetters.list"
-          :key="index"
+          :key="item ? item.id + index: index"
           :id="item ? item.id: ''"
           listType="growth"
           :propIndex="index"
@@ -75,10 +75,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -125,6 +126,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('banner', [
+      'postBannerListGetters'
+    ]),
     ...mapGetters('growth', [
       'growthListGetters'
     ])

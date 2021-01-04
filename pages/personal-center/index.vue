@@ -4,12 +4,12 @@
     <!-- 顶部用户登录信息  -->
     <div class="mine-header-wrap">
       <div class="header-left-side">
-        <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" />
+        <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" @click="toPersonalCenter" />
         <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" @click="toLogin" />
       </div>
       
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname"> {{ userInfoGetters.loginName || userInfoGetters.nickname || userInfoGetters.dpAccount }} </span>
+        <span v-if="userInfoGetters" class="user-nickname" @click="toPersonalCenter"> {{ userInfoGetters.loginName || userInfoGetters.nickname || userInfoGetters.dpAccount }} </span>
         <p v-else class="not-login-wrap"><span @click="toLogin">登录</span><span>/</span><span @click="toLogin">注册</span></p>
         <span v-if="userInfoGetters && userInfoGetters.studentSatusId" class="user-code">学籍号：{{ userInfoGetters.studentSatusId }}</span>
       </div>
@@ -96,7 +96,7 @@ export default {
       {txt:'动态',name:'dynamic',icon: require('@/assets/icons/mine/nav-dynamic.png')},
       {txt:'活动',name:'growth',icon: require('@/assets/icons/mine/nav-activity.png')},
       {txt:'我的课程',name:'course',icon: require('@/assets/icons/mine/nav-task.png')},
-      // {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
+      {txt:'阅读',name:'reading',icon: require('@/assets/icons/mine/nav-reading.png')},
       // {txt:'视频',name:'video',icon: require('@/assets/icons/mine/nav-video.png')},
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/nav-task.png')}
     ]
@@ -181,7 +181,14 @@ export default {
         }
       })
     },
-
+    toPersonalCenter() {
+      this.$router.push({
+        path: '/personal-center/publish',
+        query:{ 
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
     toAttention() {
       if (!this.$login()) return
 

@@ -17,7 +17,7 @@
     <template v-if="!publishHomeworkGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
-        <span class="txt">暂无内容</span>
+        <div class="txt">暂无内容</div>
       </div>
     </template>
   </van-list>
@@ -113,10 +113,8 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  margin-top: 50%;
+  transform: translateY(-50%);
 
   & .icon {
     width: 240px;

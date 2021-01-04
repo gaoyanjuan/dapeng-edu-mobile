@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="articleBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="readingCollegesGetters" />
@@ -9,7 +9,21 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="readingListGetters.list.length">
-          <m-reading-posts v-for="(item, i) in readingListGetters.list" :id="item ? item.id: ''" :propIndex="i" :key="i" :item="item" />
+          <m-reading-posts
+            v-for="(item, i) in readingListGetters.list"
+            :imgSmall="item.coverImgSmall"
+            :id="item ? item.id: ''"
+            :propIndex="i"
+            listType="article"
+            :key="item ? item.id + i : i"
+            :item="item"
+          />
+        </template>
+        <template v-if="!readingListGetters.list.length && finished">
+          <div class="works-blank-wrap">
+            <img class="blank-img" :src="blank" alt="" />
+            <span class="blank-txt">暂无内容～</span>
+          </div>
         </template>
       </van-list>
     </section>
@@ -25,8 +39,12 @@ export default {
     loading: false,
     finished: false,
     finishedTxt: '没有更多了',
+    blank:require('@/assets/icons/blank/have-no-reading.png')
   }),
   computed:{
+    ...mapGetters('banner', [
+      'articleBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'readingCollegesGetters'
     ]),
@@ -58,10 +76,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -90,6 +109,30 @@ export default {
   width: 100%;
   min-height: calc(100vh - 339px);
   padding-bottom: 65px;
-  background-color: #f8f8f8;
+  background-color: #f5f5f5;
+}
+
+.works-wrap .works-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.works-wrap .works-blank-wrap .blank-img {
+  width: 240px;
+  height: 126px;
+  margin-top: 24px;
+}
+
+.works-wrap .works-blank-wrap .blank-txt {
+  margin-top: 12px;
+  width: max-content;
+  height: 20px;
+  font-size: 14px;
+  font-family: @dp-font-semibold;
+  font-weight: 600;
+  color: #8D8E8E;
+  line-height: 20px;
 }
 </style>

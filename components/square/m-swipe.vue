@@ -6,10 +6,11 @@
         class="swiper"
         :options="swiperOptions"
         @slideChange="slideChange()"
+        v-if="banner.length > 0"
       >
         <swiper-slide v-for="(item, i) in banner" :key="i">
-          <a :href="item.link" target="_blank">
-            <img :src="item.img" :alt="item.title" />
+          <a :href="item.url" target="_blank">
+            <img :src="item.imgInfo" :alt="item.name" />
           </a>
         </swiper-slide>
       </swiper>
@@ -22,9 +23,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   name: 'M-Swipe',
+  props:{
+    banner:{
+      type:Array,
+      default:[]
+    }
+  },
   data: () => ({
     pagination: '1',
     swiperOptions: {
@@ -40,11 +46,6 @@ export default {
       },
     },
   }),
-  computed:{
-    ...mapGetters({
-      banner:'banner/bannerListGetters'
-    })
-  },
   methods: {
     slideChange(e) {
       const swiper = this.$refs.mySwiper.$swiper

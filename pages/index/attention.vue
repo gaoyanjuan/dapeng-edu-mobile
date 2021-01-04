@@ -26,6 +26,9 @@ export default {
   created () {
     if (process.browser) {
       try {
+        if(this.$store.getters['banner/attentionBannerListGetters'].length === 0) {
+          this.$store.dispatch('banner/appendBannerList', { channel: 'ATTENTION' })
+        }
         if (this.$store.getters['attention/popularUsersGetters'].length === 0) {
           this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
         }

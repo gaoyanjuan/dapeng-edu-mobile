@@ -10,6 +10,9 @@ import jwtDecode from 'jwt-decode'
 
 export default {
   layout: 'navbar',
+  data:()=> ({
+    state:'PASSWORD'
+  }),
   async asyncData ({ redirect, app: { $cookiz } }) {
     if ($cookiz.get(validateSystemHostName().token_name)) {
       redirect('/')
@@ -21,14 +24,25 @@ export default {
     }
     const fullPath = this.$route.fullPath
     const code = getUrlParam(fullPath, '?', 'code')
+    const state = getUrlParam(fullPath, '?', 'state')
+    let login_way = decodeURIComponent(state).split('*')[1]
+    this.state = login_way ? login_way : 'AUTOLOGIN'
+    // return
     const { data } = await this.getAuthToken({
       code,
       grant_type: 'authorization_code',
       redirect_uri: `${this.validateSystemHostName().host}/callback`
     })
-    const token = jwtDecode(data.refresh_token)
+    const token = jwtDecode(data.access_token)
+
+    // ************* 登录埋点  Start*************
+    this.$matomo.setUserId(token.sub)
+    let userData = {'user_id':token.sub, 'ztxx_dl_dlfs': this.state}
+    this.$matomo.setCustomVariable(1, 'ztxx#ztxx_dl', JSON.stringify(userData), 'page')
+    this.$matomo.trackPageView()
+    // ************* 登录埋点 End*************
+
     const expiresTime = new Date(token.exp * 1000)
-    console.log(expiresTime)
     if (process.env.mode === 'development') {
       this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
         expires: expiresTime

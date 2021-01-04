@@ -13,6 +13,8 @@ module.exports = {
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
+    MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
     OSS_BUCKET: 'dapeng-test-image'
@@ -23,7 +25,7 @@ module.exports = {
     DP_COURSE_URL: 'https://test.dapengjiaoyu.cn/dp-course', // 4.0地址
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',  // m站地址 (没用了)
-    PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
+    PROTOCOL: 'https://h5-static.dapengjiaoyu.com/h5-protocol/#/', //协议地址
     BASE_URL: 'http://172.17.207.43:8000/pcmove', // 网关广场模块地址
     OLD_BASE_URL: 'http://172.17.207.43:8000/pc', // 网关课程模块地址
     DP_AUTH_URL: 'https://auth-test.dapengjiaoyu.cn', // 认证中心外网地址
@@ -32,6 +34,8 @@ module.exports = {
     TAPI_URL: 'https://tapi.dapengjiaoyu.cn', // 获取订单token
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
+    MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
     FAILED_COLOR: '#0CB65B',
@@ -52,6 +56,8 @@ module.exports = {
     TAPI_URL: 'http://api-appl.vpc.dapengjiaoyu.cn', // 获取订单token地址
     LOG_API_URL: 'https://api.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
+    MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    MATOMO_SITEID: 14,
     PORT: 3000,
     HOST: '0.0.0.0',
     FAILED_COLOR: '#0CB65B',

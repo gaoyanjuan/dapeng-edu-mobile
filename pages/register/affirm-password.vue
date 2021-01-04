@@ -121,7 +121,15 @@ export default {
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            const token = jwtDecode(res.data.refresh_token)
+            const token = jwtDecode(res.data.access_token)
+
+            // ************* 注册埋点  Start*************
+            this.$matomo.setUserId(token.sub)
+            let userData = {'user_id':token.sub}
+            this.$matomo.setCustomVariable(1, 'ztxx#ztxx_zc', JSON.stringify(userData),'page')
+            this.$matomo.trackPageView()
+            // ************* 注册埋点 End*************
+
             const expiresTime = new Date(token.exp * 1000)
             if (process.env.mode === 'development') {
               this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {

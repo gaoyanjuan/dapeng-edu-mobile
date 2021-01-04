@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="worksBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="workCollegesGetters" />
@@ -12,7 +12,7 @@
           <m-posts 
             v-for="(item, index) in workListGetters.list"
             :id="item ? item.id: ''"
-            :key="index"
+            :key="item ? item.id + index : index"
             listType="work"
             :propIndex="index"
             :courseType="item.courseType"
@@ -38,7 +38,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Works',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
     finishedTxt:'没有更多了',
@@ -71,10 +70,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -96,6 +96,9 @@ export default {
     }
   },
   computed:{
+    ...mapGetters('banner', [
+      'worksBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'workCollegesGetters'
     ]),

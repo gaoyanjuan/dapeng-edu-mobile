@@ -30,6 +30,9 @@ export default {
   created () {
     if (process.browser) {
       try {
+        if(this.$store.getters['banner/lifeBannerListGetters'].length === 0) {
+          this.$store.dispatch('banner/appendBannerList', { channel: 'LIFE' })
+        }
         if (this.$route.query.type === 'new') {
           if (this.$store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
             this.$store.dispatch('dynamic/appendNewDynamicList', {})

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="homeworkBannerListGetters"/>
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="[{ id:'', name: '全部' }].concat(taskCollegesGetters)" />
@@ -13,7 +13,7 @@
             v-for="(item, index) in homeworkListGetters.list"
             :id="item ? item.id: ''"
             listType="homework"
-            :key="item ? item.id: index"
+            :key="item ? item.id + index: index"
             propSquareType="HOMEWORK"
             :commentList="item.comments"
             :courseType="item.courseType"
@@ -47,6 +47,9 @@ export default {
     blank:require('@/assets/icons/blank/have-no-homework.png')
   }),
   computed:{
+    ...mapGetters('banner', [
+      'homeworkBannerListGetters'
+    ]),
     ...mapGetters('colleges', [
       'taskCollegesGetters'
     ]),
@@ -81,10 +84,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },

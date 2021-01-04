@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <m-swipe :banner="lifeBannerListGetters"/>
     
     <!-- 二级菜单 -->
     <m-menus menus-type="type" :menus="menus" :automatic="true"/>
@@ -12,7 +12,7 @@
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: index"
+            :key="item ? item.id + index: index"
             listType="dynamic-hot"
             :propIndex="index"
             :listItemData="item"
@@ -25,7 +25,7 @@
           <m-posts 
             v-for="(item, index) in newDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: ''"
+            :key="item ? item.id + index: index"
             listType="dynamic-new"
             :propIndex="index"
             :listItemData="item"
@@ -38,7 +38,7 @@
           <m-posts 
             v-for="(item, index) in hotDynamicListGetters.list"
             :id="item ? item.id: ''"
-            :key="item ? item.id: ''"
+            :key="item ? item.id + index: index"
             listType="dynamic-hot"
             :propIndex="index"
             :listItemData="item"
@@ -90,10 +90,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -135,6 +136,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('banner', [
+      'lifeBannerListGetters'
+    ]),
     ...mapGetters('dynamic', [
       'newDynamicListGetters',
       'hotDynamicListGetters'
