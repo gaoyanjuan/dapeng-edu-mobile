@@ -52,7 +52,8 @@
 
 <script>
 import { mapActions } from 'vuex'
-var nc_token = ['FFFF0N00000000009B66', (new Date()).getTime(), Math.random()].join(':')
+var appKey = 'FFFF0N00000000009B75'
+var nc_token = [appKey, (new Date()).getTime(), Math.random()].join(':')
 
 export default {
   name:'Register',
@@ -83,7 +84,7 @@ export default {
     /* eslint-disable */
     this.nc = new noCaptcha({
       renderTo: '#nc-container',
-      appkey: 'FFFF0N00000000009B66',
+      appkey: appKey,
       scene: 'nc_message',
       token: nc_token,
       customWidth: '100%',
