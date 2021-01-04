@@ -42,13 +42,13 @@
     </div>
     <!-- 我的体验课、正式课、发布、订单导航 -->
     <div class="mine-user-nav-wrap">
-      <div class="nav-item">
+      <div class="nav-item" @click="toTrialClass">
         <div>
           <img src="@/assets/icons/mine/icon-trial-course.png" alt="">
         </div>
         <div>我的体验课</div>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" @click="toVipClass">
         <div>
           <img src="@/assets/icons/mine/icon-formal-course.png" alt="">
         </div>
@@ -219,6 +219,26 @@ export default {
     toPersonalCenter() {
       this.$router.push({
         path: '/personal-center/publish',
+        query:{ 
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+    toTrialClass() {
+      if (!this.$login()) return
+
+      this.$router.push({
+        path: '/personal-center/course/trial',
+        query:{ 
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+    toVipClass() {
+      if (!this.$login()) return
+      
+      this.$router.push({
+        path: '/personal-center/course/formal',
         query:{ 
           userId: this.userInfoGetters.userId
         }
