@@ -215,7 +215,10 @@ export default {
 
           break;
         case 'setting':
-
+          if (!this.$login()) return
+            this.$router.push({
+              path: '/setting'
+            })  
           break;
         case 'download':
           openInApp()
