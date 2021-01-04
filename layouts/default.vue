@@ -20,7 +20,16 @@ export default {
     show: false,
   }),
   mounted() {
-    this.$cookiz.remove('refresh_token')
+    this.$cookiz.remove('access_token_t')
+    this.$cookiz.remove('access_token_t', {
+      path: '/',
+      domain: '.dapengjiaoyu.cn'
+    })
+    this.$cookiz.remove('access_token', {
+      path: '/',
+      domain: '.dapengjiaoyu.cn'
+    })
+
 
     /*** 
      * 【刷新或者首次加载】

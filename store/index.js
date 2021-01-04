@@ -30,16 +30,6 @@ export default {
       //获取服务端cookie
       const access_token = get_cookie(req.headers.cookie, validateSystemHostName().token_name)
       if (access_token) {
-        await dispatch('user/checkToken', access_token)
-        .catch((error) => {
-          if (error) {
-            if (error.response) {
-              console.error(filter.formatDate(new Date()), error.config.url, error.response.status, error.response.data)
-            } else {
-              console.error(filter.formatDate(new Date()), error.config.url, error)
-            }
-          }
-        })
         const userinfo = app.$cookiz.get('userinfo')
         if (userinfo) {
           commit('user/appendUserInfo', userinfo)
