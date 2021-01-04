@@ -121,7 +121,7 @@ export default {
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            const token = jwtDecode(res.data.refresh_token)
+            const token = jwtDecode(res.data.access_token)
 
             // ************* 注册埋点  Start*************
             this.$matomo.setUserId(token.sub)

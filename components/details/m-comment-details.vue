@@ -66,7 +66,10 @@ export default {
       userinfo: 'user/userInfoGetters',
       commentDetailsGetters: 'comment/commentDetailsGetters',
       repliesGetters: 'comment/repliesGetters'
-    })
+    }),
+    functionName () {
+      return this.$getFunctionName(this.$store.state.listType)
+    }
   },
   watch: {
     'repliesGetters.status': function (newVal, oldVal) {
@@ -132,6 +135,11 @@ export default {
               }
             })
             this.changeReplyCount(1)
+            this.$store.commit(`${this.functionName}`, {
+              index: this.$store.state.propIndex,
+              type: 'comment',
+              value: 1
+            })
             this.$toast('评论成功')
           }
         } else {
