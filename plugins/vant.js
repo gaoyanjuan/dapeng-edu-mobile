@@ -23,6 +23,7 @@ import {
   GridItem,
   Dialog,
   Checkbox,
+  Area,
   Tag
 } from 'vant'
 
@@ -48,6 +49,7 @@ Vue.use(Button)
   .use(GridItem)
   .use(Dialog)
   .use(Checkbox)
+  .use(Area)
   .use(Tag)
   .use(Lazyload, {
     // 懒加载默认图片
