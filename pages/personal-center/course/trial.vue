@@ -1,14 +1,23 @@
 <template>
   <section class="page-course-wrapper">
     <m-navbar title="我的体验课"></m-navbar>
-
-    <div class="course-list-nav-row">
+    
+    <!-- 课程服务列表TITLE -->
+    <div class="course-list-nav-row" v-if="showAdviser">
       <img class="nav" :src="nav" />
       <span class="nav-txt">已开通的课程服务列表</span>
     </div>
 
-    <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
-      <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" />
+    <!-- 已开通的课程服务列表 -->
+    <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">    
+      <template v-if="showAdviser">
+        <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" />
+      </template>
+
+      <!-- 无顾问 -->
+      <template v-if="!showAdviser && finished">
+        <m-adviser></m-adviser>
+      </template>
     </van-list>
 
   </section>
@@ -18,6 +27,7 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   layout:'navbar',
+
   data: () => ({
     list: [],
     loading: false,
@@ -38,12 +48,23 @@ export default {
         this.finished = true
       }
     },
+    'userCourseListGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt = '没有更多了'
+      }
+    }
   },
 
   computed: {
     ...mapGetters('course', [
       'userCourseListGetters'
-    ])
+    ]),
+
+    showAdviser() {
+      return this.userCourseListGetters.list.length
+    }
   },
 
   created() {
@@ -54,6 +75,7 @@ export default {
     ...mapMutations({
       clearCourseList :'course/clearCourseList'
     }),
+
     ...mapActions({
       getCourseList :'course/appendUserCourseList'
     }),
@@ -70,6 +92,7 @@ export default {
       this.getCourseList({ type: 'TRIAL', page: newPage })
     }
   },
+  
   beforeDestroy() {
     this.clearCourseList()
   }
