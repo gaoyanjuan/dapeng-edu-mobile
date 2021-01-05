@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import validateSystemHostName from '@/plugins/validate-system-hostname'
 
 export default {
   layout: 'navbar',
@@ -38,12 +37,12 @@ export default {
     }
   },
   async asyncData ({ redirect, app: { $cookiz } }) {
-    if ($cookiz.get(validateSystemHostName().token_name)) {
+    if ($cookiz.get(process.env.TOKEN_NAME)) {
       redirect('/')
     }
   },
   mounted () {
-    if (this.$cookiz.get(this.validateSystemHostName().token_name) && window.top) {
+    if (this.$cookiz.get(process.env.TOKEN_NAME) && window.top) {
       window.top.location.replace(this.validateSystemHostName().host)
     } else {
       this.showIframe = true
