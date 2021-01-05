@@ -5,28 +5,55 @@
       <nuxt-link class="setting-item" tag="div" to="/setting/account-safety">
         <span class="setting-text">账号安全</span>
         <span class="safety-grade">账号安全等级</span>
-        <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
+        <img
+          class="right-arrow"
+          src="@/assets/icons/mine/icon-right-arrow.png"
+          alt=""
+        />
       </nuxt-link>
-      <nuxt-link class="setting-item" tag="div" to="/setting/protocol-policy">
+      <div class="setting-item" tag="div" @click="onToProtocolPolicy">
         <span class="setting-text">协议与政策</span>
-        <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
-      </nuxt-link>
+        <img
+          class="right-arrow"
+          src="@/assets/icons/mine/icon-right-arrow.png"
+          alt=""
+        />
+      </div>
       <nuxt-link class="setting-item" tag="div" to="/setting/help-feedback">
         <span class="setting-text">帮助与反馈</span>
-        <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
+        <img
+          class="right-arrow"
+          src="@/assets/icons/mine/icon-right-arrow.png"
+          alt=""
+        />
       </nuxt-link>
       <nuxt-link class="setting-item" tag="div" to="/setting/about-us">
         <span class="setting-text">关于我们</span>
-        <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
+        <img
+          class="right-arrow"
+          src="@/assets/icons/mine/icon-right-arrow.png"
+          alt=""
+        />
       </nuxt-link>
     </div>
   </div>
 </template>
 <script>
 export default {
-  layout:'navbar'
-
-}
+  layout: "navbar",
+  data() {
+    return {};
+  },
+  methods: {
+    // 协议与政策
+    onToProtocolPolicy() {
+      const href =
+        process.env.protocol +
+        "index?is_login=N&is_vip=N&platform=wap&dpaccount=&from=SERVICE_AGREEMENT&userid=";
+      location.href = href;
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
 .setting-nav-list {
@@ -61,7 +88,7 @@ export default {
         font-size: 14px;
         font-family: @dp-font-regular;
         font-weight: 400;
-        color: #75737E;
+        color: #75737e;
         line-height: 14px;
       }
       & > .right-arrow {
