@@ -29,6 +29,7 @@
   </div>
 </template>
 <script>
+import { validateUserName } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
@@ -53,8 +54,7 @@ export default {
       this.UserNameModel = ''
     },
     onSaveHandle() {
-      var regex = /^(?!dp)(?!\d+$)[\d\u4e00-\u9fffa-zA-Z]{2,12}$/i
-      if (!regex.test(this.UserNameModel)) {
+      if (!validateUserName(this.UserNameModel)) {
         this.$toast({
           message: `用户名需要为2-12位中、英文,不能包含数字或特殊符号，注意不要以dp开头哦~`,
           position: 'bottom',

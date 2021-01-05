@@ -4,16 +4,16 @@
     <!-- 顶部用户登录信息  -->
     <div class="mine-header-wrap">
       <div class="header-left-side">
-        <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" @click="toPersonalCenter" />
+        <img v-if="userInfoGetters" class="header-avatar" :src="userInfoGetters.avatar" alt="avatar" @click="toPersonalInfo" />
         <img v-else class="header-avatar" :src="notLoginAvatar" alt="avatar" @click="toLogin" />
       </div>
       
       <div class="header-right-side">
-        <span v-if="userInfoGetters" class="user-nickname" @click="toPersonalCenter"> {{ userInfoGetters.loginName || userInfoGetters.nickname || userInfoGetters.dpAccount }} </span>
+        <span v-if="userInfoGetters" class="user-nickname" @click="toPersonalInfo"> {{ userInfoGetters.loginName || userInfoGetters.nickname || userInfoGetters.dpAccount }} </span>
         <p v-else class="not-login-wrap"><span @click="toLogin">登录</span><span>/</span><span @click="toLogin">注册</span></p>
         <span v-if="userInfoGetters && userInfoGetters.studentSatusId" class="user-code">学籍号：{{ userInfoGetters.studentSatusId }}</span>
       </div>
-      <div class="right-arrow">
+      <div class="right-arrow" @click="toPersonalCenter">
         <img src="@/assets/icons/mine/personal-center-right-arrow.png" alt="">
       </div>
     </div>
@@ -226,7 +226,9 @@ export default {
           break;
       }
     },
+    // 进个人主页
     toPersonalCenter() {
+      if (!this.$login()) return
       this.$router.push({
         path: '/personal-center/publish',
         query:{ 
@@ -234,6 +236,16 @@ export default {
         }
       })
     },
+    // 进个人资料
+    toPersonalInfo () {
+      this.$router.push({
+        path: '/personal-info',
+        query:{ 
+          userId: this.userInfoGetters.userId
+        }
+      })
+    },
+      
     toTrialClass() {
       if (!this.$login()) return
 
