@@ -1,14 +1,12 @@
 <template>
   <div class="p-details">
     <!-- Header Block -->
-    <m-navbar
-      :show-right-menu="showRightMenuFlag"
-      @onOpenMenus="onShowMenus"
-      title="阅读详情"
-    />
+    <m-navbar v-if="!$route.query.share" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus" title="阅读详情"/>
+
+    <m-call-app v-else></m-call-app>
     
     <!-- Body Block -->
-    <section v-if="reading" class="posts-details-wrap">
+    <section v-if="reading" :class="$route.query.share ? 'posts-details-wrap': 'posts-details-wrap warp-top'">
       <!-- Title -->
       <div class="posts-title"> {{reading.title}} </div>
 
@@ -40,6 +38,10 @@
         :detailData="reading"
       />
     </section>
+
+     <!-- 悬浮唤起APP 按钮-->
+    <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
+
     <!-- 菜单弹层 -->
     <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
       <div class="menus__popup__item" @click="deleteRead">删除</div>
@@ -144,9 +146,12 @@ export default {
 
 <style lang="less" scoped>
 
+.warp-top {
+  margin-top: @margin-top;
+}
+
 .posts-details-wrap {
   width: 100%;
-  margin-top: 44px;
   padding:16px;
   background-color: @dp-white;
   border-bottom: 15px solid #F8F8F8;
