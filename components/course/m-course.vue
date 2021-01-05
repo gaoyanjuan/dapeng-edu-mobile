@@ -26,7 +26,7 @@
 
     <div class="course-live-row" v-if="showLive">
       <span class="live-title">{{ course.liveChapters[0].title }}</span>
-      <div class="live-btn">进入直播间</div>
+      <div class="live-btn" @click="onEnterLiveRoom">进入直播间</div>
     </div>
   </div>
 </template>
@@ -34,19 +34,27 @@
 <script>
 export default {
   name:'M-Course',
+
   props:{
     course:{
       type:Object,
       default:{}
     }
   },
+  
   data: ()=> ({
     live_label: require('@/assets/icons/course/living.png'),
   }),
+
   computed:{
     showLive:function() {
       return this.course.liveChapters.length
     }
+  },
+
+  methods:{
+    // 进入直播间逻辑~~~~
+    onEnterLiveRoom() {}
   }
 }
 </script>
