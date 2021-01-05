@@ -244,6 +244,7 @@ export default {
       if (!this.timer) {
         this.count = TIME_COUNT
         this.authStatus = false
+        
         this.timer = setInterval(() => {
           if (this.count > 0 && this.count <= TIME_COUNT) {
             this.count--
