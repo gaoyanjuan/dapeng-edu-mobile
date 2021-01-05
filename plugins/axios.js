@@ -26,10 +26,10 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
     if (config.url.startsWith('/token')) {
       const clientData = `${validateSystemHostName().client_id}:${validateSystemHostName().client_secret}`
       config.headers.Authorization = `Basic ${btoa(clientData)}`
-    } else if ($cookiz.get(validateSystemHostName().token_name)) {
-      config.headers.Authorization = `Bearer ${$cookiz.get(validateSystemHostName().token_name)}`
-    } else if (getcookiesInServer(req)[validateSystemHostName().token_name]) {
-      config.headers.Authorization = `Bearer ${getcookiesInServer(req)[validateSystemHostName().token_name]}`
+    } else if ($cookiz.get(process.env.TOKEN_NAME)) {
+      config.headers.Authorization = `Bearer ${$cookiz.get(process.env.TOKEN_NAME)}`
+    } else if (getcookiesInServer(req)[process.env.TOKEN_NAME]) {
+      config.headers.Authorization = `Bearer ${getcookiesInServer(req)[process.env.TOKEN_NAME]}`
     }
     return config
   })
@@ -68,7 +68,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
       if (!error || !error.response) {
         return error
       }
-      if (error.response.status == 401 && $cookiz.get(validateSystemHostName().token_name)) {
+      if (error.response.status == 401 && $cookiz.get(process.env.TOKEN_NAME)) {
         // 用户有登录状态,但是被其他人顶掉了
         if (error.response.data && error.response.data.state === 1001) {
           removeToken(store, $cookiz)
@@ -90,7 +90,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
         }
       } else if (error.response.status == 401) {
         // 用户cookie中已经没有token,但是页面上有存储的用户信息(cookie在浏览器中自然失效)
-        if (!$cookiz.get(validateSystemHostName().token_name) && store.getters['user/userInfoGetters']) {
+        if (!$cookiz.get(process.env.TOKEN_NAME) && store.getters['user/userInfoGetters']) {
           removeToken(store, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
@@ -130,13 +130,13 @@ function removeToken (store, $cookiz) {
   try {
     if (process.browser) {
       if (process.env.mode === 'development') {
-        $cookiz.remove(validateSystemHostName().token_name)
+        $cookiz.remove(process.env.TOKEN_NAME)
       } else {
-        $cookiz.remove(validateSystemHostName().token_name, {
+        $cookiz.remove(process.env.TOKEN_NAME, {
           path: '/',
           domain: '.dapengjiaoyu.cn'
         })
-        $cookiz.remove(validateSystemHostName().token_name)
+        $cookiz.remove(process.env.TOKEN_NAME)
       }
       $cookiz.remove('userinfo', {
         path: '/'

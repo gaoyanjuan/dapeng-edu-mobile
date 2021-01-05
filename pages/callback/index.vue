@@ -14,12 +14,12 @@ export default {
     state:'PASSWORD'
   }),
   async asyncData ({ redirect, app: { $cookiz } }) {
-    if ($cookiz.get(validateSystemHostName().token_name)) {
+    if ($cookiz.get(process.env.TOKEN_NAME)) {
       redirect('/')
     }
   },
   async mounted () {
-    if (this.$cookiz.get(this.validateSystemHostName().token_name) && window.top) {
+    if (this.$cookiz.get(process.env.TOKEN_NAME) && window.top) {
       window.top.location.replace(this.validateSystemHostName().host)
     }
     const fullPath = this.$route.fullPath
@@ -44,11 +44,11 @@ export default {
 
     const expiresTime = new Date(token.exp * 1000)
     if (process.env.mode === 'development') {
-      this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
+      this.$cookiz.set(process.env.TOKEN_NAME, data.access_token, {
         expires: expiresTime
       })
     } else {
-      this.$cookiz.set(this.validateSystemHostName().token_name, data.access_token, {
+      this.$cookiz.set(process.env.TOKEN_NAME, data.access_token, {
         expires: expiresTime,
         path: '/',
         domain: '.dapengjiaoyu.cn'

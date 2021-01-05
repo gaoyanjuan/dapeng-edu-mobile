@@ -132,13 +132,13 @@ export default {
     // 退出登录
     onLogoutEvent() {
       if (process.env.mode === 'development') {
-        this.$cookiz.remove(this.validateSystemHostName().token_name)
+        this.$cookiz.remove(process.env.TOKEN_NAME)
       } else {
-        this.$cookiz.remove(this.validateSystemHostName().token_name, {
+        this.$cookiz.remove(process.env.TOKEN_NAME, {
           path: '/',
           domain: '.dapengjiaoyu.cn'
         })
-        this.$cookiz.remove(this.validateSystemHostName().token_name)
+        this.$cookiz.remove(process.env.TOKEN_NAME)
       }
       this.$cookiz.remove('userinfo', {
         path: '/'
