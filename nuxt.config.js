@@ -110,8 +110,8 @@ export default {
     '@nuxtjs/axios',
     ['cookie-universal-nuxt', { alias: 'cookiz' }],
     ['nuxt-matomo', {
-      matomoUrl: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',
-      siteId: 19,
+      matomoUrl: env[process.env.MODE].MATOMO_URL,
+      siteId: env[process.env.MODE].MATOMO_SITEID,
       debug: true
     }],
   ],
