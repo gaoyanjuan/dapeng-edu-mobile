@@ -25,6 +25,8 @@ export default {
     TOKEN_NAME: env[process.env.MODE].TOKEN_NAME, // token名称
     protocol: env[process.env.MODE].PROTOCOL, //协议地址
     ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
+    leyuUrl: env[process.env.MODE].LEYU_SERVICE, // 乐语【综合服务客服】
+    leyuSignUrl: env[process.env.MODE].LEYU_SIGNUP, // 乐语【报名咨询客服】
     userCancelUrl: env[process.env.MODE].USER_CANCEL_URL // 用户注销地址
   },
   head: {

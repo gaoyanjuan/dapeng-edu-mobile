@@ -68,8 +68,7 @@ export default {
     ]),
 
     onContact() {
-      const href = 'http://chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站'
-      window.open(href, '_blank')
+      window.open(process.env.leyuUrl, '_blank')
     },
 
     onCopy() {
@@ -84,10 +83,8 @@ export default {
     callQQ() {
       // 微信则复制、QQ则复制且唤起
       if(this.adviserInfo.groupType !== '1') {
-        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-          location.href = 'mqqwpa://im/chat?chat_type=wpa&uin=2196126702&version=1&src_type=web&web_src=oicqzone.com'
-        } else {
-          location.href = 'https://qm.qq.com/cgi-bin/qm/qr?k=kn5CpeE8K-R_Wo80v22IKwGBwSETwU4r'
+        if(this.adviserInfo.qrCodeUrl) {
+          window.location.href = this.adviserInfo.qrCodeUrl
         }
       }
     }
