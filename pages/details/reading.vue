@@ -89,9 +89,9 @@ export default {
       this.getDetails({id: this.$route.query.id}).then( res => {
         if (res && res.data) {
           if (this.reading.publishStatus !== 'PUBLISHED') {
-            if (!this.userInfo || !this.reading.user) {
-              this.$router.replace('/404')
-            } else if (this.userInfo.userId !== this.reading.user.userId) {
+            if (!this.userInfo) {
+              this.$login()
+            } else if (this.reading.user && this.userInfo.userId !== this.reading.user.userId) {
               this.$router.replace('/404')
             }
           }
