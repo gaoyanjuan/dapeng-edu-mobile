@@ -24,6 +24,8 @@ export default {
     mode: env[process.env.MODE].MODE,
     protocol: env[process.env.MODE].PROTOCOL, //协议地址
     ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
+    leyuUrl: env[process.env.MODE].LEYU_SERVICE, // 乐语【综合服务客服】
+    leyuSignUrl: env[process.env.MODE].LEYU_SIGNUP, // 乐语【报名咨询客服】
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',

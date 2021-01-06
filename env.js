@@ -14,6 +14,8 @@ module.exports = {
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
+    LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -35,6 +37,8 @@ module.exports = {
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
+    LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -57,6 +61,8 @@ module.exports = {
     LOG_API_URL: 'https://api.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
+    LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
     MATOMO_SITEID: 14,
     PORT: 3000,
     HOST: '0.0.0.0',
