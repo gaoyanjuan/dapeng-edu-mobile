@@ -7,7 +7,7 @@
     <div
       @click.stop="toLabel(item)"
       class="label"
-      :class="{ 'active-label': labelDataGetters ? item.labelId === labelDataGetters.id : false }"
+      :class="{ 'active-label': activeLabel(item) }"
       :key="getKey(index)"
       v-if="item.labelCategoryProperty === 'SHOW_TAG'"
     >
@@ -40,7 +40,16 @@ export default {
   computed: {
     ...mapGetters('label',[
       'labelDataGetters',
-    ])
+    ]),
+    activeLabel () {
+      return function (item) {
+        if (this.$route.name === 'label' && this.labelDataGetters && item.labelId === this.labelDataGetters.id) {
+          return true
+        } else {
+          return false
+        }
+      }
+    }
   },
   mounted () {},
   methods: {
