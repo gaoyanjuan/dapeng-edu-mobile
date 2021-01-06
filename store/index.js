@@ -28,7 +28,7 @@ export default {
   actions: {
     async nuxtServerInit({commit, dispatch}, {req, app}) {
       //获取服务端cookie
-      const access_token = get_cookie(req.headers.cookie, validateSystemHostName().token_name)
+      const access_token = get_cookie(req.headers.cookie, process.env.TOKEN_NAME)
       if (access_token) {
         const userinfo = app.$cookiz.get('userinfo')
         if (userinfo) {

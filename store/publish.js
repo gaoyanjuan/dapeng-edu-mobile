@@ -43,8 +43,10 @@ export const actions = {
   },
 
   // 展翅订单查询，是否存在此人
-  async getZcAdviser (store, params) {
-    const res = await this.$axios.get(`old/platforms/zc/advisers/code?collegeId=${params}`)
+  async getZcAdviser(store, params) {
+    let reqUrl = 'old/platforms/zc/advisers/code'
+    if (params) { reqUrl = reqUrl + `?collegeId=${params}`}
+    const res = await this.$axios.get(reqUrl)
     return res
   },
 

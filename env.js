@@ -15,6 +15,7 @@ module.exports = {
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    TOKEN_NAME: 'dptoken_t', // token名称
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -37,6 +38,7 @@ module.exports = {
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    TOKEN_NAME: 'dptoken_t', // token名称
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -60,6 +62,7 @@ module.exports = {
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
     USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    TOKEN_NAME: 'dptoken', // token名称
     MATOMO_SITEID: 14,
     PORT: 3000,
     HOST: '0.0.0.0',
