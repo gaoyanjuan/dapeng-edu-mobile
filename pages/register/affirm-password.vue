@@ -142,7 +142,7 @@ export default {
             // this.$cookiz.set('refresh_token', res.data.refresh_token)
             localStorage.setItem('login_time', new Date().getTime())
             // 完成注册
-            this.$router.push('/')
+            window.top.location = '/'
           } else {
             this.warning.content = res.data.message
             this.warning.show = true
