@@ -118,7 +118,7 @@ export default {
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            const token = jwtDecode(res.data.access_token)
+            const token = jwtDecode(res.data.accessToken)
 
             // ************* 注册埋点  Start*************
             this.$matomo.setUserId(token.sub)
@@ -129,11 +129,11 @@ export default {
 
             const expiresTime = new Date(token.exp * 1000)
             if (process.env.mode === 'development') {
-              this.$cookiz.set(process.env.TOKEN_NAME, res.data.access_token, {
+              this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
                 expires: expiresTime
               })
             } else {
-              this.$cookiz.set(process.env.TOKEN_NAME, res.data.access_token, {
+              this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
                 expires: expiresTime,
                 path: '/',
                 domain: '.dapengjiaoyu.cn'
