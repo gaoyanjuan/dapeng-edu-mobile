@@ -14,6 +14,7 @@ module.exports = {
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -35,6 +36,7 @@ module.exports = {
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -57,6 +59,7 @@ module.exports = {
     LOG_API_URL: 'https://api.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
     MATOMO_SITEID: 14,
     PORT: 3000,
     HOST: '0.0.0.0',

@@ -2,15 +2,7 @@
   <div class="account-safety">
     <m-navbar title="账号与安全" />
     <div class="account-safety_content">
-      <div class="safety-grade">
-        <div class="grade-score">
-          50
-        </div>
-        <div class="account-tip">
-          <img class="star" src="@/assets/icons/mine/icon-star.png" alt="">
-          <div class="account-text">账号安全等级中等</div>
-        </div>
-      </div>
+      <safety-grade :scoreNum="this.score"/>
       <nuxt-link
         class="modification-box"
         tag="div"
@@ -44,12 +36,38 @@
         </div>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
+      <div class="modification-box" @click="unsubscribe">
+        <div class="modification-left-box">
+          <div class="modification-text">注销账户</div>
+          <div class="modification-explain">注销账户，请谨慎操作！</div>
+        </div>
+        <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
+      </div>
     </div>
   </div>
 </template>
 <script>
+import {mapActions } from 'vuex'
 export default {
-  layout:'navbar'
+  layout:'navbar',
+  data() {
+    return {
+      score:null
+    }
+  },
+  mounted() {
+    this.getAccountSafety().then((res)=> {
+      this.score =res.data
+    })
+  },
+  methods: {
+    ...mapActions('user',[
+      'getAccountSafety'
+    ]),
+    unsubscribe() {
+      window.location.href = `${process.env.userCancelUrl}`
+    }
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -60,44 +78,6 @@ export default {
   & > .account-safety_content {
     margin-top: 56px;
     padding: 0 14px 0 16px;
-    & > .safety-grade {
-      width: 343px;
-      height: 88px;
-      background: rgba(255, 191, 14, .1);
-      border-radius: 4px;
-      position: relative;
-      & > .grade-score {
-        width: 72px;
-        height: 84px;
-        font-size: 60px;
-        font-family: @dp-font-medium;
-        font-weight: 500;
-        color: #EFBA31;
-        line-height: 84px;
-        margin-left: 20px;
-      }
-      & > .account-tip {
-        width: 112px;
-        height: 55px;
-        position: absolute;
-        top:50%;
-        left: 102px;
-        transform: translateY(-50%);
-        & > .star {
-          width: 16px;
-          height: 16px;
-        }
-        & > .account-text {
-          width: 112px;
-          height: 20px;
-          font-size: 14px;
-          font-family: @dp-font-regular;
-          font-weight: 400;
-          color: #5E5E5E;
-          line-height: 20px;
-        }
-      }
-    }
     & > .modification-box {
       width: 100%;
       height: 80px;
