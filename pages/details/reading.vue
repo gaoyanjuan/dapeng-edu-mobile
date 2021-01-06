@@ -29,7 +29,7 @@
     </section>
 
     <!-- Footer Block -->
-    <section v-if="reading" class="posts-comment-wrap">
+    <section v-if="reading && reading.publishStatus === 'PUBLISHED'" class="posts-comment-wrap">
       <m-details-footer
         :propCommentCount="reading.commentCount"
         :propPraiseCount="reading.praiseCount"
@@ -88,6 +88,13 @@ export default {
 
       this.getDetails({id: this.$route.query.id}).then( res => {
         if (res && res.data) {
+          if (this.reading.publishStatus !== 'PUBLISHED') {
+            if (!this.userInfo || !this.reading.user) {
+              this.$router.replace('/404')
+            } else if (this.userInfo.userId !== this.reading.user.userId) {
+              this.$router.replace('/404')
+            }
+          }
           this.$store.commit('details/changeIsPraise', res.data.isPraise)
           this.$store.commit('details/changeIsCollection', res.data.isCollection)
           this.$store.commit('details/changeCommentCount', res.data.commentCount)
