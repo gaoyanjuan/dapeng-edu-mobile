@@ -136,7 +136,7 @@ const studentsCount = function (value) {
   let num
   if (value > 9999) {
     // 大于9999显示x.xx万
-    num = Math.floor(value / 1000) / 10 + 'w'
+    num = (Math.floor(value / 1000) / 10).toFixed(1) + 'w'
   } else {
     num = value
   }
