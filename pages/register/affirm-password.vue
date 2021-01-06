@@ -41,7 +41,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-
+import jwtDecode from 'jwt-decode'
 export default {
   name:'Affirm-Password',
   layout:'navbar',
@@ -55,8 +55,7 @@ export default {
     warning: { show:false, content:''},
     passIcon: require('@/assets/icons/register/password.png'),
     safety: require('@/assets/icons/register/safety.png'),
-    mobile: '',
-    cip: ''
+    mobile: ''
   }),
   watch:{
     password(n, o) {
@@ -86,7 +85,6 @@ export default {
   },
   mounted() {
     this.mobile = this.$route.query.mobile
-    this.cip = returnCitySN['cip']
   },
   methods: {
     ...mapActions('user', [
@@ -115,8 +113,7 @@ export default {
       // 请求注册
       const data = {
         mobile: this.mobile,
-        password: this.password,
-        registerIp: this.cip
+        password: this.password
       }
       this.userRegister(data)
         .then((res) => {
