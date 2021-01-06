@@ -792,6 +792,11 @@ export const actions = {
   async appendFollowingStatus(store, params) {
     const res = await this.$axios.get(`/users/${params.id}/follow-status`)
     return res.data
+  },
+  //账号安全等级
+  async getAccountSafety(state, params) {
+    const res = await this.$axios.get('old/users/user-security')
+    return res
   }
 }
 
