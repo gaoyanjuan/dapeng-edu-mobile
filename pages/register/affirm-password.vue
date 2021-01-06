@@ -132,11 +132,11 @@ export default {
 
             const expiresTime = new Date(token.exp * 1000)
             if (process.env.mode === 'development') {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
+              this.$cookiz.set(process.env.TOKEN_NAME, res.data.access_token, {
                 expires: expiresTime
               })
             } else {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
+              this.$cookiz.set(process.env.TOKEN_NAME, res.data.access_token, {
                 expires: expiresTime,
                 path: '/',
                 domain: '.dapengjiaoyu.cn'

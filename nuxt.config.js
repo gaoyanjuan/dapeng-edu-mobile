@@ -22,10 +22,12 @@ export default {
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
     orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
     mode: env[process.env.MODE].MODE,
+    TOKEN_NAME: env[process.env.MODE].TOKEN_NAME, // token名称
     protocol: env[process.env.MODE].PROTOCOL, //协议地址
     ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
     leyuUrl: env[process.env.MODE].LEYU_SERVICE, // 乐语【综合服务客服】
     leyuSignUrl: env[process.env.MODE].LEYU_SIGNUP, // 乐语【报名咨询客服】
+    userCancelUrl: env[process.env.MODE].USER_CANCEL_URL // 用户注销地址
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
