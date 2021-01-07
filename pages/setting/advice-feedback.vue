@@ -21,19 +21,14 @@
                 <van-radio name="3" />
               </template>
             </van-cell>
-            <van-cell title="积分未到账" clickable @click="radio = '4'">
+            <van-cell title="奖品未收到" clickable @click="radio = '4'">
               <template #right-icon>
                 <van-radio name="4" />
               </template>
             </van-cell>
-            <van-cell title="奖品未收到" clickable @click="radio = '5'">
+            <van-cell title="其他" clickable @click="radio = '5'">
               <template #right-icon>
                 <van-radio name="5" />
-              </template>
-            </van-cell>
-            <van-cell title="其他" clickable @click="radio = '6'">
-              <template #right-icon>
-                <van-radio name="6" />
               </template>
             </van-cell>
           </van-cell-group>
@@ -60,7 +55,7 @@ export default {
   layout: "navbar",
   data() {
     return {
-      radio: "6",
+      radio: "5",
       value: "",
     };
   },
@@ -75,15 +70,19 @@ export default {
   .issue-content {
     margin: 60px 0px;
     & > p {
-      color: #383640;
-      font-size: 14.5px;
+      font-weight: 500;
+      color: #747c80;
+      font-size: 12px;
       line-height: 5px;
+      padding-left: 16px;
       height: 18px;
       font-family: @dp-font-medium;
     }
     /deep/.van-cell {
-      font-weight: 600;
-      font-size: 16px;
+      font-size: 14px;
+      font-family: @dp-font-regular;
+      font-weight: 400;
+      color: #18252c;
     }
     /deep/ .van-radio__icon--checked .van-icon {
       color: #fff;
@@ -91,15 +90,19 @@ export default {
       border-color: green;
     }
     .help_title {
-      margin-top: 10px;
-      font-size: 14px;
+      font-size: 12px;
+      margin-top: 8px;
+      font-family: @dp-font-medium;
+      padding-left: 16px;
+      font-weight: 500;
+      color: #747c80;
     }
-  /deep/.van-field__control::placeholder {
-    font-size: 16px;
-    font-family: @dp-font-regular;
-    font-weight: 400;
-    color: #D1D3D5;
-}
+    /deep/.van-field__control::placeholder {
+      font-family: @dp-font-regular;
+      font-size: 14px;
+      font-weight: 400;
+      color: #a3a8ab;
+    }
   }
   .footer {
     position: fixed;
@@ -114,7 +117,7 @@ export default {
       font-size: 18px;
       font-family: @dp-font-regular;
       font-weight: 400;
-      color: #44b336;
+      color: #0cb65b;
       line-height: 20px;
     }
   }
