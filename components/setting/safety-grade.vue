@@ -9,9 +9,9 @@
         src="@/assets/icons/mine/icon-star.png" 
         alt="">
       <img v-if="(this.scoreNum % 20) !== 0" class="half-star" src="@/assets/icons/mine/icon-half-star.png" alt="">
-      <!-- <div class="account-text">账号安全等级中等</div> -->
+      <div class="account-text">账号安全等级{{grade}}</div>
     </div>
-    <div class="account-text">账号安全等级{{grade}}</div>
+    <!-- <div class="account-text">账号安全等级{{grade}}</div> -->
   </div>
 </template>
 <script>
@@ -60,10 +60,10 @@ export default {
   height: 88px;
   background: @dp-white;
   border-radius: 4px;
-  position: relative;
+  // position: relative;
   overflow: hidden;
   & > .grade-score {
-    width: 72px;
+    // width: 72px;
     height: 84px;
     float: left;
     font-size: 60px;
@@ -71,6 +71,7 @@ export default {
     font-weight: 500;
     line-height: 84px;
     margin-left: 20px;
+    position: relative;
   }
   & > .account-tip {
     width: 112px;
@@ -89,8 +90,7 @@ export default {
       line-height: 16px;
       margin-left: -5px;
     }
-  }
-  & > .account-text {
+    & > .account-text {
       width: 112px;
       height: 20px;
       font-size: 14px;
@@ -98,11 +98,9 @@ export default {
       font-weight: 400;
       color: #5E5E5E;
       line-height: 20px;
-      position: absolute;
-      top:50%;
-      left: 102px;
-      // transform: translateY(-50%);
+      margin-top: -15px;
     }
+  }
 }
 .safety-grade-danger {
   background: rgba(250, 100, 0, .1);
