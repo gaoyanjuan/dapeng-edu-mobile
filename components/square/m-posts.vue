@@ -392,15 +392,15 @@ export default {
           this.$refs.commentPopup.resetPopup()
           if (!data.highRisk) {
             this.$toast('评论成功')
-          }
-          if (this.$isSave(this.$route.name)) {
-            this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'comment',
-              value: 1
-            })
-          }  else {
-            this.popCommentCount += 1
+            if (this.$isSave(this.$route.name)) {
+              this.$store.commit(`${this.functionName}`, {
+                index: this.propIndex,
+                type: 'comment',
+                value: 1
+              })
+            }  else {
+              this.popCommentCount += 1
+            }
           }
         } else {
           this.commentFlag = true
