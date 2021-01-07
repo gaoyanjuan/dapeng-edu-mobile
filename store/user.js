@@ -554,7 +554,7 @@ export const actions = {
       let list = []
       res.data.forEach((item) => {
         if (item.redDot) {
-          list.push(item.userId)
+          list.push(item.messageId)
         }
       })
       dispatch('readMyMessages', list)
