@@ -105,8 +105,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           location.reload()
           return
         } else {
-          return error.response
-          // return Promise.reject(error.response)
+          return Promise.reject(error.response)
         }
       }
       return Promise.reject(error.response)   // 返回接口返回的错误信息
@@ -128,21 +127,12 @@ function refreshToken (store, $cookiz) {
 
 function removeToken (store, $cookiz) {
   try {
-    if (process.browser) {
-      if (process.env.mode === 'development') {
-        $cookiz.remove(process.env.TOKEN_NAME)
-      } else {
-        $cookiz.remove(process.env.TOKEN_NAME, {
-          path: '/',
-          domain: '.dapengjiaoyu.cn'
-        })
-        $cookiz.remove(process.env.TOKEN_NAME)
-      }
+    $axios.get('/logout').then(() => {
       $cookiz.remove('userinfo', {
         path: '/'
       })
       store.commit('user/appendUserInfo', null)
-    }
+    }) 
   } catch (error) {
     if (!process.browser) {
       if (error) {

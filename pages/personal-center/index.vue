@@ -151,26 +151,18 @@ export default {
 
     // 退出登录
     onLogoutEvent() {
-      if (process.env.mode === 'development') {
-        this.$cookiz.remove(process.env.TOKEN_NAME)
-      } else {
-        this.$cookiz.remove(process.env.TOKEN_NAME, {
-          path: '/',
-          domain: '.dapengjiaoyu.cn'
+      this.$axios.get('/logout').then(() => {
+        this.$cookiz.remove('userinfo', {
+          path: '/'
         })
-        this.$cookiz.remove(process.env.TOKEN_NAME)
-      }
-      this.$cookiz.remove('userinfo', {
-        path: '/'
+        const redirectUrl = `${location.protocol}//${location.host}`
+        window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
       })
-      const redirectUrl = `${location.protocol}//${location.host}`
-      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     },
 
     // 跳转登录页
     toLogin () {
-      localStorage.setItem('route', $nuxt.$route.fullPath)
-      this.$router.push('/login')
+      this.$login()
     },
 
     // 跳转注册页

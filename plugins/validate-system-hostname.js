@@ -15,9 +15,9 @@ function validateSystemHostName () {
     client_secret: 'tz9Yfdtn6w'
   }
   if (process.browser) {
-    localPCParam.host = `${location.protocol}//${location.host}`
-    testPCParam.host = `${location.protocol}//${location.host}`
-    prodPCParam.host = `${location.protocol}//${location.host}`
+    localPCParam.host = `//${location.host}`
+    testPCParam.host = `//${location.host}`
+    prodPCParam.host = `//${location.host}`
   }
   if (process.env.mode === 'test') {
     return testPCParam

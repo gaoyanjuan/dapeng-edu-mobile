@@ -104,6 +104,8 @@ export default {
   buildModules: [],
 
   serverMiddleware: [
+    { path: '/callback', handler: '~/middleware/server/login.js' },
+    { path: '/api/logout', handler: '~/middleware/server/logout.js' },
     '~/middleware/server/auth.js'
   ],
 

@@ -1,44 +1,45 @@
 const env = require('../../env')
 const cookie = require('cookie')
-const filters = require('../../utils/server-filters')
+const log = require('../../utils/log-utils')
 const axios = require('../../utils/server-axios')
 const excludeUrlList = require('../../utils/exclude-url')
 
 export default function (req, res, next) {
   const tokenName = env[process.env.MODE].TOKEN_NAME
-  const dpAuthTokenUrl = env[process.env.MODE].REFRESH_TOKEN_URL // 中台校验token地址
+  const dpAuthTokenUrl = env[process.env.MODE].REFRESH_TOKEN_URL
 
   const cookies = cookie.parse(req.headers.cookie || '')
-  console.log(filters.logDate(new Date()), req.url)
+
+  log.middlewareLog(req.url)
+  
   if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && !excludeUrlList.some((ele) => req.url.indexOf(ele) !== -1)) {
-    axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
+    axios.get(`${dpAuthTokenUrl}/jti`, {
+      headers: {
+        'Cookie': `${tokenName}=${cookies[tokenName]}`
+      }
+    })
     .then((checkTokenRes) => {
       // token有效
-      console.log(filters.logDate(new Date()), checkTokenRes.config.url, checkTokenRes.status)
+      log.successLog(checkTokenRes)
       next()
     })
     .catch((error) => {
       // token失效
-      if (error) {
-        if (error.response) {
-          console.error(filters.logDate(new Date()), error.config.url, error.response.status, error.response.data)
-        } else {
-          console.error(filters.logDate(new Date()), error.config.url, error)
-        }
-      }
+      log.errorLog(error)
+
       let type = 'failure'
       if (error.response && error.response.data && error.response.data.state === 1001) {
         type = 'displacement'
       }
       if (process.env.MODE === 'dev') {
         res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
-          expires: new Date() 
+          expires: new Date()
         }))
       } else {
         res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
           path: '/',
           domain: '.dapengjiaoyu.cn',
-          expires: new Date() 
+          expires: new Date()
         }))
       }
       const locationURL = `/login/invalid-login?type=${type}`
