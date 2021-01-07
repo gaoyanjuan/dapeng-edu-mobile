@@ -557,9 +557,7 @@ export const actions = {
           list.push(item.userId)
         }
       })
-      dispatch('readMyMessages', {
-        ids: list
-      })
+      dispatch('readMyMessages', list)
       let payload = {
         data: res.data,
         pageInfo: {
@@ -776,11 +774,7 @@ export const actions = {
   },
   // 执行消息阅读操作
   async readMyMessages ({ commit }, params) {
-    const res = await this.$axios.put('/messages/read', {
-      params: {
-        ...params
-      }
-    })
+    const res = await this.$axios.put('/messages/read', params)
     return res
   },
    // 查询其他用户的信息
