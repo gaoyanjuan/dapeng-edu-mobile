@@ -110,7 +110,7 @@ export default {
       {txt:'我的收藏',name:'collection',icon: require('@/assets/icons/mine/icon-my-collection.png')},
       {txt:'学习荣誉',name:'learn-honor',icon: require('@/assets/icons/mine/icon-learn-honor.png')},
       {txt:'快捷支付',name:'fast-payment',icon: require('@/assets/icons/mine/icon-fast-payment.png')},
-      {txt:'任务',name:'task',icon: require('@/assets/icons/mine/icon-task.png')},
+      // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/icon-task.png')},
       {txt:'联系学管',name:'teacher',icon: require('@/assets/icons/mine/icon-contact-teacher.png')},
       {txt:'建议与投诉',name:'suggest-complaint',icon: require('@/assets/icons/mine/icon-suggest-complaint .png')},
       {txt:'设置',name:'setting',icon: require('@/assets/icons/mine/icon-seting.png')},

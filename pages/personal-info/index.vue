@@ -5,7 +5,9 @@
     <div class="info-header">
       <div class="left-text">头像</div>
       <div class="right-avatar">
-        <img src="~@/assets/icons/common/dp_default_headImg.jpg" alt="">
+        <van-uploader :after-read="afterRead">
+          <img :src="userInfo.avatar" alt="">
+        </van-uploader>
       </div>
     </div>
     <!-- 分割线 -->
@@ -13,26 +15,26 @@
     <div class="form-list">
       <div class="form-item">
         <div class="left-text">大鹏号</div>
-        <span class="right-content">dp123456</span>
+        <span class="right-content">{{userInfo.dpAccount}}</span>
       </div>
-      <div class="form-item">
+      <div class="form-item" v-if="userInfo.studentSatusId">
         <div class="left-text">学籍号</div>
-        <span class="right-content">暂无</span>
+        <span class="right-content">{{userInfo.studentSatusId}}</span>
       </div>
       <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/user-name'>
         <div class="left-text">用户名</div>
-        <span class="right-content">大鹏小甜甜</span>
+        <span class="right-content">{{userInfo.loginName}}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
       <div class="form-item">
         <div class="left-text">绑定手机号</div>
-        <span class="right-content">15544687952</span>
+        <span class="right-content">{{userInfo.mobile}}</span>
       </div>
       <!-- 分割线 -->
       <div class="cut-off-line"></div>
       <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/true-name'>
         <div class="left-text">真实姓名</div>
-        <span class="right-content">张三同学</span>
+        <span class="right-content">{{userInfo.trueName}}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
       <div class="form-item" @click="onGenderHandle">
@@ -44,12 +46,18 @@
       </div>
       <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/area'>
         <div class="left-text">所在地区</div>
-        <span class="right-content">北京市</span>
+        <span class="right-content">{{
+          userInfo.address
+            ? userInfo.address.split('@').join('&nbsp;&nbsp;')
+            : ''
+        }}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
       <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/personalized-signature'>
         <div class="left-text">个性签名</div>
-        <span class="right-content">限制30字</span>
+        <span class="right-content">{{
+          userInfo.introduction ? userInfo.introduction : '请填写'
+        }}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
       <van-action-sheet
@@ -62,6 +70,9 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
+import Client from '@/utils/client'
+import { formatSlashDate } from '@/plugins/filters'
 export default {
   layout:'navbar',
   data() {
@@ -84,7 +95,26 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.getUserDetails().then((res)=> {
+      this.userInfo = res.data
+    })
+  },
   methods: {
+    ...mapActions('user', [
+      'getUserDetails',
+      'editUserInfo'
+    ]),
+    ...mapActions({
+      // 获取图片上传授权
+      getMySTS: 'publish/getMySTS',
+    }),
+    updateInfo(key, value) {
+      this.editUserInfo({
+        userId: this.userInfo.userId,
+        [key]: value
+      })
+    },
     //性别弹出层
     onGenderHandle() {
       this.showGender = true
@@ -93,6 +123,68 @@ export default {
     onSelect(item) {
       this.showGender = false
       this.userInfo.gender = item.identification
+      this.updateInfo('gender', this.userInfo.gender)
+    },
+    // 上传头像
+    async afterRead(file) {
+      const isIMAGE = [
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif'
+      ].includes(file.file.type)
+      const isLt5M = file.file.size / 1024 / 1024 < 5
+      if (!isIMAGE) {
+          this.$toast('上传图片仅支持jpg/png/gif格式图片')
+          return false
+        }
+      if (!isLt5M) {
+          this.$toast('上传文件大小不能超过 5MB!')
+          return false
+        }
+      const _this = this
+      const res = await this.getMySTS()
+      const { accessKeyId, accessKeySecret, securityToken } = res.data
+      const ossConfig = {
+        accessKeyId: accessKeyId,
+        accessKeySecret: accessKeySecret,
+        stsToken: securityToken
+      }
+      const fileName = this.generateFileName(file)
+      const render = new FileReader()
+      render.readAsDataURL(file.file)
+      render.onload = (event) => {
+        const client = Client(ossConfig)
+        client.put(fileName, file.file).then(({ res }) => {
+          if (res.statusCode === 200) {
+            this.userInfo.avatar = res.requestUrls[0]
+            this.updateInfo('avatar', res.requestUrls[0])
+            this.$store.commit('setUserAvatar', res.requestUrls[0])
+            this.$toast({
+              message: `上传成功`,
+              position: 'bottom',
+              duration: 2000
+            })
+          }
+        }).catch(error => {
+          this.$toast({
+              message: `上传失败`,
+              position: 'bottom',
+              duration: 2000
+            })
+        })
+      }
+    },
+    /**
+     * 生成OSS图片文件名
+     * 域名/年-月-日/userId/反转时间戳_SDU=
+    */
+    generateFileName(file) {
+      const userId = this.userInfo.userId
+      const date = formatSlashDate(new Date())
+      let reverseDate = Math.round(new Date() / 1000).toString()
+      reverseDate = reverseDate.split('').reverse().join('')
+      return date + '/' + userId +'/'+ reverseDate + '_SDU=.' + file.file.name.split('.').pop()
     }
   }
 }
@@ -123,10 +215,16 @@ export default {
       margin-right: 30px;
       height: 60px;
       line-height: 60px;
-      & > img {
-        width: 60px;
-        height:60px;
-        border-radius: 50%;
+      .van-uploader {
+        .van-uploader__wrapper {
+          .van-uploader__input-wrapper {
+            & > img {
+              width: 60px;
+              height:60px;
+              border-radius: 50%;
+            }
+          }
+        }
       }
     }
   }

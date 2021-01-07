@@ -29,6 +29,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   layout:'navbar',
   data() {
@@ -49,7 +50,18 @@ export default {
       return 30
     }
   },
+  mounted() {
+    // 获取用户名
+    this.getUserDetails().then((res)=> {
+      this.introduction = res.data.introduction
+      this.userInfo = res.data.userId
+    })
+  },
   methods: {
+    ...mapActions('user', [
+      'getUserDetails',
+      'editUserInfo'
+    ]),
     // 计算字数
     calcContent(words, nums) {
       if(words.length === nums) {
@@ -74,10 +86,27 @@ export default {
     },
     // 点击完成
     onSaveHandle() {
-      this.$toast({
-        message: `保存成功`,
-        position: 'bottom',
-        duration: 2000
+      const params = {
+        userId:this.userInfo,
+        introduction: this.introduction
+      }
+      this.editUserInfo(params).then(res=> {
+        if (res.status === 200) {
+          this.$toast({
+            message: `保存成功`,
+            position: 'bottom',
+            duration: 2000
+          })
+          setTimeout(() => {
+            this.$router.push('/personal-info')
+          }, 2000)
+        } else {
+          this.$toast({
+            message: `${res.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
       })
     }
   }
