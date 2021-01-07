@@ -20,8 +20,12 @@ import {
   Lazyload,
   Field,
   Grid,
+  RadioGroup,
+  Radio,
   GridItem,
   Dialog,
+  Cell,
+  CellGroup,
   Checkbox,
   Area,
   Tag
@@ -48,6 +52,10 @@ Vue.use(Button)
   .use(Grid)
   .use(GridItem)
   .use(Dialog)
+  .use(RadioGroup)
+  .use(Radio)
+  .use(Cell)
+  .use(CellGroup)
   .use(Checkbox)
   .use(Area)
   .use(Tag)
@@ -60,4 +68,6 @@ Vue.prototype.ImagePreview = ImagePreview
 
 /** 重置Vant 配置 */
 
-Toast.setDefaultOptions({ position: 'bottom'})
+Toast.setDefaultOptions({
+  position: 'bottom'
+})

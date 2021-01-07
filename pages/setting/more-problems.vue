@@ -28,7 +28,7 @@
       </nuxt-link>
     </div>
     <div class="footer">
-      <button @click="toMoreProblems">意见反馈</button>
+      <button @click="tofeedback">意见反馈</button>
     </div>
   </div>
 </template>
@@ -39,11 +39,11 @@ export default {
     return {};
   },
   methods: {
-    toMoreProblems() {
-      const href =
-        process.env.protocol +
-        "zcyhxy?platform=wap&entrance=common&from=REGISTER&userid=";
-      location.href = href;
+    tofeedback() {
+        this.$router.push({
+         path:'./advice-feedback',   //跳转的路径 
+        
+      })
     },
   },
 };
