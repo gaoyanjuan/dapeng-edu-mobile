@@ -21,8 +21,7 @@ export default {
   methods:{
     /** 联系客服 */
     onCustomer() {
-      const href = 'http://chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站'
-      window.open(href, '_blank')
+      window.open(process.env.leyuUrl, '_blank')
     },
 
     /** 复制作业号 */

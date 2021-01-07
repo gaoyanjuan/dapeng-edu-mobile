@@ -11,6 +11,7 @@ export default {
           size: 5
         }
       },
+      chaptersList: [],
       courseDetail: null
     }
   },
@@ -25,7 +26,7 @@ export default {
         state.courseList.status = 'load'
       }
     },
-    clearCourseList (state,) {
+    clearCourseList (state) {
       state.courseList.list = []
       state.courseList.pageInfo.pages = 1
       state.courseList.status = 'loading'
@@ -33,6 +34,15 @@ export default {
     changeCoursesStatus (state, payload) {
       state.courseList.status = payload
     },
+    addCourseDetail (state, payload) {
+      state.courseDetail = payload
+    },
+    appendChaptersList(state, payload) { 
+      state.chaptersList = payload
+    },
+    clearChaptersList(state) { 
+      state.chaptersList = []
+    }
   },
 
   actions: {
@@ -49,11 +59,31 @@ export default {
       commit('addUserCourseList', { data: res.data, pageInfo })
       return res
     },
+
+    // 查询课程详情
+    async appendCourseDetail({ commit }, params) {
+      const res = await this.$axios.get(`old/courses/${params}`)
+      commit('addCourseDetail', res.data)
+      return res
+    },
+
+    // 查询体验课时间轴章节
+    async appendTrialChapters({ commit }, params) {
+      const res = await this.$axios.get(`old/courses/${params.courseId}/trial-chapters`)
+      commit('appendChaptersList', res.data)
+      return res
+    },
   },
 
   getters: {
     userCourseListGetters (state) {
       return state.courseList
     },
+    courseDetailGetters (state) {
+      return state.courseDetail
+    },
+    chaptersListGetters(state) { 
+      return state.chaptersList
+    }
   }
 }
