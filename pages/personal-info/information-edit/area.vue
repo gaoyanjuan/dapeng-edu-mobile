@@ -49,6 +49,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import areaList from '@/assets/emotion/area'
 export default {
   layout:'navbar',
@@ -73,7 +74,19 @@ export default {
       return 60
     }
   },
+   mounted() {
+    // 获取用户信息
+    this.getUserDetails().then((res)=> {
+      this.addressArea = res.data.address
+      this.familyAddress = res.data.familyAddress
+      this.userInfo = res.data.userId
+    })
+  },
   methods: {
+    ...mapActions('user', [
+      'getUserDetails',
+      'editUserInfo'
+    ]),
     /*
     显示地区选择面板
     */
@@ -115,10 +128,36 @@ export default {
     },
     // 点击完成
     onSaveHandle() {
-      this.$toast({
-        message: `保存成功`,
-        position: 'bottom',
-        duration: 2000
+      if (!this.familyAddress) {
+        this.$toast({
+          message: `请填写地址`,
+          position: 'bottom',
+          duration: 2000
+        })
+        return
+      }
+      const params = {
+        userId:this.userInfo,
+        address: this.addressArea,
+        familyAddress: this.familyAddress
+      }
+      this.editUserInfo(params).then(res=> {
+        if (res.status === 200) {
+          this.$toast({
+            message: `保存成功`,
+            position: 'bottom',
+            duration: 2000
+          })
+          setTimeout(() => {
+            this.$router.push('/personal-info')
+          }, 2000)
+        } else {
+          this.$toast({
+            message: `${res.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
       })
     }
   }

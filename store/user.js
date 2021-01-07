@@ -554,12 +554,10 @@ export const actions = {
       let list = []
       res.data.forEach((item) => {
         if (item.redDot) {
-          list.push(item.userId)
+          list.push(item.messageId)
         }
       })
-      dispatch('readMyMessages', {
-        ids: list
-      })
+      dispatch('readMyMessages', list)
       let payload = {
         data: res.data,
         pageInfo: {
@@ -776,11 +774,7 @@ export const actions = {
   },
   // 执行消息阅读操作
   async readMyMessages ({ commit }, params) {
-    const res = await this.$axios.put('/messages/read', {
-      params: {
-        ...params
-      }
-    })
+    const res = await this.$axios.put('/messages/read', params)
     return res
   },
    // 查询其他用户的信息
@@ -792,6 +786,11 @@ export const actions = {
   async appendFollowingStatus(store, params) {
     const res = await this.$axios.get(`/users/${params.id}/follow-status`)
     return res.data
+  },
+  //账号安全等级
+  async getAccountSafety(state, params) {
+    const res = await this.$axios.get('old/users/user-security')
+    return res
   }
 }
 

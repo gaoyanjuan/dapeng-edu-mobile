@@ -41,7 +41,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-
+import jwtDecode from 'jwt-decode'
 export default {
   name:'Affirm-Password',
   layout:'navbar',
@@ -55,8 +55,7 @@ export default {
     warning: { show:false, content:''},
     passIcon: require('@/assets/icons/register/password.png'),
     safety: require('@/assets/icons/register/safety.png'),
-    mobile: '',
-    cip: ''
+    mobile: ''
   }),
   watch:{
     password(n, o) {
@@ -86,7 +85,6 @@ export default {
   },
   mounted() {
     this.mobile = this.$route.query.mobile
-    this.cip = returnCitySN['cip']
   },
   methods: {
     ...mapActions('user', [
@@ -115,13 +113,12 @@ export default {
       // 请求注册
       const data = {
         mobile: this.mobile,
-        password: this.password,
-        registerIp: this.cip
+        password: this.password
       }
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            const token = jwtDecode(res.data.access_token)
+            const token = jwtDecode(res.data.accessToken)
 
             // ************* 注册埋点  Start*************
             this.$matomo.setUserId(token.sub)
@@ -132,11 +129,11 @@ export default {
 
             const expiresTime = new Date(token.exp * 1000)
             if (process.env.mode === 'development') {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
+              this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
                 expires: expiresTime
               })
             } else {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
+              this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
                 expires: expiresTime,
                 path: '/',
                 domain: '.dapengjiaoyu.cn'
@@ -145,7 +142,12 @@ export default {
             // this.$cookiz.set('refresh_token', res.data.refresh_token)
             localStorage.setItem('login_time', new Date().getTime())
             // 完成注册
-            this.$router.push('/')
+            if(window.top) {
+              window.top.location.href = '/'
+            } else {
+              window.location.href = '/'
+            }
+            
           } else {
             this.warning.content = res.data.message
             this.warning.show = true

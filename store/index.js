@@ -11,7 +11,7 @@ export default {
     }
   },
   mutations: {
-    changeListData (state, payload) {
+    changeListData(state, payload) {
       if (payload) {
         if (payload.listType) {
           state.listType = payload.listType
@@ -23,12 +23,16 @@ export default {
           state.anchorId = payload.anchorId
         }
       }
+    },
+    // 设置头像
+    setUserAvatar(state, payload) {
+      state.user.userInfo.avatar = payload
     }
   },
   actions: {
     async nuxtServerInit({commit, dispatch}, {req, app}) {
       //获取服务端cookie
-      const access_token = get_cookie(req.headers.cookie, validateSystemHostName().token_name)
+      const access_token = get_cookie(req.headers.cookie, process.env.TOKEN_NAME)
       if (access_token) {
         const userinfo = app.$cookiz.get('userinfo')
         if (userinfo) {

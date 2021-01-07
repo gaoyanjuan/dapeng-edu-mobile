@@ -1,7 +1,7 @@
 module.exports = {
   dev: {
     MODE: 'development',
-    REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan', // 中台的刷新接口地址
+    REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan', // 中台刷新token,验证token有效性
     DP_COURSE_URL: 'https://test.dapengjiaoyu.cn/dp-course', // 4.0地址
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent', // 快捷支付链接地址
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn', // m站地址 (没用了)
@@ -14,6 +14,10 @@ module.exports = {
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     PROTOCOL: 'https://h5-static.dapengjiaoyu.cn/h5-protocol/#/', //协议地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
+    LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
+    USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    TOKEN_NAME: 'dptoken_t', // token名称
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -21,7 +25,7 @@ module.exports = {
   },
   test: {
     MODE: 'test',
-    REFRESH_TOKEN_URL: 'http://ag.dev-vpc.dapengjiaoyu.cn',
+    REFRESH_TOKEN_URL: 'http://172.17.207.43:8000', // 中台刷新token,验证token有效性
     DP_COURSE_URL: 'https://test.dapengjiaoyu.cn/dp-course', // 4.0地址
     DP_ZHIFU: 'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent',
     DP_M_URL: 'http://test.m.dapengjiaoyu.cn',  // m站地址 (没用了)
@@ -35,6 +39,10 @@ module.exports = {
     LOG_API_URL: 'https://tapi.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://test-myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomotest.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
+    LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
+    USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    TOKEN_NAME: 'dptoken_t', // token名称
     MATOMO_SITEID: 19,
     PORT: 3000,
     HOST: '0.0.0.0',
@@ -43,7 +51,7 @@ module.exports = {
   },
   pro: {
     MODE: 'production',
-    REFRESH_TOKEN_URL: 'http://172.17.255.95', // 认证中心刷新token地址
+    REFRESH_TOKEN_URL: 'http://172.17.255.95', // 中台刷新token,验证token有效性
     DP_COURSE_URL: 'https://www.dapengjiaoyu.cn/dp-course', // PC正式站课程模块地址
     DP_ZHIFU: 'https://zhifu.dapengjiaoyu.cn/#/quickPayMent', // 快捷支付链接地址
     DP_M_URL: 'http://m.dapengjiaoyu.cn', // 老m站地址
@@ -57,6 +65,10 @@ module.exports = {
     LOG_API_URL: 'https://api.dapengjiaoyu.cn', // 接口日志埋点调用地址
     ORDER_URL: 'https://myorder.dapengjiaoyu.cn/#/order/myOrder', // 订单地址
     MATOMO_URL: 'https://matomo.dapengjiaoyu.cn/matomo/matomo/',// Matomo
+    LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
+    LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
+    USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    TOKEN_NAME: 'dptoken', // token名称
     MATOMO_SITEID: 14,
     PORT: 3000,
     HOST: '0.0.0.0',

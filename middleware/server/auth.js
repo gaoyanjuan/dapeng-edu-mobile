@@ -1,30 +1,29 @@
-const validateSystemHostName = require('../../plugins/validate-system-hostname')
-const authEnv = require('../../utils/server-env')
+const env = require('../../env')
 const cookie = require('cookie')
-const dayjs = require('dayjs')
+const filters = require('../../utils/server-filters')
 const axios = require('../../utils/server-axios')
 const excludeUrlList = require('../../utils/exclude-url')
 
-const tokenName = validateSystemHostName.default().token_name
-const dpAuthTokenUrl = authEnv().dp_auth_token_url
-
 export default function (req, res, next) {
+  const tokenName = env[process.env.MODE].TOKEN_NAME
+  const dpAuthTokenUrl = env[process.env.MODE].REFRESH_TOKEN_URL // 中台校验token地址
+
   const cookies = cookie.parse(req.headers.cookie || '')
-  console.log(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), req.url)
+  console.log(filters.logDate(new Date()), req.url)
   if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && !excludeUrlList.some((ele) => req.url.indexOf(ele) !== -1)) {
     axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
     .then((checkTokenRes) => {
       // token有效
-      console.log(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), checkTokenRes.config.url, checkTokenRes.status)
+      console.log(filters.logDate(new Date()), checkTokenRes.config.url, checkTokenRes.status)
       next()
     })
     .catch((error) => {
       // token失效
       if (error) {
         if (error.response) {
-          console.error(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), error.config.url, error.response.status, error.response.data)
+          console.error(filters.logDate(new Date()), error.config.url, error.response.status, error.response.data)
         } else {
-          console.error(dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), error.config.url, error)
+          console.error(filters.logDate(new Date()), error.config.url, error)
         }
       }
       let type = 'failure'
