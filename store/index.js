@@ -11,7 +11,7 @@ export default {
     }
   },
   mutations: {
-    changeListData (state, payload) {
+    changeListData(state, payload) {
       if (payload) {
         if (payload.listType) {
           state.listType = payload.listType
@@ -23,6 +23,10 @@ export default {
           state.anchorId = payload.anchorId
         }
       }
+    },
+    // 设置头像
+    setUserAvatar(state, payload) {
+      state.user.userInfo.avatar = payload
     }
   },
   actions: {
