@@ -357,6 +357,7 @@ export default {
           '*.alicdn.com',
           '*.aliyun.com',
           '*.aliapp.org',
+          '*.alibaba.com',
           '*.taobao.com'
         ],
         'script-src': [
