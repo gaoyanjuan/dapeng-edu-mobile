@@ -78,7 +78,7 @@ export default {
           }
         }).catch((error) => {
           this.$toast({
-            message: `${error.response.data.message}`,
+            message: `${error.data.message}`,
             position: 'bottom',
             duration: 2000
           })
@@ -126,7 +126,6 @@ export default {
       }
       await this.verificationMobile(data)
       .then((res) => {
-        console.log(res,'tyty')
         if (res.status === 200) {
           this.$toast({
             message: `手机号格更换成功`,
@@ -140,7 +139,7 @@ export default {
       })
       .catch((error) => {
         this.$toast({
-          message: `${error.response.data.message}`,
+          message: `${error.data.message}`,
           position: 'bottom',
           duration: 2000
         })

@@ -78,7 +78,6 @@ export default {
           password: this.newPasswd
         }
         await this.modifyPassword(data).then((res) => {
-          console.log(res,'hjk')
           if (res.status === 200) {
             this.$toast({
               message: `密码修改成功`,
@@ -89,7 +88,7 @@ export default {
           }
         }).catch((error) => {
           this.$toast({
-            message: `${error.response.data.message}`,
+            message: `${error.data.message}`,
             position: 'bottom',
             duration: 2000
           })

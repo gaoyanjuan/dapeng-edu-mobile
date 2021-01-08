@@ -62,7 +62,7 @@ export default {
         }
       }).catch((error) => {
         this.$toast({
-          message: `${error.response.data.message}`,
+          message: `${error.data.message}`,
           position: 'bottom',
           duration: 2000
         })
@@ -111,7 +111,6 @@ export default {
           password: this.newPasswd
         }
         await this.resetPassword(params).then((res) => {
-          console.log(res,'676767')
           if (res.status === 200) {
             this.$toast({
               message: `重置密码成功`,
@@ -122,7 +121,7 @@ export default {
           }
         }).catch((error) => {
           this.$toast({
-            message: `${error.response.data.message}`,
+            message: `${error.data.message}`,
             position: 'bottom',
             duration: 2000
           })

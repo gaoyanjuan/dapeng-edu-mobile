@@ -89,13 +89,13 @@ export default {
           setTimeout(() => {
             this.$router.push('/personal-info')
           }, 2000)
-        } else {
-          this.$toast({
-            message: `${res.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
         }
+      }).catch((error) => {
+        this.$toast({
+          message: `${error.data.message}`,
+          position: 'bottom',
+          duration: 2000
+        })
       })
     },
     changeInput() {
