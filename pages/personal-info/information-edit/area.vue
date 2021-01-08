@@ -153,11 +153,19 @@ export default {
           }, 2000)
         }
       }).catch((error) => {
-        this.$toast({
-          message: `${error.data.message}`,
-          position: 'bottom',
-          duration: 2000
-        })
+        if (error && error.data) {
+          this.$toast({
+            message: `${error.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        } else {
+          this.$toast({
+            message: `保存失败`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
       })
     }
   }

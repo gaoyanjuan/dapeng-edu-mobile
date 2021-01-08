@@ -61,11 +61,19 @@ export default {
           this.countDown()
         }
       }).catch((error) => {
-        this.$toast({
-          message: `${error.data.message}`,
-          position: 'bottom',
-          duration: 2000
-        })
+        if (error && error.data) {
+          this.$toast({
+            message: `${error.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        } else {
+          this.$toast({
+            message: `获取验证码失败`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
       })
     },
      countDown () {
@@ -120,11 +128,19 @@ export default {
             this.onLogoutEvent()
           }
         }).catch((error) => {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          if (error && error.data) {
+            this.$toast({
+              message: `${error.data.message}`,
+              position: 'bottom',
+              duration: 2000
+            })
+          } else {
+            this.$toast({
+              message: `设置密码失败`,
+              position: 'bottom',
+              duration: 2000
+            })
+          }
         })
       } else {
         this.$toast({
