@@ -29,8 +29,11 @@ export default {
         if(this.$store.getters['banner/homeworkBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'HOMEWORK' })
         }
-        if (this.$store.getters['colleges/taskCollegesGetters'].length === 0) {
+        if (this.$store.getters['colleges/taskCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
+        }
+        if (this.$store.getters['colleges/squareTaskTrialCollegesGetters'].length === 1) {
+          this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK_TRIAL' })
         }
         if (this.$store.getters['homework/homeworkListGetters'].list.length === 0) {
           this.$store.dispatch('homework/appendHomeworkList', { categoryIds: this.$route.query.college, courseType: this.$route.query.courseType, page: 1 })

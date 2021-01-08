@@ -65,6 +65,20 @@ export const actions = {
     })
     commit('appendBannerList', {data: res, type: params.channel})
   },
+      /** 
+     * 查询广告位列表
+     */
+    async appendAdverList({
+      commit
+    }) {
+      const res = await this.$axios.get('/common/advertising-spaces', {
+        params: {
+          advertisingTypes:'C1',
+          terminalType: 'H5',
+        }
+      })
+      return res
+    }
 }
 
 export const getters = {

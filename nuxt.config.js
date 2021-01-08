@@ -16,7 +16,6 @@ export default {
   env: {
     global: global,
     zhifuUrl: env[process.env.MODE].DP_ZHIFU, // 快捷支付链接地址
-    mBaseUrl: env[process.env.MODE].DP_M_URL, // m站地址
     courseUrl: env[process.env.MODE].DP_COURSE_URL, //4.0课程
     authUrl: env[process.env.MODE].DP_AUTH_URL, // 中台登录地址
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
@@ -360,6 +359,7 @@ export default {
           '*.alicdn.com',
           '*.aliyun.com',
           '*.aliapp.org',
+          '*.alibaba.com',
           '*.taobao.com'
         ],
         'script-src': [
