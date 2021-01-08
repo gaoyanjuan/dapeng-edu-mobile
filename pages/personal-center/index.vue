@@ -60,7 +60,7 @@
         </div>
         <div>我的发布</div>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" @click="myOrder">
         <div>
           <img src="@/assets/icons/mine/icon-my-order.png" alt="">
         </div>
@@ -138,7 +138,8 @@ export default {
   methods:{
     ...mapActions('user', [
       'appendUserTrends',
-      'getUserDetails'
+      'getUserDetails',
+      'userMainStationToken'
     ]),
 
     // 打开我的喜欢弹框
@@ -202,7 +203,7 @@ export default {
 
           break;
         case 'fast-payment':
-
+          window.location.href = `${process.env.payUrl}`
           break;
         case 'task':
 
@@ -298,6 +299,11 @@ export default {
           userId: this.userInfoGetters.userId
         }
       })
+    },
+    async myOrder() {
+      if (!this.$login()) return
+      const res = await this.userMainStationToken()
+      window.location.href = `${process.env.mOrderUrl}?token=${res.data.data}&source=1`
     }
   }
 }

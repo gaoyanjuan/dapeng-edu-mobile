@@ -17,6 +17,8 @@ module.exports = {
     LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
     LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
     USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    M_ORDER_URL: 'https://test-zc.dapengjiaoyu.cn/c/#/myOrder',//M站我的订单地址
+    PAY_URL:'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent', // 快捷支付地址
     TOKEN_NAME: 'dptoken_t', // token名称
     MATOMO_SITEID: 19,
     PORT: 3000,
@@ -42,6 +44,8 @@ module.exports = {
     LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
     LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
     USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    M_ORDER_URL: 'https://test-zc.dapengjiaoyu.cn/c/#/myOrder',//M站我的订单地址
+    PAY_URL:'https://test-zhifu.dapengjiaoyu.cn/#/quickPayMent', // 快捷支付地址
     TOKEN_NAME: 'dptoken_t', // token名称
     MATOMO_SITEID: 19,
     PORT: 3000,
@@ -68,6 +72,8 @@ module.exports = {
     LEYU_SERVICE: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站',
     LEYU_SIGNUP: '//chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085048&refer=M站',
     USER_CANCEL_URL: 'https://banner.dapengjiaoyu.com/2020/08/dp_game/dev/logoutAccount/index.html',// 用户注销地址
+    M_ORDER_URL: 'https://zc.dapengjiaoyu.cn/c/#/myOrder',//M站我的订单地址
+    PAY_URL:'https://zhifu.dapengjiaoyu.cn/#/quickPayMent', // 快捷支付地址
     TOKEN_NAME: 'dptoken', // token名称
     MATOMO_SITEID: 14,
     PORT: 3000,

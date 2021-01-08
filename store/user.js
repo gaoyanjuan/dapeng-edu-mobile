@@ -806,6 +806,13 @@ export const actions = {
   async getAccountSafety(state, params) {
     const res = await this.$axios.get('old/users/user-security')
     return res
+  },
+  // 用户ID生成老主站token
+  async userMainStationToken(content) {
+    const res = await this.$axios.post(
+      `old/user/token/?userId=${content.state.userInfo.userId}`
+    )
+    return res
   }
 }
 
