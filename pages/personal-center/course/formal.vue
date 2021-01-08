@@ -1,6 +1,9 @@
 <template>
   <section class="page-course-wrapper">
     <m-navbar title="我的正式课"></m-navbar>
+
+    <!-- 我的正式课学院列表 -->
+    <m-course-menus :menus="formalCollegeListGetters"></m-course-menus>
     
     <!-- 课程服务列表TITLE -->
     <div class="course-list-nav-row" v-if="showAdviser">
@@ -28,6 +31,12 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   layout:'navbar',
   name: 'Formal',
+
+  async asyncData ({route, store, error}) {
+    if (store.getters['course/formalCollegeListGetters'].length === 0) {
+      await store.dispatch('course/appendFormalCollegeList')
+    }
+  },
 
   data: ()=> ({
     list: [],
@@ -60,7 +69,8 @@ export default {
 
   computed: {
     ...mapGetters('course', [
-      'userCourseListGetters'
+      'userCourseListGetters',
+      'formalCollegeListGetters'
     ]),
 
     showAdviser() {
