@@ -590,6 +590,21 @@ export const actions = {
     const res = await this.$axios.get(`/old/sms/check-code?${qs.stringify(params)}`)
     return res
   },
+  // 手机号码验证
+  async verificationMobile (state, params) {
+    const res = await this.$axios.put('/old/users/verification-mobile', params)
+    return res
+  },
+  // 修改密码
+  async modifyPassword (state, params) {
+    const res = await this.$axios.put('/old/users/password', params)
+    return res
+  },
+  // 重置密码
+  async resetPassword (state, params) {
+    const res = await this.$axios.put('/old/users/reset-password', params)
+    return res
+  },
   // 注册用户
   async userRegister (state, params) {
     const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)
