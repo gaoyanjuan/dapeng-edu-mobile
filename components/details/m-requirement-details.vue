@@ -153,7 +153,8 @@ export default {
           hideSwitchPlayer: true,
           width: '100%',
           height: '198px',
-          vid: this.requirementDetails.vid
+          vid: this.requirementDetails.vid,
+          cover_display: 'scaleAspectFit'
         })
       }
     }

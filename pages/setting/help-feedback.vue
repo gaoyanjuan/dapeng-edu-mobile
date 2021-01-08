@@ -61,7 +61,7 @@
     </div>
     <div class="footer">
       <button @click="toMoreProblems">更多问题</button>
-      <button>意见反馈</button>
+      <button @click="tofeedback">意见反馈</button>
     </div>
   </div>
 </template>
@@ -77,10 +77,14 @@ export default {
     toMoreProblems() {
       this.$router.push({
          path:'./more-problems',   //跳转的路径 
-        
+      })
+    },
+       tofeedback() {
+        this.$router.push({
+         path:'./advice-feedback',   //跳转的路径         
       })
     }
-  },
+  }
 };
 </script>
 <style lang="less" scoped>
