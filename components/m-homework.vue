@@ -4,7 +4,7 @@
     <m-swipe :banner="homeworkBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="[{ id:'', name: '全部' }].concat(taskCollegesGetters)" />
+    <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="CollegesData" />
 
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -51,11 +51,19 @@ export default {
       'homeworkBannerListGetters'
     ]),
     ...mapGetters('colleges', [
+      'squareTaskTrialCollegesGetters',
       'taskCollegesGetters'
     ]),
     ...mapGetters('homework', [
       'homeworkListGetters'
-    ])
+    ]),
+    CollegesData () {
+      if (this.$route.query.courseType === 'TEST') {
+        return this.squareTaskTrialCollegesGetters
+      } else if (this.$route.query.courseType !== 'CHILD') {
+        return this.taskCollegesGetters
+      }
+    }
   },
   watch: {
     'homeworkListGetters.status': function (newVal, oldVal) {
