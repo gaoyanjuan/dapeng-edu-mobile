@@ -390,7 +390,7 @@ export default {
         if (status === 201) {
           this.commentFlag = true
           this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk) {
+          if (!data.highRisk && data.id) {
             this.$toast('评论成功')
             if (this.$isSave(this.$route.name)) {
               this.$store.commit(`${this.functionName}`, {
