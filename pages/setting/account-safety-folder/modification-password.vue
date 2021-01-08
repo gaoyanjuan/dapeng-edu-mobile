@@ -32,6 +32,7 @@
   </div>
 </template>
 <script>
+import { mapGetters,mapActions } from 'vuex'
 import { validatePassword } from '@/utils/validate.js'
 export default {
   layout:'navbar',
@@ -49,8 +50,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', [
+      'modifyPassword'
+    ]),
     // 点击完成按钮的逻辑判断
-    onAccomplishBtn() {
+    async onAccomplishBtn() {
       if (this.oldPasswd.length === 0) {
         this.$toast('请输入原密码')
         return
@@ -68,13 +72,52 @@ export default {
         return
       }
       // 设置新密码正则判断
-      if(!validatePassword(this.newPasswd)) {
+      if(validatePassword(this.newPasswd)) {
+        const data = {
+          oldPassWord: this.oldPasswd,
+          password: this.newPasswd
+        }
+        await this.modifyPassword(data).then((res) => {
+          console.log(res,'hjk')
+          if (res.status === 200) {
+            this.$toast({
+              message: `密码修改成功`,
+              position: 'bottom',
+              duration: 2000
+            })
+            this.onLogoutEvent()
+          }
+        }).catch((error) => {
+          this.$toast({
+            message: `${error.response.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        })
+      } else {
         this.$toast({
           message: `密码为6—18位数字、可包含数字、大小写字母和下划线`,
           position: 'bottom',
           duration: 2000
         })
       }
+    },
+    // 修改密码后退出登录
+    onLogoutEvent() {
+      if (process.env.mode === 'development') {
+        this.$cookiz.remove(process.env.TOKEN_NAME)
+      } else {
+        this.$cookiz.remove(process.env.TOKEN_NAME, {
+          path: '/',
+          domain: '.dapengjiaoyu.cn'
+        })
+        this.$cookiz.remove(process.env.TOKEN_NAME)
+      }
+      this.$cookiz.remove('userinfo', {
+        path: '/'
+      })
+      const redirectUrl = `${location.protocol}//${location.host}`
+      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
     }
   }
 }

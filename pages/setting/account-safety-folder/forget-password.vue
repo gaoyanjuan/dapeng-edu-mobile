@@ -5,12 +5,12 @@
       <div class="form-item txt">请通过手机验证重置您的登录密码:</div>
       <div class="form-item">
         <input type="text" class="phone-number"
-        v-bind:value="1" disabled="disable">
+        v-bind:value="userInfoGetters.mobile | maskMobile" disabled="disable">
       </div>
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <div class="send-code" @click="sendMobileCode">获取验证码</div>
+        <div class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div class="form-item">
         <input type="password" class="new-passwd"
@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import { mapGetters,mapActions } from 'vuex'
 import { validatePassword,validateEmpty } from '@/utils/validate.js'
 export default {
   layout:'navbar',
@@ -32,16 +33,65 @@ export default {
     return {
       code: '',
       newPasswd: '',
-      aginPasswd: ''
+      aginPasswd: '',
+      codeBtnInfo: '获取验证码',
+      // 倒计时基数
+      countdown: 60,
+      timer: null
     }
   },
+  computed: {
+    ...mapGetters('user',[
+      'userInfoGetters'
+    ])
+  },
   methods: {
+    ...mapActions('user', [
+      'sendCode',
+      'resetPassword'
+    ]),
     // 发送验证码 
-    sendMobileCode() {
-
+    async sendMobileCode() {
+      const params = {
+        mobile: this.userInfoGetters.mobile,
+        codeType: 'RESET_PWD_CODE'
+      }
+      await this.sendCode(params).then((res) => {
+        if (res.status === 200 && !this.timer) {
+          this.countDown()
+        }
+      }).catch((error) => {
+        this.$toast({
+          message: `${error.response.data.message}`,
+          position: 'bottom',
+          duration: 2000
+        })
+      })
+    },
+     countDown () {
+      this.timer = setInterval(() => {
+        if (this.countdown > 0 && this.countdown <= 60) {
+          this.countdown--
+          if (this.countdown !== 0) {
+            this.codeBtnInfo = `${this.countdown}s后重新发送`
+          } else {
+            clearInterval(this.timer)
+            this.codeBtnInfo = '获取验证码'
+            this.countdown = 60
+            this.timer = null
+            this.codeDisabled = false
+            return false
+          }
+        }
+      }, 1000)
+      // 通过$once来监听定时器，在beforeDestroy钩子可以被清除。
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(this.timer)
+        this.timer = null
+      })
     },
     // 验证登录校验
-    onConfirmBtn() {
+    async onConfirmBtn() {
       if (validateEmpty(this.code)) {
         this.$toast('请输入验证码')
         return
@@ -54,7 +104,30 @@ export default {
         this.$toast('请确认新密码')
         return
       }
-      if(!validatePassword(this.newPasswd)) {
+      if(validatePassword(this.newPasswd)) {
+        const params = {
+          code: this.code,
+          mobile: this.userInfoGetters.mobile,
+          password: this.newPasswd
+        }
+        await this.resetPassword(params).then((res) => {
+          console.log(res,'676767')
+          if (res.status === 200) {
+            this.$toast({
+              message: `重置密码成功`,
+              position: 'bottom',
+              duration: 2000
+            })
+            this.onLogoutEvent()
+          }
+        }).catch((error) => {
+          this.$toast({
+            message: `${error.response.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        })
+      } else {
         this.$toast({
           message: `密码为6—18位数字、可包含数字、大小写字母和下划线`,
           position: 'bottom',
@@ -65,7 +138,24 @@ export default {
         this.$toast('两次密码不一致')
         return
       }
-    }
+    },
+    // 修改密码后退出登录
+    onLogoutEvent() {
+      if (process.env.mode === 'development') {
+        this.$cookiz.remove(process.env.TOKEN_NAME)
+      } else {
+        this.$cookiz.remove(process.env.TOKEN_NAME, {
+          path: '/',
+          domain: '.dapengjiaoyu.cn'
+        })
+        this.$cookiz.remove(process.env.TOKEN_NAME)
+      }
+      this.$cookiz.remove('userinfo', {
+        path: '/'
+      })
+      const redirectUrl = `${location.protocol}//${location.host}`
+      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
+    },
   }
 }
 </script>
@@ -128,7 +218,7 @@ export default {
         top: 16px;
         right: 0;
         text-align: center;
-        font-size: 15px;
+        font-size: 13px;
         color: @dp-white;
         background: rgba(12, 182, 91, 1);
         border-radius: 2px;
