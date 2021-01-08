@@ -50,14 +50,14 @@
           alt=""
         />
       </nuxt-link>
-       <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${7}`">
+       <!-- <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${7}`">
         <span class="setting-text">M站页面混乱布局出错如何解决？</span>
         <img
           class="right-arrow"
           src="@/assets/icons/mine/icon-right-arrow.png"
           alt=""
         />
-      </nuxt-link>
+      </nuxt-link> -->
     </div>
     <div class="footer">
       <button @click="toMoreProblems">更多问题</button>
