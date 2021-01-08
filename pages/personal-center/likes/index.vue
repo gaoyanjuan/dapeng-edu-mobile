@@ -35,6 +35,9 @@ export default {
   data:() => ({
     active: 0,
   }),
+  created () {
+    this.$login()
+  },
   mounted() {
     /**
      * 路由定位
