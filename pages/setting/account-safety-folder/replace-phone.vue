@@ -6,7 +6,7 @@
       <div class="form-item">
         <div class="tip">变更前：</div>
         <input type="text" class="phone-number"
-        v-bind:value="1" disabled="disable">
+        v-bind:value="userInfoGetters.mobile | maskMobile" disabled="disable">
       </div>
       <div class="form-item">
         <div class="tip">变更后：</div>
@@ -16,23 +16,31 @@
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">获取验证码</div>
+        <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div :class="isEmpty ? 'unfinished' : 'finish'" @click="onConfirmBtn">确认更换</div>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters,mapActions } from 'vuex'
 import { validateMobile } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
     return {
       mobile: '',
-      code: ''
+      code: '',
+      codeBtnInfo: '获取验证码',
+      // 倒计时基数
+      countdown: 60,
+      timer: null
     }
   },
   computed: {
+    ...mapGetters('user',[
+      'userInfoGetters'
+    ]),
     // 判断获取验证码是否点亮
     showCode() {
       return Boolean(this.mobile)
@@ -44,9 +52,38 @@ export default {
     }
   },
   methods: {
+    ...mapActions('user', [
+      'sendCode',
+      'verificationMobile'
+    ]),
     // 发送验证码校验
-    sendMobileCode() {
-      if (!validateMobile(this.mobile)) {
+    async sendMobileCode() {
+      // 校验输入的手机号
+      if (this.mobile === this.userInfoGetters.mobile) {
+        this.$toast({
+          message: `变更后手机号与现有相同!`,
+          position: 'bottom',
+          duration: 2000
+        })
+        return false
+      }
+      if (validateMobile(this.mobile)) {
+        const params = {
+          mobile: this.mobile,
+          codeType: 'REAL_PHONE_CODE'
+        }
+        await this.sendCode(params).then((res) => {
+          if (res.status === 200 && !this.timer) {
+            this.countDown()
+          }
+        }).catch((error) => {
+          this.$toast({
+            message: `${error.response.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        })
+      } else {
         this.$toast({
           message: `手机号格式不正确请重新输入`,
           position: 'bottom',
@@ -54,9 +91,60 @@ export default {
         })
       }
     },
+    // 验证码倒计时
+    countDown () {
+      this.timer = setInterval(() => {
+        if (this.countdown > 0 && this.countdown <= 60) {
+          this.countdown--
+          if (this.countdown !== 0) {
+            
+            this.codeBtnInfo = `${this.countdown}s后重新发送`
+          } else {
+            clearInterval(this.timer)
+            this.codeBtnInfo = '获取验证码'
+            this.countdown = 60
+            this.timer = null
+            this.codeDisabled = false
+            return false
+          }
+        }
+      }, 1000)
+      // 通过$once来监听定时器，在beforeDestroy钩子可以被清除。
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(this.timer)
+        this.timer = null
+      })
+    },
     // 确认更换事件
-    onConfirmBtn() {
-      
+    async onConfirmBtn() {
+      // 更换手机号
+      const data = {
+        mobile: this.mobile,
+        code: this.code,
+        type: 'ReplaceMobile',
+        verificationType: 'ACCOUNT'
+      }
+      await this.verificationMobile(data)
+      .then((res) => {
+        console.log(res,'tyty')
+        if (res.status === 200) {
+          this.$toast({
+            message: `手机号格更换成功`,
+            position: 'bottom',
+            duration: 2000
+          })
+          setTimeout(() => {
+            this.$router.push('/setting')
+          }, 2000)
+        }
+      })
+      .catch((error) => {
+        this.$toast({
+          message: `${error.response.data.message}`,
+          position: 'bottom',
+          duration: 2000
+        })
+      })
     }
   }
 }
@@ -130,11 +218,11 @@ export default {
         top: 16px;
         right: 0;
         text-align: center;
-        font-size: 15px;
+        font-size: 13px;
         color: @dp-white;
         background: rgba(12, 182, 91, .4);
         border-radius: 2px;
-        cursor: pointer;
+        pointer-events: none;
       }
       & > .send-code {
         width: 98px;
@@ -144,7 +232,7 @@ export default {
         top: 16px;
         right: 0;
         text-align: center;
-        font-size: 15px;
+        font-size: 13px;
         color: @dp-white;
         background: rgba(12, 182, 91, 1);
         border-radius: 2px;
@@ -161,7 +249,7 @@ export default {
       color: @dp-white;
       background: rgba(12, 182, 91, .4);
       border-radius: 2px;
-      cursor: pointer;
+      pointer-events: none;
     }
     & > .unfinished {
       width: 282px;
