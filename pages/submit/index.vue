@@ -311,6 +311,9 @@ export default {
   },
 
   async created(){
+    if(!this.$login()) {
+      return 
+    }
 
     if(this.$route.query.action === 'edit') {
       const _this = this
@@ -323,6 +326,9 @@ export default {
       }
       
       if (this.homeworkDetails) {
+        if(this.homeworkDetails.user.userId !== this.userInfo.userId) {
+          this.$router.replace('/404')
+        }
         this.content = this.homeworkDetails.content
         this.appendSelLabel(this.homeworkDetails.labels)
         this.homeworkDetails.imgInfo.forEach( ele => {
