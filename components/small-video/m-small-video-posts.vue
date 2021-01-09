@@ -276,4 +276,8 @@ export default {
 
 }
 
+/deep/ .label:nth-child(3) {
+  margin-left: 0;
+}
+
 </style>
