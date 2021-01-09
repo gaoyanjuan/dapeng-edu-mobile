@@ -3,7 +3,7 @@
     <template v-if="publishHomeworkGetters.list.length">
       <m-posts
         v-for="(res, index) in publishHomeworkGetters.list"
-        :key="index"
+        :key="res ? res.id + index : index"
         :commentList="res.comments"
         :courseType="res.courseType"
         :modifiedTime="res.lastModifiedTime"
