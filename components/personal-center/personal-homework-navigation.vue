@@ -56,5 +56,14 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+.navigation {
+  background-color: #F8F8F8;
+  min-height: calc(100vh - 190px);
+}
+/deep/ .van-sticky {
+  box-shadow: rgb(234, 234, 234) 0px 1px 0px 0px;
+}
+/deep/ .van-tabs__content {
+  margin-top: 1px;
+}
 </style>

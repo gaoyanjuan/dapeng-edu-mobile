@@ -73,12 +73,10 @@ export default {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  padding: 0 4px;
   min-width: 167px;
 }
 
 .works__class--wrap {
-  margin-top: 6px;
   width: max-content;
   height: 24px;
   display: flex;
@@ -86,6 +84,7 @@ export default {
   padding: 4px 8px;
   background: #f7f7f7;
   border-radius: 12px;
+  margin-bottom: 4px;
   & > span {
     font-size: 12px;
     font-family: @dp-font-regular;
@@ -95,8 +94,8 @@ export default {
 }
 
 .label {
-  margin-top: 6px;
   margin-left: 8px;
+  margin-bottom: 4px;
   height: 24px;
   padding: 4px 8px;
   background: #E6F7EE;
