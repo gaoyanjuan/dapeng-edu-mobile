@@ -99,9 +99,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/.m-works:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
+ 
 
 
 .homework-wrap {

@@ -177,9 +177,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/.m-works:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
+
 
 .blank-box .posts-blank-wrap {
   display: flex;
