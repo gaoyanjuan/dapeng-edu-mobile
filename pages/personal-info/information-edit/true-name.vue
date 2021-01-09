@@ -77,17 +77,25 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+          setTimeout(() => {
+            this.$router.push('/personal-info')
+          }, 2000)
+        }
+      }).catch((error) => {
+        if (error && error.data) {
+          this.$toast({
+            message: `${error.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
         } else {
           this.$toast({
-            message: `${res.data.message}`,
+            message: `保存失败`,
             position: 'bottom',
             duration: 2000
           })
         }
       })
-      setTimeout(() => {
-        this.$router.push('/personal-info')
-      }, 2000)
     },
     changeInput() {
       if (this.TreuNameModel) {
