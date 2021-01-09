@@ -56,5 +56,10 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+/deep/ .van-sticky {
+  box-shadow: rgb(234, 234, 234) 0px 1px 0px 0px;
+}
+/deep/ .van-tabs__content {
+  margin-top: 1px;
+}
 </style>

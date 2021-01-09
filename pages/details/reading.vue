@@ -227,7 +227,7 @@ export default {
     font-family: @dp-font-regular;
     font-weight: 400;
     color: #36404A;
-    line-height: 24px;
+    line-height: 28px;
   }
 
   /deep/ & p:not(:first-child) {
