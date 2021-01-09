@@ -98,7 +98,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
- 
 
 .dynamic-wrap {
   position: relative;
