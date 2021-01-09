@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="">
+    <div class="label-warp">
       <m-posts-class
         :remark="videoItem.college && videoItem.college.name ? `${squareType}·${videoItem.college.name.replace(/学院/, '')}` : squareType"
         :labels="videoItem.labels"
@@ -246,6 +246,9 @@ export default {
         font-weight: 400;
         color: #FFFFFF;
         margin-left: 4px;
+        text-overflow: ellipsis;
+        white-space:nowrap;
+        overflow:hidden;
       }
     }
     .info-right-side {
@@ -264,6 +267,13 @@ export default {
       }
     }
   }
+}
+
+.label-warp {
+  width: 167px;
+  margin-top: 6px;
+  padding: 0 4px;
+
 }
 
 </style>

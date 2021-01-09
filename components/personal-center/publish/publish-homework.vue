@@ -99,8 +99,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
- 
-
 
 .homework-wrap {
   position: relative;

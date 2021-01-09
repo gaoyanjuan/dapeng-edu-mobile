@@ -98,12 +98,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
- 
 
 .works-wrap {
   position: relative;
 }
-
 
 .have-no-posts-wrap {
   display: flex;

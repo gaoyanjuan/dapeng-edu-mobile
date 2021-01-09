@@ -84,6 +84,7 @@ export default {
   padding: 4px 8px;
   background: #f7f7f7;
   border-radius: 12px;
+  margin-bottom: 4px;
   & > span {
     font-size: 12px;
     font-family: @dp-font-regular;
@@ -94,6 +95,7 @@ export default {
 
 .label {
   margin-left: 8px;
+  margin-bottom: 4px;
   height: 24px;
   padding: 4px 8px;
   background: #E6F7EE;
