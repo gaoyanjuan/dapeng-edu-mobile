@@ -7,7 +7,7 @@
         <template v-if="userHomesRecommendGetters.list.length > 0">
         <m-posts
           v-for="(res, index) in userHomesRecommendGetters.list"
-          :key="index"
+          :key="res ? res.id + index : index"
           :commentList="res.comments"
           :dataType="res.type"
           :courseType="res.courseType"

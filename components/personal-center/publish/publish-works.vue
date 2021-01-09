@@ -3,7 +3,7 @@
     <template v-if="publishWorksGetters.list.length">
       <m-posts
         v-for="(res, index) in publishWorksGetters.list"
-        :key="index"
+        :key="res ? res.id + index : index"
         :courseType="res.courseType"
         :modifiedTime="res.createTime"
         :listItemData="res"

@@ -4,7 +4,7 @@
       <template v-if="userLikesGetters.activity_post.list.length">
         <m-posts
           v-for="(res, index) in userLikesGetters.activity_post.list"
-          :key="index"
+          :key="res ? res.id + index : index"
           :courseType="res.courseType"
           :modifiedTime="res.createTime"
           :listItemData="res"
@@ -27,7 +27,7 @@
       <template v-if="userFavoritesGetters.activity_post.list.length">
         <m-posts
           v-for="(res, index) in userFavoritesGetters.activity_post.list"
-          :key="index"
+          :key="res ? res.id + index : index"
           :courseType="res.courseType"
           :modifiedTime="res.createTime"
           :listItemData="res"
