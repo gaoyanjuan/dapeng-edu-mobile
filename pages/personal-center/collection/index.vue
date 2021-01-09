@@ -69,7 +69,8 @@ export default {
 <style lang="less" scoped>
 
 .user-collection-warp {
-  background-color: #F7FAF8;
+  min-height: 100vh;
+  background-color: #F8F8F8;
 }
 
 .tabs-wrap {
