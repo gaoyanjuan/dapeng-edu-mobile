@@ -6,6 +6,9 @@
     <van-sticky offset-top="1.17333rem">
       <m-course-menus v-if="formalCollegeListGetters.length" :menus="formalCollegeListGetters" />
     </van-sticky>
+
+    <!-- 学管推荐-当前在学 -->
+    <m-learning-course v-if="showCourse && showLearning" :course="userCourseListGetters.list[0]" />
     
     <!-- 课程服务列表TITLE -->
     <div class="course-list-nav-row" v-if="showCourse">
@@ -58,6 +61,7 @@ export default {
       this.defCollege = newQuery.college
       this.getCourseList({ type: 'VIP' , collegeId: newQuery.college, page: 1 })
     },
+
     'userCourseListGetters.status' : function (newVal, oldVal) {
       if (newVal === 'loading') {
         this.loading = true
@@ -69,6 +73,7 @@ export default {
         this.finished = true
       }
     },
+    
     'userCourseListGetters.list':function (newVal, oldVal) {
       if(!newVal.length) {
         this.finishedTxt = ''
@@ -86,6 +91,10 @@ export default {
 
     showCourse() {
       return this.userCourseListGetters.list.length
+    },
+
+    showLearning() {
+      return this.userCourseListGetters.list[0].learning
     },
 
     college() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="course-card" @click="onEnterCourseChapter">
+  <div class="course-card" v-if="!learnStatus" @click="onEnterCourseChapter">
     <div class="course-info-row">
 
       <img class="course-photo" v-lazy="course.coverImage" alt="course" />
@@ -48,6 +48,11 @@ export default {
   }),
 
   computed:{
+    // 当前在学状态
+    learnStatus: function() {
+      return this.course.learning
+    },
+    // 当前直播状态
     showLive:function() {
       return this.course.liveChapters.length
     }
