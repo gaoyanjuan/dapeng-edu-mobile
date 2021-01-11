@@ -315,7 +315,7 @@ export default {
     // 进个人资料
     toPersonalInfo() {
       this.$router.push({
-        path: "/personal-info",
+        path: "/personal-center/account-setting/personal-information",
         query: {
           userId: this.userInfoGetters.userId,
         },

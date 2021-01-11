@@ -21,7 +21,7 @@
         <div class="left-text">学籍号</div>
         <span class="right-content">{{userInfo.studentSatusId}}</span>
       </div>
-      <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/user-name'>
+      <nuxt-link class="form-item" tag="div" to='/personal-center/account-setting/information-edit/user-name'>
         <div class="left-text">用户名</div>
         <span class="right-content">{{userInfo.loginName}}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
@@ -32,7 +32,7 @@
       </div>
       <!-- 分割线 -->
       <div class="cut-off-line"></div>
-      <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/true-name'>
+      <nuxt-link class="form-item" tag="div" to='/personal-center/account-setting/information-edit/true-name'>
         <div class="left-text">真实姓名</div>
         <span class="right-content">{{userInfo.trueName}}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
@@ -44,7 +44,7 @@
         <span v-if="userInfo.gender === 'F'" class="right-content">女</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </div>
-      <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/area'>
+      <nuxt-link class="form-item" tag="div" to='/personal-center/account-setting/information-edit/area'>
         <div class="left-text">所在地区</div>
         <span class="right-content">{{
           userInfo.address
@@ -53,7 +53,7 @@
         }}</span>
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
-      <nuxt-link class="form-item" tag="div" to='/personal-info/information-edit/personalized-signature'>
+      <nuxt-link class="form-item" tag="div" to='/personal-center/account-setting/information-edit/personalized-signature'>
         <div class="left-text">个性签名</div>
         <span class="right-content">{{
           userInfo.introduction ? userInfo.introduction : '请填写'
