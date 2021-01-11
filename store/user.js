@@ -809,7 +809,6 @@ export const actions = {
   },
   // 用户ID生成老主站token
   async userMainStationToken(store) {
-    console.log(store)
     const res = await this.$axios.post(
       `tapi/token/?userId=${store.state.userInfo.userId}`
     )
