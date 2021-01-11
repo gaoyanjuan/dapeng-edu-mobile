@@ -97,7 +97,7 @@ export default {
   data: () => ({
     show: false,
     active: 'square',
-    courseUrl: process.env.courseUrl,
+    courseUrl: this.validateSystemHostName().course_host,
     square: {
       active: require('@/assets/icons/tabbar/bar-square-active.png'),
       inactive: require('@/assets/icons/tabbar/bar-square.png'),

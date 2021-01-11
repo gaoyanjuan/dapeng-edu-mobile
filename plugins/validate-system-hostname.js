@@ -16,8 +16,11 @@ function validateSystemHostName () {
   }
   if (process.browser) {
     localPCParam.host = `${location.protocol}//${location.host}`
+    localPCParam.course_host = `${location.protocol}//127.0.0.1:1111`
     testPCParam.host = `${location.protocol}//${location.host}`
+    testPCParam.course_host = `${location.protocol}//${location.host}/dp-course`
     prodPCParam.host = `${location.protocol}//${location.host}`
+    testPCParam.course_host = `${location.protocol}//${location.host}/dp-course`
   }
   if (process.env.mode === 'test') {
     return testPCParam
