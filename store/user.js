@@ -810,7 +810,7 @@ export const actions = {
   // 用户ID生成老主站token
   async userMainStationToken(content) {
     const res = await this.$axios.post(
-      `old/user/token/?userId=${content.state.userInfo.userId}`
+      `tapi/token/?userId=${content.state.userInfo.userId}`
     )
     return res
   }

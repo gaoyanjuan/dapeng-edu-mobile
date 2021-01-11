@@ -158,6 +158,13 @@ export default {
         changeOrigin: true
       }
     },
+    '/api/tapi': {
+      target: env[process.env.MODE].TAPI_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/tapi': '/api/user',
+        changeOrigin: true
+      }
+    },
     '/api/old': {
       target: env[process.env.MODE].OLD_BASE_URL, // 目标接口域名
       pathRewrite: {
