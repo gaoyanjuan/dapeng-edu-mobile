@@ -1,6 +1,7 @@
 export default {
   state: () => { 
     return {
+      // 课程列表
       courseList: {
         list: [],
         status: 'loading',
@@ -11,8 +12,12 @@ export default {
           size: 5
         }
       },
+      // 章节列表
       chaptersList: [],
-      courseDetail: null
+      // 课程详情
+      courseDetail: null,
+      // 正式学院列表
+      formalCollegeList:[]
     }
   },
 
@@ -42,6 +47,12 @@ export default {
     },
     clearChaptersList(state) { 
       state.chaptersList = []
+    },
+    addFormalCollegeList(state, payload) {
+      payload.forEach(element => {
+        element.name = element.name.replace(/学院/, '')
+      })
+      state.formalCollegeList = payload
     }
   },
 
@@ -73,6 +84,13 @@ export default {
       commit('appendChaptersList', res.data)
       return res
     },
+
+    // 查询我的正式课学院列表
+    async appendFormalCollegeList({ commit }, params) { 
+      const res = await this.$axios.get(`old/courses/college`)
+      commit('addFormalCollegeList', res.data)
+      return res
+    }
   },
 
   getters: {
@@ -84,6 +102,9 @@ export default {
     },
     chaptersListGetters(state) { 
       return state.chaptersList
+    },
+    formalCollegeListGetters(state) { 
+      return state.formalCollegeList
     }
   }
 }

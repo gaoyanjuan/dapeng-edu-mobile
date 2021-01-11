@@ -2,7 +2,7 @@
   <div class="course-card" @click="onEnterCourseChapter">
     <div class="course-info-row">
 
-      <img class="course-photo" :src="course.coverImage" alt="course" />
+      <img class="course-photo" v-lazy="course.coverImage" alt="course" />
       
       <div class="course-info">
 
