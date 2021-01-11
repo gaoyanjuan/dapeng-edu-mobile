@@ -96,7 +96,7 @@
         </div>
         <div>我的发布</div>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" @click="myOrder">
         <div>
           <img src="@/assets/icons/mine/icon-my-order.png" alt="" />
         </div>
@@ -219,8 +219,12 @@ export default {
   computed: {
     ...mapGetters("user", ["userInfoGetters", "userTrendsGetters"]),
   },
-  methods: {
-    ...mapActions("user", ["appendUserTrends", "getUserDetails"]),
+  methods:{
+    ...mapActions('user', [
+      'appendUserTrends',
+      'getUserDetails',
+      'userMainStationToken'
+    ]),
     ...mapActions("banner", ["appendAdverList"]),
     // 打开我的喜欢弹框
     openLovePopup() {
@@ -281,7 +285,8 @@ export default {
           break;
         case "learn-honor":
           break;
-        case "fast-payment":
+        case 'fast-payment':
+          window.location.href = `${process.env.payUrl}`
           break;
         case "task":
           break;
@@ -360,13 +365,18 @@ export default {
       this.$router.push({
         path: "/personal-center/dashboard",
         query: {
-          type: "recommend",
-          userId: this.userInfoGetters.userId,
-        },
-      });
+          type: 'recommend',
+          userId: this.userInfoGetters.userId
+        }
+      })
     },
-  },
-};
+    async myOrder() {
+      if (!this.$login()) return
+      const res = await this.userMainStationToken()
+      window.location.href = `${process.env.mOrderUrl}?token=${res.data.data}&source=1`
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

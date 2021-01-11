@@ -62,10 +62,12 @@ export default {
   },
   methods: {
     ...mapActions('user',[
-      'getAccountSafety'
+      'getAccountSafety',
+      'userMainStationToken'
     ]),
-    unsubscribe() {
-      window.location.href = `${process.env.userCancelUrl}`
+    async unsubscribe() {
+      const res = await this.userMainStationToken()
+      window.open(`${process.env.userCancelUrl}?access_token=${res.data.data}`)
     }
   }
 }
