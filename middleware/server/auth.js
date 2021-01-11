@@ -2,15 +2,18 @@ const env = require('../../env')
 const cookie = require('cookie')
 const filters = require('../../utils/server-filters')
 const axios = require('../../utils/server-axios')
-const excludeUrlList = require('../../utils/exclude-url')
+const whiteUrlList = require('../../utils/white-url-list')
 
 export default function (req, res, next) {
   const tokenName = env[process.env.MODE].TOKEN_NAME
   const dpAuthTokenUrl = env[process.env.MODE].REFRESH_TOKEN_URL // 中台校验token地址
 
   const cookies = cookie.parse(req.headers.cookie || '')
-  console.log(filters.logDate(new Date()), req.url)
-  if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && !excludeUrlList.some((ele) => req.url.indexOf(ele) !== -1)) {
+
+  if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && (req.url === '/' || whiteUrlList.some((ele) => req.url.indexOf(ele) !== -1))) {
+
+    console.log(filters.logDate(new Date()), 'auth',req.url)
+
     axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
     .then((checkTokenRes) => {
       // token有效
