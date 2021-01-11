@@ -64,6 +64,11 @@ export default {
     // 进入课程章节列表
     onEnterCourseChapter() {
       this.addCourseDetail(this.course)
+
+      this.$store.commit('changeListData', {
+        listType: 'course',
+        anchorId: this.course.id
+      })
       
       this.$router.push({
         path: '/details/course',
