@@ -57,7 +57,7 @@
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <m-posts
             v-for="(item, idx) in requirementList"
-            :key="idx"
+            :key="item ? item.id + idx : idx"
             :isRequirement="true"
             :commentList="item.comments"
             :dataType="item.type"
@@ -153,7 +153,8 @@ export default {
           hideSwitchPlayer: true,
           width: '100%',
           height: '198px',
-          vid: this.requirementDetails.vid
+          vid: this.requirementDetails.vid,
+          cover_display: 'scaleAspectFit'
         })
       }
     }

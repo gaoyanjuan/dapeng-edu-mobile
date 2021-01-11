@@ -29,7 +29,7 @@
     </section>
 
     <!-- Footer Block -->
-    <section v-if="reading && reading.publishStatus === 'PUBLISHED'" class="posts-comment-wrap">
+    <section v-if="reading && isPublished" class="posts-comment-wrap">
       <m-details-footer
         :propCommentCount="reading.commentCount"
         :propPraiseCount="reading.praiseCount"
@@ -73,6 +73,12 @@ export default {
       likeList:'comment/likesListGetters',
       userInfo: 'user/userInfoGetters'
     }),
+
+    isPublished () {
+      const personalList = [ 'DRAFT', 'REBUT', 'PUBLISHING' ]
+      return !personalList.some((ele) => ele === this.reading.publishStatus)
+    },
+
     showRightMenuFlag() {
       if(this.reading && this.reading.user && this.reading.user.userId === ( this.userInfo ? this.userInfo.userId : '') ) {
         return true
@@ -85,16 +91,9 @@ export default {
     
     if(!this.reading && this.$route.query.id) {
       const _this = this
-
       this.getDetails({id: this.$route.query.id}).then( res => {
         if (res && res.data) {
-          if (this.reading.publishStatus !== 'PUBLISHED') {
-            if (!this.userInfo) {
-              this.$login()
-            } else if (this.reading.user && this.userInfo.userId !== this.reading.user.userId) {
-              this.$router.replace('/404')
-            }
-          }
+          this.checkPublishStatus()
           this.$store.commit('details/changeIsPraise', res.data.isPraise)
           this.$store.commit('details/changeIsCollection', res.data.isCollection)
           this.$store.commit('details/changeCommentCount', res.data.commentCount)
@@ -129,6 +128,25 @@ export default {
     ...mapMutations({
       clearDetails: 'reading/clearReadingDetails'
     }),
+
+    /**校验阅读状态
+     * reading.publishStatu
+     * DRAFT(草稿暂存) REBUT(驳回) PUBLISHING(定时发布中  学员没法定时发布,只有马甲可以)  只有自己能看其他人不能看,并且没有交互
+     * PENDING(审核中)  PUBLISHED(已发布) 可以看,有交互
+     * PASS(通过)  REJECT(审核不通过) 接口不会返给
+    */
+    checkPublishStatus () {
+      const personalList = [ 'DRAFT', 'REBUT', 'PUBLISHING' ]
+      const personalPrivilege = personalList.some((ele) => ele === this.reading.publishStatus)
+      if (personalPrivilege) {
+        if (!this.userInfo) {
+          this.$login()
+        } else if (this.reading.user && this.userInfo.userId !== this.reading.user.userId) {
+          this.$router.replace('/404')
+        }
+      }
+    },
+
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
@@ -209,7 +227,7 @@ export default {
     font-family: @dp-font-regular;
     font-weight: 400;
     color: #36404A;
-    line-height: 24px;
+    line-height: 28px;
   }
 
   /deep/ & p:not(:first-child) {

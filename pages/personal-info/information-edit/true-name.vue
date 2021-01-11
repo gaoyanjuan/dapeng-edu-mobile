@@ -29,12 +29,14 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   layout:'navbar',
   data() {
     return {
       TreuNameModel: '',
-      accomplishStatus:false
+      accomplishStatus:false,
+      userInfo: ''
     }
   },
   computed: {
@@ -46,25 +48,54 @@ export default {
       }
     }
   },
+  mounted() {
+    // 获取用户名
+    this.getUserDetails().then((res)=> {
+      this.TreuNameModel = res.data.trueName
+      this.userInfo = res.data.userId
+    })
+  },
   methods: {
+    ...mapActions('user', [
+      'getUserDetails',
+      'editUserInfo'
+    ]),
     //点击叉号清空输入框内容
     deletcontent() {
       this.TreuNameModel = ''
     },
     onSaveHandle() {
-      if (this.TreuNameModel.length > 6) {
-        this.$toast({
-          message: `真实姓名不能超过6个字`,
-          position: 'bottom',
-          duration: 2000
-        })
-      } else {
-        this.$toast({
-          message: `保存成功`,
-          position: 'bottom',
-          duration: 2000
-        })
+      // 修改真实姓名
+      const params = {
+        userId:this.userInfo,
+        trueName: this.TreuNameModel
       }
+      this.editUserInfo(params).then(res=> {
+        if (res.status === 200) {
+          this.$toast({
+            message: `保存成功`,
+            position: 'bottom',
+            duration: 2000
+          })
+          setTimeout(() => {
+            this.$router.push('/personal-info')
+          }, 2000)
+        }
+      }).catch((error) => {
+        if (error && error.data) {
+          this.$toast({
+            message: `${error.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        } else {
+          this.$toast({
+            message: `保存失败`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
+      })
     },
     changeInput() {
       if (this.TreuNameModel) {

@@ -21,7 +21,9 @@ export default {
   props:{
     menus:{
       type:Array,
-      default:[]
+      default: () => {
+        return []
+      }
     },
     /***
      * 【Params】college:学院

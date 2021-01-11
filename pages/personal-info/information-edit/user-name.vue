@@ -29,14 +29,15 @@
   </div>
 </template>
 <script>
-import { validateUserName } from '@/utils/validate.js'
+import { mapActions } from 'vuex'
 export default {
   layout:'navbar',
   data() {
     return {
       UserNameModel: '',
       /** 头部完成的状态*/
-      accomplishStatus:false
+      accomplishStatus:false,
+      userInfo: ''
     }
   },
   computed: {
@@ -48,25 +49,62 @@ export default {
       }
     }
   },
+  mounted() {
+    // 获取用户名
+    this.getUserDetails().then((res)=> {
+      this.UserNameModel = res.data.loginName
+      this.userInfo = res.data.userId
+    })
+  },
   methods: {
+    ...mapActions('user', [
+      'getUserDetails',
+      'editUserInfo'
+    ]),
     //点击叉号清空输入框内容
     deletcontent() {
       this.UserNameModel = ''
     },
     onSaveHandle() {
-      if (!validateUserName(this.UserNameModel)) {
+      // 修改用户名
+      if (!this.UserNameModel) {
         this.$toast({
-          message: `用户名需要为2-12位中、英文,不能包含数字或特殊符号，注意不要以dp开头哦~`,
+          message: `请填写用户名`,
           position: 'bottom',
           duration: 2000
         })
-      } else {
-        this.$toast({
-          message: `保存成功`,
-          position: 'bottom',
-          duration: 2000
-        })
+        return
       }
+      const params = {
+        userId:this.userInfo,
+        loginName: this.UserNameModel
+      }
+      this.editUserInfo(params).then(res=> {
+        if (res.status === 200) {
+          this.$toast({
+            message: `保存成功`,
+            position: 'bottom',
+            duration: 2000
+          })
+          setTimeout(() => {
+            this.$router.push('/personal-info')
+          }, 2000)
+        }
+      }).catch((error) => {
+        if (error && error.data) {
+          this.$toast({
+            message: `${error.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        } else {
+          this.$toast({
+            message: `保存失败`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
+      })
     },
     changeInput() {
       if (this.UserNameModel) {

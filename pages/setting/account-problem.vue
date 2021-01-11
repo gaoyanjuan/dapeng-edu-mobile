@@ -5,7 +5,7 @@
       <nuxt-link
         class="setting-item"
         tag="div"
-        :to="`/setting/trouble-shooting?id=${8}`"
+        :to="`/setting/trouble-shooting?id=${7}`"
       >
         <span class="setting-text"
           >修改绑定手机号码，手机丢了，无法接受验证码怎么办？</span
@@ -19,7 +19,7 @@
       <nuxt-link
         class="setting-item"
         tag="div"
-         :to="`/setting/trouble-shooting?id=${9}`"
+         :to="`/setting/trouble-shooting?id=${8}`"
       >
         <span class="setting-text">忘记密码怎么找回密码？</span>
         <img

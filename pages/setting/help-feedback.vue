@@ -50,18 +50,18 @@
           alt=""
         />
       </nuxt-link>
-       <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${7}`">
+       <!-- <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${7}`">
         <span class="setting-text">M站页面混乱布局出错如何解决？</span>
         <img
           class="right-arrow"
           src="@/assets/icons/mine/icon-right-arrow.png"
           alt=""
         />
-      </nuxt-link>
+      </nuxt-link> -->
     </div>
     <div class="footer">
       <button @click="toMoreProblems">更多问题</button>
-      <button>意见反馈</button>
+      <button @click="tofeedback">意见反馈</button>
     </div>
   </div>
 </template>
@@ -77,10 +77,14 @@ export default {
     toMoreProblems() {
       this.$router.push({
          path:'./more-problems',   //跳转的路径 
-        
+      })
+    },
+       tofeedback() {
+        this.$router.push({
+         path:'./advice-feedback',   //跳转的路径         
       })
     }
-  },
+  }
 };
 </script>
 <style lang="less" scoped>

@@ -554,12 +554,10 @@ export const actions = {
       let list = []
       res.data.forEach((item) => {
         if (item.redDot) {
-          list.push(item.userId)
+          list.push(item.messageId)
         }
       })
-      dispatch('readMyMessages', {
-        ids: list
-      })
+      dispatch('readMyMessages', list)
       let payload = {
         data: res.data,
         pageInfo: {
@@ -588,6 +586,21 @@ export const actions = {
   // 对比验证码
   async checkCode (state, params) {
     const res = await this.$axios.get(`/old/sms/check-code?${qs.stringify(params)}`)
+    return res
+  },
+  // 手机号码验证
+  async verificationMobile (state, params) {
+    const res = await this.$axios.put('/old/users/verification-mobile', params)
+    return res
+  },
+  // 修改密码
+  async modifyPassword (state, params) {
+    const res = await this.$axios.put('/old/users/password', params)
+    return res
+  },
+  // 重置密码
+  async resetPassword (state, params) {
+    const res = await this.$axios.put('/old/users/reset-password', params)
     return res
   },
   // 注册用户
@@ -776,11 +789,7 @@ export const actions = {
   },
   // 执行消息阅读操作
   async readMyMessages ({ commit }, params) {
-    const res = await this.$axios.put('/messages/read', {
-      params: {
-        ...params
-      }
-    })
+    const res = await this.$axios.put('/messages/read', params)
     return res
   },
    // 查询其他用户的信息
