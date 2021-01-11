@@ -16,7 +16,7 @@
     <!-- 已开通的课程服务列表 -->
     <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">    
       <template v-if="showCourse">
-        <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" />
+        <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" :id="item.id"/>
       </template>
 
       <template v-if="!showCourse && finished">
@@ -94,10 +94,34 @@ export default {
   },
 
   created() {
+    // 多学院列表 ~
     if(this.formalCollegeListGetters.length) {
+
+      // 如果路由未带学院ID，则取已开通课程学院第一个
       this.defCollege =  this.college || this.formalCollegeListGetters[0].id
-      this.getCourseList({ type: 'VIP', collegeId: this.defCollege, page: 1 })
+      if(!this.userCourseListGetters.list.length) {
+        this.getCourseList({ type: 'VIP', collegeId: this.defCollege, page: 1 })
+      }
+      return
     }
+
+    // 单学院列表 ~
+    if(!this.userCourseListGetters.list.length) {
+      this.getCourseList({ type: 'VIP', page: 1 })
+    }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      if (this.$store.state.anchorId) {
+        const element = document.getElementById(this.$store.state.anchorId)
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
+      }
+    })
   },
 
   methods:{
@@ -123,7 +147,10 @@ export default {
   },
 
   beforeDestroy() {
-    this.clearCourseList()
+    const isDetails = this.$isDetails(this.$route.name)
+    if (!isDetails) {
+      this.clearCourseList()
+    }
   }
 }
 </script>

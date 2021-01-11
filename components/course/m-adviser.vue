@@ -50,16 +50,15 @@ export default {
   }),
 
   async mounted() {
-    const res = await this.getZcAdviser()
-    // 展翅无此量，显示客服
-    if (res.data.code === 409) {
-      this.showStatus = 'service'
-    } 
-    
-    if (res.status === 200) {
+    await this.getZcAdviser().then( res => {
       this.adviserInfo = res.data
       this.showStatus = 'adviser'
-    }
+    }).catch( err => {
+      // 展翅无此量，显示客服
+      if (err.data && err.data.code === 409) {
+        this.showStatus = 'service'
+      }
+    })
   },
 
   methods:{
