@@ -3,23 +3,27 @@
     <m-navbar title="我的正式课"></m-navbar>
 
     <!-- 我的正式课学院列表 -->
-    <m-course-menus :menus="formalCollegeListGetters"></m-course-menus>
+    <van-sticky offset-top="1.17333rem">
+      <m-course-menus v-if="formalCollegeListGetters.length" :menus="formalCollegeListGetters" />
+    </van-sticky>
     
     <!-- 课程服务列表TITLE -->
-    <div class="course-list-nav-row" v-if="showAdviser">
+    <div class="course-list-nav-row" v-if="showCourse">
       <img class="nav" :src="nav" />
       <span class="nav-txt">已开通的课程服务列表</span>
     </div>
 
     <!-- 已开通的课程服务列表 -->
     <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">    
-      <template v-if="showAdviser">
+      <template v-if="showCourse">
         <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" />
       </template>
 
-      <!-- 无顾问 -->
-      <template v-if="!showAdviser && finished">
-        <m-adviser></m-adviser>
+      <template v-if="!showCourse && finished">
+        <div class="course-blank-wrap">
+          <img class="blank-img" :src="blank" alt="" />
+          <span class="blank-txt">您还未报名正式课～</span>
+        </div>
       </template>
     </van-list>
     
@@ -42,11 +46,18 @@ export default {
     list: [],
     loading: false,
     finished: false,
+    defCollege: '',
     finishedTxt: '没有更多了',
     nav: require('@/assets/icons/course/nav.png'),
+    blank: require('@/assets/icons/blank/have-no-course.png'),
   }),
 
   watch:{
+    '$route.query': function (newQuery, oldQuery) {
+      this.clearCourseList()
+      this.defCollege = newQuery.college
+      this.getCourseList({ type: 'VIP' , collegeId: newQuery.college, page: 1 })
+    },
     'userCourseListGetters.status' : function (newVal, oldVal) {
       if (newVal === 'loading') {
         this.loading = true
@@ -73,13 +84,20 @@ export default {
       'formalCollegeListGetters'
     ]),
 
-    showAdviser() {
+    showCourse() {
       return this.userCourseListGetters.list.length
+    },
+
+    college() {
+      return this.$route.query.college
     }
   },
 
   created() {
-    this.getCourseList({ type: 'VIP', page: 1 })
+    if(this.formalCollegeListGetters.length) {
+      this.defCollege =  this.college || this.formalCollegeListGetters[0].id
+      this.getCourseList({ type: 'VIP', collegeId: this.defCollege, page: 1 })
+    }
   },
 
   methods:{
@@ -100,7 +118,7 @@ export default {
       if (this.userCourseListGetters.status === 'loading') return false
 
       const newPage = this.userCourseListGetters.pageInfo.pages + 1
-      this.getCourseList({ type: 'VIP', page: newPage })
+      this.getCourseList({ type: 'VIP', collegeId: this.defCollege, page: newPage })
     }
   },
 
@@ -117,14 +135,15 @@ export default {
   padding-top: 44px;
   overflow: scroll;
   background: #F8F8F8;
+  position: relative;
 }
 
 .course-list-nav-row {
   width: 100%;
-  height: 38px;
+  height: 45px;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding: 16px;
   background: @dp-white;
   border-bottom: 1px solid #F7F7F7;
 
@@ -140,5 +159,30 @@ export default {
     font-weight: 600;
     color: #18252C;
   }
+}
+
+
+.course-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.course-blank-wrap .blank-img {
+  width: 240px;
+  height: 126px;
+}
+
+.course-blank-wrap .blank-txt {
+  height: 20px;
+  font-size: 14px;
+  font-family: @semibold;
+  font-weight: 600;
+  color: #8D8E8E;
+  margin-top: 12px;
 }
 </style>

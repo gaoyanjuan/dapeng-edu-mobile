@@ -1,7 +1,7 @@
 <template>
   <div class="course-menus-wrapper">
-    <van-tabs v-model="activeName">
-      <van-tab v-for="(item, index) in menus" :key="index" :title="item.name" :name="item.name" ></van-tab>
+    <van-tabs v-model="activeName" @click="changeMenus">
+      <van-tab v-for="(item, index) in menus" :key="index" :title="item.name" :name="item.id" ></van-tab>
     </van-tabs>
   </div>
 </template>
@@ -21,8 +21,36 @@ export default {
     activeName: '',
   }),
 
+  computed:{
+    college() {
+      return this.$route.query.college
+    }
+  },
+
   mounted() {
-    console.log(this.menus)
+    this.menus.forEach(element => {
+      if(element.id === this.college) {
+        this.activeName = element.id
+      }
+    })
+  },
+
+  methods:{
+     changeMenus(name, title) {
+      // 禁止路由重复点击
+      if (this.college === name) {
+        return false
+      }
+
+      this.activeName = name
+
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          college : name
+        }
+      })
+    }
   }
 }
 </script>
@@ -59,7 +87,7 @@ export default {
 }
 
 /deep/ .van-tabs__nav--line {
-  padding-left: 16px;
+  padding-left: 6px;
   padding-right: 16px;
 }
 </style>
