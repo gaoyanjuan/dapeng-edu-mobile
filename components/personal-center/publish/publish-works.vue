@@ -3,7 +3,7 @@
     <template v-if="publishWorksGetters.list.length">
       <m-posts
         v-for="(res, index) in publishWorksGetters.list"
-        :key="index"
+        :key="res ? res.id + index : index"
         :courseType="res.courseType"
         :modifiedTime="res.createTime"
         :listItemData="res"
@@ -98,14 +98,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/.m-works:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
 
 .works-wrap {
   position: relative;
 }
-
 
 .have-no-posts-wrap {
   display: flex;

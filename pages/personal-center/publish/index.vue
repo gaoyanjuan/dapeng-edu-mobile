@@ -97,6 +97,9 @@ export default {
       vm.fromRouteName = from.name
     })
   },
+  created () {
+    this.$login()
+  },
   methods: {
     ...mapActions('user', [
       'queryUserData',
