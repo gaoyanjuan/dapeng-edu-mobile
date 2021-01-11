@@ -32,7 +32,7 @@
           </div>
         </template>
         <template v-if="labelListGetters.list.length && $route.query.topicType !== 'VIDEO'">
-          <div v-for="(item, index) in labelListGetters.list" :key="item ? item.id + index: index" :id="item ? item.id: ''">
+          <div class="list-item" v-for="(item, index) in labelListGetters.list" :key="item ? item.id + index: index" :id="item ? item.id: ''">
             <m-reading-posts
               v-if="item && item.topicType === 'ARTICLE'"
               listType="label"
@@ -42,7 +42,6 @@
             />
             <m-posts
               v-else
-              class="list-item"
               listType="label"
               :propIndex="index"
               :commentList="item.comments"

@@ -105,8 +105,8 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           location.reload()
           return
         } else {
-          return error.response
-          // return Promise.reject(error.response)
+          // return error.response
+          return Promise.reject(error.response)
         }
       }
       return Promise.reject(error.response)   // 返回接口返回的错误信息

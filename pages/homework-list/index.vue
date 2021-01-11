@@ -212,7 +212,6 @@ export default {
   background: #0cb65b;
   color: #fff;
 }
-  
 
 .homework-wrap {
 

@@ -77,11 +77,19 @@ export default {
             this.countDown()
           }
         }).catch((error) => {
-          this.$toast({
-            message: `${error.response.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          if (error && error.data) {
+            this.$toast({
+              message: `${error.data.message}`,
+              position: 'bottom',
+              duration: 2000
+            })
+          } else {
+            this.$toast({
+              message: `获取验证码失败`,
+              position: 'bottom',
+              duration: 2000
+            })
+          }
         })
       } else {
         this.$toast({
@@ -126,7 +134,6 @@ export default {
       }
       await this.verificationMobile(data)
       .then((res) => {
-        console.log(res,'tyty')
         if (res.status === 200) {
           this.$toast({
             message: `手机号格更换成功`,
@@ -139,11 +146,19 @@ export default {
         }
       })
       .catch((error) => {
-        this.$toast({
-          message: `${error.response.data.message}`,
-          position: 'bottom',
-          duration: 2000
-        })
+        if (error && error.data) {
+          this.$toast({
+            message: `${error.data.message}`,
+            position: 'bottom',
+            duration: 2000
+          })
+        } else {
+          this.$toast({
+            message: `手机号格更换失败`,
+            position: 'bottom',
+            duration: 2000
+          })
+        }
       })
     }
   }
