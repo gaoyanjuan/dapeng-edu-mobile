@@ -17,7 +17,7 @@ export default function (req, res, next) {
     axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
     .then((checkTokenRes) => {
       // token有效
-      console.log(filters.logDate(new Date()), checkTokenRes.config.url, checkTokenRes.status)
+      console.log(filters.logDate(new Date()), `${dpAuthTokenUrl}/jti`, checkTokenRes.status)
       next()
     })
     .catch((error) => {
