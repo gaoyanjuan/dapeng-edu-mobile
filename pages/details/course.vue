@@ -33,7 +33,7 @@ export default {
   },
 
   async asyncData ({route, store, error}) {
-    if (store.getters['course/chaptersListGetters'].length === 0) {
+    if (route.query.type === 'TRIAL' && store.getters['course/chaptersListGetters'].length === 0) {
       await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
     }
   },
