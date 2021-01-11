@@ -26,7 +26,9 @@ export default {
     ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
     leyuUrl: env[process.env.MODE].LEYU_SERVICE, // 乐语【综合服务客服】
     leyuSignUrl: env[process.env.MODE].LEYU_SIGNUP, // 乐语【报名咨询客服】
-    userCancelUrl: env[process.env.MODE].USER_CANCEL_URL // 用户注销地址
+    userCancelUrl: env[process.env.MODE].USER_CANCEL_URL,// 用户注销地址
+    mOrderUrl: env[process.env.MODE].M_ORDER_URL, //m站我的订单地址
+    payUrl: env[process.env.MODE].PAY_URL // 快捷支付地址
   },
   head: {
     title: '大鹏教育-高品质的设计师在线教育',
@@ -153,6 +155,13 @@ export default {
       target: env[process.env.MODE].REFRESH_TOKEN_URL, // 目标接口域名
       pathRewrite: {
         '^/api/token/refresh_token': '/auth/oauth/token',
+        changeOrigin: true
+      }
+    },
+    '/api/tapi': {
+      target: env[process.env.MODE].TAPI_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/tapi': '/api/user',
         changeOrigin: true
       }
     },

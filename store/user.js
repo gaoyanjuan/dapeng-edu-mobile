@@ -803,8 +803,15 @@ export const actions = {
     return res.data
   },
   //账号安全等级
-  async getAccountSafety(state, params) {
+  async getAccountSafety({ commit }, params) {
     const res = await this.$axios.get('old/users/user-security')
+    return res
+  },
+  // 用户ID生成老主站token
+  async userMainStationToken({state},params) {
+    const res = await this.$axios.post(
+      `tapi/token/?userId=${state.userInfo.userId}`
+    )
     return res
   }
 }
