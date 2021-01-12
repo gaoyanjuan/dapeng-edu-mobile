@@ -23,14 +23,6 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
   $axios.defaults.timeout = 20000
 
   $axios.interceptors.request.use(config => {
-    if (config.url.startsWith('/token')) {
-      const clientData = `${validateSystemHostName().client_id}:${validateSystemHostName().client_secret}`
-      config.headers.Authorization = `Basic ${btoa(clientData)}`
-    } else if ($cookiz.get(process.env.TOKEN_NAME)) {
-      config.headers.Authorization = `Bearer ${$cookiz.get(process.env.TOKEN_NAME)}`
-    } else if (getcookiesInServer(req)[process.env.TOKEN_NAME]) {
-      config.headers.Authorization = `Bearer ${getcookiesInServer(req)[process.env.TOKEN_NAME]}`
-    }
     return config
   })
 

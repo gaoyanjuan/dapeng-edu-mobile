@@ -5,7 +5,6 @@ function login() {
   if ($nuxt.$store.getters['user/userInfoGetters'] && $nuxt.$store.getters['user/userInfoGetters'].userId) {
     return true
   } else {
-    console.log($nuxt.$route)
     const url = getLoginUrl()
     location.href= url
     return false
