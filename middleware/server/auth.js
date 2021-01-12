@@ -6,7 +6,7 @@ const whiteUrlList = require('../../utils/white-url-list')
 
 export default function (req, res, next) {
   const tokenName = env[process.env.MODE].TOKEN_NAME
-  const dpAuthTokenUrl = env[process.env.MODE].REFRESH_TOKEN_URL
+  const dpAuthTokenUrl = env[process.env.MODE].REFRESH_TOKEN_URL // 中台校验token地址
 
   const cookies = cookie.parse(req.headers.cookie || '')
 
