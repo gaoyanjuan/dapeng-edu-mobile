@@ -14,8 +14,8 @@ function errorLog (params) {
   }
 }
 
-function middlewareLog (params) {
-  console.log(filters.logDate(new Date()), params)
+function middlewareLog (params, middleware='') {
+  console.log(filters.logDate(new Date()), middleware, params)
 }
 
 module.exports = {

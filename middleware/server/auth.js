@@ -10,11 +10,17 @@ export default function (req, res, next) {
 
   const cookies = cookie.parse(req.headers.cookie || '')
 
+  log.middlewareLog(req.url)
+
   if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && (req.url === '/' || whiteUrlList.some((ele) => req.url.indexOf(ele) !== -1))) {
 
-    log.middlewareLog(req.url)
+    log.middlewareLog(req.url, 'auth')
 
-    axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
+    axios.get(`${dpAuthTokenUrl}/jti`, {
+      headers: {
+        'Cookie': `${tokenName}=${cookies[tokenName]}`
+      }
+    })
     .then((checkTokenRes) => {
       // token有效
       checkTokenRes.config.url = `${dpAuthTokenUrl}/jti`

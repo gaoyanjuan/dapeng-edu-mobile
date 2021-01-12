@@ -30,3 +30,9 @@ function getLoginUrl () {
 }
 
 Vue.prototype.$login = login
+Vue.prototype.$getLoginUrl = getLoginUrl
+
+export default{
+  login,
+  getLoginUrl
+}

@@ -60,7 +60,8 @@ export default {
       location.href = '/'
     },
     toLogin () {
-      this.$router.replace('/login')
+      const loginUrl = this.$getLoginUrl()
+      location.href = loginUrl
     }
   }
 }
