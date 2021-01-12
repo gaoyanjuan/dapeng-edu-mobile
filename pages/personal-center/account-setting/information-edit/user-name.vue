@@ -11,7 +11,7 @@
     <div class="modified-content">
       <div class="modified-name-box">
         <input
-          v-model="UserNameModel"
+          v-model="userNameModel"
           class="modified-name"
           @input="changeInput()"
           placeholder="请输入用户名"
@@ -34,15 +34,14 @@ export default {
   layout:'navbar',
   data() {
     return {
-      UserNameModel: '',
+      userNameModel: '',
       /** 头部完成的状态*/
-      accomplishStatus:false,
-      userInfo: ''
+      accomplishStatus:false
     }
   },
   computed: {
     closeIcon() {
-      if (this.UserNameModel) {
+      if (this.userNameModel) {
         return 'close-icon'
       } else {
         return 'close-icon-hidden'
@@ -51,23 +50,20 @@ export default {
   },
   mounted() {
     // 获取用户名
-    this.getUserDetails().then((res)=> {
-      this.UserNameModel = res.data.loginName
-      this.userInfo = res.data.userId
-    })
+    const userinfo = this.$cookiz.get('userinfo')
+    this.userNameModel = userinfo.loginName
   },
   methods: {
     ...mapActions('user', [
-      'getUserDetails',
       'editUserInfo'
     ]),
     //点击叉号清空输入框内容
     deletcontent() {
-      this.UserNameModel = ''
+      this.userNameModel = ''
     },
     onSaveHandle() {
       // 修改用户名
-      if (!this.UserNameModel) {
+      if (!this.userNameModel) {
         this.$toast({
           message: `请填写用户名`,
           position: 'bottom',
@@ -75,20 +71,22 @@ export default {
         })
         return
       }
+      const userinfo = this.$cookiz.get('userinfo')
       const params = {
-        userId:this.userInfo,
-        loginName: this.UserNameModel
+        userId:userinfo.userId,
+        loginName: this.userNameModel
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
+          userinfo.loginName = this.userNameModel
+          this.$cookiz.set('userinfo',userinfo, {
+            path: '/'
+          })
           this.$toast({
             message: `保存成功`,
             position: 'bottom',
             duration: 2000
           })
-          setTimeout(() => {
-            this.$router.push('/personal-info')
-          }, 2000)
         }
       }).catch((error) => {
         if (error && error.data) {
@@ -107,7 +105,7 @@ export default {
       })
     },
     changeInput() {
-      if (this.UserNameModel) {
+      if (this.userNameModel) {
         this.accomplishStatus = true
       } else {
         this.accomplishStatus = false
