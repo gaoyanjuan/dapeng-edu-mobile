@@ -47,7 +47,6 @@ export default {
       this.appendStages(params).then( res => {
         this.liveStage = res.data.liveStage
         this.selected = res.data.liveStage[0]
-        console.log(res)
       })
     },
 
