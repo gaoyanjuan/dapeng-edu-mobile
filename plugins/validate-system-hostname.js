@@ -13,7 +13,7 @@ function validateSystemHostName () {
   }
   if (process.browser) {
     localPCParam.host = `//${location.host}`
-    localPCParam.course_host = `//127.0.0.1:1111`
+    localPCParam.course_host = `//127.0.0.1:3001`
     testPCParam.host = `//${location.host}`
     testPCParam.course_host = `//${location.host}/dp-course`
     prodPCParam.host = `//${location.host}`
