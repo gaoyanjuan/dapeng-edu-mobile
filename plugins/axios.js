@@ -5,7 +5,7 @@ import { Dialog } from 'vant'
 const btoa = require('btoa')
 const HttpAgent = require('agentkeepalive')
 const HttpsAgent = require('agentkeepalive').HttpsAgent
-
+import checkLogin  from '../plugins/check-login'
 
 export default function ({ store, redirect, req, route, error, app: { $axios, $cookiz } }) {
   $axios.defaults.httpAgent = new HttpAgent({
@@ -71,19 +71,19 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
       if (error.response.status == 401 && $cookiz.get(process.env.TOKEN_NAME)) {
         // 用户有登录状态,但是被其他人顶掉了
         if (error.response.data && error.response.data.state === 1001) {
-          removeToken(store, $cookiz)
+          removeToken(store, $axios, $cookiz)
           if (process.browser) {
             login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
           }
           // 用户有登录状态,但是refresh_token已经失效
         } else if (error.response.data && error.response.data.error === 'invalid_token') {
-          removeToken(store, $cookiz)
+          removeToken(store, $axios, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
           }
         } else {
            // 用户有登录状态,access_token已经失效
-          removeToken(store, $cookiz)
+          removeToken(store, $axios, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
           }
@@ -91,7 +91,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
       } else if (error.response.status == 401) {
         // 用户cookie中已经没有token,但是页面上有存储的用户信息(cookie在浏览器中自然失效)
         if (!$cookiz.get(process.env.TOKEN_NAME) && store.getters['user/userInfoGetters']) {
-          removeToken(store, $cookiz)
+          removeToken(store, $axios, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
           }
@@ -116,7 +116,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
 
 function refreshToken (store, $cookiz) {
   const hostData = validateSystemHostName()
-  const accessToken = $cookiz.get(hostData.token_name)
+  const accessToken = $cookiz.get(process.env.TOKEN_NAME)
   // const refreshToken = $cookiz.get('refresh_token')
   return store.dispatch('accesstoken/getRefreshToken', {
     access_token: accessToken,
@@ -126,23 +126,14 @@ function refreshToken (store, $cookiz) {
   })
 }
 
-function removeToken (store, $cookiz) {
+function removeToken (store, $axios, $cookiz) {
   try {
-    if (process.browser) {
-      if (process.env.mode === 'development') {
-        $cookiz.remove(process.env.TOKEN_NAME)
-      } else {
-        $cookiz.remove(process.env.TOKEN_NAME, {
-          path: '/',
-          domain: '.dapengjiaoyu.cn'
-        })
-        $cookiz.remove(process.env.TOKEN_NAME)
-      }
+    $axios.get('/logout').then(() => {
       $cookiz.remove('userinfo', {
         path: '/'
       })
       store.commit('user/appendUserInfo', null)
-    }
+    }) 
   } catch (error) {
     if (!process.browser) {
       if (error) {
@@ -161,7 +152,8 @@ function login(params, redirect) {
     showCancelButton: true,
     message: params.message
   }).then(() => {
-    location.href = '/login'
+    const loginUrl = checkLogin.getLoginUrl()
+    location.href = loginUrl
   }).catch(() => {
     location.href = '/'
   })

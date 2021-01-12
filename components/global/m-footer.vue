@@ -97,7 +97,7 @@ export default {
   data: () => ({
     show: false,
     active: 'square',
-    courseUrl: process.env.courseUrl,
+    courseUrl: null,
     square: {
       active: require('@/assets/icons/tabbar/bar-square-active.png'),
       inactive: require('@/assets/icons/tabbar/bar-square.png'),
@@ -145,6 +145,7 @@ export default {
     /**
      * 路由定位
      */
+    this.courseUrl = this.validateSystemHostName().course_host
     const to = this.$route || { name: 'index' }
     if (to.name === 'index') {
       this.active = 'square'

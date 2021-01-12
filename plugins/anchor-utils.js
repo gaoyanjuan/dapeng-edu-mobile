@@ -5,7 +5,8 @@ const detailsList = [
   'details-homework',
   'details-reading',
   'details-video',
-  'details-works'
+  'details-works',
+  'details-course'
 ]
 
 function isDetails (name) {

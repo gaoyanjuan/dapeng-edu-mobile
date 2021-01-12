@@ -15,8 +15,6 @@ export default {
   },
   env: {
     global: global,
-    zhifuUrl: env[process.env.MODE].DP_ZHIFU, // 快捷支付链接地址
-    courseUrl: env[process.env.MODE].DP_COURSE_URL, //4.0课程
     authUrl: env[process.env.MODE].DP_AUTH_URL, // 中台登录地址
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
     orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
@@ -26,26 +24,28 @@ export default {
     ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
     leyuUrl: env[process.env.MODE].LEYU_SERVICE, // 乐语【综合服务客服】
     leyuSignUrl: env[process.env.MODE].LEYU_SIGNUP, // 乐语【报名咨询客服】
-    userCancelUrl: env[process.env.MODE].USER_CANCEL_URL // 用户注销地址
+    userCancelUrl: env[process.env.MODE].USER_CANCEL_URL,// 用户注销地址
+    mOrderUrl: env[process.env.MODE].M_ORDER_URL, //m站我的订单地址
+    payUrl: env[process.env.MODE].PAY_URL // 快捷支付地址
   },
   head: {
-    title: '大鹏教育-高品质的设计师在线教育',
+    title: '大鹏教育-千万人的兴趣学习社区',
     meta: [
       { name: 'renderer', content:'webkit'},
       { name: 'x5-fullscreen', content: 'true' },
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'},
-      { keywords: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
+      { keywords: '大鹏教育、成人教育、兴趣培训、在线教育、国画、书法、美术、设计、手办、篆刻、短视频、播音、开发、吉他、0基础、培训机构、在线直播、才艺秀、商城、社区' },
       {
         hid: 'description',
         name: 'description',
-        content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业'
+        content: '大鹏教育专注成人0基础才艺、兴趣线上培训，已有3000万用户选择这里。教学目标包含基础、进阶、拔高3大成长阶段，教学内容涵盖国画、美术、书法、设计、短视频、篆刻、手办、吉他、开发、播音等多个科目，直播互动式学习，让学员当堂课就能有所提升，产出完整作品。在大鹏兴趣学习社区，学员可以分享学习成果和生活动态，也能看直播，逛商城，玩转各项才艺，get老师同款画材工具。来大鹏教育，学我想学，找到生活的热情。'
       },
-      { property: 'og:title', content: ' 大鹏教育-高品质的设计师在线教育' },
-      { property: 'og:type', content: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
+      { property: 'og:title', content: '大鹏教育-千万人的兴趣学习社区' },
+      { property: 'og:type', content: '大鹏教育、成人教育、兴趣培训、在线教育、国画、书法、美术、设计、手办、篆刻、短视频、播音、开发、吉他、0基础、培训机构、在线直播、才艺秀、商城、社区' },
       { property: 'og:url', content: 'http://www.dapengjiaoyu.cn/' },
       { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/ijjctyun.png' },
-      { property: 'og:description', content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业' },
+      { property: 'og:description', content: '大鹏教育专注成人0基础才艺、兴趣线上培训，已有3000万用户选择这里。教学目标包含基础、进阶、拔高3大成长阶段，教学内容涵盖国画、美术、书法、设计、短视频、篆刻、手办、吉他、开发、播音等多个科目，直播互动式学习，让学员当堂课就能有所提升，产出完整作品。在大鹏兴趣学习社区，学员可以分享学习成果和生活动态，也能看直播，逛商城，玩转各项才艺，get老师同款画材工具。来大鹏教育，学我想学，找到生活的热情。' },
       { property: 'og:site_name', content: '大鹏教育职业技能培训' }
     ],
     link: [
@@ -103,6 +103,8 @@ export default {
   buildModules: [],
 
   serverMiddleware: [
+    { path: '/callback', handler: '~/middleware/server/login.js' },
+    { path: '/api/logout', handler: '~/middleware/server/logout.js' },
     '~/middleware/server/auth.js'
   ],
 
@@ -153,6 +155,13 @@ export default {
       target: env[process.env.MODE].REFRESH_TOKEN_URL, // 目标接口域名
       pathRewrite: {
         '^/api/token/refresh_token': '/auth/oauth/token',
+        changeOrigin: true
+      }
+    },
+    '/api/tapi': {
+      target: env[process.env.MODE].TAPI_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/tapi': '/api/user',
         changeOrigin: true
       }
     },

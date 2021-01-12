@@ -1,8 +1,8 @@
 <template>
-  <div class="course-card" @click="onEnterCourseChapter">
+  <div class="course-card" v-if="!learnStatus" @click="onEnterCourseChapter">
     <div class="course-info-row">
 
-      <img class="course-photo" :src="course.coverImage" alt="course" />
+      <img class="course-photo" v-lazy="course.coverImage" alt="course" />
       
       <div class="course-info">
 
@@ -48,6 +48,11 @@ export default {
   }),
 
   computed:{
+    // 当前在学状态
+    learnStatus: function() {
+      return this.course.learning
+    },
+    // 当前直播状态
     showLive:function() {
       return this.course.liveChapters.length
     }
@@ -64,6 +69,11 @@ export default {
     // 进入课程章节列表
     onEnterCourseChapter() {
       this.addCourseDetail(this.course)
+
+      this.$store.commit('changeListData', {
+        listType: 'course',
+        anchorId: this.course.id
+      })
       
       this.$router.push({
         path: '/details/course',

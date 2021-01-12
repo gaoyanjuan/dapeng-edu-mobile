@@ -67,20 +67,22 @@ export default {
   }),
   methods: {
     onClickLeft() {
-      const isLogin = this.$cookiz.get('isLogin')
-      if (isLogin) {
-        const isDetails = this.$isDetails(this.$route.name)
-        this.$cookiz.set('isLogin', false, {
-          path: '/'
-        })
-        if (isDetails) {
-          this.$router.go(-4)
-        } else {
-          this.$router.go(-1)
-        }
-      } else {
-        this.$router.go(-1)
-      }
+      this.$router.go(-1)
+      // 我可以后退
+      // const isLogin = this.$cookiz.get('isLogin')
+      // if (isLogin) {
+      //   const isDetails = this.$isDetails(this.$route.name)
+      //   this.$cookiz.set('isLogin', false, {
+      //     path: '/'
+      //   })
+      //   if (isDetails) {
+      //     this.$router.go(-4)
+      //   } else {
+      //     this.$router.go(-1)
+      //   }
+      // } else {
+      //   this.$router.go(-1)
+      // }
     },
     onClickRight() {
       this.$emit('onClickRight')

@@ -96,7 +96,7 @@
         </div>
         <div>我的发布</div>
       </div>
-      <div class="nav-item">
+      <div class="nav-item" @click="myOrder">
         <div>
           <img src="@/assets/icons/mine/icon-my-order.png" alt="" />
         </div>
@@ -219,8 +219,12 @@ export default {
   computed: {
     ...mapGetters("user", ["userInfoGetters", "userTrendsGetters"]),
   },
-  methods: {
-    ...mapActions("user", ["appendUserTrends", "getUserDetails"]),
+  methods:{
+    ...mapActions('user', [
+      'appendUserTrends',
+      'getUserDetails',
+      'userMainStationToken'
+    ]),
     ...mapActions("banner", ["appendAdverList"]),
     // 打开我的喜欢弹框
     openLovePopup() {
@@ -232,26 +236,18 @@ export default {
 
     // 退出登录
     onLogoutEvent() {
-      if (process.env.mode === "development") {
-        this.$cookiz.remove(process.env.TOKEN_NAME);
-      } else {
-        this.$cookiz.remove(process.env.TOKEN_NAME, {
-          path: "/",
-          domain: ".dapengjiaoyu.cn",
-        });
-        this.$cookiz.remove(process.env.TOKEN_NAME);
-      }
-      this.$cookiz.remove("userinfo", {
-        path: "/",
-      });
-      const redirectUrl = `${location.protocol}//${location.host}`;
-      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`;
+      this.$axios.get('/logout').then(() => {
+        this.$cookiz.remove('userinfo', {
+          path: '/'
+        })
+        const redirectUrl = `${location.protocol}//${location.host}`
+        window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
+      })
     },
 
     // 跳转登录页
-    toLogin() {
-      localStorage.setItem("route", $nuxt.$route.fullPath);
-      this.$router.push("/login");
+    toLogin () {
+      this.$login()
     },
 
     // 跳转注册页
@@ -281,7 +277,8 @@ export default {
           break;
         case "learn-honor":
           break;
-        case "fast-payment":
+        case 'fast-payment':
+          window.location.href = `${process.env.payUrl}`
           break;
         case "task":
           break;
@@ -325,22 +322,12 @@ export default {
     toTrialClass() {
       if (!this.$login()) return;
 
-      this.$router.push({
-        path: "/personal-center/course/trial",
-        query: {
-          userId: this.userInfoGetters.userId,
-        },
-      });
+      this.$router.push('/personal-center/course/trial')
     },
     toVipClass() {
-      if (!this.$login()) return;
-
-      this.$router.push({
-        path: "/personal-center/course/formal",
-        query: {
-          userId: this.userInfoGetters.userId,
-        },
-      });
+      if (!this.$login()) return
+      
+      this.$router.push('/personal-center/course/formal')
     },
     toAttention() {
       if (!this.$login()) return;
@@ -370,13 +357,18 @@ export default {
       this.$router.push({
         path: "/personal-center/dashboard",
         query: {
-          type: "recommend",
-          userId: this.userInfoGetters.userId,
-        },
-      });
+          type: 'recommend',
+          userId: this.userInfoGetters.userId
+        }
+      })
     },
-  },
-};
+    async myOrder() {
+      if (!this.$login()) return
+      const res = await this.userMainStationToken()
+      window.location.href = `${process.env.mOrderUrl}?token=${res.data.data}&source=1`
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
