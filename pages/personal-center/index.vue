@@ -330,12 +330,22 @@ export default {
     toTrialClass() {
       if (!this.$login()) return;
 
-      this.$router.push('/personal-center/course/trial')
+      this.$router.push({
+        path: '/personal-center/course/trial',
+        query: {
+          userId: this.userInfoGetters.userId
+        },
+      })
     },
     toVipClass() {
       if (!this.$login()) return
       
-      this.$router.push('/personal-center/course/formal')
+      this.$router.push({
+        path: '/personal-center/course/formal',
+        query: {
+          userId: this.userInfoGetters.userId
+        },
+      })
     },
     toAttention() {
       if (!this.$login()) return;

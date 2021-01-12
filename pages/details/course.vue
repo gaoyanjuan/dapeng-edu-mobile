@@ -1,11 +1,11 @@
 <template>
-  <section v-if="courseDetail">
+  <div v-if="courseDetail">
     <!-- 试学课章节 -->
     <m-trial-course-chapter v-if="type === 'TRIAL'" :chapter="courseDetail"/>
     
     <!-- 正式课章节 -->
     <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail"/>
-  </section>
+  </div>
 </template>
 
 <script>
