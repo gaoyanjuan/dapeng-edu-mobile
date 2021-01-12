@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 export default {
   layout:'navbar',
   data() {
@@ -39,7 +39,13 @@ export default {
       userInfo: ''
     }
   },
+  created () {
+    this.$login()
+  },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     closeIcon() {
       if (this.treuNameModel) {
         return 'close-icon'
@@ -49,11 +55,16 @@ export default {
     }
   },
   mounted() {
-    // 获取用户名
-    this.getUserDetails().then((res)=> {
-      this.treuNameModel = res.data.trueName
-      this.userInfo = res.data.userId
-    })
+    // 获取用户真实姓名
+    if (this.userInfoGetters.trueName) {
+      this.treuNameModel = this.userInfoGetters.trueName
+      this.userInfo = this.userInfoGetters.userId
+    } else {
+      this.getUserDetails().then((res)=> {
+        this.treuNameModel = res.data.trueName
+        this.userInfo = res.data.userId
+      })
+    }
   },
   methods: {
     ...mapActions('user', [
@@ -77,6 +88,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {

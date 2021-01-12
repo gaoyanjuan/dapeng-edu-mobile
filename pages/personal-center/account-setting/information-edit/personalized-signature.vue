@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 export default {
   layout:'navbar',
   data() {
@@ -45,17 +45,28 @@ export default {
       accomplishStatus:false
     }
   },
+  created () {
+    this.$login()
+  },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     maxCount() {
       return 30
     }
   },
   mounted() {
-    // 获取用户名
-    this.getUserDetails().then((res)=> {
-      this.introduction = res.data.introduction
-      this.userInfo = res.data.userId
-    })
+    // 获取个性签名
+    if (this.userInfoGetters.introduction) {
+      this.introduction = this.userInfoGetters.introduction
+      this.userInfo = this.userInfoGetters.userId
+    } else {
+      this.getUserDetails().then((res)=> {
+        this.introduction = res.data.introduction
+        this.userInfo = res.data.userId
+      })
+    }
   },
   methods: {
     ...mapActions('user', [
@@ -97,6 +108,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+          this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {

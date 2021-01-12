@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 export default {
   layout:'navbar',
   data() {
@@ -39,7 +39,13 @@ export default {
       accomplishStatus:false
     }
   },
+  created () {
+    this.$login()
+  },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     closeIcon() {
       if (this.userNameModel) {
         return 'close-icon'
@@ -50,12 +56,15 @@ export default {
   },
   mounted() {
     // 获取用户名
-    const userinfo = this.$cookiz.get('userinfo')
-    this.userNameModel = userinfo.loginName
+    if (this.userInfoGetters.loginName) {
+      this.userNameModel = this.userInfoGetters.loginName
+      this.userInfo = this.userInfoGetters.userId
+    }
   },
   methods: {
     ...mapActions('user', [
-      'editUserInfo'
+      'editUserInfo',
+      'getUserDetails'
     ]),
     //点击叉号清空输入框内容
     deletcontent() {
@@ -73,7 +82,7 @@ export default {
       }
       const userinfo = this.$cookiz.get('userinfo')
       const params = {
-        userId:userinfo.userId,
+        userId:this.userInfo,
         loginName: this.userNameModel
       }
       this.editUserInfo(params).then(res=> {
@@ -87,6 +96,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+          this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {

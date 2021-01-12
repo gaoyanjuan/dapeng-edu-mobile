@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 import areaList from '@/assets/emotion/area'
 export default {
   layout:'navbar',
@@ -69,18 +69,30 @@ export default {
       accomplishStatus:false
     }
   },
+  created () {
+    this.$login()
+  },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     maxCount() {
       return 60
     }
   },
    mounted() {
     // 获取用户信息
-    this.getUserDetails().then((res)=> {
-      this.addressArea = res.data.address
-      this.familyAddress = res.data.familyAddress
-      this.userInfo = res.data.userId
-    })
+    if (this.userInfoGetters.address) {
+      this.addressArea = this.userInfoGetters.address
+      this.familyAddress = this.userInfoGetters.familyAddress
+      this.userInfo = this.userInfoGetters.userId
+    } else {
+      this.getUserDetails().then((res)=> {
+        this.addressArea = res.data.address
+        this.familyAddress = res.data.familyAddress
+        this.userInfo = res.data.userId
+      })
+    }
   },
   methods: {
     ...mapActions('user', [
@@ -148,6 +160,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+          this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
