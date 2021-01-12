@@ -527,6 +527,7 @@ export default {
         width: 343px;
         height: 76px;
         border-radius: 10px;
+        object-fit:cover;
       }
     }
   }

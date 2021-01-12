@@ -603,6 +603,11 @@ export const actions = {
     const res = await this.$axios.put('/old/users/reset-password', params)
     return res
   },
+   // 意见反馈
+   async postFeedback (state, params) {
+    const res = await this.$axios.post(`/common/feedbacks?${qs.stringify(params)}`)
+    return res
+  },
   // 注册用户
   async userRegister (state, params) {
     const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)

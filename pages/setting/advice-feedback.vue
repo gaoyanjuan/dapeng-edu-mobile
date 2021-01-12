@@ -36,7 +36,8 @@
       </div>
       <div class="help_title">问题和建议</div>
       <van-field
-        v-model="value"
+        v-model="content"
+        required
         rows="3"
         autosize
         type="textarea"
@@ -46,21 +47,48 @@
       />
     </div>
     <div class="footer">
-      <button>确认提交</button>
+      <button @click="onSubmit">确认提交</button>
     </div>
   </div>
 </template>
 <script>
+import { mapActions } from "vuex";
+import { validateEmpty } from '@/utils/validate.js'
 export default {
   layout: "navbar",
   data() {
     return {
       radio: "5",
-      value: "",
+      content: "",
     };
   },
   mounted() {},
-};
+  methods: {
+    ...mapActions("user", ["postFeedback"]),
+    async onSubmit() {
+      if (validateEmpty(this.content)) {
+        this.$toast("请输入内容")
+        return
+      }
+      const params = {
+        title: this.radio,
+        content: this.content,
+      }
+      await this.postFeedback(params).then((res) => {
+        if (res.status === 201) {
+          this.$toast({
+            message: `反馈成功`,
+            position: "bottom",
+            duration: 2000,
+          })
+        }
+        setTimeout(() => {
+          this.$router.push({ path: "./help-feedback" })
+        }, 1000)
+      })
+    }
+  }
+}
 </script>
 <style lang="less" scoped>
 .advice-feedback {
