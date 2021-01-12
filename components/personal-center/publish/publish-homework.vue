@@ -3,7 +3,7 @@
     <template v-if="publishHomeworkGetters.list.length">
       <m-posts
         v-for="(res, index) in publishHomeworkGetters.list"
-        :key="index"
+        :key="res ? res.id + index : index"
         :commentList="res.comments"
         :courseType="res.courseType"
         :modifiedTime="res.lastModifiedTime"
@@ -99,10 +99,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/.m-works:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
-
 
 .homework-wrap {
   position: relative;

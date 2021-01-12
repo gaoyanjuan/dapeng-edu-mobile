@@ -88,9 +88,9 @@
 
       <!-- 顶部Navbar  菜单弹层 -->
       <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-        <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click.stop="editHomework">编辑</div>
+        <div v-if="canEdit" class="menus__popup__item" @click.stop="editHomework">编辑</div>
         <div v-if="showonCollect" class="menus__popup__item" @click.stop="onCollect">{{ isCollection ? '取消收藏' : '收藏' }}</div>
-        <div v-else class="menus__popup__item" @click.stop="deleteItem">删除</div>
+        <div v-if="canDelete" class="menus__popup__item" @click.stop="deleteItem">删除</div>
         <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
         <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
       </van-popup>
@@ -204,6 +204,19 @@ export default {
     commentFlag: true
   }),
   computed: {
+    ...mapGetters({
+      userinfo: 'user/userInfoGetters'
+    }),
+    canEdit () {
+      return this.pageName === 'myHomework' && this.listItemData.type !== 'VIDEO' && this.listItemData.approvedLevel === '0'
+    },
+    canDelete () {
+      if (this.pageName === 'myHomework') {
+        return this.pageName === 'myHomework' && this.listItemData.type !== 'VIDEO' && this.listItemData.approvedLevel === '0'
+      } else {
+        return this.userinfo && this.userinfo.userId === this.listItemData.user.userId
+      }
+    },
     // 主体id
     mainId () {
       if (this.isGrowth) {
@@ -274,25 +287,16 @@ export default {
         return '/details/growth'
       }
     },
-    ...mapGetters('user',[
-      'userInfoGetters',
-    ]),
     showCopyFlag () {
-      if(this.propSquareType === 'HOMEWORK') {
-        if(this.userInfoGetters && this.listItemData.user) {
-          if(this.userInfoGetters.userId !== this.listItemData.user.userId) {
-            return true
-          }
-        }else {
-          return true
-        }
-      }else {
+      if(this.userinfo && this.userinfo.userId === this.listItemData.user.userId) {
         return false
+      } else {
+        return true
       }
     },
     showonCollect () {
-      if (this.userInfoGetters) {
-        return this.$route.query.userId !== this.userInfoGetters.userId
+      if (this.userinfo) {
+        return this.$route.query.userId !== this.userinfo.userId
       }
     },
     functionName () {
@@ -366,9 +370,15 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
-        if (this.listItemData.approvedLevel && this.listItemData.approvedLevel !== '0') {
-          this.showMenusPopup = !this.showMenusPopup
-          return
+        // 是否是作业
+        if (this.listItemData.approvedLevel) {
+          if (this.userinfo && this.userinfo.userId === this.listItemData.user.userId) {
+            this.showPublishMenusPopup = !this.showPublishMenusPopup
+            return
+          } else {
+            this.showMenusPopup = !this.showMenusPopup
+            return
+          }
         }
         this.showPublishMenusPopup = !this.showPublishMenusPopup
         return
@@ -390,17 +400,17 @@ export default {
         if (status === 201) {
           this.commentFlag = true
           this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk) {
+          if (!data.highRisk && data.id) {
             this.$toast('评论成功')
-          }
-          if (this.$isSave(this.$route.name)) {
-            this.$store.commit(`${this.functionName}`, {
-              index: this.propIndex,
-              type: 'comment',
-              value: 1
-            })
-          }  else {
-            this.popCommentCount += 1
+            if (this.$isSave(this.$route.name)) {
+              this.$store.commit(`${this.functionName}`, {
+                index: this.propIndex,
+                type: 'comment',
+                value: 1
+              })
+            }  else {
+              this.popCommentCount += 1
+            }
           }
         } else {
           this.commentFlag = true
@@ -747,6 +757,7 @@ export default {
 // classification
 .m-works > .works__class {
   margin-top: 12px;
+  height: 24px;
 }
 
 // Label

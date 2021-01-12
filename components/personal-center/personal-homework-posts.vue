@@ -4,7 +4,7 @@
       <template v-if="userLikesGetters.homework.list.length">
         <m-posts
           v-for="(res, index) in userLikesGetters.homework.list"
-          :key="index"
+          :key="res ? res.id + index : index"
           :courseType="res.courseType"
           :modifiedTime="res.lastModifiedTime"
           :commentList="res.comments"
@@ -28,7 +28,7 @@
       <template v-if="userFavoritesGetters.homework.list.length">
         <m-posts
           v-for="(res, index) in userFavoritesGetters.homework.list"
-          :key="index"
+          :key="res ? res.id + index : index"
           :courseType="res.courseType"
           :modifiedTime="res.lastModifiedTime"
           :listItemData="res"
@@ -177,9 +177,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/.m-works:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
+
 
 .blank-box .posts-blank-wrap {
   display: flex;

@@ -120,7 +120,7 @@ export default {
         if (status === 201) {
           this.commentFlag = true
           this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk) {
+          if (!data.highRisk && data.id) {
             this.commitNewRepliesComment({
               ...data,
               isPraise: false,

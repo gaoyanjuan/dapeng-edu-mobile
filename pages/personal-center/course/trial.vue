@@ -11,7 +11,7 @@
     <!-- 已开通的课程服务列表 -->
     <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">    
       <template v-if="showAdviser">
-        <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" />
+        <m-course v-for="(item, index) in userCourseListGetters.list" :key="index" :course="item" :id="item.id"/>
       </template>
 
       <!-- 无顾问 -->
@@ -68,7 +68,22 @@ export default {
   },
 
   created() {
-    this.getCourseList({ type: 'TRIAL', page: 1 })
+    if(this.userCourseListGetters.list.length === 0) {
+      this.getCourseList({ type: 'TRIAL', page: 1 })
+    }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      if (this.$store.state.anchorId) {
+        const element = document.getElementById(this.$store.state.anchorId)
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
+      }
+    })
   },
 
   methods:{
@@ -94,7 +109,10 @@ export default {
   },
   
   beforeDestroy() {
-    this.clearCourseList()
+    const isDetails = this.$isDetails(this.$route.name)
+    if (!isDetails) {
+      this.clearCourseList()
+    }
   }
 }
 </script>

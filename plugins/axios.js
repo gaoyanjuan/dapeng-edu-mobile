@@ -105,6 +105,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           location.reload()
           return
         } else {
+          // return error.response
           return Promise.reject(error.response)
         }
       }
@@ -115,7 +116,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
 
 function refreshToken (store, $cookiz) {
   const hostData = validateSystemHostName()
-  const accessToken = $cookiz.get(hostData.token_name)
+  const accessToken = $cookiz.get(process.env.TOKEN_NAME)
   // const refreshToken = $cookiz.get('refresh_token')
   return store.dispatch('accesstoken/getRefreshToken', {
     access_token: accessToken,

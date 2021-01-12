@@ -2,7 +2,7 @@ const env = require('../../env')
 const cookie = require('cookie')
 const log = require('../../utils/log-utils')
 const axios = require('../../utils/server-axios')
-const excludeUrlList = require('../../utils/exclude-url')
+const whiteUrlList = require('../../utils/white-url-list')
 
 export default function (req, res, next) {
   const tokenName = env[process.env.MODE].TOKEN_NAME
@@ -10,17 +10,15 @@ export default function (req, res, next) {
 
   const cookies = cookie.parse(req.headers.cookie || '')
 
-  log.middlewareLog(req.url)
-  
-  if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && !excludeUrlList.some((ele) => req.url.indexOf(ele) !== -1)) {
-    axios.get(`${dpAuthTokenUrl}/jti`, {
-      headers: {
-        'Cookie': `${tokenName}=${cookies[tokenName]}`
-      }
-    })
+  if (cookies[tokenName] && req.url.indexOf('/api/') == -1 && (req.url === '/' || whiteUrlList.some((ele) => req.url.indexOf(ele) !== -1))) {
+
+    log.middlewareLog(req.url)
+
+    axios.get(`${dpAuthTokenUrl}/jti?access_token=${cookies[tokenName]}`)
     .then((checkTokenRes) => {
       // token有效
-      log.successLog(checkTokenRes)
+      checkTokenRes.config.url = `${dpAuthTokenUrl}/jti`
+      log.successLog(checkTokenRes)      
       next()
     })
     .catch((error) => {

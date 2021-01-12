@@ -6,14 +6,13 @@
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="recommendListGetters.list.length">
-          <div v-for="(res, i) in recommendListGetters.list" :key="res && res.recommendTopic ? res.recommendTopic.id + i: i">
+          <div class="recommend-item" v-for="(res, i) in recommendListGetters.list" :key="res && res.recommendTopic ? res.recommendTopic.id + i: i">
             <m-reading-posts
               v-if="res && res.hotType === 'ARTICLE'"
               :id="res.recommendTopic ? res.recommendTopic.id: ''"
               listType="recommend"
               :propIndex="i"
               :imgSmall="res.recommendTopic.coverImgSmall"
-              :key="res.recommendTopic ? res.recommendTopic.id: ''"
               :item="res.recommendTopic"
             />
             <m-posts
@@ -150,6 +149,13 @@ export default {
   background-color: #f8f8f8;
 }
 
+.recommend-item:first-child {
+  margin-top: 0px;
+}
+
+.recommend-item {
+  margin-top: 12px;
+}
 
 .recommend-wrap .works-blank-wrap {
   display: flex;
