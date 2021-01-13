@@ -4,38 +4,38 @@
       <Nuxt />
     </div>
     <div class="off-line-wrap" v-if="$nuxt.isOffline">
-       <span class="off-line-txt"> 您的网络已断开 </span>
-       <span class="off-line-txt"> 请检查后刷新一下哦~ </span>
+      <span class="off-line-txt"> 您的网络已断开 </span>
+      <span class="off-line-txt"> 请检查后刷新一下哦~ </span>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
-  data:() => ({
+  data: () => ({
     show: false,
   }),
   mounted() {
-    this.$cookiz.remove('access_token_t')
-    this.$cookiz.remove('access_token_t', {
-      path: '/',
-      domain: '.dapengjiaoyu.cn'
-    })
-    this.$cookiz.remove('access_token', {
-      path: '/',
-      domain: '.dapengjiaoyu.cn'
-    })
+   if (this.$store.getters["banner/adverBannerListGetters"] === "" &&
+      this.$store.getters["banner/adverBannerListGetters"] === null) {
+    return
+    }else {
+        this.appendAdverList();
+    }
 
-    
-    /*** 
+    /***
      * 【刷新或者首次加载】
      * 等待文档树渲染完毕后，再放开显示
-    */
+     */
     this.$nextTick(() => {
-      this.show = true
-    })
-  }
-}
+      this.show = true;
+    });
+  },
+  methods: {
+    ...mapActions("banner", ["appendAdverList"]),
+  },
+};
 </script>
 
 
@@ -54,17 +54,15 @@ export default {
   margin: 45% auto;
 }
 
-
 .off-line-txt {
   font-size: 14px;
   font-family: @regular;
   font-weight: 400;
-  color: #747C80;
+  color: #747c80;
   line-height: 26px;
 }
 
 .off-line-txt:not(:first-child) {
   margin-top: 5px;
 }
-
 </style>

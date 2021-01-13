@@ -24,7 +24,7 @@ export default function (req, res, next) {
     .then((checkTokenRes) => {
       // token有效
       checkTokenRes.config.url = `${dpAuthTokenUrl}/jti`
-      log.successLog(checkTokenRes)      
+      log.successLog(checkTokenRes)
       next()
     })
     .catch((error) => {
