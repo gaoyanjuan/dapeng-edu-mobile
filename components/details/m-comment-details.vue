@@ -117,36 +117,35 @@ export default {
         commit: true
       })
       .then(({status, data}) => {
-        if (status === 201) {
-          this.commentFlag = true
-          this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk && data.id) {
-            this.commitNewRepliesComment({
-              ...data,
-              isPraise: false,
-              isRecommend: false,
-              praiseCount: 0,
-              parentId: this.commentDetailsGetters.id,
-              parentUser: {
-                ...this.commentDetailsGetters.user
-              },
-              user: {
-                ...this.userinfo
-              }
-            })
-            this.changeReplyCount(1)
-            this.$store.commit(`${this.functionName}`, {
-              index: this.$store.state.propIndex,
-              type: 'comment',
-              value: 1
-            })
-            this.$toast('评论成功')
-          }
-        } else {
-          this.commentFlag = true
-          if (data && data.message) {
-            this.$toast(data.message)
-          }
+        this.commentFlag = true
+        this.$refs.commentPopup.resetPopup()
+        if (!data.highRisk && data.id) {
+          this.commitNewRepliesComment({
+            ...data,
+            isPraise: false,
+            isRecommend: false,
+            praiseCount: 0,
+            parentId: this.commentDetailsGetters.id,
+            parentUser: {
+              ...this.commentDetailsGetters.user
+            },
+            user: {
+              ...this.userinfo
+            }
+          })
+          this.changeReplyCount(1)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'comment',
+            value: 1
+          })
+          this.$toast('评论成功')
+        }
+      })
+      .catch((error) => {
+        this.commentFlag = true
+        if (error && error.message) {
+          this.$toast(data.message)
         }
       })
     },

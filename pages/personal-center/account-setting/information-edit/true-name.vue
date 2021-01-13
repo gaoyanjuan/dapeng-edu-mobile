@@ -11,7 +11,7 @@
     <div class="modified-content">
       <div class="modified-name-box">
         <input
-          v-model="TreuNameModel"
+          v-model="treuNameModel"
           class="modified-name"
           @input="changeInput()"
           placeholder="请输入您的真实姓名"
@@ -29,19 +29,22 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 export default {
   layout:'navbar',
   data() {
     return {
-      TreuNameModel: '',
+      treuNameModel: '',
       accomplishStatus:false,
-      userInfo: ''
+      userId: ''
     }
   },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     closeIcon() {
-      if (this.TreuNameModel) {
+      if (this.treuNameModel) {
         return 'close-icon'
       } else {
         return 'close-icon-hidden'
@@ -49,11 +52,17 @@ export default {
     }
   },
   mounted() {
-    // 获取用户名
-    this.getUserDetails().then((res)=> {
-      this.TreuNameModel = res.data.trueName
-      this.userInfo = res.data.userId
-    })
+    this.$login()
+    // 获取用户真实姓名
+    if (this.userInfoGetters.trueName) {
+      this.treuNameModel = this.userInfoGetters.trueName
+      this.userId = this.userInfoGetters.userId
+    } else {
+      this.getUserDetails().then((res)=> {
+        this.treuNameModel = res.data.trueName
+        this.userId = res.data.userId
+      })
+    }
   },
   methods: {
     ...mapActions('user', [
@@ -62,13 +71,13 @@ export default {
     ]),
     //点击叉号清空输入框内容
     deletcontent() {
-      this.TreuNameModel = ''
+      this.treuNameModel = ''
     },
     onSaveHandle() {
       // 修改真实姓名
       const params = {
-        userId:this.userInfo,
-        trueName: this.TreuNameModel
+        userId:this.userId,
+        trueName: this.treuNameModel
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
@@ -77,9 +86,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
-          setTimeout(() => {
-            this.$router.push('/personal-info')
-          }, 2000)
+           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
@@ -98,7 +105,7 @@ export default {
       })
     },
     changeInput() {
-      if (this.TreuNameModel) {
+      if (this.treuNameModel) {
         this.accomplishStatus = true
       } else {
         this.accomplishStatus = false

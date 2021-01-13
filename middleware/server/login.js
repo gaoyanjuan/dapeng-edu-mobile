@@ -35,21 +35,31 @@ export default function (req, res, next) {
 
     //3.设置cookie: https://www.npmjs.com/package/cookie
     if (process.env.MODE === 'dev') {
-      res.setHeader('Set-Cookie', cookie.serialize(tokenName, decodedData.jti, {
-        httpOnly: true,
-        expires: new Date(decodedData.exp * 1000),
-        path: '/'
-      }))
+      res.setHeader('Set-Cookie', [
+        cookie.serialize(tokenName, decodedData.jti, {
+          httpOnly: true,
+          expires: new Date(decodedData.exp * 1000),
+          path: '/'
+        }),
+        cookie.serialize('redirect_url', '', { expires: new Date() }),
+        cookie.serialize('isLogin', true)
+      ])
     } else {
-      res.setHeader('Set-Cookie', cookie.serialize(tokenName, decodedData.jti, {
-        httpOnly: true,
-        expires: new Date(decodedData.exp * 1000),
-        path: '/',
-        domain: '.dapengjiaoyu.cn'
-      }))
+      res.setHeader('Set-Cookie', [
+        cookie.serialize(tokenName, decodedData.jti, {
+          httpOnly: true,
+          expires: new Date(decodedData.exp * 1000),
+          path: '/',
+          domain: '.dapengjiaoyu.cn'
+        }),
+        cookie.serialize('redirect_url', '', { expires: new Date() }),
+        cookie.serialize('isLogin', true)
+      ])
     }
+    const cookies = cookie.parse(req.headers.cookie || '')
+    const redirectUrl = cookies.redirect_url
     res.statusCode = 302
-    res.setHeader('Location', '/callback')
+    res.setHeader('Location', redirectUrl || '/')
     res.end()
     return
   }).catch((error) => {
