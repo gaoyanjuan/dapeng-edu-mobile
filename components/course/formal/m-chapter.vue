@@ -41,7 +41,7 @@ export default {
   methods:{
     enterLiveRoom() {
       if(this.chapter.liveStatus === 'UNSTART') {
-        let time = this.formatTime(chapter.startTime)
+        let time = this.formatTime(this.chapter.startTime)
         this.$toast(`直播开始时间：${time}`)
 
       } else if (this.chapter.liveStatus === 'FINISH') {
