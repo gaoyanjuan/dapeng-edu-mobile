@@ -221,23 +221,22 @@ export default {
         commit: true
       })
       .then(({status, data}) => {
-        if (status === 201) {
-          this.commentFlag = true
-          this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk && data.id) {
-            this.$toast('评论成功')
-            this.changeCommentCount(this.detailsGetters.commentCount + 1)
-            this.$store.commit(`${this.functionName}`, {
-              index: this.$store.state.propIndex,
-              type: 'comment',
-              value: 1
-            })
-          }
-        } else {
-          this.commentFlag = true
-          if (data && data.message) {
-            this.$toast(data.message)
-          }
+        this.commentFlag = true
+        this.$refs.commentPopup.resetPopup()
+        if (!data.highRisk && data.id) {
+          this.$toast('评论成功')
+          this.changeCommentCount(this.detailsGetters.commentCount + 1)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'comment',
+            value: 1
+          })
+        }
+      })
+      .catch((error) => {
+        this.commentFlag = true
+        if (error && error.data && error.data.message) {
+          this.$toast(error.data.message)
         }
       })
     }
