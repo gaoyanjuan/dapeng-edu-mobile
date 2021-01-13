@@ -1,10 +1,16 @@
 const filters = require('./server-filters')
 
 function successLog (params) {
+  if (process.browser) {
+    return
+  }
   console.log(filters.logDate(new Date()), params.config.url, params.status)
 }
 
 function errorLog (params) {
+  if (process.browser) {
+    return
+  }
   if (params) {
     if (params.response) {
       console.error(filters.logDate(new Date()), params.config.url, params.response.status, params.response.data)
@@ -15,6 +21,9 @@ function errorLog (params) {
 }
 
 function middlewareLog (params, middleware='') {
+  if (process.browser) {
+    return
+  }
   console.log(filters.logDate(new Date()), middleware, params)
 }
 

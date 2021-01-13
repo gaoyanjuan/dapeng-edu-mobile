@@ -1,10 +1,13 @@
 
 import Vue from 'vue'
+import validateSystemHostName from '@/plugins/validate-system-hostname'
 
 function login() {
   if ($nuxt.$store.getters['user/userInfoGetters'] && $nuxt.$store.getters['user/userInfoGetters'].userId) {
     return true
   } else {
+    const host = validateSystemHostName().host
+    $nuxt.$cookiz.set('redirect_url', `${host}${$nuxt.$route.fullPath}`)
     const url = getLoginUrl()
     location.href= url
     return false
