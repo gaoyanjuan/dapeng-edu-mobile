@@ -95,10 +95,10 @@ export default {
       appendFormalChapters :'course/appendFormalChapters'
     }),
 
-    async initChapterStage() {
+    initChapterStage() {
       const params = {courseId:this.courseId}
 
-      await this.appendStages(params).then( res => {
+      this.appendStages(params).then( res => {
         if(res.data.liveStage.length === 0) {
           this.finishedTxt = ''
           this.finished = true
@@ -107,7 +107,6 @@ export default {
 
         this.liveStage = res.data.liveStage
         this.selected = res.data.liveStage[0]
-        this.getChapterList()
       })
     },
 
@@ -126,7 +125,6 @@ export default {
         this.finished = true
         return false
       }
-      
       if (this.chapters.status === 'loading') return false
       const newPage = this.chapters.pageInfo.pages + 1
       this.appendFormalChapters({ courseId: this.courseId, stageId: this.selected.id, page: newPage })
