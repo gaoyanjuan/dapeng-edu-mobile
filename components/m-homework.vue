@@ -21,6 +21,7 @@
             :listItemData="item"
             :path="navRoute"
             :propIndex="index"
+            pageName="homework"
           />
         </template>
         <template v-if="!homeworkListGetters.list.length && finished">

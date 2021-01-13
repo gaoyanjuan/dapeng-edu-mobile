@@ -41,7 +41,7 @@
     </div>
 
     <!-- comment 体验课不展示讲师评论 -->
-    <div class="works__comment" v-if="commentList && courseType && courseType !=='TEST'" @click.stop="">
+    <div class="works__comment" v-if="showComment" @click.stop="">
       <m-teacher-audio
         :teacherName="commentList.user ? commentList.user.nickname : ''"
         :teacherType="courseType"
@@ -301,6 +301,25 @@ export default {
     },
     functionName () {
       return this.$getFunctionName(this.listType)
+    },
+    showComment() {
+      if(this.commentList && this.courseType && this.courseType !=='TEST') {
+        return true
+      }else if(this.commentList && this.courseType && this.courseType ==='TEST') {
+        if(!this.userinfo || !this.userinfo.userId) {
+          return false
+        }
+        if(this.pageName === 'homework' || this.pageName === 'requirement') {
+          if(this.userinfo && this.userinfo.userId && this.userinfo.userId === this.listItemData.user.userId) {
+            return true
+          }else {
+            return false
+          }
+        }else {
+          return true
+        }
+        
+      }
     }
   },
   created () {
