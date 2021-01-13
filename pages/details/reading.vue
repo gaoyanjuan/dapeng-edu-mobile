@@ -59,6 +59,11 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'P-Reading-Details',
   layout:'navbar',
+  head () {
+    return {
+      title: '阅读详情-大鹏教育-千万人的兴趣学习社区',
+    }
+  },
   data:() => ({
     showMenusPopup: false,
     deleteDialogParams: {
