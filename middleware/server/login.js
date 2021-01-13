@@ -59,7 +59,7 @@ export default function (req, res, next) {
     const cookies = cookie.parse(req.headers.cookie || '')
     const redirectUrl = cookies.redirect_url
     res.statusCode = 302
-    res.setHeader('Location', redirectUrl)
+    res.setHeader('Location', redirectUrl || '/')
     res.end()
     return
   }).catch((error) => {

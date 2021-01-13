@@ -397,26 +397,25 @@ export default {
         }
       })
       .then(({status, data}) => {
-        if (status === 201) {
-          this.commentFlag = true
-          this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk && data.id) {
-            this.$toast('评论成功')
-            if (this.$isSave(this.$route.name)) {
-              this.$store.commit(`${this.functionName}`, {
-                index: this.propIndex,
-                type: 'comment',
-                value: 1
-              })
-            }  else {
-              this.popCommentCount += 1
-            }
+        this.commentFlag = true
+        this.$refs.commentPopup.resetPopup()
+        if (!data.highRisk && data.id) {
+          this.$toast('评论成功')
+          if (this.$isSave(this.$route.name)) {
+            this.$store.commit(`${this.functionName}`, {
+              index: this.propIndex,
+              type: 'comment',
+              value: 1
+            })
+          }  else {
+            this.popCommentCount += 1
           }
-        } else {
-          this.commentFlag = true
-          if (data && data.message) {
-            this.$toast(data.message)
-          }
+        }
+      })
+      .catch((error) => {
+        this.commentFlag = true
+        if (error && error.data && error.data.message) {
+          this.$toast(error.data.message)
         }
       })
     },

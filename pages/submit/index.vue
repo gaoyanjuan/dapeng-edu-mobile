@@ -590,11 +590,10 @@ export default {
     /** 作业提交成功，检查是否存在顾问 */
     getCounselor() {
       this.getZcAdviser( this.requirement.college.id).then( res => {
-        if(res.status === 409) {
-          this.homeworkNumberPop.show = true
-        } else {
-          this.sucessToast('homework')
-        }
+        this.sucessToast('homework')
+      })
+      .catch(() => {
+        this.homeworkNumberPop.show = true
       })
     },
 
