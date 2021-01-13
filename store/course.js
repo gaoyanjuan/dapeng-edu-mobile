@@ -17,7 +17,12 @@ export default {
       // 课程详情
       courseDetail: null,
       // 正式学院列表
-      formalCollegeList:[]
+      formalCollegeList: [],
+      // 可看期列表
+      stage: {
+        liveStage: [],
+        playbackStage: []
+      }
     }
   },
 
@@ -53,6 +58,10 @@ export default {
         element.name = element.name.replace(/学院/, '')
       })
       state.formalCollegeList = payload
+    },
+    addStages(state, payload) {
+      state.stage.liveStage = payload.liveStage
+      state.stage.playbackStage = payload.playbackStage
     }
   },
 
@@ -90,6 +99,17 @@ export default {
       const res = await this.$axios.get(`old/courses/college`)
       commit('addFormalCollegeList', res.data)
       return res
+    },
+
+    // 查询用户可看期
+    async appendStages({ commit }, params) {
+      const res = await this.$axios.get(`old/courses/stages`, {
+        params: {
+          ...params
+        }
+      })
+      commit('addStages', res.data)
+      return res
     }
   },
 
@@ -105,6 +125,12 @@ export default {
     },
     formalCollegeListGetters(state) { 
       return state.formalCollegeList
+    },
+    liveStageGetters(state) { 
+      return state.stage.liveStage
+    },
+    playbackStageGetters(state) { 
+      return state.stage.playbackStage
     }
   }
 }

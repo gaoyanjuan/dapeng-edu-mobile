@@ -97,9 +97,6 @@ export default {
       vm.fromRouteName = from.name
     })
   },
-  created () {
-    this.$login()
-  },
   methods: {
     ...mapActions('user', [
       'queryUserData',
@@ -179,6 +176,7 @@ export default {
     }
   },
   mounted() {
+    this.$login()
     // 判断我的或TA的个人主页是否显示关注按钮以及用户信息的赋值
     if (this.$route.query.userId === this.userInfoGetters.userId) {
       if (this.userInfoGetters.introduction) {

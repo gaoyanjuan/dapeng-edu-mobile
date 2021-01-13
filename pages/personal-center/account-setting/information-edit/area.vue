@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 import areaList from '@/assets/emotion/area'
 export default {
   layout:'navbar',
@@ -66,21 +66,32 @@ export default {
       /** 描述框大小*/
       autosize: { maxHeight: 100, minHeight: 100},
       // 完成的状态
-      accomplishStatus:false
+      accomplishStatus:false,
+      userId: ''
     }
   },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     maxCount() {
       return 60
     }
   },
    mounted() {
+    this.$login()
     // 获取用户信息
-    this.getUserDetails().then((res)=> {
-      this.addressArea = res.data.address
-      this.familyAddress = res.data.familyAddress
-      this.userInfo = res.data.userId
-    })
+    if (this.userInfoGetters.address) {
+      this.addressArea = this.userInfoGetters.address
+      this.familyAddress = this.userInfoGetters.familyAddress
+      this.userId = this.userInfoGetters.userId
+    } else {
+      this.getUserDetails().then((res)=> {
+        this.addressArea = res.data.address
+        this.familyAddress = res.data.familyAddress
+        this.userId = res.data.userId
+      })
+    }
   },
   methods: {
     ...mapActions('user', [
@@ -137,7 +148,7 @@ export default {
         return
       }
       const params = {
-        userId:this.userInfo,
+        userId:this.userId,
         address: this.addressArea,
         familyAddress: this.familyAddress
       }
@@ -148,9 +159,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
-          setTimeout(() => {
-            this.$router.push('/personal-info')
-          }, 2000)
+          this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {

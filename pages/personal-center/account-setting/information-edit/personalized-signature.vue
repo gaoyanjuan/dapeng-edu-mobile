@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions,mapGetters } from 'vuex'
 export default {
   layout:'navbar',
   data() {
@@ -42,20 +42,30 @@ export default {
       /** 描述框大小*/
       autosize: { maxHeight: 50, minHeight: 50},
       /** 头部完成的状态*/
-      accomplishStatus:false
+      accomplishStatus:false,
+      userId: ''
     }
   },
   computed: {
+    ...mapGetters('user', [
+      'userInfoGetters'
+    ]),
     maxCount() {
       return 30
     }
   },
   mounted() {
-    // 获取用户名
-    this.getUserDetails().then((res)=> {
-      this.introduction = res.data.introduction
-      this.userInfo = res.data.userId
-    })
+    this.$login()
+    // 获取个性签名
+    if (this.userInfoGetters.introduction) {
+      this.introduction = this.userInfoGetters.introduction
+      this.userId = this.userInfoGetters.userId
+    } else {
+      this.getUserDetails().then((res)=> {
+        this.introduction = res.data.introduction
+        this.userId = res.data.userId
+      })
+    }
   },
   methods: {
     ...mapActions('user', [
@@ -87,7 +97,7 @@ export default {
     // 点击完成
     onSaveHandle() {
       const params = {
-        userId:this.userInfo,
+        userId:this.userId,
         introduction: this.introduction
       }
       this.editUserInfo(params).then(res=> {
@@ -97,9 +107,7 @@ export default {
             position: 'bottom',
             duration: 2000
           })
-          setTimeout(() => {
-            this.$router.push('/personal-info')
-          }, 2000)
+          this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
