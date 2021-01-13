@@ -17,6 +17,8 @@ export const state = () => ({
   videoBannerList: [],
   // MOVIE | 长视频
   movieBannerList: [],
+  // 广告占位图
+  advertisBanner:[]
 })
 
 export const mutations = {
@@ -49,6 +51,9 @@ export const mutations = {
     if (payload.type === 'MOVIE') {
       state.movieBannerList = payload.data.data
     }
+  },
+  appendAdverList(state, res) {
+    state.advertisBanner= res
   }
 }
 
@@ -78,7 +83,10 @@ export const actions = {
         terminalType: 'H5',
       }
     })
-    return res
+    console.log(res);
+    commit('appendAdverList', {
+      data: res.data,
+    })
   }
 }
 
@@ -109,5 +117,8 @@ export const getters = {
   },
   movieBannerListGetters(state) {
     return state.movieBannerList
+  },
+ adverBannerListGetters(state) {
+    return state.advertisBanner
   },
 }

@@ -82,9 +82,9 @@ export default {
             duration: 2000,
           })
         }
-        setTimeout(() => {
-          this.$router.push({ path: "./help-feedback" })
-        }, 1000)
+        // setTimeout(() => {
+        //   this.$router.push({ path: "./help-feedback" })
+        // }, 1000)
       })
     }
   }
