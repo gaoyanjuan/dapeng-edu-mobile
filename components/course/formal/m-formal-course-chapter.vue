@@ -35,7 +35,7 @@ export default {
 <style lang="less" scoped>
 .m-vip-chapter-wrapper {
   width: 375px;
-  height: 100vh;
+  min-height: 100vh;
   background: #F8F8F8;
 }
 
