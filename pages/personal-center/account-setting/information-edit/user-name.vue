@@ -36,11 +36,9 @@ export default {
     return {
       userNameModel: '',
       /** 头部完成的状态*/
-      accomplishStatus:false
+      accomplishStatus:false,
+      userId: ''
     }
-  },
-  created () {
-    this.$login()
   },
   computed: {
     ...mapGetters('user', [
@@ -55,10 +53,11 @@ export default {
     }
   },
   mounted() {
+    this.$login()
     // 获取用户名
     if (this.userInfoGetters.loginName) {
       this.userNameModel = this.userInfoGetters.loginName
-      this.userInfo = this.userInfoGetters.userId
+      this.userId = this.userInfoGetters.userId
     }
   },
   methods: {
@@ -82,7 +81,7 @@ export default {
       }
       const userinfo = this.$cookiz.get('userinfo')
       const params = {
-        userId:this.userInfo,
+        userId:this.userId,
         loginName: this.userNameModel
       }
       this.editUserInfo(params).then(res=> {

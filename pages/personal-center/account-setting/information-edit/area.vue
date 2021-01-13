@@ -66,11 +66,9 @@ export default {
       /** 描述框大小*/
       autosize: { maxHeight: 100, minHeight: 100},
       // 完成的状态
-      accomplishStatus:false
+      accomplishStatus:false,
+      userId: ''
     }
-  },
-  created () {
-    this.$login()
   },
   computed: {
     ...mapGetters('user', [
@@ -81,16 +79,17 @@ export default {
     }
   },
    mounted() {
+    this.$login()
     // 获取用户信息
     if (this.userInfoGetters.address) {
       this.addressArea = this.userInfoGetters.address
       this.familyAddress = this.userInfoGetters.familyAddress
-      this.userInfo = this.userInfoGetters.userId
+      this.userId = this.userInfoGetters.userId
     } else {
       this.getUserDetails().then((res)=> {
         this.addressArea = res.data.address
         this.familyAddress = res.data.familyAddress
-        this.userInfo = res.data.userId
+        this.userId = res.data.userId
       })
     }
   },
@@ -149,7 +148,7 @@ export default {
         return
       }
       const params = {
-        userId:this.userInfo,
+        userId:this.userId,
         address: this.addressArea,
         familyAddress: this.familyAddress
       }

@@ -36,11 +36,8 @@ export default {
     return {
       treuNameModel: '',
       accomplishStatus:false,
-      userInfo: ''
+      userId: ''
     }
-  },
-  created () {
-    this.$login()
   },
   computed: {
     ...mapGetters('user', [
@@ -55,14 +52,15 @@ export default {
     }
   },
   mounted() {
+    this.$login()
     // 获取用户真实姓名
     if (this.userInfoGetters.trueName) {
       this.treuNameModel = this.userInfoGetters.trueName
-      this.userInfo = this.userInfoGetters.userId
+      this.userId = this.userInfoGetters.userId
     } else {
       this.getUserDetails().then((res)=> {
         this.treuNameModel = res.data.trueName
-        this.userInfo = res.data.userId
+        this.userId = res.data.userId
       })
     }
   },
@@ -78,7 +76,7 @@ export default {
     onSaveHandle() {
       // 修改真实姓名
       const params = {
-        userId:this.userInfo,
+        userId:this.userId,
         trueName: this.treuNameModel
       }
       this.editUserInfo(params).then(res=> {
