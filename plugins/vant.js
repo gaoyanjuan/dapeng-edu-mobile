@@ -6,6 +6,7 @@ import {
   List,
   NavBar,
   Empty,
+  Picker,
   Popup,
   ActionSheet,
   Tab,
@@ -35,6 +36,7 @@ Vue.use(Button)
   .use(Tabbar)
   .use(TabbarItem)
   .use(List)
+  .use(Picker)
   .use(NavBar)
   .use(Empty)
   .use(Popup)

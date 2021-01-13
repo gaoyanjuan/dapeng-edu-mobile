@@ -17,15 +17,6 @@ export default {
     show: false,
   }),
   mounted() {
-    this.$cookiz.remove("access_token_t");
-    this.$cookiz.remove("access_token_t", {
-      path: "/",
-      domain: ".dapengjiaoyu.cn",
-    });
-    this.$cookiz.remove("access_token", {
-      path: "/",
-      domain: ".dapengjiaoyu.cn",
-    });
      if( this.$store.getters["banner/adverBannerListGetters"] !== "" &&
       this.$store.getters["banner/adverBannerListGetters"] !== null) {
       this.appendAdverList();

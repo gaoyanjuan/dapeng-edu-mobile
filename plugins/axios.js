@@ -1,8 +1,7 @@
-import { getcookiesInServer } from '@/utils/cookie-tool'
 import validateSystemHostName from '@/plugins/validate-system-hostname'
 import filter from './filters'
 import { Dialog } from 'vant'
-const btoa = require('btoa')
+const log = require('../utils/log-utils')
 const HttpAgent = require('agentkeepalive')
 const HttpsAgent = require('agentkeepalive').HttpsAgent
 import checkLogin  from '../plugins/check-login'
@@ -23,14 +22,6 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
   $axios.defaults.timeout = 20000
 
   $axios.interceptors.request.use(config => {
-    if (config.url.startsWith('/token')) {
-      const clientData = `${validateSystemHostName().client_id}:${validateSystemHostName().client_secret}`
-      config.headers.Authorization = `Basic ${btoa(clientData)}`
-    } else if ($cookiz.get(process.env.TOKEN_NAME)) {
-      config.headers.Authorization = `Bearer ${$cookiz.get(process.env.TOKEN_NAME)}`
-    } else if (getcookiesInServer(req)[process.env.TOKEN_NAME]) {
-      config.headers.Authorization = `Bearer ${getcookiesInServer(req)[process.env.TOKEN_NAME]}`
-    }
     return config
   })
 
@@ -43,9 +34,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
         pages: parseInt(response.headers['x-pagination-pages']) || 1,
         size: parseInt(response.headers['x-pagination-size']) || process.env.global.pageSize
       }
-      if (!process.browser) {
-        console.log(filter.formatDate(new Date()), response.config.url, response.status)
-      }
+      log.successLog(response)
       // 请求接口数据正常，返回数据
       return response
     },
@@ -56,19 +45,13 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
         }
         return error
       }
-      if (!process.browser) {
-        if (error) {
-          if (error.response) {
-            console.error(filter.formatDate(new Date()), error.config.url, error.response.status, error.response.data)
-          } else {
-            console.error(filter.formatDate(new Date()), error.config.url, error)
-          }
-        }
-      }
+
+      log.errorLog(error)
+
       if (!error || !error.response) {
         return error
       }
-      if (error.response.status == 401 && $cookiz.get(process.env.TOKEN_NAME)) {
+      if (error.response.status == 401 && store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
         // 用户有登录状态,但是被其他人顶掉了
         if (error.response.data && error.response.data.state === 1001) {
           removeToken(store, $axios, $cookiz)
@@ -90,7 +73,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
         }
       } else if (error.response.status == 401) {
         // 用户cookie中已经没有token,但是页面上有存储的用户信息(cookie在浏览器中自然失效)
-        if (!$cookiz.get(process.env.TOKEN_NAME) && store.getters['user/userInfoGetters']) {
+        if (store.getters['user/userInfoGetters']) {
           removeToken(store, $axios, $cookiz)
           if (process.browser) {
             login({ message: '登录失效' }, redirect)
@@ -105,7 +88,6 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
           location.reload()
           return
         } else {
-          // return error.response
           return Promise.reject(error.response)
         }
       }
