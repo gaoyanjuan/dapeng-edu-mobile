@@ -5,7 +5,7 @@
       <div class="app_wrap">
         <Nuxt />
       </div>
-      <m-footer/>
+      <m-footer />
     </div>
     <div class="off-line-wrap" v-if="$nuxt.isOffline">
       <span class="off-line-txt"> 您的网络已断开 </span>
@@ -15,20 +15,30 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
-  data:() => ({
+  data: () => ({
     show: false,
   }),
   mounted() {
-    /*** 
+    if (this.$store.getters["banner/adverBannerListGetters"] === "" &&
+      this.$store.getters["banner/adverBannerListGetters"] === null) {
+    return
+    }else {
+        this.appendAdverList();
+    }
+    /***
      * 【刷新或者首次加载】
      * 等待文档树渲染完毕后，再放开显示
-    */
+     */
     this.$nextTick(() => {
-      this.show = true
-    })
-  }
-}
+      this.show = true;
+    });
+  },
+  methods: {
+    ...mapActions("banner", ["appendAdverList"]),
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -50,7 +60,7 @@ export default {
   font-size: 14px;
   font-family: @regular;
   font-weight: 400;
-  color: #747C80;
+  color: #747c80;
   line-height: 26px;
 }
 
