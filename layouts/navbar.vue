@@ -17,9 +17,11 @@ export default {
     show: false,
   }),
   mounted() {
-     if( this.$store.getters["banner/adverBannerListGetters"] !== "" &&
-      this.$store.getters["banner/adverBannerListGetters"] !== null) {
-      this.appendAdverList();
+   if (this.$store.getters["banner/adverBannerListGetters"] === "" &&
+      this.$store.getters["banner/adverBannerListGetters"] === null) {
+    return
+    }else {
+        this.appendAdverList();
     }
 
     /***
