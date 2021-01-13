@@ -150,6 +150,7 @@ export default {
         accessKeySecret: accessKeySecret,
         stsToken: securityToken
       }
+      const userinfo = this.$cookiz.get('userinfo')
       const fileName = this.generateFileName(file)
       const render = new FileReader()
       render.readAsDataURL(file.file)
@@ -160,6 +161,10 @@ export default {
             this.userInfo.avatar = res.requestUrls[0]
             this.updateInfo('avatar', res.requestUrls[0])
             this.$store.commit('setUserAvatar', res.requestUrls[0])
+            userinfo.avatar = res.requestUrls[0]
+            this.$cookiz.set('userinfo',userinfo, {
+              path: '/'
+            })
             this.$toast({
               message: `上传成功`,
               position: 'bottom',
