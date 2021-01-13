@@ -106,7 +106,7 @@
     <!-- 广告站位图 -->
     <div class="advertising-picture">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item v-for="(item, index) in advertisBanner" :key="index">
+        <van-swipe-item v-for="(item, index) in adverBannerListGetters.data" :key="index">
           <a :href="item.url" target="_blank">
             <img :src="item.imgInfo" :alt="item.name" />
           </a>
@@ -133,7 +133,7 @@
       v-if="userInfoGetters"
       class="mine-app-logout-wrap"
       @click="onLogoutEvent"
-    >
+    >  
       退出登录
     </div>
 
@@ -196,10 +196,7 @@ export default {
         icon: require("@/assets/icons/mine/icon-download.png"),
       },
     ],
-    advertisBanner: [
-      require("@/assets/icons/mine/personal-homepage-bg.png"),
-      require("@/assets/icons/mine/personal-homepage-bg.png"),
-    ],
+    advertisBanner: [],
   }),
   mounted() {
     if (this.userInfoGetters && this.userInfoGetters.userId) {
@@ -208,16 +205,14 @@ export default {
         !this.userInfoGetters.loginName ||
         !this.userInfoGetters.nickname
       ) {
-        this.getUserDetails();
+        this.getUserDetails()
       }
       this.appendUserTrends({ userId: this.userInfoGetters.userId });
-    }
-    this.appendAdverList().then((res) => {
-      this.advertisBanner = res.data;
-    });
+    }  
   },
   computed: {
     ...mapGetters("user", ["userInfoGetters", "userTrendsGetters"]),
+     ...mapGetters("banner", ["adverBannerListGetters"]),
   },
   methods:{
     ...mapActions('user', [
@@ -225,13 +220,12 @@ export default {
       'getUserDetails',
       'userMainStationToken'
     ]),
-    ...mapActions("banner", ["appendAdverList"]),
     // 打开我的喜欢弹框
     openLovePopup() {
       if (!this.$login()) {
-        return;
+        return
       }
-      this.lovePopup.show = true;
+      this.lovePopup.show = true
     },
 
     // 退出登录
@@ -252,7 +246,7 @@ export default {
 
     // 跳转注册页
     toRegister() {
-      this.$router.push("/register");
+      this.$router.push("/register")
     },
     // 进入我的喜欢、收藏等页面跳转
     onNavGroupItem(params) {
@@ -529,6 +523,7 @@ export default {
         width: 343px;
         height: 76px;
         border-radius: 10px;
+        object-fit:cover;
       }
     }
   }

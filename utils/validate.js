@@ -38,7 +38,7 @@ export function validateMobileCode (mobile) {
 
 // 校验是否为空
 export function validateEmpty (val) {
-  if (val instanceof Array) {
+  if (val instanceof Array) { 
     if (val.length === 0) return true
   } else if (val instanceof Object) {
     if (JSON.stringify(val) === '{}') return true
