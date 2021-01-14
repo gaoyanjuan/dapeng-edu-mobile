@@ -36,6 +36,21 @@ export default {
           size: 10
         }
       },
+      // 正式课-录播课章节列表
+      formalRecordChapters: {
+        list: [],
+        info: {
+          chapterNumber: 0,
+          nodeNumber: 0
+        },
+        status: 'loading',
+        pageInfo: {
+          count: 0,
+          number: 0,
+          pages: 1,
+          size: 10
+        }
+      },
       // 课程详情
       courseDetail: null,
       // 正式学院列表
@@ -120,6 +135,26 @@ export default {
     changePlaybackChapterStatus (state, payload) {
       state.formalPlaybackChapters.status = payload
     },
+
+    appendRecordChaptersList(state, payload) {
+      state.formalRecordChapters.info.chapterNumber = payload.data.chapterNumber
+      state.formalRecordChapters.info.nodeNumber = payload.data.nodeNumber
+      state.formalRecordChapters.list = state.formalRecordChapters.list.concat(payload.data.courseVodContents)
+      state.formalRecordChapters.pageInfo = payload.pageInfo
+      if (payload.data.courseVodContents.length < state.formalRecordChapters.pageInfo.size) {
+        state.formalRecordChapters.status = 'over'
+      } else {
+        state.formalRecordChapters.status = 'load'
+      }
+    },
+    clearRecordChapter (state) {
+      state.formalRecordChapters.list = []
+      state.formalRecordChapters.pageInfo.pages = 1
+      state.formalRecordChapters.status = 'loading'
+    },
+    changeRecordChapterStatus (state, payload) {
+      state.formalRecordChapters.status = payload
+    },
   },
 
   actions: {
@@ -198,6 +233,19 @@ export default {
       commit('appendPlaybackChaptersList', { data: res.data, pageInfo })
       return res
     },
+
+    // 查询录播课章节列表
+    async appendRecordChapters({ commit }, params) {
+      commit('changeRecordChapterStatus', 'loading')
+      const res = await this.$axios.get(`old/courses/${params.courseId}/vods`, {
+        params: {
+          page: params.page
+        }
+      })
+      const pageInfo = { pages: params.page, size: 10 }
+      commit('appendRecordChaptersList', { data: res.data, pageInfo })
+      return res
+    }
   },
 
   getters: {
@@ -224,6 +272,9 @@ export default {
     },
     playbackChaptersGetters(state) { 
       return state.formalPlaybackChapters
-    }
+    },
+    recordChaptersGetters(state) { 
+      return state.formalRecordChapters
+    },
   }
 }
