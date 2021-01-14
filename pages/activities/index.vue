@@ -8,6 +8,11 @@
 import { mapActions } from 'vuex'
 export default {
   name:'activities',
+  head () {
+    return {
+      title: '活动-大鹏教育-千万人的兴趣学习社区',
+    }
+  },
   async asyncData ({route, store, error}) {
     if (process.browser) return {
       isServiceload: false
