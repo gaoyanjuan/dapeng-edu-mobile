@@ -35,6 +35,7 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
         size: parseInt(response.headers['x-pagination-size']) || process.env.global.pageSize
       }
       log.successLog(response)
+      
       // 请求接口数据正常，返回数据
       return response
     },
@@ -54,28 +55,28 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
       if (error.response.status == 401 && store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
         // 用户有登录状态,但是被其他人顶掉了
         if (error.response.data && error.response.data.state === 1001) {
-          removeToken(store, $axios, $cookiz)
           if (process.browser) {
+            removeToken(store, $axios, $cookiz)
             login({ message: '该账号已在其他同类设备登录，如非本人操作，则密码可能已经被泄露，建议立即更换密码' }, redirect)
           }
           // 用户有登录状态,但是refresh_token已经失效
         } else if (error.response.data && error.response.data.error === 'invalid_token') {
-          removeToken(store, $axios, $cookiz)
           if (process.browser) {
+            removeToken(store, $axios, $cookiz)
             login({ message: '登录失效' }, redirect)
           }
         } else {
            // 用户有登录状态,access_token已经失效
-          removeToken(store, $axios, $cookiz)
           if (process.browser) {
+            removeToken(store, $axios, $cookiz)
             login({ message: '登录失效' }, redirect)
           }
         }
       } else if (error.response.status == 401) {
         // 用户cookie中已经没有token,但是页面上有存储的用户信息(cookie在浏览器中自然失效)
         if (store.getters['user/userInfoGetters']) {
-          removeToken(store, $axios, $cookiz)
           if (process.browser) {
+            removeToken(store, $axios, $cookiz)
             login({ message: '登录失效' }, redirect)
           }
         }

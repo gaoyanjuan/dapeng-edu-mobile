@@ -12,7 +12,7 @@ function errorLog (params) {
     return
   }
   if (params) {
-    if (params.response) {
+    if (params.response && params.config) {
       console.error(filters.logDate(new Date()), params.config.url, params.response.status, params.response.data)
     } else {
       console.error(filters.logDate(new Date()), params.config.url, params)
