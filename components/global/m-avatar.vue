@@ -125,7 +125,9 @@ export default {
     },
     showMySubmit() {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      return this.userInfo && this.userInfo.userId === currentUserId && this.pageName === 'requirement'
+      let flag = this.userInfo && this.userInfo.userId === currentUserId && (this.pageName === 'requirement' || this.pageName === 'homework')
+      // return this.userInfo && this.userInfo.userId === currentUserId && this.pageName === 'requirement'
+      return flag
     },
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)
