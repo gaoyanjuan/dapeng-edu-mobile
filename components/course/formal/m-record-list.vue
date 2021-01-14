@@ -2,7 +2,7 @@
   <div class="m-record-list-wrapper">
     
     <!-- 课程章节信息 -->
-    <van-sticky offset-top="2.24rem">
+    <van-sticky offset-top="2.24rem" v-if="chapters">
       <div class="record-list-header">总共{{ chapters.info.chapterNumber }}章·{{ chapters.info.nodeNumber }}节课 </div>
     </van-sticky>
 
@@ -76,13 +76,13 @@ export default {
       appendRecordChapters :'course/appendRecordChapters'
     }),
 
-    async initRecordPage() {
+    initRecordPage() {
       const params = {
         page: 1,
         courseId:this.courseId
       }
 
-      await this.appendRecordChapters(params)
+      this.appendRecordChapters(params)
     },
 
     onLoad() {
