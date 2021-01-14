@@ -369,7 +369,7 @@ export default {
     async myOrder() {
       if (!this.$login()) return
       const res = await this.userMainStationToken()
-      window.location.href = `${process.env.mOrderUrl}?token=${res.data.data}&source=1`
+      window.location.href = `${process.env.mOrderUrl}?token=${res.data.data}&source=4`
     }
   }
 }
