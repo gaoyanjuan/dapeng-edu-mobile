@@ -36,19 +36,12 @@ export default {
     }
   },
   mounted () {
-    if (process.env.mode === 'development') {
-      this.$cookiz.remove(process.env.TOKEN_NAME)
-    } else {
-      this.$cookiz.remove(process.env.TOKEN_NAME, {
-        path: '/',
-        domain: '.dapengjiaoyu.cn'
+    this.$axios.get('/logout').then(() => {
+      this.$cookiz.remove('userinfo', {
+        path: '/'
       })
-      this.$cookiz.remove(process.env.TOKEN_NAME)
-    }
-    this.$cookiz.remove('userinfo', {
-      path: '/'
+      this.$store.commit('user/appendUserInfo', null)
     })
-    this.$store.commit('user/appendUserInfo', null)
     if (this.$route.query.type === 'failure') {
       this.content = '登录失效'
     } else if (this.$route.query.type === 'displacement') {

@@ -19,6 +19,7 @@ export default function (req, res, next) {
 
   //获取url中code
   const code = url.parse(req.url, true).query.code
+  const state = url.parse(req.url, true).query.state
   const host = req.headers.host
 
   //1.根据code获取认证数据(数据模拟)
@@ -42,7 +43,8 @@ export default function (req, res, next) {
           path: '/'
         }),
         cookie.serialize('redirect_url', '', { expires: new Date() }),
-        cookie.serialize('isLogin', true)
+        cookie.serialize('isLogin', true),
+        cookie.serialize('matomo', state)
       ])
     } else {
       res.setHeader('Set-Cookie', [
@@ -53,7 +55,8 @@ export default function (req, res, next) {
           domain: '.dapengjiaoyu.cn'
         }),
         cookie.serialize('redirect_url', '', { expires: new Date() }),
-        cookie.serialize('isLogin', true)
+        cookie.serialize('isLogin', true),
+        cookie.serialize('matomo', state)
       ])
     }
     const cookies = cookie.parse(req.headers.cookie || '')
