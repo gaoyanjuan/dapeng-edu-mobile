@@ -29,7 +29,9 @@ import {
   CellGroup,
   Checkbox,
   Area,
-  Tag
+  Tag,
+  Collapse,
+  CollapseItem,
 } from 'vant'
 
 Vue.use(Button)
@@ -61,6 +63,8 @@ Vue.use(Button)
   .use(Checkbox)
   .use(Area)
   .use(Tag)
+  .use(Collapse)
+  .use(CollapseItem)
   .use(Lazyload, {
     // 懒加载默认图片
     loading: require('@/assets/icons/common/photos-bg.png')

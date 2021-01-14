@@ -36,7 +36,7 @@ export default {
 .m-vip-chapter-wrapper {
   width: 375px;
   min-height: 100vh;
-  background: #F8F8F8;
+  background: @dp-white;
 }
 
 /deep/.van-tabs {
