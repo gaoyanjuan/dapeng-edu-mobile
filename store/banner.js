@@ -83,7 +83,6 @@ export const actions = {
         terminalType: 'H5',
       }
     })
-    console.log(res);
     commit('appendAdverList', {
       data: res.data,
     })

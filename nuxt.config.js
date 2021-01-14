@@ -44,7 +44,7 @@ export default {
       { property: 'og:title', content: '大鹏教育-千万人的兴趣学习社区' },
       { property: 'og:type', content: '大鹏教育、成人教育、兴趣培训、在线教育、国画、书法、美术、设计、手办、篆刻、短视频、播音、开发、吉他、0基础、培训机构、在线直播、才艺秀、商城、社区' },
       { property: 'og:url', content: 'http://www.dapengjiaoyu.cn/' },
-      { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/ijjctyun.png' },
+      { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/2021-01-14/jbez3emw/9004491950161_UEM=.jpg' },
       { property: 'og:description', content: '大鹏教育专注成人0基础才艺、兴趣线上培训，已有3000万用户选择这里。教学目标包含基础、进阶、拔高3大成长阶段，教学内容涵盖国画、美术、书法、设计、短视频、篆刻、手办、吉他、开发、播音等多个科目，直播互动式学习，让学员当堂课就能有所提升，产出完整作品。在大鹏兴趣学习社区，学员可以分享学习成果和生活动态，也能看直播，逛商城，玩转各项才艺，get老师同款画材工具。来大鹏教育，学我想学，找到生活的热情。' },
       { property: 'og:site_name', content: '大鹏教育职业技能培训' }
     ],
