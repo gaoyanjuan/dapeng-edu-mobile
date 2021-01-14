@@ -2,10 +2,12 @@
   <div class="m-living-wrapper">
 
     <!-- 当前选择期标题 -->
-    <div class="state-select-header" v-if="selected" @click="openStagePop">
-      <span class="stage-txt">{{selected.title}}（{{calcState()}}）</span>
-      <img v-if="this.liveStage.length > 1" class="icon-select" :src="select" alt="select"/>
-    </div>
+    <van-sticky offset-top="2.24rem">
+      <div class="state-select-header" v-if="selected" @click="openStagePop">
+        <span class="stage-txt">{{selected.title}}（{{calcState()}}）</span>
+        <img v-if="this.liveStage.length > 1" class="icon-select" :src="select" alt="select"/>
+      </div>
+    </van-sticky>
 
     <!-- 当前选择期下的章节列表 -->
     <div class="state-chapter-content">
@@ -198,14 +200,19 @@ export default {
   }
 }
 
-.state-chapter-content .chapter-blank-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.state-chapter-content {
+
+  padding-top: 40px;
+
+  .chapter-blank-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
 .chapter-blank-wrap {

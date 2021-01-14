@@ -14,8 +14,19 @@ export default {
       },
       // 体验课章节列表
       chaptersList: [],
-      // 正式课章节列表
+      // 正式课-直播章节列表
       formalChapters: {
+        list: [],
+        status: 'loading',
+        pageInfo: {
+          count: 0,
+          number: 0,
+          pages: 1,
+          size: 10
+        }
+      },
+      // 正式课-直播回放章节列表
+      formalPlaybackChapters: {
         list: [],
         status: 'loading',
         pageInfo: {
@@ -91,6 +102,24 @@ export default {
     changeFormalChapterStatus (state, payload) {
       state.formalChapters.status = payload
     },
+
+    appendPlaybackChaptersList(state, payload) {
+      state.formalPlaybackChapters.list = state.formalPlaybackChapters.list.concat(payload.data)
+      state.formalPlaybackChapters.pageInfo = payload.pageInfo
+      if (payload.data.length < state.formalPlaybackChapters.pageInfo.size) {
+        state.formalPlaybackChapters.status = 'over'
+      } else {
+        state.formalPlaybackChapters.status = 'load'
+      }
+    },
+    clearPlaybackChapter (state) {
+      state.formalPlaybackChapters.list = []
+      state.formalPlaybackChapters.pageInfo.pages = 1
+      state.formalPlaybackChapters.status = 'loading'
+    },
+    changePlaybackChapterStatus (state, payload) {
+      state.formalPlaybackChapters.status = payload
+    },
   },
 
   actions: {
@@ -140,7 +169,7 @@ export default {
       return res
     },
 
-    //查询期的章节列表
+    //查询期的直播课章节列表
     async appendFormalChapters({ commit }, params) {
       commit('changeFormalChapterStatus', 'loading')
       const res = await this.$axios.get(`old/courses/stages/${params.stageId}/chapters`, {
@@ -152,6 +181,21 @@ export default {
       })
       const pageInfo = { pages: params.page, size: 10 }
       commit('appendFormalChaptersList', { data: res.data, pageInfo })
+      return res
+    },
+
+    //查询期的直播回放章节列表
+    async appendPlaybackChapters({ commit }, params) {
+      commit('changePlaybackChapterStatus', 'loading')
+      const res = await this.$axios.get(`old/courses/stages/${params.stageId}/chapters`, {
+        params: {
+          size: 10,
+          page: params.page,
+          courseId: params.courseId
+        }
+      })
+      const pageInfo = { pages: params.page, size: 10 }
+      commit('appendPlaybackChaptersList', { data: res.data, pageInfo })
       return res
     },
   },
@@ -177,6 +221,9 @@ export default {
     },
     formalChaptersGetters(state) { 
       return state.formalChapters
+    },
+    playbackChaptersGetters(state) { 
+      return state.formalPlaybackChapters
     }
   }
 }
