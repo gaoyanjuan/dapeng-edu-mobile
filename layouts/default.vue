@@ -15,30 +15,40 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from "vuex"
 export default {
   data: () => ({
     show: false,
   }),
   mounted() {
-    if (this.$store.getters["banner/adverBannerListGetters"] === "" &&
-      this.$store.getters["banner/adverBannerListGetters"] === null) {
-    return
-    }else {
-        this.appendAdverList();
+    // ************* 登录埋点  Start*************
+    const matomo = this.$cookiz.get('matomo')
+    if (matomo && this.$store.getters['user/userInfoGetters']) {
+      this.$cookiz.remove('matomo')
+      const userId = this.$store.getters['user/userInfoGetters'].userId
+      this.$matomo.setUserId(userId)
+      let userData = {'user_id': userId, 'ztxx_dl_dlfs': matomo}
+      this.$matomo.setCustomVariable(1, 'ztxx#ztxx_dl', JSON.stringify(userData), 'page')
+      this.$matomo.trackPageView()
     }
+    // ************* 登录埋点 End*************
+
+    if (this.$store.getters["banner/adverBannerListGetters"].length === 0) {
+      this.appendAdverList()
+    }
+
     /***
      * 【刷新或者首次加载】
      * 等待文档树渲染完毕后，再放开显示
      */
     this.$nextTick(() => {
-      this.show = true;
+      this.show = true
     })
   },
   methods: {
     ...mapActions("banner", ["appendAdverList"])
-  },
-};
+  }
+}
 </script>
 
 <style lang="less" scoped>

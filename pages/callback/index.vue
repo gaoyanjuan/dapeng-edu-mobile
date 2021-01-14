@@ -13,8 +13,8 @@ export default {
   data:()=> ({
     state:'PASSWORD'
   }),
-  async asyncData ({ redirect, app: { $cookiz } }) {
-    if ($cookiz.get(process.env.TOKEN_NAME)) {
+  async asyncData ({ redirect, store, app: { $cookiz } }) {
+    if (store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
       redirect('/')
     }
   },

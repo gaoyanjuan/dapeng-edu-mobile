@@ -581,9 +581,7 @@ export default {
     },
     /** 进入详情 */
     toDetail () {
-      this.$cookiz.set('isLogin', false, {
-        path: '/'
-      })
+      this.$cookiz.remove('isLogin')
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,

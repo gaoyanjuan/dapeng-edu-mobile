@@ -136,9 +136,7 @@ export default {
       }
     },
     toDetail () {
-      this.$cookiz.set('isLogin', false, {
-        path: '/'
-      })
+      this.$cookiz.remove('isLogin')
       this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
       this.$store.commit('changeListData', {
         listType: this.listType,

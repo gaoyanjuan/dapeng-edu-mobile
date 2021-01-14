@@ -159,9 +159,8 @@ export default {
       }
     },
     toDetail() {
-      this.$cookiz.set('isLogin', false, {
-        path: '/'
-      })
+      this.$cookiz.remove('isLogin')
+
       this.$store.commit('changeListData', {
         listType: 'video',
         propIndex: this.propIndex,

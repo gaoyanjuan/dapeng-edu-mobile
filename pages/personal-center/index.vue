@@ -106,7 +106,7 @@
     <!-- 广告站位图 -->
     <div class="advertising-picture">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-        <van-swipe-item v-for="(item, index) in adverBannerListGetters.data" :key="index">
+        <van-swipe-item v-for="(item, index) in adverBannerListGetters" :key="index">
           <a :href="item.url" target="_blank">
             <img :src="item.imgInfo" :alt="item.name" />
           </a>

@@ -52,8 +52,10 @@ export const mutations = {
       state.movieBannerList = payload.data.data
     }
   },
-  appendAdverList(state, res) {
-    state.advertisBanner= res
+  appendAdverList(state, payload) {
+    if (payload && payload.data) {
+      state.advertisBanner = payload.data
+    }
   }
 }
 
@@ -83,9 +85,7 @@ export const actions = {
         terminalType: 'H5',
       }
     })
-    commit('appendAdverList', {
-      data: res.data,
-    })
+    commit('appendAdverList', res)
   }
 }
 
