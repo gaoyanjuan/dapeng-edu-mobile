@@ -105,6 +105,7 @@ export default {
   serverMiddleware: [
     { path: '/callback', handler: '~/middleware/server/login.js' },
     { path: '/api/logout', handler: '~/middleware/server/logout.js' },
+    { path: '/api/set-token', handler: '~/middleware/server/set-token.js' },
     '~/middleware/server/auth.js'
   ],
 

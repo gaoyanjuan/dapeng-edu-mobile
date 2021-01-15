@@ -35,32 +35,17 @@ export default function (req, res, next) {
     let decodedData = jwtDecode(tokenData.data.access_token)
 
     //3.设置cookie: https://www.npmjs.com/package/cookie
-    if (process.env.MODE === 'dev') {
-      res.setHeader('Set-Cookie', [
-        cookie.serialize(tokenName, decodedData.jti, {
-          httpOnly: true,
-          expires: new Date(decodedData.exp * 1000),
-          path: '/'
-        }),
-        cookie.serialize('redirect_url', '', { expires: new Date() }),
-        cookie.serialize('NotLogged', '', { expires: new Date() }),
-        cookie.serialize('isLogin', true),
-        cookie.serialize('matomo', state)
-      ])
-    } else {
-      res.setHeader('Set-Cookie', [
-        cookie.serialize(tokenName, decodedData.jti, {
-          httpOnly: true,
-          expires: new Date(decodedData.exp * 1000),
-          path: '/',
-          domain: '.dapengjiaoyu.cn'
-        }),
-        cookie.serialize('redirect_url', '', { expires: new Date() }),
-        cookie.serialize('NotLogged', '', { expires: new Date() }),
-        cookie.serialize('isLogin', true),
-        cookie.serialize('matomo', state)
-      ])
-    }
+    res.setHeader('Set-Cookie', [
+      cookie.serialize(tokenName, decodedData.jti, {
+        httpOnly: true,
+        expires: new Date(decodedData.exp * 1000),
+        path: '/'
+      }),
+      cookie.serialize('redirect_url', '', { expires: new Date() }),
+      cookie.serialize('NotLogged', '', { expires: new Date() }),
+      cookie.serialize('isLogin', true),
+      cookie.serialize('matomo', state)
+    ])
     const cookies = cookie.parse(req.headers.cookie || '')
     const redirectUrl = cookies.redirect_url
     res.statusCode = 302
