@@ -36,12 +36,7 @@ export default {
     }
   },
   mounted () {
-    this.$axios.get('/logout').then(() => {
-      this.$cookiz.remove('userinfo', {
-        path: '/'
-      })
-      this.$store.commit('user/appendUserInfo', null)
-    })
+    this.$logout()
     if (this.$route.query.type === 'failure') {
       this.content = '登录失效'
     } else if (this.$route.query.type === 'displacement') {
