@@ -127,18 +127,25 @@ export default {
             this.$matomo.trackPageView()
             // ************* 注册埋点 End*************
 
-            const expiresTime = new Date(token.exp * 1000)
-            if (process.env.mode === 'development') {
-              this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
-                expires: expiresTime
-              })
-            } else {
-              this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
-                expires: expiresTime,
-                path: '/',
-                domain: '.dapengjiaoyu.cn'
-              })
-            }
+            this.$axios.get('/set-token', {
+              params: {
+                jti: token.jti,
+                exp: token.exp
+              }
+            })
+
+            // const expiresTime = new Date(token.exp * 1000)
+            // if (process.env.mode === 'development') {
+            //   this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
+            //     expires: expiresTime
+            //   })
+            // } else {
+            //   this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
+            //     expires: expiresTime,
+            //     path: '/',
+            //     domain: '.dapengjiaoyu.cn'
+            //   })
+            // }
             // this.$cookiz.set('refresh_token', res.data.refresh_token)
             localStorage.setItem('login_time', new Date().getTime())
             // 完成注册
