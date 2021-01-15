@@ -41,7 +41,7 @@ export default {
       { property: 'og:title', content: ' 大鹏教育-高品质的设计师在线教育' },
       { property: 'og:type', content: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
       { property: 'og:url', content: 'http://www.dapengjiaoyu.cn/' },
-      { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/ijjctyun.png' },
+      { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/2021-01-14/jbez3emw/9004491950161_UEM=.jpg' },
       { property: 'og:description', content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业' },
       { property: 'og:site_name', content: '大鹏教育职业技能培训' }
     ],
