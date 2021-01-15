@@ -1,11 +1,11 @@
 <template>
   <div class="empty-wrapper">
 
-    <m-navbar title="空白页"></m-navbar>
+    <m-navbar :title="$route.query.title"></m-navbar>
 
     <div class="empty">
       <img class="empty-icon" :src="empty" alt="empty" />
-      <span class="empty-txt">暂无可提交作业～</span>
+      <span class="empty-txt">页面加载异常，请稍后～</span>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
   layout:'navbar',
 
   data: ()=> ({
-    empty: require('@/assets/icons/blank/have-no-homework.png')
+    empty: require('@/assets/icons/blank/have-no-network.png')
   })
 }
 </script>
