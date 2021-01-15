@@ -156,15 +156,11 @@ export default {
     },
     // 修改密码后退出登录
     onLogoutEvent() {
-      this.$axios.get('/logout').then(() => {
-        this.$cookiz.remove('userinfo', {
-          path: '/'
-        })
-        this.$store.commit('user/appendUserInfo', null)
+      this.$login().then(() => {
+        const redirectUrl = `${location.protocol}//${location.host}`
+        window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
       })
-      const redirectUrl = `${location.protocol}//${location.host}`
-      window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
-    },
+    }
   }
 }
 </script>

@@ -31,7 +31,20 @@ function getLoginUrl () {
   )
 }
 
+function logout () {
+  return new Promise((resolve) => {
+    $nuxt.$axios.get('/logout').then(() => {
+      $nuxt.$cookiz.remove('userinfo', {
+        path: '/'
+      })
+      $nuxt.$store.commit('user/appendUserInfo', null)
+      resolve(true)
+    })
+  })
+}
+
 Vue.prototype.$login = login
+Vue.prototype.$logout = logout
 Vue.prototype.$getLoginUrl = getLoginUrl
 
 export default{

@@ -43,6 +43,7 @@ export default function (req, res, next) {
           path: '/'
         }),
         cookie.serialize('redirect_url', '', { expires: new Date() }),
+        cookie.serialize('NotLogged', '', { expires: new Date() }),
         cookie.serialize('isLogin', true),
         cookie.serialize('matomo', state)
       ])
@@ -55,6 +56,7 @@ export default function (req, res, next) {
           domain: '.dapengjiaoyu.cn'
         }),
         cookie.serialize('redirect_url', '', { expires: new Date() }),
+        cookie.serialize('NotLogged', '', { expires: new Date() }),
         cookie.serialize('isLogin', true),
         cookie.serialize('matomo', state)
       ])

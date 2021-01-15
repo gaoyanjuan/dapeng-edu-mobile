@@ -230,10 +230,7 @@ export default {
 
     // 退出登录
     onLogoutEvent() {
-      this.$axios.get('/logout').then(() => {
-        this.$cookiz.remove('userinfo', {
-          path: '/'
-        })
+      this.$logout().then(() => {
         const redirectUrl = `${location.protocol}//${location.host}`
         window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
       })
