@@ -317,7 +317,9 @@ export default {
       const res = await this.$axios.get(`/users/stages`, {
         params: { ...params }
       })
-      commit('appendStagesList', { data: res.data})
+      if (res && res.status === 200) {
+        commit('appendStagesList', { data: res.data})
+      }
       return res
     },
 

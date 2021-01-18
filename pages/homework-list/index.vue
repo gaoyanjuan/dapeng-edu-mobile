@@ -164,6 +164,11 @@ export default {
     },
 
     toTasksPage(params) {
+      if(params.openStatus === 'UNCONFIRMED') {
+        this.$toast('页面加载异常，请稍后～')
+        return false 
+      }
+
       this.$router.push({
         path: '/homework-list/homework-select',
         query: { 

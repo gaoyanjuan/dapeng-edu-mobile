@@ -147,6 +147,14 @@ export default {
 
     if(this.courseType === 'VIP') {
       this.appendStagesList({ courseId: this.$route.query.id }).then( res => {
+        if (res && res.data && res.data.code === 404937) {
+          this.$router.replace({
+            path: '/empty',
+            query: {
+              title: this.$route.query.title
+            }
+          })
+        }
         this.stages = res.data || []
         loadVipCourse(this.stages)
         this.stagesLoad = true
