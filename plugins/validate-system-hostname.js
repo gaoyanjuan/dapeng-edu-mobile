@@ -4,10 +4,10 @@ function validateSystemHostName () {
     CLIENT_SECRET: 'COm6AqoH'
   }
   const testPCParam = {
-    client_id: 'b4cd9c34'
+    CLIENT_ID: 'b4cd9c34'
   }
   const prodPCParam = {
-    client_id: 'Dd8fbbB5'
+    CLIENT_ID: 'Dd8fbbB5'
   }
   if (process.browser) {
     localPCParam.host = `//${location.host}`
