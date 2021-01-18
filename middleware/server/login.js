@@ -9,7 +9,13 @@ const cookie = require('cookie')
 const log = require('../../utils/log-utils')
 const btoa = require('btoa')
 const hostData = require('../../plugins/validate-system-hostname')
-const clientData = `${hostData.default().client_id}:${hostData.default().client_secret}`
+// 登录secret获取,开发环境读取文件,线上环境 pm2 注入
+let clientData
+if (process.env.MODE === 'dev') {
+  clientData = `${hostData.default().CLIENT_ID}:${hostData.default().CLIENT_SECRET}`
+} else {
+  clientData = `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
+}
 
 export default function (req, res, next) {
   log.middlewareLog(`/callback${req.url}`)
