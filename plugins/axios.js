@@ -1,4 +1,3 @@
-import validateSystemHostName from '@/plugins/validate-system-hostname'
 import filter from './filters'
 import { Dialog } from 'vant'
 const log = require('../utils/log-utils')
@@ -97,17 +96,17 @@ export default function ({ store, redirect, req, route, error, app: { $axios, $c
   )
 }
 
-function refreshToken (store, $cookiz) {
-  const hostData = validateSystemHostName()
-  const accessToken = $cookiz.get(process.env.TOKEN_NAME)
-  // const refreshToken = $cookiz.get('refresh_token')
-  return store.dispatch('accesstoken/getRefreshToken', {
-    access_token: accessToken,
-    // refresh_token: refreshToken,
-    redirect_uri: `${hostData.host}/callback`,
-    grant_type: 'refresh_token'
-  })
-}
+// function refreshToken (store, $cookiz) {
+//   const hostData = validateSystemHostName()
+//   const accessToken = $cookiz.get(process.env.TOKEN_NAME)
+//   const refreshToken = $cookiz.get('refresh_token')
+//   return store.dispatch('accesstoken/getRefreshToken', {
+//     access_token: accessToken,
+//     refresh_token: refreshToken,
+//     redirect_uri: `${hostData.host}/callback`,
+//     grant_type: 'refresh_token'
+//   })
+// }
 
 function removeToken (store, $axios, $cookiz) {
   try {
