@@ -1,23 +1,23 @@
 function validateSystemHostName () {
   const localPCParam = {
     client_id: 'pc',
-    token_name: 'dptoken_t',
     client_secret: 'COm6AqoH'
   }
   const testPCParam = {
     client_id: 'b4cd9c34',
-    token_name: 'dptoken_t',
     client_secret: 'VXAaTFh8yv'
   }
   const prodPCParam = {
     client_id: 'Dd8fbbB5',
-    token_name: 'dptoken',
     client_secret: 'tz9Yfdtn6w'
   }
   if (process.browser) {
-    localPCParam.host = `${location.protocol}//${location.host}`
-    testPCParam.host = `${location.protocol}//${location.host}`
-    prodPCParam.host = `${location.protocol}//${location.host}`
+    localPCParam.host = `//${location.host}`
+    localPCParam.course_host = `//127.0.0.1:3001`
+    testPCParam.host = `//${location.host}`
+    testPCParam.course_host = `//${location.host}/dp-course`
+    prodPCParam.host = `//${location.host}`
+    testPCParam.course_host = `//${location.host}/dp-course`
   }
   if (process.env.mode === 'test') {
     return testPCParam

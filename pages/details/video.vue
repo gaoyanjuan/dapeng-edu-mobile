@@ -44,6 +44,11 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Video-Page-Details',
   layout:'navbar',
+  head () {
+    return {
+      title: '视频详情-大鹏教育-千万人的兴趣学习社区',
+    }
+  },
   data:() => ({
     player: null,
   }),

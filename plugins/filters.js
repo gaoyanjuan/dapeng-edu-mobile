@@ -174,6 +174,56 @@ export function formatSlashDate(date) {
   return dayjs(date).format('YYYY-MM-DD') // 使用 dayjs 格式化时间
 }
 
+const formatLiveTime = function (startTime, finishTime) {
+  const start = Number(startTime)
+  const finish = Number(finishTime)
+  
+  const startDate = dayjs(start).format('MM-DD')
+  const sTime = dayjs(start).format('HH:mm')
+  const fTime = dayjs(finish).format('HH:mm')
+  return `${startDate} ${sTime} ~ ${fTime}` // 使用 dayjs 格式化时间
+}
+
+const formatChapterTime = function (startTime, finishTime) {
+  const start = Number(startTime)
+  const finish = Number(finishTime)
+  
+  const sTime = dayjs(start).format('HH:mm')
+  const fTime = dayjs(finish).format('HH:mm')
+  return `${sTime} - ${fTime}` // 使用 dayjs 格式化时间
+}
+
+const formatLiveDate = function (dateTime) {
+  const date = dayjs(dateTime).format('MM月DD日')
+  let day = ''
+  switch (dayjs(dateTime).day()) {
+    case 0:
+      day = '星期天'
+      break;
+    case 1:
+      day = '星期一'
+      break;
+    case 2:
+      day = '星期二'
+      break;
+    case 3:
+      day = '星期三'
+      break;
+    case 4:
+      day = '星期四'
+      break;
+    case 5:
+      day = '星期五'
+      break;
+    case 6:
+      day = '星期六'
+      break;
+    default:
+      break;
+  }
+  return `${date} ${day}` // 使用 dayjs 格式化时间
+}
+
 const filter = {
   formatDate,
   activitiesDate,
@@ -187,7 +237,10 @@ const filter = {
   formatEmotions,
   filterCollageName,
   formatSlashDate,
-  formatHomeworkDate
+  formatHomeworkDate,
+  formatLiveTime,
+  formatLiveDate,
+  formatChapterTime
 }
 Object.keys(filter).forEach((key) => {
   Vue.filter(key, filter[key])

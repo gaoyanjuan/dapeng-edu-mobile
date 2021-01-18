@@ -36,19 +36,7 @@ export default {
     }
   },
   mounted () {
-    if (process.env.mode === 'development') {
-      this.$cookiz.remove(process.env.TOKEN_NAME)
-    } else {
-      this.$cookiz.remove(process.env.TOKEN_NAME, {
-        path: '/',
-        domain: '.dapengjiaoyu.cn'
-      })
-      this.$cookiz.remove(process.env.TOKEN_NAME)
-    }
-    this.$cookiz.remove('userinfo', {
-      path: '/'
-    })
-    this.$store.commit('user/appendUserInfo', null)
+    this.$logout()
     if (this.$route.query.type === 'failure') {
       this.content = '登录失效'
     } else if (this.$route.query.type === 'displacement') {
@@ -60,7 +48,8 @@ export default {
       location.href = '/'
     },
     toLogin () {
-      this.$router.replace('/login')
+      const loginUrl = this.$getLoginUrl()
+      location.href = loginUrl
     }
   }
 }

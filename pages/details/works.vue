@@ -9,6 +9,11 @@ import { mapActions } from 'vuex'
 export default {
   title: '作品详情页',
   layout: 'navbar',
+  head () {
+    return {
+      title: '作品详情-大鹏教育-千万人的兴趣学习社区',
+    }
+  },
   async asyncData ({route, store, error}) {
     if (process.browser) return {
       isServiceload: false

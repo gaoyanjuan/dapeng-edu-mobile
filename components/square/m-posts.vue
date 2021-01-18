@@ -41,7 +41,7 @@
     </div>
 
     <!-- comment 体验课不展示讲师评论 -->
-    <div class="works__comment" v-if="commentList && courseType && courseType !=='TEST'" @click.stop="">
+    <div class="works__comment" v-if="showComment" @click.stop="">
       <m-teacher-audio
         :teacherName="commentList.user ? commentList.user.nickname : ''"
         :teacherType="courseType"
@@ -301,6 +301,25 @@ export default {
     },
     functionName () {
       return this.$getFunctionName(this.listType)
+    },
+    showComment() {
+      if(this.commentList && this.courseType && this.courseType !=='TEST') {
+        return true
+      }else if(this.commentList && this.courseType && this.courseType ==='TEST') {
+        if(!this.userinfo || !this.userinfo.userId) {
+          return false
+        }
+        if(this.pageName === 'homework' || this.pageName === 'requirement') {
+          if(this.userinfo && this.userinfo.userId && this.userinfo.userId === this.listItemData.user.userId) {
+            return true
+          }else {
+            return false
+          }
+        }else {
+          return true
+        }
+        
+      }
     }
   },
   created () {
@@ -397,26 +416,25 @@ export default {
         }
       })
       .then(({status, data}) => {
-        if (status === 201) {
-          this.commentFlag = true
-          this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk && data.id) {
-            this.$toast('评论成功')
-            if (this.$isSave(this.$route.name)) {
-              this.$store.commit(`${this.functionName}`, {
-                index: this.propIndex,
-                type: 'comment',
-                value: 1
-              })
-            }  else {
-              this.popCommentCount += 1
-            }
+        this.commentFlag = true
+        this.$refs.commentPopup.resetPopup()
+        if (!data.highRisk && data.id) {
+          this.$toast('评论成功')
+          if (this.$isSave(this.$route.name)) {
+            this.$store.commit(`${this.functionName}`, {
+              index: this.propIndex,
+              type: 'comment',
+              value: 1
+            })
+          }  else {
+            this.popCommentCount += 1
           }
-        } else {
-          this.commentFlag = true
-          if (data && data.message) {
-            this.$toast(data.message)
-          }
+        }
+      })
+      .catch((error) => {
+        this.commentFlag = true
+        if (error && error.data && error.data.message) {
+          this.$toast(error.data.message)
         }
       })
     },
@@ -563,9 +581,7 @@ export default {
     },
     /** 进入详情 */
     toDetail () {
-      this.$cookiz.set('isLogin', false, {
-        path: '/'
-      })
+      this.$cookiz.remove('isLogin')
       this.$store.commit('changeListData', {
         listType: this.listType,
         propIndex: this.propIndex,

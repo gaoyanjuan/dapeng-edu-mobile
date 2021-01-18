@@ -13,8 +13,8 @@ export default {
   data:()=> ({
     state:'PASSWORD'
   }),
-  async asyncData ({ redirect, app: { $cookiz } }) {
-    if ($cookiz.get(process.env.TOKEN_NAME)) {
+  async asyncData ({ redirect, store, app: { $cookiz } }) {
+    if (store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
       redirect('/')
     }
   },
@@ -87,8 +87,8 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   background-size: 172px 36px;
-  animation: load 1.04s ease infinite;
-  -webkit-animation: load 1.04s ease infinite;
+  // animation: load 1.04s ease infinite;
+  // -webkit-animation: load 1.04s ease infinite;
 }
 
 @keyframes load {

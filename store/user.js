@@ -588,6 +588,26 @@ export const actions = {
     const res = await this.$axios.get(`/old/sms/check-code?${qs.stringify(params)}`)
     return res
   },
+  // 手机号码验证
+  async verificationMobile (state, params) {
+    const res = await this.$axios.put('/old/users/verification-mobile', params)
+    return res
+  },
+  // 修改密码
+  async modifyPassword (state, params) {
+    const res = await this.$axios.put('/old/users/password', params)
+    return res
+  },
+  // 重置密码
+  async resetPassword (state, params) {
+    const res = await this.$axios.put('/old/users/reset-password', params)
+    return res
+  },
+   // 意见反馈
+   async postFeedback (state, params) {
+    const res = await this.$axios.post(`/common/feedbacks?${qs.stringify(params)}`)
+    return res
+  },
   // 注册用户
   async userRegister (state, params) {
     const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)
@@ -786,6 +806,18 @@ export const actions = {
   async appendFollowingStatus(store, params) {
     const res = await this.$axios.get(`/users/${params.id}/follow-status`)
     return res.data
+  },
+  //账号安全等级
+  async getAccountSafety({ commit }, params) {
+    const res = await this.$axios.get('old/users/user-security')
+    return res
+  },
+  // 用户ID生成老主站token
+  async userMainStationToken({state},params) {
+    const res = await this.$axios.post(
+      `tapi/token/?userId=${state.userInfo.userId}`
+    )
+    return res
   }
 }
 
