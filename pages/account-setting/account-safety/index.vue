@@ -6,7 +6,7 @@
       <nuxt-link
         class="modification-box"
         tag="div"
-        to="/personal-center/account-setting/account-safety/replace-phone"
+        to="/account-setting/account-safety/replace-phone"
       >
         <div class="modification-left-box">
           <div class="modification-text">更换手机号</div>
@@ -17,7 +17,7 @@
       <nuxt-link
         class="modification-box"
         tag="div"
-        to="/personal-center/account-setting/account-safety/modification-password"
+        to="/account-setting/account-safety/modification-password"
       >
         <div class="modification-left-box">
           <div class="modification-text">修改密码</div>
@@ -28,7 +28,7 @@
       <nuxt-link
         class="modification-box"
         tag="div"
-        to="/personal-center/account-setting/account-safety/forget-password"
+        to="/account-setting/account-safety/forget-password"
       >
         <div class="modification-left-box">
           <div class="modification-text">忘记密码</div>
