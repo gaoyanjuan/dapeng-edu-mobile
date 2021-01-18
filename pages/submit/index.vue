@@ -311,9 +311,7 @@ export default {
   },
 
   async created(){
-    if(!this.$login()) {
-      return 
-    }
+    if(!this.$login()) { return false }
 
     if(this.$route.query.action === 'edit') {
       const _this = this
@@ -326,9 +324,11 @@ export default {
       }
       
       if (this.homeworkDetails) {
+
         if(this.homeworkDetails.user.userId !== this.userInfo.userId) {
           this.$router.replace('/404')
         }
+
         this.content = this.homeworkDetails.content
         this.appendSelLabel(this.homeworkDetails.labels)
         this.homeworkDetails.imgInfo.forEach( ele => {
@@ -388,7 +388,9 @@ export default {
       // 查询作业要求
       getRequirementDetails :'homework/appendRequirementDetails',
       // 获取用户发布的作业
-      getUserPublished: 'user/appendPublishHomework'
+      getUserPublished: 'user/appendPublishHomework',
+      // 是否关课状态查询
+      checkCourseExpire: 'publish/checkCourseExpire'
     }),
 
     ...mapMutations({
@@ -608,9 +610,20 @@ export default {
     },
 
     /** 获取作业要求数据 */
-    getRequirement() {
+    async getRequirement() {
       if (!this.$route.query.action) {
-        this.getRequirementDetails({ id: this.$route.query.taskId })
+        const res = await this.getRequirementDetails({ id: this.$route.query.taskId })
+        if(res.data && res.data.courseId) {
+          this.checkCourseStatus(res.data.courseId)
+        }
+      }
+    },
+
+    // 检查是否处于关课状态
+    async checkCourseStatus(courseId) {
+      const res = await this.checkCourseExpire({courseId: courseId })
+      if(res.data) {
+        this.$router.replace(`/empty?title=提交正式课作业`)
       }
     },
 

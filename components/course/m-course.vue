@@ -2,7 +2,7 @@
   <div class="course-card" v-if="!learnStatus" @click="onEnterCourseChapter">
     <div class="course-info-row">
 
-      <img class="course-photo" v-lazy="course.coverImage" alt="course" />
+      <img class="course-photo" v-lazy="course.coverImage || defaultImg" alt="course" />
       
       <div class="course-info">
 
@@ -45,6 +45,7 @@ export default {
   
   data: ()=> ({
     live_label: require('@/assets/icons/course/living.png'),
+    defaultImg: require('@/assets/icons/common/photos-bg.png'),
   }),
 
   computed:{
@@ -55,6 +56,10 @@ export default {
     // 当前直播状态
     showLive:function() {
       return this.course.liveChapters.length
+    },
+    // 课程URL
+    courseUrl() {
+      return this.validateSystemHostName().course_host 
     }
   },
 
@@ -64,7 +69,10 @@ export default {
     ]),
 
     // 进入直播间逻辑~~~~
-    onEnterLiveRoom() {},
+    onEnterLiveRoom() {
+      const chapterId = this.course.liveChapters[0].id
+      window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${chapterId}`
+    },
 
     // 进入课程章节列表
     onEnterCourseChapter() {
