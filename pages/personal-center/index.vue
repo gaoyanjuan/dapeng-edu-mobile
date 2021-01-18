@@ -304,10 +304,7 @@ export default {
     toPersonalInfo() {
       this.$router.push({
         path: "/account-setting/personal-information",
-        query: {
-          userId: this.userInfoGetters.userId,
-        },
-      });
+      })
     },
 
     toTrialClass() {
