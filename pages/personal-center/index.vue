@@ -297,13 +297,13 @@ export default {
         path: "/personal-center/publish",
         query: {
           userId: this.userInfoGetters.userId,
-        },
-      });
+        }
+      })
     },
     // 进个人资料
     toPersonalInfo() {
       this.$router.push({
-        path: "/personal-center/account-setting/personal-information",
+        path: "/account-setting/personal-information",
         query: {
           userId: this.userInfoGetters.userId,
         },

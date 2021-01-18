@@ -2,7 +2,7 @@
   <div class="setting-nav-list">
     <m-navbar title="设置" />
     <div class="setting-content">
-      <nuxt-link class="setting-item" tag="div" to="/personal-center/account-setting/account-safety">
+      <nuxt-link class="setting-item" tag="div" to="/account-setting/account-safety">
         <span class="setting-text">账号安全</span>
         <span class="safety-grade">账号安全等级</span>
         <img
