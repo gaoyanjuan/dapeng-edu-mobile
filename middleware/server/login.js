@@ -11,7 +11,6 @@ const btoa = require('btoa')
 const hostData = require('../../plugins/validate-system-hostname')
 // 登录secret获取,开发环境读取文件,线上环境 pm2 注入
 let clientData
-console.log(process.env.MODE)
 if (process.env.MODE === 'dev') {
   clientData = `${hostData.default().CLIENT_ID}:${hostData.default().CLIENT_SECRET}`
 } else {
