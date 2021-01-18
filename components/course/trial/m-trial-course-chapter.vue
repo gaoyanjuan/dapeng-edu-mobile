@@ -62,7 +62,15 @@ export default {
   computed: {
     ...mapGetters('course', [
       'chaptersListGetters'
-    ])
+    ]),
+
+    courseUrl() {
+      return this.validateSystemHostName().course_host 
+    },
+
+    courseId() {
+      return this.$route.query.courseId
+    }
   },
 
   methods:{
@@ -73,6 +81,9 @@ export default {
 
       } else if (params.liveStatus === 'FINISH') {
         this.$toast('当前直播已结束')
+
+      } else {
+        window.location.href = `${this.courseUrl}/secure/course/${this.courseId}/live/${params.id}`
       }
     },
 

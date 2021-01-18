@@ -38,6 +38,12 @@ export default {
     }
   },
 
+  computed: {
+    courseUrl() {
+      return this.validateSystemHostName().course_host 
+    }, 
+  },
+
   methods:{
     enterLiveRoom() {
       if(this.chapter.liveStatus === 'UNSTART') {
@@ -46,6 +52,9 @@ export default {
 
       } else if (this.chapter.liveStatus === 'FINISH') {
         this.$toast('直播已结束')
+
+      } else {
+        window.location.href = `${this.courseUrl}/secure/course/${this.courseId}/live/${params.id}`
       }
     },
 

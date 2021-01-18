@@ -56,6 +56,10 @@ export default {
     // 当前直播状态
     showLive:function() {
       return this.course.liveChapters.length
+    },
+    // 课程URL
+    courseUrl() {
+      return this.validateSystemHostName().course_host 
     }
   },
 
@@ -65,7 +69,10 @@ export default {
     ]),
 
     // 进入直播间逻辑~~~~
-    onEnterLiveRoom() {},
+    onEnterLiveRoom() {
+      const chapterId = this.course.liveChapters[0].id
+      window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${chapterId}`
+    },
 
     // 进入课程章节列表
     onEnterCourseChapter() {

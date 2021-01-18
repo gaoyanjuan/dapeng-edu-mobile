@@ -19,7 +19,7 @@
 
     <!-- 当前在学课程章节 -->
     <div class="course-chapters-row" v-if="course.liveChapters.length > 0">
-      <div class="chapter" v-for="item in course.liveChapters" :key="item.id">
+      <div class="chapter" v-for="item in course.liveChapters" :key="item.id" @click="enterLiveRoom(item)">
         <div class="left-side-wrap">
           <span class="chapter-title van-ellipsis">{{item.title}}</span>
           <span class="chapter-date">{{ item.startTime | formatLiveTime(item.finishTime) }}</span>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 export default {
   name: 'Learning-Course',
 
@@ -49,13 +50,38 @@ export default {
     }
   },
 
+  computed:{
+    courseUrl() {
+      return this.validateSystemHostName().course_host 
+    },
+  },
+
   data: () => ({
     unstart: require('@/assets/icons/course/unstart.png'),
     end: require('@/assets/icons/course/end.png'),
     living: require('@/assets/icons/course/living.png'),
     playback: require('@/assets/icons/course/playback.png'),
     enter: require('@/assets/icons/course/more.png')
-  })
+  }),
+
+  methods: {
+    enterLiveRoom(params) {
+      if(params.liveStatus === 'UNSTART') {
+        let time = this.formatTime(params.startTime)
+        this.$toast(`直播开始时间：${time}`)
+
+      } else if (params.liveStatus === 'FINISH') {
+        this.$toast('当前直播已结束')
+
+      } else {
+        window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${params.id}`
+      }
+    },
+
+    formatTime(time) {
+      return dayjs(time).format('YYYY-MM-DD HH:mm')
+    }
+  }
 }
 </script>
 
