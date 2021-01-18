@@ -2,7 +2,7 @@
   <div class="course-card" v-if="!learnStatus" @click="onEnterCourseChapter">
     <div class="course-info-row">
 
-      <img class="course-photo" v-lazy="course.coverImage" alt="course" />
+      <img class="course-photo" v-lazy="course.coverImage || defaultImg" alt="course" />
       
       <div class="course-info">
 
@@ -45,6 +45,7 @@ export default {
   
   data: ()=> ({
     live_label: require('@/assets/icons/course/living.png'),
+    defaultImg: require('@/assets/icons/common/photos-bg.png'),
   }),
 
   computed:{
