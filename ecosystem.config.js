@@ -10,7 +10,9 @@ module.exports = {
       error_file: "/home/dapeng/logs/pm2/wap-err.log",
       out_file: "/home/dapeng/logs/pm2/wap-out.log",
       env: {
-        "MODE": "pro"
+        "MODE": "pro",
+        "CLIENT_ID": "Dd8fbbB5",
+        "CLIENT_SECRET": "tz9Yfdtn6w"
       }
     },
     {
@@ -23,7 +25,9 @@ module.exports = {
       error_file: "./logs/wap-err.log",
       out_file: "./logs/wap-out.log",
       env: {
-        "MODE": "test"
+        "MODE": "test",
+        "CLIENT_ID": "b4cd9c34",
+        "CLIENT_SECRET": "VXAaTFh8yv"
       }
     }
   ]

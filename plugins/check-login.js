@@ -16,7 +16,7 @@ function login() {
 
 function getLoginUrl () {
   const config = {
-    clientId: $nuxt.validateSystemHostName().client_id,
+    clientId: $nuxt.validateSystemHostName().CLIENT_ID,
     redirect_uri: `${$nuxt.validateSystemHostName().host}/callback`,
     state: 1
   }
