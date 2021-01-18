@@ -96,6 +96,12 @@ export const actions = {
   delSelLabel({ commit, state }, params) { 
     commit('delSelLabel', params)
   },
+
+  // 是否关课状态查询
+  async checkCourseExpire({ commit }, params) { 
+    const res = await this.$axios.get(`/courses/${params.courseId}/is-expire`)
+    return res
+  }
 }
 
 export const getters = {
