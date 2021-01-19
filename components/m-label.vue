@@ -2,7 +2,7 @@
   <div>
     <div class="label-navbar">
       <div class="label-navbar-back">
-        <img @click="back" src="@/assets/icons/navbar/nav-arrow-back.png" alt="">
+        <img @click="$goback" src="@/assets/icons/navbar/nav-arrow-back.png" alt="">
       </div>
       <div class="label-navbar-title">
         {{ labelDataGetters && labelDataGetters.name }}
@@ -155,23 +155,6 @@ export default {
         topicType: this.$route.query.topicType, 
         page: newPage
       })
-    },
-    back () {
-      const route = 'personal-center-publish'
-      const isLogin = this.$cookiz.get('isLogin')
-      if (isLogin) {
-        const isDetails = this.$isDetails(this.$route.name)
-        this.$cookiz.remove('isLogin')
-        if (isDetails) {
-          this.$router.go(-4)
-        } else {
-          this.$router.go(-1)
-        }
-      } else if(this.$route.name === route) {
-        this.$router.replace('/personal-center')
-      } else {
-        this.$router.go(-1)
-      }
     },
     pathType(item){
       switch (item.topicType) {
