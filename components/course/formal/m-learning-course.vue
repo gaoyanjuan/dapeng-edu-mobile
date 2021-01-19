@@ -73,6 +73,10 @@ export default {
       } else if (params.liveStatus === 'FINISH') {
         this.$toast('当前直播已结束')
 
+      } else if (params.liveStatus === 'PLAYBACK'){
+        const url = `/secure/course/playback?courseId=${this.course.id}&stageId=${this.course.stage.id}&v=${params.videoContent.vid}&cid=${params.id}`
+        window.location.href = this.courseUrl + url
+      
       } else {
         window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${params.id}`
       }

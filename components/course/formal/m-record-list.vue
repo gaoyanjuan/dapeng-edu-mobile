@@ -16,7 +16,7 @@
             <template #value> <span> {{activeNames === i ? '折叠': '展开'}} </span> </template>
             
             <!-- 手风琴列表 -->
-            <div v-for="(lecture, j) in item.lectures" class="record-item" :key="j">
+            <div v-for="(lecture, j) in item.lectures" class="record-item" :key="j" @click="enterRecordRoom(lecture)">
               <span :class="lecture.haveLearned ? 'record-item-title-active':'record-item-title'">{{ lecture.title }}</span>
               <span class="record-item-percentage" v-if="lecture.haveLearned"> 已看：{{ lecture.percentage }}%</span>
             </div>
@@ -76,6 +76,10 @@ export default {
       chapters: 'course/recordChaptersGetters'
     }),
 
+    courseUrl() {
+      return this.validateSystemHostName().course_host 
+    },
+
     courseId() {
       return this.$route.query.courseId
     },
@@ -111,6 +115,11 @@ export default {
       if (this.chapters.status === 'loading') return false
       const newPage = this.chapters.pageInfo.pages + 1
       this.appendRecordChapters({ courseId: this.courseId, page: newPage })
+    },
+
+    enterRecordRoom(params) {
+      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
+      window.location.href = this.courseUrl + url
     }
   },
 
