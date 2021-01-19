@@ -7,7 +7,11 @@
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userNickname }}</span>
         <span class="info-date">
-          {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
+          {{ submitTime | commonDate }}
+          <span
+            class="info-my-submit"
+            v-if="showMySubmit">｜{{ $route.path.includes('/homework') ? '我最近发布的' : '我发布的' }}
+          </span>
         </span>
       </div>
     </div>
