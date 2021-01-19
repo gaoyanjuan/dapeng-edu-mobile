@@ -35,13 +35,22 @@ export default {
     chapter:{
       type:Object,
       default:{}
+    },
+
+    stage: {
+      type:Object,
+      default:{}
     }
   },
 
   computed: {
     courseUrl() {
       return this.validateSystemHostName().course_host 
-    }, 
+    },
+
+    courseId() {
+      return this.$route.query.courseId
+    }
   },
 
   methods:{
@@ -53,8 +62,12 @@ export default {
       } else if (this.chapter.liveStatus === 'FINISH') {
         this.$toast('直播已结束')
 
+      } else if (this.chapter.liveStatus === 'PLAYBACK'){
+        const url = `/secure/course/playback?courseId=${this.courseId}&stageId=${this.stage.id}&v=${this.chapter.videoContent.vid}&cid=${this.chapter.id}`
+        window.location.href = this.courseUrl + url
+      
       } else {
-        window.location.href = `${this.courseUrl}/secure/course/${this.courseId}/live/${params.id}`
+        window.location.href = `${this.courseUrl}/secure/course/${this.courseId}/live/${this.chapter.id}`
       }
     },
 

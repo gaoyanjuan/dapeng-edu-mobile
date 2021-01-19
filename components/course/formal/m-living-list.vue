@@ -13,7 +13,7 @@
     <div class="state-chapter-content">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="chapters.list.length">
-          <m-chapter v-for="item in chapters.list" :key="item.id" :chapter="item"></m-chapter>
+          <m-chapter v-for="item in chapters.list" :key="item.id" :chapter="item" :stage="selected"></m-chapter>
         </template>
 
         <template v-if="!chapters.list.length && finished">
