@@ -33,9 +33,9 @@ export default {
     }
     // ************* 登录埋点 End*************
 
-    if (this.$store.getters["banner/adverBannerListGetters"].length === 0) {
-      this.appendAdverList()
-    }
+    // if (this.$store.getters["banner/adverBannerListGetters"].length === 0) {
+    //   this.appendAdverList()
+    // }
 
     /***
      * 【刷新或者首次加载】
