@@ -40,11 +40,17 @@ export default function (req, res, next) {
           expires: new Date()
         }))
       } else {
-        res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
-          path: '/',
-          domain: '.dapengjiaoyu.cn',
-          expires: new Date()
-        }))
+        res.setHeader('Set-Cookie', [
+          cookie.serialize(tokenName, '', {
+            domain: '.dapengjiaoyu.cn',
+            expires: new Date(),
+            path: '/'
+          }),
+          cookie.serialize(tokenName, '', {
+            expires: new Date(),
+            path: '/'
+          })
+        ])
       }
       const locationURL = `/login/invalid-login?type=${type}`
       res.statusCode = 302
