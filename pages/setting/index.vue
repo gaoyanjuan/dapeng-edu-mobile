@@ -53,6 +53,10 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+  },
   computed: {
     ...mapGetters("user", ["userInfoGetters"]),
   },
