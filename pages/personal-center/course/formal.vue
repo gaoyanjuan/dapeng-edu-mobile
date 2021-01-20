@@ -157,11 +157,12 @@ export default {
     }
   },
 
-  beforeDestroy() {
-    const isDetails = this.$isDetails(this.$route.name)
+  beforeRouteLeave (to, from, next) {
+    const isDetails = this.$isDetails(to.name)
     if (!isDetails) {
       this.clearCourseList()
     }
+    next()
   }
 }
 </script>

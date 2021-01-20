@@ -70,6 +70,8 @@ export default {
   mounted() {
     if(!this.$login()) return
     
+    console.log(this.$route.name)
+
     if(this.userCourseListGetters.list.length === 0) {
       this.getCourseList({ type: 'TRIAL', page: 1 })
     }
@@ -108,11 +110,12 @@ export default {
     }
   },
   
-  beforeDestroy() {
-    const isDetails = this.$isDetails(this.$route.name)
+  beforeRouteLeave (to, from, next) {
+    const isDetails = this.$isDetails(to.name)
     if (!isDetails) {
       this.clearCourseList()
     }
+    next()
   }
 }
 </script>
