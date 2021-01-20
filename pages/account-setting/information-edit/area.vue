@@ -184,6 +184,7 @@ export default {
 .area {
   overflow: hidden;
   position: relative;
+  min-height: calc(100vh - 1px);
   background: @dp-app-bgc;
   & > .modified-content {
     margin-top: 56px;

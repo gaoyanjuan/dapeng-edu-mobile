@@ -118,6 +118,7 @@ export default {
 .true-name {
   width: 100%;
   position: relative;
+  min-height: calc(100vh - 1px);
   background: @dp-app-bgc;
   overflow: hidden;
   & > .modified-content {
