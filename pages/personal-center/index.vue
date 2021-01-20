@@ -104,7 +104,7 @@
       </div>
     </div>
     <!-- 广告站位图 -->
-    <div class="advertising-picture">
+    <!-- <div class="advertising-picture">
       <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
         <van-swipe-item v-for="(item, index) in adverBannerListGetters" :key="index">
           <a :href="item.url" target="_blank">
@@ -112,7 +112,7 @@
           </a>
         </van-swipe-item>
       </van-swipe>
-    </div>
+    </div> -->
 
     <!-- 我的喜欢、我的收藏、学习荣誉等底部导航 -->
     <div class="mine-nav-group-wrap">
