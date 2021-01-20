@@ -199,7 +199,7 @@ export default {
 .personal-info {
   overflow: hidden;
   position: relative;
-  min-height: calc(100vh);
+  min-height: 100vh;
   background: @dp-app-bgc;
   & > .info-header {
     background: @dp-white;
