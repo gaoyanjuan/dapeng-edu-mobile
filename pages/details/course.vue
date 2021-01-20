@@ -33,12 +33,16 @@ export default {
   },
 
   async asyncData ({route, store, error}) {
-    if (route.query.type === 'TRIAL' && store.getters['course/chaptersListGetters'].length === 0) {
-      await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
+    if(store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
+      if (route.query.type === 'TRIAL' && store.getters['course/chaptersListGetters'].length === 0) {
+        await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
+      }
     }
   },
 
   async mounted() {
+    if(!this.$login()) return
+    
     if (this.courseDetailGetters) {
       this.courseDetail = this.courseDetailGetters
     }

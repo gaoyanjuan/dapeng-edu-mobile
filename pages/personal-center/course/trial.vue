@@ -67,13 +67,9 @@ export default {
     }
   },
 
-  created() {
-    if(this.userCourseListGetters.list.length === 0) {
-      this.getCourseList({ type: 'TRIAL', page: 1 })
-    }
-  },
-
   mounted() {
+    if(!this.$login()) return
+    
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
@@ -84,6 +80,10 @@ export default {
         }
       }
     })
+    
+    if(this.userCourseListGetters.list.length === 0) {
+      this.getCourseList({ type: 'TRIAL', page: 1 })
+    }
   },
 
   methods:{
@@ -108,11 +108,12 @@ export default {
     }
   },
   
-  beforeDestroy() {
-    const isDetails = this.$isDetails(this.$route.name)
+  beforeRouteLeave (to, from, next) {
+    const isDetails = this.$isDetails(to.name)
     if (!isDetails) {
       this.clearCourseList()
     }
+    next()
   }
 }
 </script>
