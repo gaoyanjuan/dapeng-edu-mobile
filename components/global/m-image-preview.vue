@@ -8,6 +8,7 @@
       :images="imagePreview.images"
       :start-position="imagePreview.startPosition"
       class-name="images-preview-wrapper"
+      @close="onClose"
       @change="onChange"
     >
       <template v-slot:index>
@@ -92,6 +93,23 @@ export default {
       love: require('@/assets/icons/preview/love.png'), 
     }
   },
+
+  watch:{
+    'imagePreview.show':{
+      immediate: false,
+      handler (val) {
+        if(val && this.imagePreview.isDrawed) {
+          let res = this.imagePreview.drawed[this.index]
+          if(res.isDrawed) {
+            this.imagePreview.isDrawed = true
+          } else {
+            this.imagePreview.isDrawed = false
+          }
+        }
+      }
+    }
+  },
+
   methods: {
 
     /** 评论 */
@@ -119,6 +137,15 @@ export default {
     },
     /** 下标更新  */
     onChange(index) {
+      if(this.imagePreview.drawed.length) {
+        let res = this.imagePreview.drawed[index]
+        if(res.isDrawed) {
+          this.imagePreview.isDrawed = true
+        } else {
+          this.imagePreview.isDrawed = false
+        }
+      }
+      
       this.index = index
     },
     /** 关闭图片预览*/

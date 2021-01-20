@@ -592,6 +592,12 @@ export default {
     },
     /** 进入详情 */
     toDetail () {
+      let from = ''
+      // 只有个人中心页-才会看到涂鸦
+      if(this.$route.name === 'personal-center-publish') {
+        from = 'personal'
+      }
+      
       this.$cookiz.remove('isLogin')
       this.$store.commit('changeListData', {
         listType: this.listType,
@@ -606,6 +612,7 @@ export default {
               id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
+              from: from
             }
           })
         } else {
@@ -613,6 +620,7 @@ export default {
             path: this.typePath,
             query: {
               id: this.mainId,
+              from: from
             }
           })
         }
@@ -624,6 +632,7 @@ export default {
               id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
+              from: from
             }
           })
         } else {
@@ -631,6 +640,7 @@ export default {
             path: this.typePath,
             query: {
               id: this.mainId,
+              from: from
             }
           })
         }
