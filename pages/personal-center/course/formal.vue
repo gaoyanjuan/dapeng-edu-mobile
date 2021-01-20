@@ -106,6 +106,17 @@ export default {
 
   mounted() {
     if(!this.$login()) return
+
+    this.$nextTick(() => {
+      if (this.$store.state.anchorId) {
+        const element = document.getElementById(this.$store.state.anchorId)
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
+      }
+    })
     
     // 多学院列表 ~
     if(this.formalCollegeListGetters.length) {
@@ -122,17 +133,6 @@ export default {
     if(!this.userCourseListGetters.list.length) {
       this.getCourseList({ type: 'VIP', page: 1 })
     }
-
-    this.$nextTick(() => {
-      if (this.$store.state.anchorId) {
-        const element = document.getElementById(this.$store.state.anchorId)
-        if (element) {
-          element.scrollIntoView({
-            behavior: 'auto'
-          })
-        }
-      }
-    })
   },
 
   methods:{
