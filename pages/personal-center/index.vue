@@ -250,6 +250,9 @@ export default {
           });
           break;
         case "learn-honor":
+          if (!this.$login()) return;
+          this.$router.push({path: "/personal-center/honor",
+          })
           break;
         case 'fast-payment':
           window.location.href = `${process.env.payUrl}`

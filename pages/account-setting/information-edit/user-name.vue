@@ -53,7 +53,9 @@ export default {
     }
   },
   mounted() {
-    this.$login()
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    
     // 获取用户名
     if (this.userInfoGetters.loginName) {
       this.userNameModel = this.userInfoGetters.loginName

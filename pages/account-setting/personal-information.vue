@@ -94,6 +94,9 @@ export default {
     }
   },
   mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+
     this.getUserDetails().then((res)=> {
       this.userInfo = res.data
     })
