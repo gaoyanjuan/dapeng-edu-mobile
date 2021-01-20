@@ -10,7 +10,7 @@
           {{ submitTime | commonDate }}
           <span
             class="info-my-submit"
-            v-if="showMySubmit">｜{{ $route.path.includes('/homework') ? '我最近发布的' : '我发布的' }}
+            v-if="showMySubmit">｜{{ myPublish }}
           </span>
         </span>
       </div>
@@ -135,6 +135,13 @@ export default {
     },
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)
+    },
+    myPublish() {
+      if (this.$route.path.includes('/homework')) {
+        return '我最近发布的'
+      } else {
+        return '我发布的'
+      }
     }
   },
   created () {
