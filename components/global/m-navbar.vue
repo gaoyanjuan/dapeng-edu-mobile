@@ -6,7 +6,7 @@
     :title="title"
     :left-text="leftText"
     :right-text="rightText"
-    @click-left="onClickLeft"
+    @click-left="$goback"
     @click-right="onClickRight"
     safe-area-inset-top
   >
@@ -66,20 +66,6 @@ export default {
     navMenu: require('@/assets/icons/navbar/nav-menus.png')
   }),
   methods: {
-    onClickLeft() {
-      const isLogin = this.$cookiz.get('isLogin')
-      if (isLogin) {
-        const isDetails = this.$isDetails(this.$route.name)
-        this.$cookiz.remove('isLogin')
-        if (isDetails) {
-          this.$router.go(-4)
-        } else {
-          this.$router.go(-1)
-        }
-      } else {
-        this.$router.go(-1)
-      }
-    },
     onClickRight() {
       this.$emit('onClickRight')
     },

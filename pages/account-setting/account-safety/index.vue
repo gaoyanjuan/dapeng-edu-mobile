@@ -56,6 +56,9 @@ export default {
     }
   },
   mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    
     this.getAccountSafety().then((res)=> {
       this.score =res.data
     })
