@@ -40,8 +40,10 @@ export default {
   name: 'Formal',
 
   async asyncData ({route, store, error}) {
-    if (store.getters['course/formalCollegeListGetters'].length === 0) {
-      await store.dispatch('course/appendFormalCollegeList')
+    if(store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
+      if (store.getters['course/formalCollegeListGetters'].length === 0) {
+        await store.dispatch('course/appendFormalCollegeList')
+      }
     }
   },
 
@@ -102,7 +104,9 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
+    if(!this.$login()) return
+    
     // 多学院列表 ~
     if(this.formalCollegeListGetters.length) {
 
@@ -118,9 +122,7 @@ export default {
     if(!this.userCourseListGetters.list.length) {
       this.getCourseList({ type: 'VIP', page: 1 })
     }
-  },
 
-  mounted() {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)

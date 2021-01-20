@@ -67,13 +67,13 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
+    if(!this.$login()) return
+    
     if(this.userCourseListGetters.list.length === 0) {
       this.getCourseList({ type: 'TRIAL', page: 1 })
     }
-  },
 
-  mounted() {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
