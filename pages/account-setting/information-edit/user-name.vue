@@ -129,6 +129,7 @@ export default {
 .user-name {
   width: 100%;
   position: relative;
+  min-height: 100vh;
   background: @dp-app-bgc;
   overflow: hidden;
   & > .modified-content {
