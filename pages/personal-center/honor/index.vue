@@ -23,16 +23,16 @@
             <th>课程</th>
             <th>成绩</th>
           </tr>
-          <tr v-for="item in tables" key="index">
+          <tr v-for="item in tables">
             <td>{{ item.id }}</td>
             <td>{{ item.content }}</td>
             <td>{{ item.qualified }}</td>
           </tr>
         </table>
         <div class="bott_yz">
-          <img src="@/assets/icons/mine/jkzs_dpyinzhang.png" alt="">
-          <p>证书编号：{{honor.certificate}}</p>
-          <p>发证时间：{{honor.issueDate}}</p>
+          <img src="@/assets/icons/mine/jkzs_dpyinzhang.png" alt="" />
+          <p>证书编号：{{ honor.certificate }}</p>
+          <p>发证时间：{{ honor.issueDate }}</p>
         </div>
       </div>
     </div>
@@ -48,8 +48,8 @@ export default {
         name: "于于于",
         sex: "女",
         number: "1235645656446",
-        certificate:'45655487436',
-        issueDate:'2020年12月30日'
+        certificate: "45655487436",
+        issueDate: "2020年12月30日",
       },
       tables: [
         {
@@ -70,7 +70,11 @@ export default {
       ],
     };
   },
-};
+  mounted() {
+    // 链接访问时判断是否登录
+    if (!this.$login()) return
+  }
+}
 </script>
 <style lang="less" scoped>
 .my-honor {
@@ -135,15 +139,15 @@ export default {
         border-spacing: 2px;
         & tr {
           border: 1px solid#333;
-          & th{
+          & th {
             min-width: 40px;
             font-size: 14px;
             text-align: center;
             border: 1px solid#333;
             font-weight: 600;
           }
-          &> td {
-             font-size: 12px;
+          & > td {
+            font-size: 12px;
             text-align: center;
             border: 1px solid#333;
             font-weight: 400;
