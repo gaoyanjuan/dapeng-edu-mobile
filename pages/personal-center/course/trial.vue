@@ -70,8 +70,6 @@ export default {
   mounted() {
     if(!this.$login()) return
     
-    console.log(this.$route.name)
-
     if(this.userCourseListGetters.list.length === 0) {
       this.getCourseList({ type: 'TRIAL', page: 1 })
     }
