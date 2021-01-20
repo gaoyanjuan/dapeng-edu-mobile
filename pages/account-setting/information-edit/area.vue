@@ -79,7 +79,9 @@ export default {
     }
   },
    mounted() {
-    this.$login()
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    
     // 获取用户信息
     if (this.userInfoGetters.address) {
       this.addressArea = this.userInfoGetters.address
@@ -184,6 +186,7 @@ export default {
 .area {
   overflow: hidden;
   position: relative;
+  min-height: 100vh;
   background: @dp-app-bgc;
   & > .modified-content {
     margin-top: 56px;

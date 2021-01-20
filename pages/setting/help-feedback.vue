@@ -18,7 +18,7 @@
           alt=""  
         />
       </nuxt-link>
-      <nuxt-link class="setting-item" tag="div":to="`/setting/trouble-shooting?id=${3}`">
+      <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${3}`">
         <span class="setting-text">如何报名课程？</span>
         <img
           class="right-arrow"

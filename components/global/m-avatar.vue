@@ -7,7 +7,11 @@
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userNickname }}</span>
         <span class="info-date">
-          {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
+          {{ submitTime | commonDate }}
+          <span
+            class="info-my-submit"
+            v-if="showMySubmit">｜{{ myPublish }}
+          </span>
         </span>
       </div>
     </div>
@@ -131,6 +135,13 @@ export default {
     },
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)
+    },
+    myPublish() {
+      if (this.$route.path.includes('/homework')) {
+        return '我最近发布的'
+      } else {
+        return '我发布的'
+      }
     }
   },
   created () {
