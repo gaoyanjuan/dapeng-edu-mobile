@@ -44,6 +44,10 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+  },
   methods: {
     // 协议与政策
     onToProtocolPolicy() {
