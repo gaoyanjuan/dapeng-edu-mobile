@@ -36,13 +36,25 @@
         />
       </nuxt-link>
     </div>
+    <!-- 退出登录 -->
+    <div
+      v-if="userInfoGetters"
+      class="mine-app-logout-wrap"
+      @click="onLogoutEvent"
+    >  
+      退出登录
+    </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex"
 export default {
   layout: "navbar",
   data() {
     return {};
+  },
+  computed: {
+    ...mapGetters("user", ["userInfoGetters"]),
   },
   methods: {
     // 协议与政策
@@ -52,6 +64,13 @@ export default {
         "index?is_login=N&is_vip=N&platform=wap&dpaccount=&from=SERVICE_AGREEMENT&userid=";
       location.href = href;
     },
+    // 退出登录
+    onLogoutEvent() {
+      this.$logout().then(() => {
+        const redirectUrl = `${location.protocol}//${location.host}`
+        window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
+      })
+    },
   },
 };
 </script>
@@ -59,9 +78,11 @@ export default {
 .setting-nav-list {
   overflow: hidden;
   position: relative;
-  background: @dp-white;
+  min-height: 100vh;
+  background: @dp-app-bgc;
   & > .setting-content {
     margin-top: 44px;
+    background: @dp-white;
     & > .setting-item {
       width: 100%;
       height: 54px;
@@ -100,6 +121,22 @@ export default {
         vertical-align: middle;
       }
     }
+  }
+  & > .mine-app-logout-wrap {
+    width: 375px;
+    height: 49px;
+    line-height: 49px;
+    border-radius: 6px;
+    position: fixed;
+    bottom: 0;
+    font-size: 14px;
+    font-family: @regular;
+    font-weight: 500;
+    color: #0CB65B;
+    text-align: center;
+    background: #ffffff;
+    box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
   }
 }
 </style>

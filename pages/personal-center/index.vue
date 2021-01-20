@@ -128,15 +128,6 @@
       </van-grid>
     </div>
 
-    <!-- 退出登录 -->
-    <div
-      v-if="userInfoGetters"
-      class="mine-app-logout-wrap"
-      @click="onLogoutEvent"
-    >  
-      退出登录
-    </div>
-
     <!-- 我的喜欢弹层 -->
     <m-love-popup :show-popup="lovePopup" />
   </div>
@@ -226,14 +217,6 @@ export default {
         return
       }
       this.lovePopup.show = true
-    },
-
-    // 退出登录
-    onLogoutEvent() {
-      this.$logout().then(() => {
-        const redirectUrl = `${location.protocol}//${location.host}`
-        window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
-      })
     },
 
     // 跳转登录页
@@ -488,6 +471,9 @@ export default {
 // 我的体验课、正式课等导航栏样式
 .mine-user-nav-wrap {
   margin-top: 16px;
+  background: #ffffff;
+  box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -527,11 +513,12 @@ export default {
 }
 
 .mine-nav-group-wrap {
+  padding: 10px;
   width: 343px;
   min-height: 77px;
   background: #ffffff;
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
-  border-radius: 6px;
+  border-radius: 8px;
   margin-top: 10px;
 
   & .nav-icon {
