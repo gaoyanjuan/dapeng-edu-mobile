@@ -117,11 +117,13 @@ export default {
     if (process.browser) return { isServiceload : false }
 
     try {
-      const type = route.query.courseType
-      if(type === 'TEST' && !store.getters['homework/trialsCoursesGetters'].list.length) {
-        await store.dispatch('homework/appendTrialsCourses', { id : route.query.id, page: 1 })
+      if(store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
+        const type = route.query.courseType
+        if(type === 'TEST' && !store.getters['homework/trialsCoursesGetters'].list.length) {
+          await store.dispatch('homework/appendTrialsCourses', { id : route.query.id, page: 1 })
+        }
+        return { isServiceload: true }
       }
-      return { isServiceload: true }
     } catch (err) {
       console.log(err)
     }
@@ -135,6 +137,8 @@ export default {
   },
 
   created() {
+    if(!this.$login()) return
+
     const _this = this
 
     if (this.$route.query.courseType) {

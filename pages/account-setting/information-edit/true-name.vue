@@ -52,7 +52,9 @@ export default {
     }
   },
   mounted() {
-    this.$login()
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    
     // 获取用户真实姓名
     if (this.userInfoGetters.trueName) {
       this.treuNameModel = this.userInfoGetters.trueName
@@ -118,6 +120,7 @@ export default {
 .true-name {
   width: 100%;
   position: relative;
+  min-height: 100vh;
   background: @dp-app-bgc;
   overflow: hidden;
   & > .modified-content {

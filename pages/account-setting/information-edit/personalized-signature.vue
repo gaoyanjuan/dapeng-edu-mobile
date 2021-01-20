@@ -55,7 +55,9 @@ export default {
     }
   },
   mounted() {
-    this.$login()
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    
     // 获取个性签名
     if (this.userInfoGetters.introduction) {
       this.introduction = this.userInfoGetters.introduction
@@ -133,6 +135,7 @@ export default {
 .personalized-signature {
   overflow: hidden;
   position: relative;
+  min-height: 100vh;
   background: @dp-app-bgc;
   & > .modified-content {
     margin-top: 44px;
