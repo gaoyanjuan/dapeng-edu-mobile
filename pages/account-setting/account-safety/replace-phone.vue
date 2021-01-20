@@ -51,6 +51,10 @@ export default {
       return Boolean(this.mobile && this.code)
     }
   },
+  mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+  },
   methods: {
     ...mapActions('user', [
       'sendCode',

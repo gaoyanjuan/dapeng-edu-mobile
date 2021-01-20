@@ -176,7 +176,8 @@ export default {
     }
   },
   mounted() {
-    this.$login()
+    if(!this.$login()) return
+
     // 判断我的或TA的个人主页是否显示关注按钮以及用户信息的赋值
     if (this.$route.query.userId === this.userInfoGetters.userId) {
       if (this.userInfoGetters.introduction) {
