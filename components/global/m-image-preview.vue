@@ -8,6 +8,7 @@
       :images="imagePreview.images"
       :start-position="imagePreview.startPosition"
       class-name="images-preview-wrapper"
+      @close="onClose"
       @change="onChange"
     >
       <template v-slot:index>
@@ -20,15 +21,25 @@
 
       <template v-slot:cover>
         <div class="images-preview-footer">
-          <div class="footer-comment-cloumn" @click.stop="openComment">
-            <img class="icon" :src="comment" alt="" />
-            <span class="nums">{{ imagePreview.commentCount | studentsCount }}</span>
+
+          <div class="footer-left-side-wrap">
+            <div v-if="imagePreview.isDrawed && imagesMode" class="btn-change-photos btn-original" @click="lookScrawl">查看涂鸦图</div>
+            <div v-else-if="imagePreview.isDrawed && !imagesMode" class="btn-change-photos btn-scrawl" @click="lookOriginal">查看原图</div>
           </div>
-          <div class="footer-love-cloumn" @click.stop="onLove">
-            <img class="icon" v-if="imagePreview.isPraise" src="@/assets/icons/posts/posts-unlove.png" alt="unlove" />
-            <img class="icon" v-else src="@/assets/icons/posts/posts-love.png" alt="love" />
-            <span class="nums">{{ imagePreview.praiseCount | studentsCount }}</span>
+
+          <div class="footer-right-side-wrap">
+            <div class="footer-comment-cloumn" @click.stop="openComment">
+              <img class="icon" :src="comment" alt="" />
+              <span class="nums">{{ imagePreview.commentCount | studentsCount }}</span>
+            </div>
+
+            <div class="footer-love-cloumn" @click.stop="onLove">
+              <img class="icon" v-if="imagePreview.isPraise" src="@/assets/icons/posts/posts-unlove.png" alt="unlove" />
+              <img class="icon" v-else src="@/assets/icons/posts/posts-love.png" alt="love" />
+              <span class="nums">{{ imagePreview.praiseCount | studentsCount }}</span>
+            </div>
           </div>
+
         </div>
       </template>
     </van-image-preview>
@@ -54,8 +65,10 @@ export default {
       type: Object,
       default() {
         return {
-          show: false,
           images: [],
+          drawed: [],
+          show: false,
+          isDrawed: false,
           startPosition: 1,
           isPraise: false,
           isCollection: false,
@@ -68,17 +81,35 @@ export default {
   data() {
     return {
       index: 0,
+      commentCount: 0,
+      praiseCount: 0,
+      isPraise: false,
+      isCollection: false,
       showMenusPopup:false,
+      imagesMode: true,
       more:require('@/assets/icons/preview/more.png'),
       close: require('@/assets/icons/preview/close.png'),
       comment: require('@/assets/icons/preview/comment.png'),
-      love: require('@/assets/icons/preview/love.png'),
-      isPraise: false,
-      isCollection: false,
-      commentCount: 0,
-      praiseCount: 0
+      love: require('@/assets/icons/preview/love.png'), 
     }
   },
+
+  watch:{
+    'imagePreview.show':{
+      immediate: false,
+      handler (val) {
+        if(val && this.imagePreview.isDrawed) {
+          let res = this.imagePreview.drawed[this.index]
+          if(res.isDrawed) {
+            this.imagePreview.isDrawed = true
+          } else {
+            this.imagePreview.isDrawed = false
+          }
+        }
+      }
+    }
+  },
+
   methods: {
 
     /** 评论 */
@@ -106,10 +137,20 @@ export default {
     },
     /** 下标更新  */
     onChange(index) {
+      if(this.imagePreview.drawed.length) {
+        let res = this.imagePreview.drawed[index]
+        if(res.isDrawed) {
+          this.imagePreview.isDrawed = true
+        } else {
+          this.imagePreview.isDrawed = false
+        }
+      }
+      
       this.index = index
     },
     /** 关闭图片预览*/
     onClose() {
+      this.imagesMode = true
       this.imagePreview.show = false
     },
     /** 更多 */
@@ -125,6 +166,26 @@ export default {
       a.href = imgUrl
       a.dispatchEvent(event)
       this.showMenusPopup = false
+    },
+
+    /** 打开涂鸦模式 */
+    lookScrawl() {
+      let arr = []
+      this.imagePreview.drawed.forEach(element => {
+        arr.push(element.graffiti.url)
+      })
+      this.imagePreview.images = arr
+      this.imagesMode = false
+    },
+
+    /*** 打开原图模式 */
+    lookOriginal() {
+      let arr = []
+      this.imagePreview.drawed.forEach(element => {
+        arr.push(element.original.url)
+      })
+      this.imagePreview.images = arr
+      this.imagesMode = true
     }
   }
 }
@@ -190,16 +251,54 @@ export default {
 
   .images-preview-footer {
     width: 375px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    height: 32px;
     position: absolute;
     bottom: 12px;
     left: 50%;
     padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     transform: translateX(-50%);
+  }
 
+  .images-preview-footer .footer-left-side-wrap {
+    display: flex;
+    align-items: center;
+
+    .btn-change-photos {
+      width: 94px;
+      height: 32px;
+      line-height: 32px;  
+      font-size: 14px;
+      font-family: @medium;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .btn-scrawl {
+      color: #5D2D09;
+      background-image: url('~@/assets/icons/preview/artwork-btn-bg.png');
+      background-color: transparent;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .btn-original {
+      color: #FFFFFF;
+      background-image: url('~@/assets/icons/preview/scrawl-btn-bg.png');
+      background-color: transparent;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  .images-preview-footer .footer-right-side-wrap {
+    display: flex;
+    align-items: center;
+    
     .footer-comment-cloumn,
     .footer-love-cloumn {
       width: 59px;
@@ -225,7 +324,6 @@ export default {
     }
   }
 }
-
 
 /** menus-popup */
 /deep/.van-popup {

@@ -46,6 +46,11 @@ export default {
     item:{
       type: Object,
       default:{}
+    },
+    /** 调用来源 */
+    pageName: {
+      type: String,
+      default: ''
     }
   },
   data: () => ({
@@ -114,6 +119,13 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
+      let drawed = { show: false, list: []}
+
+      if(this.$route.query.from === 'personal' && this.item.doodlingImg) {
+        drawed.show = true
+        drawed.list = this.item.doodlingImg
+      }
+
       this.imagePreview = {
         images: this.handleFilterImage(),
         startPosition: index,
@@ -121,6 +133,8 @@ export default {
         isCollection: this.detailsGetters.isCollection,
         praiseCount: this.detailsGetters.praiseCount,
         commentCount: this.detailsGetters.commentCount,
+        drawed: drawed.list,
+        isDrawed: drawed.show,
         show: true
       }
     },

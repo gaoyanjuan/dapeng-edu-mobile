@@ -186,6 +186,8 @@ export default {
     imagePreview: {
       show: false,
       images: [],
+      drawed: [],
+      isDrawed: false,
       startPosition: 1,
       isPraise: false,
       isCollection: false,
@@ -375,14 +377,23 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
+      let drawed = { show: false, list: []}
+
+      if(this.pageName === 'myHomework' && this.listItemData.doodlingImg) {
+        drawed.show = true
+        drawed.list = this.listItemData.doodlingImg
+      }
+
       this.imagePreview = {
+        show: true,
+        drawed: drawed.list,
+        isDrawed: drawed.show,
         startPosition: index,
         images: this.listItemData.img,
         isPraise: this.isPraise,
         isCollection: this.isCollection,
         praiseCount: this.praiseCount,
-        commentCount: this.commentCount,
-        show: true
+        commentCount: this.commentCount
       }
     },
 
@@ -581,6 +592,12 @@ export default {
     },
     /** 进入详情 */
     toDetail () {
+      let from = ''
+      // 只有个人中心页-才会看到涂鸦
+      if(this.$route.name === 'personal-center-publish') {
+        from = 'personal'
+      }
+      
       this.$cookiz.remove('isLogin')
       this.$store.commit('changeListData', {
         listType: this.listType,
@@ -595,6 +612,7 @@ export default {
               id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
+              from: from
             }
           })
         } else {
@@ -602,6 +620,7 @@ export default {
             path: this.typePath,
             query: {
               id: this.mainId,
+              from: from
             }
           })
         }
@@ -613,6 +632,7 @@ export default {
               id: this.mainId,
               tagsId: this.listItemData.tagsId,
               topicType: this.listItemData.topicType,
+              from: from
             }
           })
         } else {
@@ -620,6 +640,7 @@ export default {
             path: this.typePath,
             query: {
               id: this.mainId,
+              from: from
             }
           })
         }
