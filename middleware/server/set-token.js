@@ -11,11 +11,20 @@ export default function (req, res, next) {
   const query = url.parse(req.url, true).query
 
   try {
-    res.setHeader('Set-Cookie', cookie.serialize(tokenName, query.jti, {
-      httpOnly: true,
-      expires: new Date(query.exp * 1000),
-      path: '/'
-    }))
+    if (process.env.MODE === 'dev') {
+      res.setHeader('Set-Cookie', cookie.serialize(tokenName, query.jti, {
+        httpOnly: true,
+        expires: new Date(query.exp * 1000),
+        path: '/'
+      }))
+    } else {
+      res.setHeader('Set-Cookie', cookie.serialize(tokenName, query.jti, {
+        httpOnly: true,
+        domain: '.dapengjiaoyu.cn',
+        expires: new Date(query.exp * 1000),
+        path: '/'
+      }))
+    }
     res.statusCode = 200
     res.end()
   } catch (error) {

@@ -49,6 +49,10 @@ export default {
       return Boolean(this.oldPasswd && this.newPasswd && this.aginPasswd)
     }
   },
+  mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+  },
   methods: {
     ...mapActions('user', [
       'modifyPassword'

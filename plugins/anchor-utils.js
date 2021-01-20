@@ -1,5 +1,6 @@
 // 详情页route-name
 const detailsList = [
+  'index-course-courseId',
   'details-dynamic',
   'details-growth',
   'details-homework',
@@ -59,13 +60,33 @@ function isSave (name) {
   return result
 }
 
+function goback () {
+  const isLogin = $nuxt.$cookiz.get('isLogin')
+  if (isLogin) {
+    const isDetails = $nuxt.$isDetails($nuxt.$route.name)
+    $nuxt.$cookiz.set('isLogin', false, {
+      path: '/'
+    })
+    if (isDetails) {
+      $nuxt.$router.go(-4)
+    } else {
+      $nuxt.$router.go(-1)
+    }
+  } else {
+    $nuxt.$router.go(-1)
+  }
+}
+
+
 import Vue from 'vue'
 Vue.prototype.$isDetails = isDetails
 Vue.prototype.$getFunctionName = getFunctionName
 Vue.prototype.$isSave = isSave
+Vue.prototype.$goback = goback
 
 export default {
   isDetails,
   getFunctionName,
+  goback,
   isSave
 }

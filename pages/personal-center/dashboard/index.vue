@@ -45,10 +45,9 @@ export default {
     back: require('@/assets/icons/navbar/nav-arrow-back.png'),
    interactionNews: true
   }),
-  created () {
-    this.$login()
-  },
   mounted(){
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
     /**
      * 路由定位
      */
