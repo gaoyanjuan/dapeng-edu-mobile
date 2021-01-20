@@ -10,8 +10,6 @@
         </van-uploader>
       </div>
     </div>
-    <!-- 分割线 -->
-    <div class="cut-off-line"></div>
     <div class="form-list">
       <div class="form-item">
         <div class="left-text">大鹏号</div>
@@ -30,8 +28,8 @@
         <div class="left-text">绑定手机号</div>
         <span class="right-content">{{userInfo.mobile}}</span>
       </div>
-      <!-- 分割线 -->
-      <div class="cut-off-line"></div>
+    </div>
+    <div class="form-list">
       <nuxt-link class="form-item" tag="div" to='/account-setting/information-edit/true-name'>
         <div class="left-text">真实姓名</div>
         <span class="right-content">{{userInfo.trueName}}</span>
@@ -201,10 +199,11 @@ export default {
 .personal-info {
   overflow: hidden;
   position: relative;
-  background: @dp-white;
+  min-height: 100vh;
+  background: @dp-app-bgc;
   & > .info-header {
+    background: @dp-white;
     height: 88px;
-    margin-left: 15px;
     margin-top: 44px;
     display: flex;
     justify-content: space-between;
@@ -212,6 +211,7 @@ export default {
     & > .left-text {
       width: 60px;
       height: 20px;
+      margin-left: 15px;
       font-size: 14px;
       font-family: @dp-font-regular;
       font-weight: 400;
@@ -237,8 +237,10 @@ export default {
     }
   }
   & > .form-list {
-    margin: 0 15px;
+    margin-top: 12px;
+    background: @dp-white;
     & > .form-item {
+      margin: 0 15px;
       height: 44px;
       border-bottom: 1px solid #f5f5f5;
       display: flex;
@@ -272,9 +274,5 @@ export default {
       }
     }
   }
-}
-.cut-off-line {
-  height:12px;
-  background: @dp-app-bgc;
 }
 </style>
