@@ -35,10 +35,9 @@ export default {
   data:() => ({
     active: 0,
   }),
-  created () {
-    this.$login()
-  },
   mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
     /**
      * 路由定位
      */

@@ -79,7 +79,9 @@ export default {
     }
   },
    mounted() {
-    this.$login()
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    
     // 获取用户信息
     if (this.userInfoGetters.address) {
       this.addressArea = this.userInfoGetters.address
