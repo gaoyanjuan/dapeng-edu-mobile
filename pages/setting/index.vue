@@ -78,7 +78,7 @@ export default {
 .setting-nav-list {
   overflow: hidden;
   position: relative;
-  min-height: calc(100vh - 1px);
+  min-height: calc(100vh);
   background: @dp-app-bgc;
   & > .setting-content {
     margin-top: 44px;
