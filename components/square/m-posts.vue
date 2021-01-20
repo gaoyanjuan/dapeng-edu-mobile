@@ -186,6 +186,8 @@ export default {
     imagePreview: {
       show: false,
       images: [],
+      drawed: [],
+      isDrawed: false,
       startPosition: 1,
       isPraise: false,
       isCollection: false,
@@ -375,14 +377,23 @@ export default {
      * @index：当前图片索引
      */
     openImagePreview(index) {
+      let drawed = { show: false, list: []}
+
+      if(this.pageName === 'myHomework' && this.listItemData.doodlingImg) {
+        drawed.show = true
+        drawed.list = this.listItemData.doodlingImg
+      }
+
       this.imagePreview = {
+        show: true,
+        drawed: drawed.list,
+        isDrawed: drawed.show,
         startPosition: index,
         images: this.listItemData.img,
         isPraise: this.isPraise,
         isCollection: this.isCollection,
         praiseCount: this.praiseCount,
-        commentCount: this.commentCount,
-        show: true
+        commentCount: this.commentCount
       }
     },
 
