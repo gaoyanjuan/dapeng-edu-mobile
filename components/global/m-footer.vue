@@ -145,7 +145,7 @@ export default {
     /**
      * 路由定位
      */
-    this.courseUrl = this.validateSystemHostName().course_host
+    this.courseUrl = this.validateSystemHostName().COURSE_HOST
     const to = this.$route || { name: 'index' }
     if (to.name === 'index') {
       this.active = 'square'

@@ -52,7 +52,7 @@ export default {
 
   computed:{
     courseUrl() {
-      return this.validateSystemHostName().course_host 
+      return this.validateSystemHostName().COURSE_HOST 
     },
   },
 
