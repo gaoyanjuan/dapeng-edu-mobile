@@ -10,12 +10,12 @@ function validateSystemHostName () {
     CLIENT_ID: 'Dd8fbbB5'
   }
   if (process.browser) {
-    localPCParam.host = `//${location.host}`
-    localPCParam.course_host = `//127.0.0.1:3001`
-    testPCParam.host = `//${location.host}`
-    testPCParam.course_host = `//${location.host}/dp-course`
-    prodPCParam.host = `//${location.host}`
-    testPCParam.course_host = `//${location.host}/dp-course`
+    localPCParam.HOST = `//${location.host}`
+    localPCParam.COURSE_HOST = `//127.0.0.1:3001`
+    testPCParam.HOST = `//${location.host}`
+    testPCParam.COURSE_HOST = `//${location.host}/dp-course`
+    prodPCParam.HOST = `//${location.host}`
+    testPCParam.COURSE_HOST = `//${location.host}/dp-course`
   }
   if (process.env.mode === 'test') {
     return testPCParam
