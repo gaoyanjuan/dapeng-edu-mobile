@@ -113,7 +113,7 @@ export default {
         float: right;
         width: 24px;
         height: 24px;
-        vertical-align: middle;
+        vertical-align: middle; 
       }
     }
   }
@@ -124,7 +124,7 @@ export default {
     margin-left: -196px;
     z-index: 55;
     & > button {
-      width: 188px;
+      width: 186px;
       height: 49px;
       border: none;
       background: #ffffff;
