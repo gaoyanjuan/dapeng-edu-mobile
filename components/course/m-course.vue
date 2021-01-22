@@ -59,7 +59,7 @@ export default {
     },
     // 课程URL
     courseUrl() {
-      return this.validateSystemHostName().course_host 
+      return this.validateSystemHostName().COURSE_HOST
     }
   },
 
