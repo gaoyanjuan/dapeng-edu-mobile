@@ -17,7 +17,8 @@
 
         <div class="course-info-teacher">
           <span class="teacher">讲师：{{ course.teacher.nickname }}</span>
-          <span class="counter">{{ course.totalStudent | studentsCount }}人在看</span>
+          <span v-if="showLive" class="counter">{{ course.count | studentsCount }}人在看</span>
+          <span v-else class="counter">{{ course.totalStudent | studentsCount }}人看过</span>
         </div>
       </div>
     </div>
@@ -25,7 +26,7 @@
     <div class="course-line-row" v-if="showLive"></div>
 
     <div class="course-live-row" v-if="showLive">
-      <span class="live-title">{{ course.liveChapters[0].title }}</span>
+      <span class="live-title van-ellipsis">{{ course.liveChapters[0].title }}</span>
       <div class="live-btn" @click.stop="onEnterLiveRoom">进入直播间</div>
     </div>
   </div>
@@ -189,6 +190,7 @@ export default {
   justify-content: space-between;
 
   .live-title {
+    max-width: 250px;
     font-size: 12px;
     font-family: @regular;
     font-weight: 400;
