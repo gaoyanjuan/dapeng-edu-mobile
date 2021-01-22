@@ -112,9 +112,8 @@ export default {
       }
       if (this.attentionListGetters.status === 'loading') return false
       const newPage = this.attentionListGetters.pageInfo.number + 1
-      this.appendAttentionList({
-        page: newPage
-      })
+      this.appendAttentionList({ page: newPage })
+      this._squareLoading({ page_area: '关注', page_area_sec:'', request_type: '手动上拉刷新'})
     },
     pathType(item){
       switch (item.topicType) {

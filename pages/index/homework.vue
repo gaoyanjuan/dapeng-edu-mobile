@@ -37,6 +37,7 @@ export default {
         }
         if (this.$store.getters['homework/homeworkListGetters'].list.length === 0) {
           this.$store.dispatch('homework/appendHomeworkList', { categoryIds: this.$route.query.college, courseType: this.$route.query.courseType, page: 1 })
+          this._squareLoading({ page_area: '作业', page_area_sec:'全部', request_type: '进入页面加载'})
         }
       } catch (error) {}
     }

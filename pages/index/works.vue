@@ -35,6 +35,7 @@ export default {
         }
         if (this.$store.getters['work/workListGetters'].list.length === 0) {
           this.$store.dispatch('work/appendWorkList', { categoryIds: this.$route.query.college, page: 1 })
+          this._squareLoading({ page_area: '作品', page_area_sec:'全部', request_type: '进入页面加载'})
         }
       } catch (error) {}
     }

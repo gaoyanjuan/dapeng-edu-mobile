@@ -4,7 +4,7 @@
     <m-swipe :banner="homeworkBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="CollegesData" />
+    <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="CollegesData" @switchCollegeName="switchCollegeName" />
 
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -43,6 +43,8 @@ export default {
     list: [],
     loading: false,
     finished: false,
+    courseType: '作业',
+    collegeType: '全部', 
     finishedTxt: '没有更多了',
     navRoute:'/details/homework',
     blank:require('@/assets/icons/blank/have-no-homework.png')
@@ -84,6 +86,19 @@ export default {
       } else {
         this.finishedTxt ='没有更多了'
       }
+    },
+    '$route.query':function(newVal, oldVal) {
+      switch (newVal.courseType) {
+        case 'VIP':
+          this.courseType = '正式课' 
+          break
+        case 'TEST':
+          this.courseType = '体验课' 
+          break
+        case 'CHILD':
+          this.courseType = '亲子课' 
+          break
+      }
     }
   },
   mounted(){
@@ -117,6 +132,14 @@ export default {
         courseType: this.$route.query.courseType,
         page: newPage
       })
+      this._squareLoading({ 
+        page_area: this.courseType,
+        page_area_sec:this.collegeType,
+        request_type: '手动上拉刷新'
+      })
+    },
+    switchCollegeName(params) {
+      this.collegeType = params.name
     }
   }
 }

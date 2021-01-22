@@ -34,6 +34,7 @@ export default {
         }
         if (this.$store.getters['reading/readingListGetters'].list.length === 0) {
           this.$store.dispatch('reading/appendReadingList', { collegeId: this.$route.query.college, page: 1 })
+          this._squareLoading({ page_area: '阅读', page_area_sec:'全部', request_type: '进入页面加载'})
         }
       } catch (error) {}
     }
