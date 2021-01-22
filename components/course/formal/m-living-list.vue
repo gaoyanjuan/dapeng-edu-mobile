@@ -4,7 +4,7 @@
     <!-- 当前选择期标题 -->
     <van-sticky offset-top="2.24rem">
       <div class="state-select-header" v-if="selected" @click="openStagePop">
-        <span class="stage-txt">{{selected.title}}（{{calcState()}}）</span>
+        <span class="stage-txt van-ellipsis">{{selected.title}}（{{calcState()}}）</span>
         <img v-if="this.liveStage.length > 1" class="icon-select" :src="select" alt="select"/>
       </div>
     </van-sticky>
@@ -187,7 +187,7 @@ export default {
   .l-flex-row();
 
   .stage-txt {
-    max-width: 260px;
+    max-width: 280px;
     font-size: 15px;
     font-family: @medium;
     font-weight: 500;

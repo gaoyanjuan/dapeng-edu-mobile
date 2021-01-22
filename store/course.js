@@ -161,15 +161,45 @@ export default {
      // 查询用户开通课程列表
     async appendUserCourseList({ commit }, params) {
       commit('changeCoursesStatus', 'loading')
-      const res = await this.$axios.get('old/courses/open', {
+      await this.$axios.get('old/courses/open', {
         params: {
           ...params,
           size: 5
         }
+      }).then(res => {
+        let ids = ''
+        res.data.forEach(item => {
+          if (item.living) {
+            ids += item.liveChannelId + ','
+          }
+        })
+        
+        if (ids) {
+          this.$axios.get('old/platforms/polyv/get-realtime-viewers', {
+            params: {
+              channelIds: ids.substr(0, ids.length - 1)
+            }
+          }).then(views => {
+            
+            for (let i = 0; i < views.data.length; i++) {
+              for (let j = 0; j < res.data.length; j++) {
+                if (parseInt(res.data[j].liveChannelId) === views.data[i].channelId) {
+                  res.data[j].count = views.data[i].count
+                  break
+                }
+              }
+            }
+
+            const pageInfo = { pages: params.page, size: 5 }
+            commit('addUserCourseList', { data: res.data, pageInfo })
+            return res
+          })
+        } else {
+          const pageInfo = { pages: params.page, size: 5 }
+          commit('addUserCourseList', { data: res.data, pageInfo })
+          return res
+        }
       })
-      const pageInfo = { pages: params.page, size: 5 }
-      commit('addUserCourseList', { data: res.data, pageInfo })
-      return res
     },
 
     // 查询课程详情
