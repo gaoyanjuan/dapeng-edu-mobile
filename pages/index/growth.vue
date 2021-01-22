@@ -33,6 +33,7 @@ export default {
         } else {
           this.$store.dispatch('growth/appendGrowthList', { type: 'HOTTEST', page: 1 })
         }
+        this._squareLoading({ page_area: '成长', page_area_sec:'', request_type: '进入页面加载'})
       } catch (error) {}
     }
   },

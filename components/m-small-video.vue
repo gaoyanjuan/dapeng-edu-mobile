@@ -4,7 +4,7 @@
     <m-swipe :banner="videoBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
+    <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college" @switchCollegeName="switchCollegeName"/>
 
     <section class="works-wrapper">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -41,6 +41,7 @@ export default {
     waterFallComplete: false,
     loading: false,
     finished: false,
+    collegeType: '全部',
     finishedTxt:'没有更多了',
     blank:require('@/assets/icons/blank/have-no-video.png')
   }),
@@ -97,6 +98,14 @@ export default {
         collegeId: this.$route.query.college,
         timestamp: newStartTime
       })
+      this._squareLoading({ 
+        page_area: '小视频',
+        page_area_sec:this.collegeType,
+        request_type: '手动上拉刷新'
+      })
+    },
+    switchCollegeName(params) {
+      this.collegeType = params.name
     }
   }
 }
