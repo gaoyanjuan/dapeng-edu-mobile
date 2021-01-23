@@ -17,9 +17,9 @@ function validateSystemHostName () {
     prodPCParam.HOST = `//${location.host}`
     testPCParam.COURSE_HOST = `//${location.host}/dp-course`
   }
-  if (process.env.MODE === 'test') {
+  if (process.env.mode === 'test') {
     return testPCParam
-  } else if (process.env.MODE === 'production') {
+  } else if (process.env.mode === 'production') {
     return prodPCParam
   } else {
     return localPCParam
