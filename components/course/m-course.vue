@@ -72,7 +72,11 @@ export default {
     // 进入直播间逻辑~~~~
     onEnterLiveRoom() {
       const chapterId = this.course.liveChapters[0].id
-      window.location.href = `${this.courseUrl}/secure/course/trial/${this.course.id}/live/${chapterId}`
+      if (this.course.courseType === 'PC_TRIAL') {
+        window.location.href = `${this.courseUrl}/secure/course/trial/${this.course.id}/live/${chapterId}`
+      } else {
+        window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${chapterId}`
+      }
     },
 
     // 进入课程章节列表
