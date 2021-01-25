@@ -818,7 +818,12 @@ export const actions = {
       `tapi/token/?userId=${state.userInfo.userId}`
     )
     return res
-  }
+  },
+  async getCertificatesList({ commit }, params) {
+    const res = await this.$axios.get(`old/certificates`)
+    return res
+    // commit('appendCertificates', data)
+  },
 }
 
 export const getters = {

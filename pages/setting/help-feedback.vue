@@ -15,7 +15,7 @@
         <img
           class="right-arrow"
           src="@/assets/icons/mine/icon-right-arrow.png"
-          alt=""  
+          alt=""
         />
       </nuxt-link>
       <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${3}`">
@@ -25,7 +25,7 @@
           src="@/assets/icons/mine/icon-right-arrow.png"
           alt=""
         />
-      </nuxt-link>
+      </nuxt-link>  
       <nuxt-link class="setting-item" tag="div" :to="`/setting/trouble-shooting?id=${4}`">
         <span class="setting-text">如何联系班主任老师？</span>
         <img
