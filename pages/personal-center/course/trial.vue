@@ -102,7 +102,6 @@ export default {
       }
       
       if (this.userCourseListGetters.status === 'loading') return false
-
       const newPage = this.userCourseListGetters.pageInfo.pages + 1
       this.getCourseList({ type: 'TRIAL', page: newPage })
     }

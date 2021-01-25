@@ -139,13 +139,17 @@ export default {
       } else {
         return '/'
       }
-    }
+    },
+
+    ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    }),
   },
   mounted() {
     /**
      * 路由定位
      */
-    this.courseUrl = this.validateSystemHostName().course_host
+    this.courseUrl = this.validateSystemHostName().COURSE_HOST
     const to = this.$route || { name: 'index' }
     if (to.name === 'index') {
       this.active = 'square'
@@ -160,17 +164,55 @@ export default {
   methods:{
     // 显示发布菜单
     showPublishMenus() {
+      this.matomo('ISSUE')
       this.show = true
     },
-
+ 
     // 切换菜单时
     changeTab(name) {
+      
+      this.matomo(name)
+
       if(name === 'course') {
         window.location.href = `${this.courseUrl}?r=${Math.random()}`
         return false
       }
       
       this.active = name
+    },
+
+    // 触发埋点事件
+    matomo(name) {
+      let params = JSON.stringify({
+        navigation_name: this.transitionTabName(name),
+        user_id: (this.userInfo && this.userInfo.userId) ? this.userInfo.userId : ''
+      })
+      
+      this.$matomo.setCustomVariable(1, 'common#navigation_click', params, 'page')
+      this.$matomo.trackPageView()
+    },
+    
+    // 转换tabbar Name
+    transitionTabName(name) {
+      let res = ''
+      switch (name) {
+        case 'square':
+          res = 'HOME'
+          break
+        case 'ISSUE':
+          res = 'ISSUE'
+          break
+        case 'course':
+          res = 'COURSE'
+          break
+        case 'activities':
+          res = 'ACTIVITY'
+          break
+        case 'personal-center':
+          res = 'ABOUT_US'
+          break
+      }
+      return res
     },
 
     // 进入发布页面

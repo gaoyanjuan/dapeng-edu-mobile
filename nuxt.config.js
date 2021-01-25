@@ -95,7 +95,8 @@ export default {
     { src: '~/plugins/toast.js', ssr: true },
     { src: '~/plugins/animate.js', ssr: true },
     { src: '~/plugins/check-login.js', ssr: true },
-    { src: '~/plugins/anchor-utils.js', ssr: true }
+    { src: '~/plugins/anchor-utils.js', ssr: true },
+    { src: '~/plugins/matomo.js', ssr: true }
   ],
 
   components: true,

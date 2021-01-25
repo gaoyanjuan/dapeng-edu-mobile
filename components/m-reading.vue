@@ -4,7 +4,7 @@
     <m-swipe :banner="articleBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" :menus="readingCollegesGetters" />
+    <m-menus menus-type="college" :menus="readingCollegesGetters" @switchCollegeName="switchCollegeName"/>
 
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -38,6 +38,7 @@ export default {
     list: [],
     loading: false,
     finished: false,
+    collegeType: '全部',
     finishedTxt: '没有更多了',
     blank:require('@/assets/icons/blank/have-no-reading.png')
   }),
@@ -99,6 +100,14 @@ export default {
         categoryIds: this.$route.query.college,
         page: newPage
       })
+      this._squareLoading({ 
+        page_area: '阅读',
+        page_area_sec: this.collegeType,
+        request_type: '手动上拉刷新'
+      })
+    },
+    switchCollegeName(params) {
+      this.collegeType = params.name
     }
   }
 }

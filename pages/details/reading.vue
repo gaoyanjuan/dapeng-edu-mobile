@@ -147,7 +147,9 @@ export default {
         if (!this.userInfo) {
           this.$login()
         } else if (this.reading.user && this.userInfo.userId !== this.reading.user.userId) {
-          this.$router.replace('/404')
+          if (this.userInfo.userId !== this.reading.operatorId) {
+            this.$router.replace('/404')
+          }
         }
       }
     },

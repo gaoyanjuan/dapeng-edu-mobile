@@ -16,8 +16,8 @@
             <template #value> <span> {{activeNames === i ? '折叠': '展开'}} </span> </template>
             
             <!-- 手风琴列表 -->
-            <div v-for="(lecture, j) in item.lectures" class="record-item" :key="j" @click="enterRecordRoom(lecture)">
-              <span :class="lecture.haveLearned ? 'record-item-title-active':'record-item-title'">{{ lecture.title }}</span>
+            <div v-for="(lecture, j) in item.lectures" class="record-item" :key="j" @click="enterRecordRoom(item, lecture)">
+              <span :class="lecture.haveLearned ? 'record-item-title-active van-ellipsis':'record-item-title van-ellipsis'">{{ lecture.title }}</span>
               <span class="record-item-percentage" v-if="lecture.haveLearned"> 已看：{{ lecture.percentage }}%</span>
             </div>
 
@@ -77,7 +77,7 @@ export default {
     }),
 
     courseUrl() {
-      return this.validateSystemHostName().course_host 
+      return this.validateSystemHostName().COURSE_HOST 
     },
 
     courseId() {
@@ -117,8 +117,8 @@ export default {
       this.appendRecordChapters({ courseId: this.courseId, page: newPage })
     },
 
-    enterRecordRoom(params) {
-      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
+    enterRecordRoom(item, params) {
+      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&cid=${item.sectionId}&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
       window.location.href = this.courseUrl + url
     }
   },
@@ -158,6 +158,9 @@ export default {
       font-family: @medium;
       font-weight: 600;
       color: #18252C;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
 
     .van-cell__value {

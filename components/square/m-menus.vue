@@ -84,6 +84,8 @@ export default {
           [this.menusType] : item.id
         }
       })
+
+      this.$emit('switchCollegeName', item)
     }
   },
 }

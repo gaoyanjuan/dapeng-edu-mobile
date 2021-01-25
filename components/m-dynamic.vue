@@ -119,8 +119,11 @@ export default {
       }
       if (this.hotDynamicListGetters.status === 'loading') return false
       const newPage = this.hotDynamicListGetters.page + 1
-      this.appendHotDynamicList({
-        page: newPage
+      this.appendHotDynamicList({ page: newPage })
+      this._squareLoading({
+        page_area: '动态',
+        page_area_sec: '',
+        request_type: '手动上拉刷新'
       })
     },
     getMoreNewData () {
@@ -130,8 +133,11 @@ export default {
       }
       if (this.newDynamicListGetters.status === 'loading') return false
       const newPage = this.newDynamicListGetters.page + 1
-      this.appendNewDynamicList({
-        page: newPage
+      this.appendNewDynamicList({ page: newPage })
+      this._squareLoading({ 
+        page_area: '动态',
+        page_area_sec: '',
+        request_type: '手动上拉刷新'
       })
     }
   },
