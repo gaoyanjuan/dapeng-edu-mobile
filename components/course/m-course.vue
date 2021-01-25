@@ -81,6 +81,12 @@ export default {
 
     // 进入课程章节列表
     onEnterCourseChapter() {
+      
+      if(params.openStatus === 'UNCONFIRMED') {
+        this.$toast('页面加载异常，请稍后～')
+        return false 
+      }
+
       this.addCourseDetail(this.course)
 
       this.$store.commit('changeListData', {
