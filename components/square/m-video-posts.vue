@@ -1,20 +1,20 @@
 <template>
   <div class="video-posts-wrap">
 
-    <nuxt-link tag="div" class="video-posts-content" :to="`/details/video?id=${item.id}`">
+    <div class="video-posts-content" @click="toDetail">
       {{ item.title }}
-    </nuxt-link>
+    </div>
 
-    <nuxt-link tag="div" class="video-posts-cover" :to="`/details/video?id=${item.id}`">
+    <div class="video-posts-cover"  @click="toDetail">
       <img v-if="item.video && item.video.cover" class="video-cover" v-lazy="item.video.cover" />
       <img v-else class="video-cover" v-lazy="cover" alt="" />
       <img class="video-play" :src="playBtn" alt="" />
       <span class="video-duration"> {{ item.video.duration }} </span>
-    </nuxt-link>
+    </div>
 
     <div class="video-posts-info">
       <div class="video-posts-label">视频·{{ item.college.name.replace(/学院/, '') }}</div>
-      <span class="video-posts-nickname">{{ item.user.nickname }}</span>
+      <span class="video-posts-nickname">{{ nickname}}</span>
       <span class="video-posts-date">{{ item.createTime | commonDate }}</span>
     </div>
 
@@ -77,6 +77,15 @@ export default {
       this.praiseCount = newVal.praiseCount
       this.isPraise = newVal.isPraise
       this.isCollection = newVal.isCollection
+    },
+  },
+  computed:{
+    nickname () {
+      if (this.item &&  this.item.user && this.item.user.nickname) {
+        return this.item.user.nickname
+      } else {
+        return '佚名'
+      }
     },
   },
   mounted(){
@@ -160,11 +169,11 @@ export default {
     },
     toDetail() {
       this.$cookiz.remove('isLogin')
-
+      
       this.$store.commit('changeListData', {
         listType: 'video',
         propIndex: this.propIndex,
-        anchorId: this.listItemData.id
+        anchorId: this.item.id
       })
       this.$router.push({
         path: `/details/video?id=${this.item.id}`
