@@ -174,7 +174,7 @@ export default {
       this.matomo(name)
 
       if(name === 'course') {
-        window.location.href = `${this.courseUrl}?r=${Math.random()}`
+        window.location.href = `${this.courseUrl}`
         return false
       }
       
