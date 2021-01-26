@@ -44,9 +44,11 @@ export default {
     this.$nextTick(() => {
       this.show = true
     })
+  
   },
   methods: {
-    ...mapActions("banner", ["appendAdverList"])
+    ...mapActions("banner", ["appendAdverList"]),
+   
   }
 }
 </script>
