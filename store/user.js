@@ -610,7 +610,7 @@ export const actions = {
   },
   // 注册用户
   async userRegister (state, params) {
-    const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)
+    const res = await this.$axios.post('/old/users/register', params)
     return res
   },
   // 用户的发布作业列表

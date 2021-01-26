@@ -15,6 +15,13 @@
               :imgSmall="res.recommendTopic.coverImgSmall"
               :item="res.recommendTopic"
             />
+            <m-video-posts
+              v-else-if="res && res.hotType === 'MOVIE'"
+              :id="res.recommendTopic ? res.recommendTopic.id: ''"
+              listType="recommend"
+              :propIndex="i"
+              :item="res.recommendTopic"
+            />
             <m-posts
               v-else
               :id="res.recommendTopic ? res.recommendTopic.id : ''"

@@ -19,9 +19,9 @@
       <van-tab title= '阅读'>
         <publish-reading :showPersonal="showPersonal"/>
       </van-tab>
-      <!-- <van-tab title= '视频'>
+      <van-tab title= '视频'>
         <publish-video />
-      </van-tab> -->
+      </van-tab>
     </van-tabs>
   </div>
 </template>

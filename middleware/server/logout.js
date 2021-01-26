@@ -9,11 +9,11 @@ export default function (req, res, next) {
     res.setHeader('Set-Cookie', [
       cookie.serialize(tokenName, '', {
         domain: '.dapengjiaoyu.cn',
-        expires: new Date(),
+        expires: new Date(0),
         path: '/'
       }),
       cookie.serialize(tokenName, '', {
-        expires: new Date(),
+        expires: new Date(0),
         path: '/'
       })
     ])

@@ -10,11 +10,12 @@
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="videoListGetters.list.length">
           <m-video-posts v-for="(item, i) in videoListGetters.list"
-          :id="item ? item.id: ''"
-          :propIndex="i"
-          :key="item ? item.id + i : i"
-          :item="item"
-        />
+            :id="item ? item.id: ''"
+            :propIndex="i"
+            listType="video"
+            :key="item ? item.id + i : i"
+            :item="item"
+          />
         </template>
         <template v-if="!videoListGetters.list.length && finished">
           <div class="works-blank-wrap">

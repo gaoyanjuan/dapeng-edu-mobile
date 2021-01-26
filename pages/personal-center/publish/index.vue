@@ -368,15 +368,6 @@ export default {
   font-weight: 400;
   color: #0CB65B;
 }
-/deep/.van-tab {
-  width: 45px;
-  text-align: center;
-  flex: 0;
-  -webkit-flex: 0;
-}
-/deep/ .van-tab__text--ellipsis  {
-  width: 45px;
-}
 
 /deep/ .van-tabs__nav--line {
   padding-left: 35px;

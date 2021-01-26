@@ -40,6 +40,12 @@
               :imgSmall="item.coverImg"
               :item="item"
             />
+            <m-video-posts
+              v-else-if="item && item.topicType === 'MOVIE'"
+              listType="label"
+              :propIndex="index"
+              :item="item"
+            />
             <m-posts
               v-else
               listType="label"
@@ -83,6 +89,7 @@ export default {
         { name: '作品', topicType: 'WORKS' },
         { name: '动态', topicType: 'LIFE' },
         { name: '阅读', topicType: 'ARTICLE' },
+        { name: '视频', topicType: 'MOVIE' },
         { name: '小视频', topicType: 'VIDEO' }
       ]
     }
