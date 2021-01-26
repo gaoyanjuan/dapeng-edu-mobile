@@ -9,7 +9,13 @@
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="videoListGetters.list.length">
-          <m-video-posts v-for="(item, i) in videoListGetters.list" :id="item ? item.id + i: i" :propIndex="i" :key="i" :item="item"/>
+          <m-video-posts v-for="(item, i) in videoListGetters.list"
+            :id="item ? item.id: ''"
+            :propIndex="i"
+            listType="video"
+            :key="item ? item.id + i : i"
+            :item="item"
+          />
         </template>
         <template v-if="!videoListGetters.list.length && finished">
           <div class="works-blank-wrap">
@@ -30,6 +36,7 @@ export default {
     list: [],
     loading: false,
     finished: false,
+    collegeType: '全部',
     finishedTxt:'没有更多了',
     blank:require('@/assets/icons/blank/have-no-video.png')
   }),
@@ -91,6 +98,11 @@ export default {
       this.appendVideoList({
         collegeId: this.$route.query.college,
         page: newPage
+      })
+      this._squareLoading({ 
+        page_area: '视频',
+        page_area_sec: this.collegeType,
+        request_type: '手动上拉刷新'
       })
     }
   }

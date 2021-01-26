@@ -71,11 +71,15 @@ export const actions = {
     commit('appendReadingList', { data: res.data, pageInfo })
     return res
   },
+  async appendBrowseCount (store, params) {
+    const res = await this.$axios.put(`/articles/browse/${params.id}`)
+    return res
+  },
   /** * 查询作品详情 */
-  async appendReadingDetails({ commit }, params) {
+  async appendReadingDetails({ commit, dispatch }, params) {
     const res = await this.$axios.get(`/articles/${params.id}`)
     try {
-      this.$axios.put(`/articles/browse/${params.id}`)
+      dispatch('appendBrowseCount', params)
     } catch (error) {}
     commit('appendReadingDetails', res)
     return res

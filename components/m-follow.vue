@@ -27,6 +27,14 @@
               :key="res.topic ? res.topic.id: ''"
               :item="res.topic"
             />
+            <m-video-posts 
+              v-else-if="res && res.topicType === 'MOVIE'"
+              :id="res.topic ? res.topic.id: ''"
+              listType="attention"
+              :propIndex="i"
+              :key="res.topic ? res.topic.id + i : i"
+              :item="res.topic"
+            />
             <m-posts
               v-else
               :id="res.topic ? res.topic.id: ''"

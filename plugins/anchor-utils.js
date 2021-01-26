@@ -38,6 +38,8 @@ function getFunctionName (name) {
     return 'label/changeLabelList'
   } else if (name === 'article')  {
     return 'reading/changeReadingList'
+  } else if (name === 'video') {
+    return 'video/changeVideoList'
   }
 }
 

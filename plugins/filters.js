@@ -142,6 +142,19 @@ const studentsCount = function (value) {
   }
   return num
 }
+
+// 通用数量过滤
+const commonCount = function (value) {
+  let num
+  if (value > 9999) {
+    // 大于9999显示x.xx万
+    num = (Math.floor(value / 1000) / 10).toFixed(1) + 'w'
+  } else {
+    num = value
+  }
+  return num
+}
+
 /**
  * 手机号掩码
  * @param {*} mobile
@@ -230,6 +243,7 @@ const filter = {
   commonDate,
   lecturerCommentDate,
   studentsCount,
+  commonCount,
   maskMobile,
   studyProcess,
   requireData,
