@@ -260,8 +260,10 @@ export default {
         case "task":
           break;
         case "teacher":
+           window.open(process.env.leyuUrl, '_blank')
           break;
         case "suggest-complaint":
+           window.open(process.env.leyuUrl, '_blank')
           break;
         case "setting":
           if (!this.$login()) return;
