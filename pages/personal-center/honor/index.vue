@@ -1,21 +1,21 @@
 <template>
   <div class="my-honor">
     <m-navbar title="我的荣誉" />
-    <div class="honor-back" v-if="honor&&tables">
+    <div ref="certDiv" class="honor-back" v-if="certificatesGetters">
       <div class="cer_comain">
         <img src="@/assets/icons/mine/jiekezhengshu.png" alt="" />
-        <button></button>
+        <button @click="handleUploading"></button>
         <div class="xy_message">
           <p>
-            <strong>{{ honor.nickname }}</strong
-            >同学已修完大鹏教育<br />{{ honor.setMealName }}
+            <strong>{{ certificatesGetters.nickname }}</strong
+            >同学已修完大鹏教育<br />的{{ certificatesGetters.setMealName }}
             ，特此证明。
           </p>
         </div>
         <div class="xy_content">
-          <p>姓名：{{ honor.nickname }}</p>
-          <p>性别：{{ honor.sex }}</p>
-          <p>身份证号：{{ honor.card }}</p>
+          <p>姓名：{{ certificatesGetters.nickname }}</p>
+          <p>性别：{{ certificatesGetters.sex }}</p>
+          <p>身份证号：{{ certificatesGetters.card }}</p>
         </div>
         <table class="score_table">
           <tr>
@@ -23,16 +23,16 @@
             <th>课程</th>
             <th>成绩</th>
           </tr>
-          <tr v-for="item in tables">
-            <td>{{ item.id }}</td>
+          <tr v-for="( item ,index ) in certificatesGetters.courses" :key="index">
+            <td>{{ index + 1 }}</td>
             <td>{{ item.title }}</td>
             <td>合格</td>
           </tr>
         </table>
         <div class="bott_yz">
           <img src="@/assets/icons/mine/jkzs_dpyinzhang.png" alt="" />
-          <p>证书编号：{{ honor.num }}</p>
-          <p>发证时间：{{ honor.cerTime | commonDate }}</p>
+          <p>证书编号：{{ certificatesGetters.num }}</p>
+          <p>发证时间：{{ certificatesGetters.cerTime | commonDate }}</p>
         </div>
       </div>
     </div>
@@ -40,37 +40,72 @@
       <img src="@/assets/icons/mine/ip-deep.png">
       <p>未取得证书，加油学习吧~</p>
     </div>
+    <van-popup v-model="show">
+      <img class="close-img" @click="handelClose" src="@/assets/icons/mine/close.png" alt="">
+      <img class="popup-img" :src="img" alt="">
+      <h1>长按图片保存哦~</h1>
+    </van-popup>
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { dataURLtoBlob } from '@/plugins/assist'
+import html2canvas from 'html2canvas'
+import {mapGetters,mapActions } from "vuex"
+import { validateEmpty } from '@/utils/validate.js'
 export default {
   layout: "navbar",
   data() {
     return {
-      honor: {},
-      tables: [],
+      certificates: {},
+      img: '',
+      show:false,
     };
   },
   mounted() {
     // 链接访问时判断是否登录
     if (!this.$login()) return
-    this.unsubscribe()
+    if (validateEmpty(this.certificatesGetters)) {
+      this.getCertificatesList()
+    }
+  },
+  computed: {
+    ...mapGetters("user", ["certificatesGetters"]),
   },
   methods: {
     ...mapActions("user", ["getCertificatesList"]),
-    async unsubscribe() {
-      await this.getCertificatesList().then((res) => {
-        this.honor = res.data[0]
-        this.tables = res.data[0]
-        let course = []
-        this.tables.courses.map((item) => {
-          course.push(item)
-          return course
-        })
-        this.tables = course
+    handleUploading () {
+      this.show = true
+      this.generatedImage(`结课证书${Date.parse(new Date())}.png`)
+    },
+    handelClose () {
+      this.show = false
+    },
+    // 获取下载证书url
+    generatedImage (imgName) {
+      const _this = this
+      window.pageYOffset = 0
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      // eslint-disable-next-line no-undef
+      // const imageWrapper = document.getElementById('certDiv')
+      // console.log(document.getElementById('certDiv'))
+      html2canvas(this.$refs.certDiv, {
+        // scale: 1,
+        scale: 3.75, // 图片质量增大至300dpi标准
+        useCORS: true
+        // x: imageWrapper.getBoundingClientRect().left + 8
+      }).then(function (canvas) {
+        const imgUri = canvas
+          .toDataURL('image/png')
+          .replace('image/png', 'image/octet-stream') // 获取生成的图片的url
+        // 将base64转为blob
+        const blob = dataURLtoBlob(imgUri)
+        const files = new window.File([blob],imgName,{ type: blob.type })
+        // 将blob转为img
+        _this.img = window.URL.createObjectURL(files)
+        console.log(_this.img)
       })
-    }
+    },
   },
 }
 </script>
@@ -186,6 +221,28 @@ export default {
     left: 108px;
     // line-height: 20px;
    }
+  }
+  .van-popup {
+    width: 300px;
+    height: 410px;
+    & > .close-img {
+      width: 36px;
+      height: 29px;
+      position: absolute;
+      right: 3px;
+    }
+    & > .popup-img {
+      width: 187px;
+      height: 348px;
+      margin: 10px 58px 0 56px;
+    }
+    & > h1 {
+      font-size: 0.26rem;
+      color: #666;
+      text-align: center;
+      line-height: 40px;
+      font-weight: 400;
+    }
   }
 }
 </style>

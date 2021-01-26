@@ -33,6 +33,7 @@
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
     "dayjs": "^1.8.36",
+    "html2canvas": "^1.0.0-rc.7",
     "image-size": "^0.9.3",
     "jwt-decode": "^3.1.2",
     "nuxt": "^2.14.5",

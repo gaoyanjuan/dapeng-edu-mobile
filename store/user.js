@@ -221,8 +221,9 @@ export const state = () => ({
         pages: 1,
         size: process.env.global.pageSize
       }
-    }
+    },
   },
+  certificates: []
 })
 
 export const mutations = {
@@ -468,7 +469,10 @@ export const mutations = {
   changeListStatus(state, payload) {
     let type = payload
     state[type].status = 'loading'
-  }
+  },
+  appendCertificates(state, payload) {
+    state.certificates = payload.data[0]
+  },
 }
 
 export const actions = {
@@ -819,10 +823,10 @@ export const actions = {
     )
     return res
   },
-  async getCertificatesList({ commit }, params) {
+  async getCertificatesList({ commit}) {
     const res = await this.$axios.get(`old/certificates`)
+    commit('appendCertificates', res)
     return res
-    // commit('appendCertificates', data)
   },
 }
 
@@ -869,4 +873,7 @@ export const getters = {
   publishVideoGetters(state) {
     return state.publishVideo
   },
+  certificatesGetters(state) {
+  return state.certificates
+},
 }
