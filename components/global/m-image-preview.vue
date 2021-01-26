@@ -87,6 +87,7 @@ export default {
       isCollection: false,
       showMenusPopup:false,
       imagesMode: true,
+      originalImages: [],
       more:require('@/assets/icons/preview/more.png'),
       close: require('@/assets/icons/preview/close.png'),
       comment: require('@/assets/icons/preview/comment.png'),
@@ -171,6 +172,10 @@ export default {
     /** 打开涂鸦模式 */
     lookScrawl() {
       let arr = []
+
+      // 先备份一份原图
+      this.originalImages = this.imagePreview.images
+
       this.imagePreview.drawed.forEach(element => {
         arr.push(element.graffiti.url)
       })
@@ -180,11 +185,7 @@ export default {
 
     /*** 打开原图模式 */
     lookOriginal() {
-      let arr = []
-      this.imagePreview.drawed.forEach(element => {
-        arr.push(element.original.url)
-      })
-      this.imagePreview.images = arr
+      this.imagePreview.images = this.originalImages
       this.imagesMode = true
     }
   }
