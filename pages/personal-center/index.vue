@@ -156,7 +156,7 @@ export default {
         icon: require("@/assets/icons/mine/icon-my-collection.png"),
       },
       {
-        txt: "学习荣誉",
+        txt: "我的荣誉",
         name: "learn-honor",
         icon: require("@/assets/icons/mine/icon-learn-honor.png"),
       },
