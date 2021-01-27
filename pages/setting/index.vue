@@ -2,7 +2,7 @@
   <div class="setting-nav-list">
     <m-navbar title="设置" />
     <div class="setting-content">
-      <nuxt-link class="setting-item" tag="div" to="/account-setting/account-safety">
+      <div class="setting-item" @click="onToAccountSafety">
         <span class="setting-text">账号安全</span>
         <span class="safety-grade">账号安全等级</span>
         <img
@@ -10,7 +10,7 @@
           src="@/assets/icons/mine/icon-right-arrow.png"
           alt=""
         />
-      </nuxt-link>
+      </div>
       <div class="setting-item" tag="div" @click="onToProtocolPolicy">
         <span class="setting-text">协议与政策</span>
         <img
@@ -63,6 +63,10 @@ export default {
         process.env.protocol +
         "index?is_login=N&is_vip=N&platform=wap&dpaccount=&from=SERVICE_AGREEMENT&userid=";
       location.href = href;
+    },
+    onToAccountSafety() {
+      if (!this.$login()) return;
+       this.$router.push({path: "/account-setting/account-safety"})
     },
     // 退出登录
     onLogoutEvent() {
