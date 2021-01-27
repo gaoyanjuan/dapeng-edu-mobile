@@ -44,11 +44,11 @@ export default {
         state.readingColleges = state.readingColleges.concat(payload.data)
       } else if (payload.collegeType === 'RELEASE_TASK') {
         state.homeworkColleges = state.homeworkColleges.concat(payload.data)
-      } else if (payload.collegeType === 'RELEASE_WORK') {
+      } else if (payload.collegeType === 'RELEASE_WORK' || payload.collegeType === 'RELEASE_GROW') {
         state.submitWorkColleges = payload.data
       } else if (payload.collegeType === 'SQUARE_TASK_TRIAL') {
         state.squareTaskTrialColleges = state.squareTaskTrialColleges.concat(payload.data)
-      }  else {
+      } else {
         state.colleges = payload.data
       }
     }
