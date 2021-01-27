@@ -36,7 +36,7 @@
           placeholder="请再次输入密码"
         />
       </div>
-      <!-- <div class="hint">密码为6—18位数字、可包含数字、大小写字母和下划线</div> -->
+      <div class="hint">密码为6—18位数字、可包含数字、大小写字母和下划线</div>
       <div :class="isCodeEmpty ? 'unfinished' : 'finish'" @click="onAccomplishBtn">完成</div>
     </div>
     <div class="form-list" v-if="mobileState === 'Verification'">
