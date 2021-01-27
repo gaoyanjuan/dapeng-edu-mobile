@@ -266,7 +266,6 @@ export default {
            window.open(process.env.leyuUrl, '_blank')
           break;
         case "setting":
-          if (!this.$login()) return;
           this.$router.push({
             path: "/setting",
           });

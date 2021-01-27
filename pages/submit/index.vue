@@ -76,8 +76,11 @@
         <template v-else-if="homeworkDetails"> {{ homeworkDetails.college | filterCollageName }} </template>
       </section>
 
+      <!-- 生活动态标签 -->
+      <section v-if="submitType === 'LIFE'" class="dynamic-label-row">动态</section>
+
       <!-- 作品--添加学院 -->
-      <section v-if="submitType === 'WORKS'" class="works-college-wrap">
+      <section v-if="submitType === 'WORKS' || $route.query.contentType" class="works-college-wrap">
         <div class="college-label-row">
           <img class="college-label" :src="label" alt="label" />
           <span class="college-txt">添加学院</span>
@@ -92,9 +95,6 @@
           </div>
         </div>
       </section>
-
-      <!-- 生活动态标签 -->
-      <section v-if="submitType === 'LIFE'" class="dynamic-label-row">动态</section>
 
       <!-- 添加标签 -->
       <section class="homework-label-select-row">
@@ -348,6 +348,10 @@ export default {
       this.dynamicNums = '只能输入200个字哦'
       this.openAppPop.show = true
       this.getActivities()
+
+      if (this.$route.query.contentType) {
+        this.getColleges({collegeType: 'RELEASE_GROW'})
+      }
       
     } else {
       this.dynamicNums = '只能输入60个字哦'
@@ -578,6 +582,8 @@ export default {
       }
 
       if(this.$route.query.contentType) {
+        let index = this.collegeIndex
+        params.collegeId = this.collegeList[index].id
         params.activityId = this.activityData.id
         params.activityType = this.activityData.activity.type
       }
