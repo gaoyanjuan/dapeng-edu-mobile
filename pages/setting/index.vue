@@ -11,7 +11,7 @@
           alt=""
         />
       </div>
-      <div class="setting-item" tag="div" @click="onToProtocolPolicy">
+      <!-- <div class="setting-item" tag="div" @click="onToProtocolPolicy">
         <span class="setting-text">协议与政策</span>
         <img
           class="right-arrow"
@@ -34,7 +34,7 @@
           src="@/assets/icons/mine/icon-right-arrow.png"
           alt=""
         />
-      </nuxt-link>
+      </nuxt-link> -->
     </div>
     <!-- 退出登录 -->
     <div
