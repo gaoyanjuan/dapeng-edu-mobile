@@ -4,7 +4,6 @@
     <div class="body_main">
       <div class="about_logo">
         <img src="@/assets/icons/mine/dapeng.png" alt="" />
-        <p>v2.1</p>
       </div>
       <div class="about_content">
         <div class="site-com">
