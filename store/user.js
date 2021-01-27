@@ -223,7 +223,8 @@ export const state = () => ({
       }
     },
   },
-  certificates: []
+  certificates: [],
+  isVerify: null
 })
 
 export const mutations = {
@@ -473,6 +474,9 @@ export const mutations = {
   appendCertificates(state, payload) {
     state.certificates = payload.data[0]
   },
+  geMyState(state, payload) { 
+    state.isVerify = payload.data
+  }
 }
 
 export const actions = {
@@ -605,6 +609,12 @@ export const actions = {
   // 重置密码
   async resetPassword (state, params) {
     const res = await this.$axios.put('/old/users/reset-password', params)
+    return res
+  },
+  // 查询当前用户账号状态
+  async geMyState ({ commit }) {
+    const res = await this.$axios.get('old/users/state')
+    commit('geMyState', res)
     return res
   },
    // 意见反馈
@@ -874,6 +884,9 @@ export const getters = {
     return state.publishVideo
   },
   certificatesGetters(state) {
-  return state.certificates
-},
+    return state.certificates
+  },
+  userStatusGetters(state) { 
+    return state.isVerify
+  }
 }
