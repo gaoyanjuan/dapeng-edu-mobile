@@ -109,7 +109,7 @@ export default {
     //确认选中
     areaConfirm(res) {
       this.showAreaPopup = false
-      const area = res[0].name + res[1].name + res[2].name
+      const area = res[0].name + '@' + res[1].name + '@' + res[2].name
       this.addressArea = area
       this.accomplishStatus = true
     },
