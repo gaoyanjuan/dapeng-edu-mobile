@@ -1,5 +1,5 @@
 <template>
-  <div class="m-works" @click="toDetail">
+  <div class="m-works" @click="toDetail" v-if="listItemData">
     <!-- header -->
     <m-avatar
       avatar-style="width:40px; height:40px;"

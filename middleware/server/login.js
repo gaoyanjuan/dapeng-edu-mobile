@@ -48,8 +48,8 @@ export default function (req, res, next) {
           expires: new Date(decodedData.exp * 1000),
           path: '/'
         }),
-        cookie.serialize('redirect_url', '', { expires: new Date() }),
-        cookie.serialize('NotLogged', '', { expires: new Date() }),
+        cookie.serialize('redirect_url', '', { expires: new Date(0) }),
+        cookie.serialize('NotLogged', '', { expires: new Date(0) }),
         cookie.serialize('isLogin', true),
         cookie.serialize('matomo', state)
       ])
@@ -61,8 +61,8 @@ export default function (req, res, next) {
           expires: new Date(decodedData.exp * 1000),
           path: '/'
         }),
-        cookie.serialize('redirect_url', '', { expires: new Date() }),
-        cookie.serialize('NotLogged', '', { expires: new Date() }),
+        cookie.serialize('redirect_url', '', { expires: new Date(0) }),
+        cookie.serialize('NotLogged', '', { expires: new Date(0) }),
         cookie.serialize('isLogin', true),
         cookie.serialize('matomo', state)
       ])

@@ -1,10 +1,10 @@
 <template>
   <div>
     <m-tabs>
-      <m-tab-item selected="true" name="评论" :count="detailsGetters.commentCount">
+      <m-tab-item selected="true" name="评论" :count="commentCount">
         <m-comment-list :contentType="contentType" :courseType="courseType" />
       </m-tab-item>
-      <m-tab-item name="喜欢" :count="detailsGetters.praiseCount">
+      <m-tab-item name="喜欢" :count="praiseCount">
         <m-like-list />
       </m-tab-item>
     </m-tabs>
@@ -21,7 +21,9 @@
 </template>
 
 <script>
+import filter from '@/plugins/filters'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+
 export default {
   props: {
     detailData: {
@@ -66,6 +68,12 @@ export default {
     }),
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)
+    },
+    commentCount () {
+      return filter.commonCount(this.detailsGetters.commentCount)
+    },
+    praiseCount () {
+      return filter.commonCount(this.detailsGetters.praiseCount)
     }
   },
   methods: {
