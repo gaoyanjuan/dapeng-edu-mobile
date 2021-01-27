@@ -848,7 +848,16 @@ export default {
 
     /*** 添加学院 */
     changeCollege(index, item) {
-      this.collegeIndex = index
+
+      if(this.$route.query.contentType) {
+        if(index === this.collegeIndex) {
+          this.collegeIndex = null
+        } else {
+          this.collegeIndex = index
+        }
+      } else {
+        this.collegeIndex = index
+      }
     },
 
     /** 关闭底部唤起 */

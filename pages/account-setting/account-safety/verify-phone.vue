@@ -1,24 +1,18 @@
 <template>
   <div class="replace-phone">
-    <m-navbar title="更换手机号" />
+    <m-navbar title="绑定手机号" />
     <div class="form-list">
-      <div class="form-item txt">您正在进行手机换绑操作，请输入现有手机号，并为新手机验证以完成变更:</div>
+      <div class="form-item txt">您的手机号尚未验证，为保障账户安全，请验证您的手机号:</div>
       <div class="form-item">
-        <div class="tip">变更前：</div>
         <input type="text" class="phone-number"
-        v-bind:value="userInfoGetters.mobile | maskMobile" disabled="disable">
-      </div>
-      <div class="form-item">
-        <div class="tip">变更后：</div>
-        <input type="text" class="phone-number"
-        placeholder="请输入新手机号" v-model.trim="mobile">
+          placeholder="请输入新手机号" v-model.trim="mobile">
       </div>
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
         <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
-      <div :class="isEmpty ? 'unfinished' : 'finish'" @click="onConfirmBtn">确认更换</div>
+      <div :class="isEmpty ? 'unfinished' : 'finish'" @click="onConfirmBtn">提交</div>
     </div>
   </div>
 </template>
@@ -62,15 +56,6 @@ export default {
     ]),
     // 发送验证码校验
     async sendMobileCode() {
-      // 校验输入的手机号
-      if (this.mobile === this.userInfoGetters.mobile) {
-        this.$toast({
-          message: `变更后手机号与现有相同!`,
-          position: 'bottom',
-          duration: 2000
-        })
-        return false
-      }
       if (validateMobile(this.mobile)) {
         const params = {
           mobile: this.mobile,
@@ -89,7 +74,7 @@ export default {
             })
           } else {
             this.$toast({
-              message: `获取验证码失败`,
+              message: `短信验证码发送失败`,
               position: 'bottom',
               duration: 2000
             })
@@ -133,14 +118,14 @@ export default {
       const data = {
         mobile: this.mobile,
         code: this.code,
-        type: 'ReplaceMobile',
+        type: 'SelfVerification',
         verificationType: 'ACCOUNT'
       }
       await this.verificationMobile(data)
       .then((res) => {
         if (res.status === 200) {
           this.$toast({
-            message: `手机号更换成功`,
+            message: `手机号绑定成功`,
             position: 'bottom',
             duration: 2000
           })
@@ -177,7 +162,7 @@ export default {
     margin: 56px 47px 0 46px;
     & > .txt {
       width: 282px;
-      height: 50px;
+      height: 70px;
       font-size: 14px;
       font-family: @dp-font-semibold;
       font-weight: 600;
