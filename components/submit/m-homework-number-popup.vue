@@ -45,13 +45,13 @@ export default {
 
 .van-popup {
   width: 260px !important;
-  height: 235px !important;
+  min-height: 235px !important;
   overflow: hidden;
 }
 
 .popup-warp {
   width: 260px;
-  height: 235px;
+  min-height: 235px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -76,17 +76,14 @@ export default {
 
   & .popup-body {
     width: 224px;
-    height: 24px;
     margin-top: 44px;
-    display: flex;
     align-items: center;
     justify-content: center;
-
+    word-break: break-all;
     font-size: 16px;
     font-family: @regular;
     font-weight: 400;
     color: #36404A;
-    .text-ellipsis()
   }
 
   & .popup-footer {
@@ -112,6 +109,7 @@ export default {
 
   & .popup-copy-row {
     margin-top: 12px;
+    padding-bottom: 12px;
     font-size: 12px;
     font-family: @regular;
     font-weight: 400;
