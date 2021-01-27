@@ -3,7 +3,7 @@ module.exports = {
     MODE: 'development',
     REFRESH_TOKEN_URL: 'http://ag.kong.dapeng.lan', // 中台刷新token,验证token有效性
     BASE_URL: 'http://ag.kong.dapeng.lan/pcmove', // 网关广场模块地址
-    OLD_BASE_URL: 'http://192.168.1.62/pc/api', // 网关课程模块地址
+    OLD_BASE_URL: 'http://ag.kong.dapeng.lan/pc', // 网关课程模块地址
     DP_AUTH_URL: 'http://passport.dapeng.lan', // 认证中心外网地址
     DP_AUTH_TOKEN_URL: 'http://passport.dapeng.lan', // 认证中心内网地址
     OSS_URL: 'https://testimage.dapengjiaoyu.com', // oss地址
