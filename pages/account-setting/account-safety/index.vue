@@ -4,6 +4,19 @@
     <div class="account-safety_content">
       <safety-grade :scoreNum="this.score"/>
       <nuxt-link
+        v-if="mobileState !== 'Verification'"
+        class="modification-box"
+        tag="div"
+        to="/account-setting/account-safety/verify-phone"
+      >
+        <div class="modification-left-box">
+          <div class="modification-text">手机号验证</div>
+          <div class="modification-explain">您的手机号尚未验证，为保障账户安全，请验证您的手机号</div>
+        </div>
+        <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
+      </nuxt-link>
+      <nuxt-link
+        v-if="mobileState === 'Verification'"
         class="modification-box"
         tag="div"
         to="/account-setting/account-safety/replace-phone"
@@ -26,6 +39,7 @@
         <img class="right-arrow" src="@/assets/icons/mine/icon-right-arrow.png" alt="">
       </nuxt-link>
       <nuxt-link
+        v-if="mobileState === 'Verification'"
         class="modification-box"
         tag="div"
         to="/account-setting/account-safety/forget-password"
@@ -47,13 +61,19 @@
   </div>
 </template>
 <script>
-import {mapActions } from 'vuex'
+import {mapActions, mapGetters } from 'vuex'
 export default {
   layout:'navbar',
   data() {
     return {
-      score:null
+      score:null,
+      mobileState: ''
     }
+  },
+  computed: {
+    ...mapGetters('user', [
+      'userStatusGetters'
+    ]),
   },
   mounted() {
     // 链接访问时判断是否登录
@@ -62,11 +82,19 @@ export default {
     this.getAccountSafety().then((res)=> {
       this.score =res.data
     })
+    if (this.userStatusGetters) {
+      this.mobileState = this.userStatusGetters.mobileValidateState
+    } else {
+      this.geMyState().then(res =>{
+        this.mobileState = res.data.mobileValidateState
+      })
+    }
   },
   methods: {
     ...mapActions('user',[
       'getAccountSafety',
-      'userMainStationToken'
+      'userMainStationToken',
+      'geMyState'
     ]),
     async unsubscribe() {
       const res = await this.userMainStationToken()
