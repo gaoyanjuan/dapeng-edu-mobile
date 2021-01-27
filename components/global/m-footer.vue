@@ -270,7 +270,7 @@ export default {
 
 .tabbar-btn-text-active {
   // color: #0CB65B;
-  color: #d1d3d5;
+  color: #333333;
 }
 
 /deep/ .van-overlay {
