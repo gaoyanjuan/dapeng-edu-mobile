@@ -1,5 +1,5 @@
 <template>
-  <div class="learning-course-wrapper">
+  <div class="learning-course-wrapper" @click="onEnterCourseChapter">
 
     <!-- 当前在学课程封面图 -->
     <div class="course-cover-row">
@@ -19,7 +19,7 @@
 
     <!-- 当前在学课程章节 -->
     <div class="course-chapters-row" v-if="course.liveChapters.length > 0">
-      <div class="chapter" v-for="item in course.liveChapters" :key="item.id" @click="enterLiveRoom(item)">
+      <div class="chapter" v-for="item in course.liveChapters" :key="item.id" @click.stop="enterLiveRoom(item)">
         <div class="left-side-wrap">
           <span class="chapter-title van-ellipsis">{{item.title}}</span>
           <span class="chapter-date">{{ item.startTime | formatLiveTime(item.finishTime) }}</span>
@@ -80,6 +80,23 @@ export default {
       } else {
         window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${params.id}`
       }
+    },
+
+     // 进入课程章节列表
+    onEnterCourseChapter() {
+      
+      if(this.course.openStatus === 'UNCONFIRMED') {
+        this.$toast('页面加载异常，请稍后～')
+        return false 
+      }
+
+      this.$router.push({
+        path: '/details/course',
+        query:{ 
+          type: this.course.type,
+          courseId: this.course.id
+        }
+      })
     },
 
     formatTime(time) {
@@ -180,7 +197,7 @@ export default {
   }
 
   .chapter-date {
-    width: 113px;
+    width: auto;
     height: 17px;
     font-size: 12px;
     font-family: @regular;
