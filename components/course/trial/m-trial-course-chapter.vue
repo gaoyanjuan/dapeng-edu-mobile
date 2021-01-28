@@ -40,6 +40,13 @@
         </div>
       </template>
     </div>
+    <!-- 暂无章节数据 -->
+    <template v-if="!chaptersListGetters.length">
+      <div class="chapter-blank-wrap">
+        <img class="blank-img" :src="blank" alt="无章节数据" />
+        <span class="blank-txt">暂无章节数据～</span>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -57,7 +64,9 @@ export default {
     }
   },
 
-  data: () => ({}),
+  data: () => ({
+    blank: require('@/assets/icons/blank/have-no-course.png')
+  }),
 
   computed: {
     ...mapGetters('course', [
@@ -251,5 +260,29 @@ export default {
   line-height: 28px;
   background: #F1F1F2;
   border-radius: 17px;
+}
+
+.chapter-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .blank-img {
+    width: 240px;
+    height: 126px;
+  }
+
+  .blank-txt {
+    height: 20px;
+    font-size: 14px;
+    font-family: @semibold;
+    font-weight: 600;
+    color: #8D8E8E;
+    margin-top: 12px;
+  }
 }
 </style>
