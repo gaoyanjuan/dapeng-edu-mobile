@@ -96,7 +96,8 @@ export default {
     { src: '~/plugins/animate.js', ssr: true },
     { src: '~/plugins/check-login.js', ssr: true },
     { src: '~/plugins/anchor-utils.js', ssr: true },
-    { src: '~/plugins/matomo.js', ssr: true }
+    { src: '~/plugins/matomo.js', ssr: true },
+    { src: '~/plugins/vconsole.js', ssr: false }
   ],
 
   components: true,
