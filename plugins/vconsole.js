@@ -1,5 +1,4 @@
 import VConsole from 'vconsole'
-
-if (process.env.MODE === 'test') {
+if (process.env.mode === 'test') {
   new VConsole()
 }
