@@ -71,6 +71,9 @@ export default {
   computed: {
     ...mapGetters({
       detailsGetters: 'details/detailsGetters'
+    }),
+    ...mapGetters({
+      userinfo: 'user/userInfoGetters'
     })
   },
   mounted() {
@@ -122,8 +125,10 @@ export default {
       let drawed = { show: false, list: []}
 
       if(this.$route.query.from === 'personal' && this.item.doodlingImg) {
-        drawed.show = true
-        drawed.list = this.item.doodlingImg
+        if(this.userinfo.userId === this.item.user.userId) {
+          drawed.show = true
+          drawed.list = this.item.doodlingImg
+        }
       }
 
       this.imagePreview = {
