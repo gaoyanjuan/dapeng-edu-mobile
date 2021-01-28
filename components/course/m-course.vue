@@ -16,7 +16,7 @@
         </div>
 
         <div class="course-info-teacher">
-          <span class="teacher">讲师：{{ course.teacher.nickname }}</span>
+          <span v-if="showLive" class="teacher">讲师：{{ course.teacher.nickname }}</span>
           <span v-if="showLive" class="counter">{{ course.count | studentsCount }}人在看</span>
           <span v-else class="counter">{{ course.totalStudent | studentsCount }}人看过</span>
         </div>
