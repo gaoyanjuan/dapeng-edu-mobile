@@ -127,7 +127,7 @@ export default {
       align-items: center;
       background: @dp-white;
       & > .modified-name {
-        width: 80%;
+        width: 100%;
         line-height: 32px;
         font-size: 14px;
         outline: none;
