@@ -21,7 +21,7 @@
         <div class="left-title">地址</div>
         <div class="detail-address">
           <van-field
-            v-model.trim="familyAddress"
+            v-model="familyAddress"
             :autosize="autosize"
             type="textarea"
             :maxlength="maxCount"
@@ -141,12 +141,9 @@ export default {
     },
     // 点击完成
     onSaveHandle() {
+      this.familyAddress = this.familyAddress.trim()
       if (!this.familyAddress) {
-        this.$toast({
-          message: `请填写地址`,
-          position: 'bottom',
-          duration: 2000
-        })
+        this.$toast('请填写地址')
         return
       }
       const params = {
@@ -156,26 +153,14 @@ export default {
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存成功')
           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast(error.data.message)
         } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存失败')
         }
       })
     }

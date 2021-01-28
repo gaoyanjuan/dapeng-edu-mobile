@@ -11,7 +11,7 @@
     <div class="modified-content">
       <div class="modified-name-box">
         <van-field
-          v-model.trim="introduction"
+          v-model="introduction"
           type="textarea"
           :maxlength="maxCount"
           placeholder="请输入您的签名哦~"
@@ -98,32 +98,25 @@ export default {
     },
     // 点击完成
     onSaveHandle() {
+      this.introduction =this.introduction.trim()
+      if (!this.introduction) {
+        this.$toast('请填写用户签名')
+        return
+      }
       const params = {
         userId:this.userId,
         introduction: this.introduction
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存成功')
           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast(error.data.message)
         } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存失败')
         }
       })
     }
