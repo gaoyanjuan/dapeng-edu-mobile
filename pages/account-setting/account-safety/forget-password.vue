@@ -110,7 +110,7 @@ export default {
       })
     },
     // 验证登录校验
-    onConfirmBtn() {
+    async onConfirmBtn() {
       if (validateEmpty(this.code)) {
         this.$toast('请输入验证码')
         return
@@ -129,7 +129,7 @@ export default {
           mobile: this.userInfoGetters.mobile,
           password: this.newPasswd
         }
-        this.resetPassword(params)
+        await this.resetPassword(params)
         .then((res) => {
           if (res.status === 200) {
             this.$toast({
