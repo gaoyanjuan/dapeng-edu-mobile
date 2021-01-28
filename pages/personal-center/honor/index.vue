@@ -8,8 +8,7 @@
         <div class="xy_message">
           <p>
             <strong>{{ certificatesGetters.nickname }}</strong
-            >同学已修完大鹏教育<br />的{{ certificatesGetters.setMealName }}
-            ，特此证明。
+            >同学已修完大鹏教育<br />的{{ certificatesGetters.setMealName }} ，特此证明。
           </p>
         </div>
         <div class="xy_content">
@@ -103,7 +102,6 @@ export default {
         const files = new window.File([blob],imgName,{ type: blob.type })
         // 将blob转为img
         _this.img = window.URL.createObjectURL(files)
-        console.log(_this.img)
       })
     },
   },
