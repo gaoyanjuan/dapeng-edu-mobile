@@ -297,6 +297,8 @@ export default {
     toTrialClass() {
       if (!this.$login()) return;
 
+      this.$cookiz.remove('isLogin', { path: '/' })
+
       this.$router.push({
         path: '/personal-center/course/trial',
         query: {
@@ -306,7 +308,9 @@ export default {
     },
     toVipClass() {
       if (!this.$login()) return
-      
+
+      this.$cookiz.remove('isLogin', { path: '/' })
+
       this.$router.push({
         path: '/personal-center/course/formal',
         query: {
@@ -316,6 +320,8 @@ export default {
     },
     toAttention() {
       if (!this.$login()) return;
+
+      this.$cookiz.remove('isLogin', { path: '/' })
 
       this.$router.push({
         path: "/personal-center/dashboard",
