@@ -30,6 +30,7 @@
 </template>
 <script>
 import { mapActions,mapGetters } from 'vuex'
+import { validateEmpty } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
@@ -77,34 +78,47 @@ export default {
     },
     onSaveHandle() {
       // 修改真实姓名
-      const params = {
-        userId:this.userId,
-        trueName: this.treuNameModel
+      this.treuNameModel = this.treuNameModel.trim()
+      if (!this.treuNameModel) {
+        this.$toast('请输入真实姓名')
+        return
       }
-      this.editUserInfo(params).then(res=> {
-        if (res.status === 200) {
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
-           this.getUserDetails()
+      if (!validateEmpty(this.treuNameModel)) { 
+        const chinese = /^[\u2E80-\u9FFF]+$/
+        const letter = /^[a-zA-Z]+$/
+        if (chinese.test(this.treuNameModel)) {
+          if (this.treuNameModel.length > 5 || this.treuNameModel.length < 2) {
+            this.$toast('真实姓名为小于6个的汉字，并且不得小于2个字')
+            return false
+          }
         }
-      }).catch((error) => {
-        if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
-        } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+        if (letter.test(this.treuNameModel)) {
+          if (this.treuNameModel.length > 20 || this.treuNameModel.length < 2) {
+            this.$toast('真实姓名为小于20个的英文，并且不得小于2个英文')
+            return false
+          }
         }
-      })
+        if (!chinese.test(this.treuNameModel) && !letter.test(this.treuNameModel)) {
+          this.$toast('真实姓名为小于20个的英文或者小于5个的汉字')
+          return false
+        }
+        const params = {
+          userId:this.userId,
+          trueName: this.treuNameModel
+        }
+        this.editUserInfo(params).then(res=> {
+          if (res.status === 200) {
+            this.$toast('保存成功')
+            this.getUserDetails()
+          }
+        }).catch((error) => {
+          if (error && error.data) {
+            this.$toast(error.data.message)
+          } else {
+            this.$toast('保存失败')
+          }
+        })
+      }
     },
     changeInput() {
       if (this.treuNameModel) {
