@@ -40,7 +40,7 @@
         </div>
       </template>
     </div>
-    <!-- 暂无录播课程 -->
+    <!-- 暂无章节数据 -->
     <template v-if="!chaptersListGetters.length">
       <div class="chapter-blank-wrap">
         <img class="blank-img" :src="blank" alt="无章节数据" />
