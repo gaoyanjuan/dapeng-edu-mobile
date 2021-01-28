@@ -1,10 +1,15 @@
 <template>
   <div v-if="courseDetail">
     <!-- 试学课章节 -->
-    <m-trial-course-chapter v-if="type === 'TRIAL'" :chapter="courseDetail"/>
+    <template v-if="isOpenCourse">
+      <m-trial-course-chapter v-if="type === 'TRIAL'" :chapter="courseDetail"/>
     
-    <!-- 正式课章节 -->
-    <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail"/>
+      <!-- 正式课章节 -->
+      <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail"/>
+    </template>
+    <template v-else>
+      <not-have-course :courseInfo="courseDetail" />
+    </template>
   </div>
 </template>
 
@@ -35,7 +40,16 @@ export default {
   async asyncData ({route, store, error}) {
     if(store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
       if (route.query.type === 'TRIAL' && store.getters['course/chaptersListGetters'].length === 0) {
-        await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
+        try {
+          await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
+          return {
+            isOpenCourse: true
+          }
+        } catch (error) {
+          return {
+            isOpenCourse: false
+          }
+        }
       }
     }
   },
