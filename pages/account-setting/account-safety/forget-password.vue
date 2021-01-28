@@ -123,6 +123,10 @@ export default {
         this.$toast('请确认新密码')
         return
       }
+      if (this.newPasswd !== this.aginPasswd ) {
+        this.$toast('两次密码不一致')
+        return
+      }
       if(validatePassword(this.newPasswd)) {
         const params = {
           code: this.code,
@@ -160,10 +164,6 @@ export default {
           position: 'bottom',
           duration: 2000
         })
-      }
-      if (this.newPasswd !== this.aginPasswd ) {
-        this.$toast('两次密码不一致')
-        return
       }
     },
     // 修改密码后退出登录
