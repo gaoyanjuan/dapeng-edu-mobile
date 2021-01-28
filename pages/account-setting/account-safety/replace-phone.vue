@@ -11,12 +11,13 @@
       <div class="form-item">
         <div class="tip">变更后：</div>
         <input type="text" class="phone-number"
-        placeholder="请输入新手机号" v-model.trim="mobile">
+        placeholder="请输入新手机号" v-model.trim="mobile" @input="inputState">
       </div>
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">{{codeBtnInfo}}</div>
+        <div v-if="codeDisabled" class="un-send-code" >{{codeBtnInfo}}</div>
+        <div v-else class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div :class="isEmpty ? 'unfinished' : 'finish'" @click="onConfirmBtn">确认更换</div>
     </div>
@@ -34,17 +35,15 @@ export default {
       codeBtnInfo: '获取验证码',
       // 倒计时基数
       countdown: 60,
-      timer: null
+      timer: null,
+      // 是否禁用按钮
+      codeDisabled: true,
     }
   },
   computed: {
     ...mapGetters('user',[
       'userInfoGetters'
     ]),
-    // 判断获取验证码是否点亮
-    showCode() {
-      return Boolean(this.mobile)
-    },
 
     // 判断确认更换是否点亮
     isEmpty() {
@@ -60,6 +59,14 @@ export default {
       'sendCode',
       'verificationMobile'
     ]),
+    inputState(val) {
+      const { value } = val.target;
+      if (value) {
+        this.codeDisabled = false
+      } else {
+        this.codeDisabled = true
+      }
+    },
     // 发送验证码校验
     async sendMobileCode() {
       // 校验输入的手机号
@@ -94,6 +101,7 @@ export default {
               duration: 2000
             })
           }
+          this.codeDisabled = true
         })
       } else {
         this.$toast({
@@ -116,7 +124,7 @@ export default {
             this.codeBtnInfo = '获取验证码'
             this.countdown = 60
             this.timer = null
-            this.codeDisabled = false
+            this.codeDisabled = true
             return false
           }
         }
@@ -187,7 +195,7 @@ export default {
     & >.form-item {
       position: relative;
       & > .tip {
-        width: 56px;
+        width: 282px;
         height: 20px;
         font-size: 14px;
         font-family: @dp-font-regular;

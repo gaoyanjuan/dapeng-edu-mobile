@@ -10,7 +10,8 @@
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <div class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
+        <div class="send-code" v-if="codeDisabled">{{codeBtnInfo}}</div>
+        <div class="send-code" v-else @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div class="form-item">
         <input type="password" class="new-passwd"
@@ -37,7 +38,9 @@ export default {
       codeBtnInfo: '获取验证码',
       // 倒计时基数
       countdown: 60,
-      timer: null
+      timer: null,
+      // 是否禁用按钮
+      codeDisabled: false,
     }
   },
   computed: {
@@ -56,6 +59,7 @@ export default {
     ]),
     // 发送验证码 
     async sendMobileCode() {
+      this.codeDisabled = true
       const params = {
         mobile: this.userInfoGetters.mobile,
         codeType: 'RESET_PWD_CODE'
@@ -71,12 +75,14 @@ export default {
             position: 'bottom',
             duration: 2000
           })
+          this.codeDisabled = false
         } else {
           this.$toast({
             message: `获取验证码失败`,
             position: 'bottom',
             duration: 2000
           })
+          this.codeDisabled = false
         }
       })
     },
