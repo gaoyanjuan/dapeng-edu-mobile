@@ -81,10 +81,14 @@ export default {
 
     callQQ() {
       // 微信则复制、QQ则复制且唤起
-      if(this.adviserInfo.groupType !== '1') {
+      if(this.adviserInfo.groupType === '0') {
         if(this.adviserInfo.qrCodeUrl) {
           window.location.href = this.adviserInfo.qrCodeUrl
+        } else {
+          window.location.href = 'mqqwpa://'
         }
+      } else {
+        window.location.href = 'weixin://'
       }
     }
   }
