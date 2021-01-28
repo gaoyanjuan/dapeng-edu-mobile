@@ -13,7 +13,6 @@
         <input
           v-model="treuNameModel"
           class="modified-name"
-          @input="changeInput()"
           placeholder="请输入您的真实姓名"
         >
         <span class="right-close">
@@ -36,8 +35,9 @@ export default {
   data() {
     return {
       treuNameModel: '',
-      accomplishStatus:false,
-      userId: ''
+      accomplishStatus:true,
+      userId: '',
+      userNameModel: ''
     }
   },
   computed: {
@@ -59,10 +59,12 @@ export default {
     // 获取用户真实姓名
     if (this.userInfoGetters.trueName) {
       this.treuNameModel = this.userInfoGetters.trueName
+      this.userNameModel = this.userInfoGetters.loginName
       this.userId = this.userInfoGetters.userId
     } else {
       this.getUserDetails().then((res)=> {
         this.treuNameModel = res.data.trueName
+        this.userNameModel = res.data.loginName
         this.userId = res.data.userId
       })
     }
@@ -78,12 +80,7 @@ export default {
     },
     onSaveHandle() {
       // 修改真实姓名
-      this.treuNameModel = this.treuNameModel.trim()
-      if (!this.treuNameModel) {
-        this.$toast('请输入真实姓名')
-        return
-      }
-      if (!validateEmpty(this.treuNameModel)) { 
+      if (!validateEmpty(this.treuNameModel)) {
         const chinese = /^[\u2E80-\u9FFF]+$/
         const letter = /^[a-zA-Z]+$/
         if (chinese.test(this.treuNameModel)) {
@@ -102,30 +99,24 @@ export default {
           this.$toast('真实姓名为小于20个的英文或者小于5个的汉字')
           return false
         }
-        const params = {
-          userId:this.userId,
-          trueName: this.treuNameModel
+      }
+      const params = {
+        userId:this.userId,
+        trueName: this.treuNameModel,
+        loginName: this.userNameModel
+      }
+      this.editUserInfo(params).then(res=> {
+        if (res.status === 200) {
+          this.$toast('保存成功')
+          this.getUserDetails()
         }
-        this.editUserInfo(params).then(res=> {
-          if (res.status === 200) {
-            this.$toast('保存成功')
-            this.getUserDetails()
-          }
-        }).catch((error) => {
-          if (error && error.data) {
-            this.$toast(error.data.message)
-          } else {
-            this.$toast('保存失败')
-          }
-        })
-      }
-    },
-    changeInput() {
-      if (this.treuNameModel) {
-        this.accomplishStatus = true
-      } else {
-        this.accomplishStatus = false
-      }
+      }).catch((error) => {
+        if (error && error.data) {
+          this.$toast(error.data.message)
+        } else {
+          this.$toast('保存失败')
+        }
+      })
     }
   }
 }
@@ -146,6 +137,7 @@ export default {
       padding: 0 32px;
       background: @dp-white;
       & > .modified-name {
+        width: 100%;
         line-height: 32px;
         font-size: 14px;
         outline: none;
