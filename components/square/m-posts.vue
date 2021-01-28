@@ -379,9 +379,11 @@ export default {
     openImagePreview(index) {
       let drawed = { show: false, list: []}
 
-      if(this.pageName === 'myHomework' && this.listItemData.doodlingImg) {
-        drawed.show = true
-        drawed.list = this.listItemData.doodlingImg
+      if(this.pageName === 'myHomework' && this.listItemData.doodlingImg ) {
+        if(this.userinfo.userId === this.listItemData.user.userId) {
+          drawed.show = true
+          drawed.list = this.listItemData.doodlingImg
+        }
       }
 
       this.imagePreview = {
