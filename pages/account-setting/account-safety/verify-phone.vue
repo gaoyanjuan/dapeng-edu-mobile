@@ -1,12 +1,12 @@
 <template>
   <div class="replace-phone">
-    <m-navbar title="手机号验证" />
+    <m-navbar title="绑定手机号" />
     <div class="form-list">
       <div class="form-item txt">您的手机号尚未验证，为保障账户安全，请验证您的手机号:</div>
       <div class="form-item">
         <input type="text" class="phone-number"
           @input="inputState"
-          placeholder="请输入手机号" v-model.trim="mobile">
+          placeholder="请输入新手机号" v-model.trim="mobile">
       </div>
       <div class="form-item">
         <input type="text" class="verification-code"
