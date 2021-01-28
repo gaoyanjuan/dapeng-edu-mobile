@@ -111,6 +111,7 @@ export default {
           if (this.countdown !== 0) {
             
             this.codeBtnInfo = `${this.countdown}s后重新发送`
+            this.codeDisabled = true
           } else {
             clearInterval(this.timer)
             this.codeBtnInfo = '获取验证码'

@@ -92,6 +92,7 @@ export default {
           this.countdown--
           if (this.countdown !== 0) {
             this.codeBtnInfo = `${this.countdown}s后重新发送`
+            this.codeDisabled = true
           } else {
             clearInterval(this.timer)
             this.codeBtnInfo = '获取验证码'
@@ -109,7 +110,7 @@ export default {
       })
     },
     // 验证登录校验
-    async onConfirmBtn() {
+    onConfirmBtn() {
       if (validateEmpty(this.code)) {
         this.$toast('请输入验证码')
         return
@@ -128,7 +129,8 @@ export default {
           mobile: this.userInfoGetters.mobile,
           password: this.newPasswd
         }
-        await this.resetPassword(params).then((res) => {
+        this.resetPassword(params)
+        .then((res) => {
           if (res.status === 200) {
             this.$toast({
               message: `重置密码成功`,
@@ -166,7 +168,7 @@ export default {
     },
     // 修改密码后退出登录
     onLogoutEvent() {
-      this.$login().then(() => {
+      this.$logout().then(() => {
         const redirectUrl = `${location.protocol}//${location.host}`
         window.location.href = `${process.env.authUrl}/logout?redirectUrl=${redirectUrl}`
       })
