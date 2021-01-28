@@ -109,7 +109,7 @@ export default {
 
 // 个人资料头图样式
 .m-navbar .navbar__accomplish {
-  width: 28px;
+  width: 38px;
   height: 20px;
   font-size: 14px;
   font-family: @dp-font-regular;

@@ -73,12 +73,9 @@ export default {
     },
     onSaveHandle() {
       // 修改用户名
+      this.userNameModel = this.userNameModel.trim()
       if (!this.userNameModel) {
-        this.$toast({
-          message: `请填写用户名`,
-          position: 'bottom',
-          duration: 2000
-        })
+        this.$toast('请填写用户名')
         return
       }
       const userinfo = this.$cookiz.get('userinfo')
@@ -92,26 +89,14 @@ export default {
           this.$cookiz.set('userinfo',userinfo, {
             path: '/'
           })
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存成功')
           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast(error.data.message)
         } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存失败')
         }
       })
     },
