@@ -88,6 +88,7 @@ export default {
       showMenusPopup:false,
       imagesMode: true,
       originalImages: [],
+      drawedImages: [],
       more:require('@/assets/icons/preview/more.png'),
       close: require('@/assets/icons/preview/close.png'),
       comment: require('@/assets/icons/preview/comment.png'),
@@ -141,8 +142,17 @@ export default {
       if(this.imagePreview.drawed.length) {
         let res = this.imagePreview.drawed[index]
         if(res.isDrawed) {
+
+          if(this.drawedImages.length && !this.imagesMode) {
+            this.imagesMode = false
+            this.imagePreview.images = this.drawedImages
+          }
           this.imagePreview.isDrawed = true
+          
         } else {
+          if(this.originalImages.length) {
+            this.imagePreview.images = this.originalImages
+          }
           this.imagePreview.isDrawed = false
         }
       }
@@ -152,6 +162,7 @@ export default {
     /** 关闭图片预览*/
     onClose() {
       this.imagesMode = true
+      this.drawedImages = []
       this.imagePreview.show = false
     },
     /** 更多 */
@@ -179,6 +190,9 @@ export default {
       this.imagePreview.drawed.forEach(element => {
         arr.push(element.graffiti.url)
       })
+
+      // 再备份一份涂鸦图
+      this.drawedImages = arr
       this.imagePreview.images = arr
       this.imagesMode = false
     },
