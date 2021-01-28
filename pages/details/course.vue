@@ -8,7 +8,6 @@
       <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail"/>
     </template>
     <template v-else>
-      <m-navbar :title="courseDetail.title"></m-navbar>
       <not-have-course :courseInfo="courseDetail" />
     </template>
   </div>
