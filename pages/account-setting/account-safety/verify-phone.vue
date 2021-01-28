@@ -5,12 +5,15 @@
       <div class="form-item txt">您的手机号尚未验证，为保障账户安全，请验证您的手机号:</div>
       <div class="form-item">
         <input type="text" class="phone-number"
+          @input="inputState"
           placeholder="请输入新手机号" v-model.trim="mobile">
       </div>
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">{{codeBtnInfo}}</div>
+        <!-- <div :class="showCode ? 'send-code': 'un-send-code'" v-if="codeDisabled" @click="sendMobileCode">{{codeBtnInfo}}</div> -->
+        <div v-if="codeDisabled" class="un-send-code" >{{codeBtnInfo}}</div>
+        <div v-else class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div :class="isEmpty ? 'unfinished' : 'finish'" @click="onConfirmBtn">提交</div>
     </div>
@@ -28,7 +31,9 @@ export default {
       codeBtnInfo: '获取验证码',
       // 倒计时基数
       countdown: 60,
-      timer: null
+      timer: null,
+      // 是否禁用按钮
+      codeDisabled: false,
     }
   },
   computed: {
@@ -54,9 +59,18 @@ export default {
       'sendCode',
       'verificationMobile'
     ]),
+    inputState(val) {
+      const { value } = val.target;
+      if (value) {
+        this.codeDisabled = false
+      } else {
+        this.codeDisabled = true
+      }
+    },
     // 发送验证码校验
     async sendMobileCode() {
       if (validateMobile(this.mobile)) {
+        this.codeDisabled = true
         const params = {
           mobile: this.mobile,
           codeType: 'REAL_PHONE_CODE'
@@ -79,6 +93,7 @@ export default {
               duration: 2000
             })
           }
+          this.codeDisabled = false
         })
       } else {
         this.$toast({
@@ -112,9 +127,9 @@ export default {
         this.timer = null
       })
     },
-    // 确认更换事件
+    // 确认事件
     async onConfirmBtn() {
-      // 更换手机号
+      // 绑定手机号
       const data = {
         mobile: this.mobile,
         code: this.code,
@@ -130,7 +145,7 @@ export default {
             duration: 2000
           })
           setTimeout(() => {
-            this.$router.push('/setting')
+            this.$router.push('/account-setting/account-safety')
           }, 2000)
         }
       })

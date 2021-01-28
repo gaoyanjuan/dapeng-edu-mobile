@@ -82,13 +82,9 @@ export default {
     this.getAccountSafety().then((res)=> {
       this.score =res.data
     })
-    if (this.userStatusGetters) {
-      this.mobileState = this.userStatusGetters.mobileValidateState
-    } else {
-      this.geMyState().then(res =>{
-        this.mobileState = res.data.mobileValidateState
-      })
-    }
+    this.geMyState().then(res =>{
+      this.mobileState = res.data.mobileValidateState
+    })
   },
   methods: {
     ...mapActions('user',[
