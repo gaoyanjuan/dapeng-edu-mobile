@@ -66,9 +66,7 @@ function goback () {
   const isLogin = $nuxt.$cookiz.get('isLogin')
   if (isLogin) {
     const isDetails = $nuxt.$isDetails($nuxt.$route.name)
-    $nuxt.$cookiz.set('isLogin', false, {
-      path: '/'
-    })
+    $nuxt.$cookiz.remove('isLogin', { path: '/' })
     if (isDetails) {
       $nuxt.$router.go(-4)
     } else {
