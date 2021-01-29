@@ -13,15 +13,15 @@
     <div class="form-list">
       <div class="form-item">
         <div class="left-text">大鹏号</div>
-        <span class="right-content">{{userInfo.dpAccount}}</span>
+        <span class="txt">{{userInfo.dpAccount}}</span>
       </div>
       <div class="form-item" v-if="userInfo.studentSatusId">
         <div class="left-text">学籍号</div>
-        <span class="right-content">{{userInfo.studentSatusId}}</span>
+        <span class="txt">{{userInfo.studentSatusId}}</span>
       </div>
       <div class="form-item" v-else>
         <div class="left-text">学籍号</div>
-        <span class="right-content">暂无</span>
+        <span class="txt">暂无</span>
       </div>
       <nuxt-link class="form-item" tag="div" to='/account-setting/information-edit/user-name'>
         <div class="left-text">用户名</div>
@@ -30,8 +30,8 @@
       </nuxt-link>
       <div class="form-item">
         <div class="left-text">绑定手机号</div>
-        <span v-if="userInfo.mobile" class="right-content">{{userInfo.mobile | maskMobile}}</span>
-        <span v-else class="right-content">尚未绑定</span>
+        <span v-if="userInfo.mobile" class="txt">{{userInfo.mobile | maskMobile}}</span>
+        <span v-else class="txt">尚未绑定</span>
       </div>
     </div>
     <div class="form-list">
@@ -277,14 +277,23 @@ export default {
         font-weight: 400;
         color: #A3A8AB;
         line-height: 20px;
-        margin-right: 19px;
+        margin-right: 27px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+      & > .txt {
+        width: 80%;
+        text-align: right;
+        font-size: 14px;
+        font-family: @dp-font-regular;
+        font-weight: 400;
+        color: #A3A8AB;
+        line-height: 20px;
+      }
       & > .right-arrow {
         position: absolute;
-        right: 8px;
+        right: 16px;
         float: right;
         width: 24px;
         height: 24px;
