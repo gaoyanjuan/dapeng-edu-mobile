@@ -88,11 +88,13 @@ export default {
       this.addressArea = this.userInfoGetters.address
       this.familyAddress = this.userInfoGetters.familyAddress
       this.userId = this.userInfoGetters.userId
+      this.onChangeInput(this.familyAddress)
     } else {
       this.getUserDetails().then((res)=> {
         this.addressArea = res.data.address
         this.familyAddress = res.data.familyAddress
         this.userId = res.data.userId
+        this.onChangeInput(this.familyAddress)
       })
     }
   },
