@@ -98,7 +98,6 @@ export default {
           this.getUserDetails()
         }
       }).catch((error) => {
-        console.log(error,'678')
         if (error && error.data) {
           this.$toast(error.data.message)
         } else {
