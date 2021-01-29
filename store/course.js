@@ -201,6 +201,11 @@ export default {
         }
       })
     },
+    // 查询用户是否开课
+    async isOpenCourse ({ commit }, params) {
+      const res = await this.$axios.get(`old/courses/${params.courseId}/is-open-courses`)
+      return res
+    },
 
     // 查询课程详情
     async appendCourseDetail({ commit }, params) {

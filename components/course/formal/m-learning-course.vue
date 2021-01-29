@@ -5,7 +5,7 @@
     <div class="course-cover-row">
       <img class="cover" :src="course.coverImage" alt="cover" />
       <div class="cover-footer">
-        <span class="teacher-name"> {{course.teacher.nickname}} </span>
+        <span class="teacher-name"> 讲师：{{course.teacher.nickname}} </span>
         <span class="course-view"> {{course.totalStudent | studentsCount}} 在看</span>
       </div>
     </div>
