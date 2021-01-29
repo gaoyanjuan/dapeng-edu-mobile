@@ -30,6 +30,7 @@
 </template>
 <script>
 import { mapActions,mapGetters } from 'vuex'
+import { validateUserName } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
@@ -73,6 +74,10 @@ export default {
     },
     onSaveHandle() {
       // 修改用户名
+      if (!validateUserName(this.userNameModel)) {
+        this.$toast('用户名需为2-12位中、英文，不能包含数字或特殊符号，注意不要以dp开头哦~')
+        return false
+      }
       this.userNameModel = this.userNameModel.trim()
       if (!this.userNameModel) {
         this.$toast('请填写用户名')
@@ -127,7 +132,7 @@ export default {
       align-items: center;
       background: @dp-white;
       & > .modified-name {
-        width: 100%;
+        width: 95%;
         line-height: 32px;
         font-size: 14px;
         outline: none;
