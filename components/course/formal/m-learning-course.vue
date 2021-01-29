@@ -22,7 +22,11 @@
       <div class="chapter" v-for="item in course.liveChapters" :key="item.id" @click.stop="enterLiveRoom(item)">
         <div class="left-side-wrap">
           <span class="chapter-title van-ellipsis">{{item.title}}</span>
-          <span class="chapter-date">{{ item.startTime | formatLiveTime(item.finishTime) }}</span>
+          <div class="chapter-date">
+            {{ item.startTime | formatLiveTime(item.finishTime) }}
+            <span class="percentage" v-if="item.haveLearned">已看:{{ item.percentage }}%</span>
+          </div>
+
         </div>
 
         <div class="right-side-wrap">
@@ -204,6 +208,10 @@ export default {
     font-weight: 400;
     color: #A3A8AB;
     margin-top: 4px;
+
+    .percentage {
+      margin-left: 6px;
+    }
   }
 }
 
@@ -212,7 +220,7 @@ export default {
   align-items: center;
 
   .living-status {
-    width: 32px;
+    max-width: 47px;
     height: 15px;
   }
 
