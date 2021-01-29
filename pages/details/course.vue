@@ -39,6 +39,7 @@ export default {
 
   async asyncData ({route, store, error}) {
     if(store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
+      // 试学课查询章节失败,说明用户没有课程权限
       if (route.query.type === 'TRIAL' && store.getters['course/chaptersListGetters'].length === 0) {
         try {
           await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
@@ -46,6 +47,18 @@ export default {
             isOpenCourse: true
           }
         } catch (error) {
+          return {
+            isOpenCourse: false
+          }
+        }
+      } else {
+        // 正式课查询接口,查看用户是否拥有课程权限
+        const res = await store.dispatch('course/isOpenCourse', { courseId: route.query.courseId })
+        if (res && res.data) {
+          return {
+            isOpenCourse: true
+          }
+        } else {
           return {
             isOpenCourse: false
           }
