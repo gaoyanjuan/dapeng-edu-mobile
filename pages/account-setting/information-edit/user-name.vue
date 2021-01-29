@@ -75,7 +75,7 @@ export default {
     onSaveHandle() {
       // 修改用户名
       if (!validateUserName(this.userNameModel)) {
-        this.$toast('用户名（2-12位，不含符号，不为纯数字，不以dp开头')
+        this.$toast('用户名需为2-12位中、英文，不能包含数字或特殊符号，注意不要以dp开头哦~')
         return false
       }
       this.userNameModel = this.userNameModel.trim()
