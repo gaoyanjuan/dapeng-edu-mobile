@@ -1,6 +1,9 @@
 <template>
   <div class="m-vip-chapter-wrapper">
     <m-navbar :title="chapter.title"></m-navbar>
+
+    <!-- 学管推荐标识LOGO -->
+    <img v-if="chapter.learning" :src="recommend" class="navbar-recommend-logo" />
     
     <van-tabs v-model="activeName" sticky offset-top="1.17333rem">
       <van-tab title="直播课" name="living">
@@ -27,7 +30,8 @@ export default {
   },
 
   data: ()=> ({
-    activeName:'living'
+    activeName:'living',
+    recommend: require('@/assets/icons/course/recommend.png')
   })
 }
 </script>
@@ -37,6 +41,15 @@ export default {
   width: 375px;
   min-height: 100vh;
   background: @dp-white;
+}
+
+.navbar-recommend-logo {
+  position: fixed;
+  top: 0;
+  right: 30px;
+  width: 45px;
+  height: 42px;
+  z-index: 2001;
 }
 
 /deep/.van-tabs {

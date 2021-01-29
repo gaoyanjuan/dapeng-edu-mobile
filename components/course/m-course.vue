@@ -46,7 +46,7 @@ export default {
   
   data: ()=> ({
     live_label: require('@/assets/icons/course/living.png'),
-    defaultImg: require('@/assets/icons/common/photos-bg.png'),
+    defaultImg: require('@/assets/icons/common/course-bg.png'),
   }),
 
   computed:{

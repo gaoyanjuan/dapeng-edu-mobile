@@ -96,7 +96,7 @@ export default {
 
       this.$router.push({
         path: '/details/course',
-        query:{ 
+        query:{
           type: this.course.type,
           courseId: this.course.id
         }
