@@ -259,7 +259,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       & > .left-text {
-        width: 70px;
+        width: 80px;
         height: 20px;
         font-size: 14px;
         font-family: @dp-font-regular;
