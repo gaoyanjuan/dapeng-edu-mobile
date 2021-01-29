@@ -118,7 +118,7 @@ export default {
     },
 
     enterRecordRoom(item, params) {
-      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&cid=${item.sectionId}&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
+      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&sectionId=${item.sectionId}&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
       window.location.href = this.courseUrl + url
     }
   },
