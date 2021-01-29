@@ -19,6 +19,10 @@
         <div class="left-text">学籍号</div>
         <span class="right-content">{{userInfo.studentSatusId}}</span>
       </div>
+      <div class="form-item" v-else>
+        <div class="left-text">学籍号</div>
+        <span class="right-content">暂无</span>
+      </div>
       <nuxt-link class="form-item" tag="div" to='/account-setting/information-edit/user-name'>
         <div class="left-text">用户名</div>
         <span class="right-content">{{userInfo.loginName}}</span>
@@ -80,17 +84,22 @@ export default {
       actions: [
         {
           name: '男',
-          identification: 'M'
+          identification: 'M',
+          color: '#18252C'
         },
         {
           name: '女',
-          identification: 'F'
+          identification: 'F',
+          color: '#18252C'
         },
         {
           name: '保密',
-          identification: 'S'
+          identification: 'S',
+          color: '#18252C'
         }
-      ]
+      ],
+      activeColor:'#0CB65B',
+      normalColor:'#18252C'
     }
   },
   mounted() {
@@ -118,6 +127,9 @@ export default {
     },
     //性别弹出层
     onGenderHandle() {
+      this.actions.map(item =>{
+        this.userInfo.gender === item.identification ? item.color = this.activeColor : item.color = this.normalColor
+      })
       this.showGender = true
     },
     // 性别选择
@@ -262,11 +274,11 @@ export default {
         font-weight: 400;
         color: #A3A8AB;
         line-height: 20px;
-        margin-right: 27px;
+        margin-right: 19px;
       }
       & > .right-arrow {
         position: absolute;
-        right: 16px;
+        right: 8px;
         float: right;
         width: 24px;
         height: 24px;
@@ -274,5 +286,8 @@ export default {
       }
     }
   }
+}
+.active {
+  color: #0CB65B;
 }
 </style>

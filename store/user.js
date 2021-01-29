@@ -502,7 +502,7 @@ export const actions = {
   },
   // 修改信息
   async editUserInfo ({ commit }, params) {
-    const res = await this.$axios.patch('old/users', params)
+    const res = await this.$axios.put('old/users', params)
     return res
   },
   // 检查用户是否可以注册
