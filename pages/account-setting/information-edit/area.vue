@@ -51,6 +51,7 @@
 <script>
 import { mapActions,mapGetters } from 'vuex'
 import areaList from '@/assets/emotion/area'
+import { validateEmpty } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
@@ -62,11 +63,11 @@ export default {
       /** 字数限制 */
       wordsLimit: false,
       /** 动态文字 */
-      dynamicNums:'',
+      dynamicNums:'只能输入60个字哦',
       /** 描述框大小*/
       autosize: { maxHeight: 100, minHeight: 100},
       // 完成的状态
-      accomplishStatus:false,
+      accomplishStatus:true,
       userId: ''
     }
   },
@@ -111,7 +112,6 @@ export default {
       this.showAreaPopup = false
       const area = res[0].name + '@' + res[1].name + '@' + res[2].name
       this.addressArea = area
-      this.accomplishStatus = true
     },
     // 取消选中
     areaCancel() {
@@ -133,18 +133,15 @@ export default {
     // 字数监听
     onChangeInput(words) {
       this.calcContent(words ,60)
-      if (this.familyAddress) {
-        this.accomplishStatus = true
-      } else {
-        this.accomplishStatus = false
-      }
     },
     // 点击完成
     onSaveHandle() {
-      this.familyAddress = this.familyAddress.trim()
-      if (!this.familyAddress) {
-        this.$toast('请填写地址')
-        return
+      if (!validateEmpty(this.familyAddress)) {
+        const address = /^[\u4e00-\u9fa5a-zA-Z0-9__,.!，。！、]+$/
+        if (!address.test(this.familyAddress)) {
+          this.$toast('地址格式不正确，符号只能为下划线，顿号，句号，逗号，感叹号')
+          return false
+        }
       }
       const params = {
         userId:this.userId,
