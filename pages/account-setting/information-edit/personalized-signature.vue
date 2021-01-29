@@ -38,12 +38,13 @@ export default {
       /** 字数限制 */
       wordsLimit: false,
       /** 动态文字 */
-      dynamicNums:'',
+      dynamicNums:'只能输入30个字哦',
       /** 描述框大小*/
       autosize: { maxHeight: 50, minHeight: 50},
       /** 头部完成的状态*/
-      accomplishStatus:false,
-      userId: ''
+      accomplishStatus:true,
+      userId: '',
+      userNameModel: '',
     }
   },
   computed: {
@@ -61,10 +62,12 @@ export default {
     // 获取个性签名
     if (this.userInfoGetters.introduction) {
       this.introduction = this.userInfoGetters.introduction
+      this.userNameModel = this.userInfoGetters.loginName
       this.userId = this.userInfoGetters.userId
     } else {
       this.getUserDetails().then((res)=> {
         this.introduction = res.data.introduction
+        this.userNameModel = res.data.loginName
         this.userId = res.data.userId
       })
     }
@@ -90,22 +93,13 @@ export default {
     // 字数监听
     onChangeInput(words) {
       this.calcContent(words ,30)
-      if (this.introduction) {
-        this.accomplishStatus = true
-      } else {
-        this.accomplishStatus = false
-      }
     },
     // 点击完成
     onSaveHandle() {
-      this.introduction =this.introduction.trim()
-      if (!this.introduction) {
-        this.$toast('请填写用户签名')
-        return
-      }
       const params = {
         userId:this.userId,
-        introduction: this.introduction
+        introduction: this.introduction,
+        
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
