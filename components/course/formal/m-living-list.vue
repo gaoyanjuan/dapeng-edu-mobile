@@ -101,7 +101,7 @@ export default {
       const params = {courseId:this.courseId}
 
       this.appendStages(params).then( res => {
-        if(res.data.liveStage.length === 0) {
+        if(res.data.liveStage === null || res.data.liveStage.length === 0) {
           this.finishedTxt = ''
           this.finished = true
           return false

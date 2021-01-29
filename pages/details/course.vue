@@ -1,12 +1,15 @@
 <template>
   <div v-if="courseDetail">
-    <!-- 试学课章节 -->
     <template v-if="isOpenCourse">
+
+      <!-- 试学课章节 -->
       <m-trial-course-chapter v-if="type === 'TRIAL'" :chapter="courseDetail"/>
     
       <!-- 正式课章节 -->
       <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail"/>
+
     </template>
+
     <template v-else>
       <not-have-course :courseInfo="courseDetail" />
     </template>
@@ -24,9 +27,6 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('course', [
-      'courseDetailGetters'
-    ]),
 
     type() {
       return this.$route.query.type
@@ -69,16 +69,10 @@ export default {
 
   async mounted() {
     if(!this.$login()) return
-    
-    if (this.courseDetailGetters) {
-      this.courseDetail = this.courseDetailGetters
-    }
 
-    if(!this.courseDetail) {
-      await this.appendCourseDetail(this.courseId).then(res => {
-        this.courseDetail = res.data
-      })
-    }
+    await this.appendCourseDetail(this.courseId).then(res => {
+      this.courseDetail = res.data
+    })
   },
   methods:{
     ...mapActions('course', [
