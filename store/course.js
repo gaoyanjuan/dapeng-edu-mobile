@@ -81,7 +81,7 @@ export default {
     changeCoursesStatus (state, payload) {
       state.courseList.status = payload
     },
-    addCourseDetail (state, payload) {
+    addCourseDetail(state, payload) {
       state.courseDetail = payload
     },
     appendChaptersList(state, payload) { 

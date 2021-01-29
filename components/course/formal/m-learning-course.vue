@@ -24,7 +24,7 @@
           <span class="chapter-title van-ellipsis">{{item.title}}</span>
           <div class="chapter-date">
             {{ item.startTime | formatLiveTime(item.finishTime) }}
-            <span class="percentage" v-if="item.haveLearned">已看:{{ item.percentage }}%</span>
+            <span class="percentage" v-if="item.liveStatus === 'PLAYBACK' && item.haveLearned">已看:{{ item.percentage }}%</span>
           </div>
 
         </div>
@@ -96,7 +96,7 @@ export default {
 
       this.$router.push({
         path: '/details/course',
-        query:{ 
+        query:{
           type: this.course.type,
           courseId: this.course.id
         }
