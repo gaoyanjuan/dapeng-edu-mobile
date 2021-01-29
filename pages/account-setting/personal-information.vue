@@ -30,7 +30,8 @@
       </nuxt-link>
       <div class="form-item">
         <div class="left-text">绑定手机号</div>
-        <span class="right-content">{{userInfo.mobile}}</span>
+        <span v-if="userInfo.mobile" class="right-content">{{userInfo.mobile | maskMobile}}</span>
+        <span v-else class="right-content">尚未绑定</span>
       </div>
     </div>
     <div class="form-list">
