@@ -114,9 +114,6 @@ export default {
         }
       })
     }
-  },
-  watch:{
-    
   }
   
 }
