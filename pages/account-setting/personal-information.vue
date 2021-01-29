@@ -269,12 +269,17 @@ export default {
         display: inline-block;
       }
       & > .right-content {
+        width: 80%;
+        text-align: right;
         font-size: 14px;
         font-family: @dp-font-regular;
         font-weight: 400;
         color: #A3A8AB;
         line-height: 20px;
         margin-right: 19px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       & > .right-arrow {
         position: absolute;

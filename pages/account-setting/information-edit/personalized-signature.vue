@@ -96,11 +96,6 @@ export default {
     },
     // 点击完成
     onSaveHandle() {
-      // this.introduction =this.introduction.trim()
-      // if (!this.introduction) {
-      //   this.$toast('请填写用户签名')
-      //   return
-      // }
       const params = {
         userId:this.userId,
         introduction: this.introduction,

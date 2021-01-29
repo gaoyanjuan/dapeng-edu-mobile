@@ -137,7 +137,7 @@ export default {
       padding: 0 32px;
       background: @dp-white;
       & > .modified-name {
-        width: 98%;
+        width: 95%;
         line-height: 32px;
         font-size: 14px;
         outline: none;
