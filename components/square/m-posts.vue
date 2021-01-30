@@ -10,6 +10,7 @@
       v-on:onOpenMenus="onShowMenus"
       :pageName="pageName"
       :listItemData="listItemData"
+      :isShowMySubmit="isShowMySubmit"
     />
 
     <!-- content -->
@@ -120,6 +121,10 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name: 'WorksCard',
   props:{
+    isShowMySubmit: {
+      type: Boolean,
+      default: false
+    },
     propIndex:{
       type: Number,
       default: 0
