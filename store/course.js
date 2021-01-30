@@ -147,7 +147,7 @@ export default {
         state.formalRecordChapters.status = 'load'
       }
     },
-    clearRecordChapter (state) {
+    clearRecordChapter(state) {
       state.formalRecordChapters.list = []
       state.formalRecordChapters.pageInfo.pages = 1
       state.formalRecordChapters.status = 'loading'

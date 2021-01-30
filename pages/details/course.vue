@@ -7,7 +7,7 @@
       <m-trial-course-chapter v-if="type === 'TRIAL'" :chapter="courseDetail"/>
     
       <!-- 正式课章节 -->
-      <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail"/>
+      <m-formal-course-chapter v-else-if="type === 'VIP'" :chapter="courseDetail" :show-record="record"/>
 
     </template>
 
@@ -24,6 +24,7 @@ export default {
   layout:'navbar',
 
   data: ()=> ({
+    record: true,
     showDiv: false,
     courseDetail: null
   }),
@@ -72,6 +73,16 @@ export default {
   async mounted() {
     if(!this.$login()) return
 
+    // 查看是否存在录播
+    await this.appendRecordChapters({page: 1, courseId: this.courseId }).then(res => {
+      // 只做查询，清空store
+      this.clearRecordChapter()
+      
+      if(!res.data.courseVodContents.length) {
+        this.record = false
+      }
+    })
+
     await this.appendCourseDetail(this.courseId).then(res => {
       this.courseDetail = res.data
     })
@@ -84,11 +95,13 @@ export default {
   methods:{
     ...mapActions('course', [
       'appendCourseDetail',
-      'appendTrialChapters'
+      'appendTrialChapters',
+      'appendRecordChapters'
     ]),
 
     ...mapMutations('course', [
-      'clearChaptersList'
+      'clearChaptersList',
+      'clearRecordChapter'
     ])
   },
 

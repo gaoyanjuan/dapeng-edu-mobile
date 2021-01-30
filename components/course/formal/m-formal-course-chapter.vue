@@ -12,9 +12,11 @@
       <van-tab title="直播回放" name="playback">
         <m-playback-list />
       </van-tab>
-      <van-tab title="录播课" name="record">
-        <m-record-list />
-      </van-tab>
+      <template v-if="showRecord">
+        <van-tab title="录播课" name="record">
+          <m-record-list />
+        </van-tab>
+      </template>
     </van-tabs>
   </div>
 </template>
@@ -24,8 +26,12 @@ export default {
   name:'Vip-Chapter',
   props:{
     chapter:{
-      type:Object,
-      default:{}
+      type: Object,
+      default: {}
+    },
+    showRecord: {
+      type: Boolean,
+      default: true
     }
   },
 
