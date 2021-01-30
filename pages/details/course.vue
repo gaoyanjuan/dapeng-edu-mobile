@@ -1,7 +1,8 @@
 <template>
   <div v-if="courseDetail">
     <template v-if="isOpenCourse">
-
+      <!-- 解决页面加载失败问题,通过改变dom树引起页面重新渲染 -->
+      <div class="show-div" v-if="showDiv"></div>
       <!-- 试学课章节 -->
       <m-trial-course-chapter v-if="type === 'TRIAL'" :chapter="courseDetail"/>
     
@@ -23,6 +24,7 @@ export default {
   layout:'navbar',
 
   data: ()=> ({
+    showDiv: false,
     courseDetail: null
   }),
 
@@ -73,6 +75,11 @@ export default {
     await this.appendCourseDetail(this.courseId).then(res => {
       this.courseDetail = res.data
     })
+
+    // 解决页面加载失败问题,通过改变dom树引起页面重新渲染
+    setTimeout(() => {
+      this.showDiv = true
+    }, 500)
   },
   methods:{
     ...mapActions('course', [
@@ -90,3 +97,9 @@ export default {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.show-div {
+  height: 1px;
+}
+</style>
