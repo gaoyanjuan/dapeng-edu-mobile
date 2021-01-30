@@ -11,7 +11,6 @@
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <!-- <div :class="showCode ? 'send-code': 'un-send-code'" v-if="codeDisabled" @click="sendMobileCode">{{codeBtnInfo}}</div> -->
         <div v-if="codeDisabled" class="un-send-code" >{{codeBtnInfo}}</div>
         <div v-else class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
@@ -33,7 +32,7 @@ export default {
       countdown: 60,
       timer: null,
       // 是否禁用按钮
-      codeDisabled: false,
+      codeDisabled: true,
     }
   },
   computed: {

@@ -81,6 +81,7 @@ export default {
         return false
       }
       if (validateMobile(this.mobile)) {
+        this.codeDisabled = true
         const params = {
           mobile: this.mobile,
           codeType: 'REAL_PHONE_CODE'
@@ -103,7 +104,7 @@ export default {
               duration: 2000
             })
           }
-          this.codeDisabled = true
+          this.codeDisabled = false
         })
       } else {
         this.$toast({
