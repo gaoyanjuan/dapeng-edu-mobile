@@ -5,7 +5,7 @@
     <!-- 学管推荐标识LOGO -->
     <img v-if="chapter.learning" :src="recommend" class="navbar-recommend-logo" />
     
-    <van-tabs v-model="activeName" sticky offset-top="1.17333rem">
+    <van-tabs v-model="activeName" sticky offset-top="1.17333rem" @click="onSwitchTab">
       <van-tab title="直播课" name="living">
         <m-living-list />
       </van-tab>
@@ -32,7 +32,19 @@ export default {
   data: ()=> ({
     activeName:'living',
     recommend: require('@/assets/icons/course/recommend.png')
-  })
+  }),
+
+  mounted() {
+    let route = this.$route.query.state || 'living'
+    this.activeName = route
+  },
+
+  methods: {
+    onSwitchTab(name) {
+      if(name === this.$route.query.state) return
+      this.$router.replace({ query: { ...this.$route.query, state: name } })
+    }
+  }
 }
 </script>
 

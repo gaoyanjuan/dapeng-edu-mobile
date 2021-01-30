@@ -199,13 +199,13 @@ export default {
 
   &-title {
     font-size: 15px;
-    line-height: 14px;
+    line-height: 16px;
     color: #18252C;
   }
 
   &-title-active {
     font-size: 15px;
-    line-height: 14px;
+    line-height: 16px;
     color: #75737EFF;
   }
 

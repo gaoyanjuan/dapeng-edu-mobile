@@ -5,8 +5,7 @@
       <div class="form-item txt">您正在进行手机换绑操作，请输入现有手机号，并为新手机验证以完成变更:</div>
       <div class="form-item">
         <div class="tip">变更前：</div>
-        <input type="text" class="phone-number"
-        v-bind:value="userInfoGetters.mobile | maskMobile" disabled="disable">
+        <input type="text" class="phone-number" :value="userInfoGetters.mobile | maskMobile" disabled="disable">
       </div>
       <div class="form-item">
         <div class="tip">变更后：</div>
@@ -24,7 +23,7 @@
   </div>
 </template>
 <script>
-import { mapGetters,mapActions } from 'vuex'
+import { mapGetters,mapActions,mapMutations } from 'vuex'
 import { validateMobile } from '@/utils/validate.js'
 export default {
   layout:'navbar',
@@ -59,6 +58,9 @@ export default {
       'sendCode',
       'verificationMobile'
     ]),
+    ...mapMutations('user',[
+      'appendUserMobile'
+    ]),
     inputState(val) {
       const { value } = val.target;
       if (value) {
@@ -79,6 +81,7 @@ export default {
         return false
       }
       if (validateMobile(this.mobile)) {
+        this.codeDisabled = true
         const params = {
           mobile: this.mobile,
           codeType: 'REAL_PHONE_CODE'
@@ -101,7 +104,7 @@ export default {
               duration: 2000
             })
           }
-          this.codeDisabled = true
+          this.codeDisabled = false
         })
       } else {
         this.$toast({
@@ -125,7 +128,7 @@ export default {
             this.codeBtnInfo = '获取验证码'
             this.countdown = 60
             this.timer = null
-            this.codeDisabled = true
+            this.codeDisabled = false
             return false
           }
         }
@@ -152,6 +155,12 @@ export default {
             message: `手机号更换成功`,
             position: 'bottom',
             duration: 2000
+          })
+          this.appendUserMobile(this.mobile)
+          const userinfo = this.userInfoGetters
+          userinfo.mobile = this.mobile
+          this.$cookiz.set('userinfo',userinfo, {
+            path: '/'
           })
           setTimeout(() => {
             this.$router.push('/setting')
