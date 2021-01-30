@@ -10,7 +10,7 @@
     </van-sticky>
 
     <!-- 当前选择期下的章节列表 -->
-    <div class="state-chapter-content">
+    <div :class="platform === 'ios' ? 'state-chapter-content':'state-chapter-content-section'">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="chapters.list.length">
           <m-chapter v-for="item in chapters.list" :key="item.id" :chapter="item" :stage="selected"></m-chapter>
@@ -32,11 +32,13 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { appSource } from '@/utils/device-type'
 export default {
   name:'M-Living-List',
   
   data: () => ({
     liveStage:[],
+    platform: 'ios',
     selected: null,
     loading: false,
     finished: false,
@@ -85,6 +87,8 @@ export default {
 
   created() {
     this.initChapterStage()
+    
+    this.platform = appSource().type
   },
 
   methods:{
@@ -201,21 +205,22 @@ export default {
 }
 
 .state-chapter-content {
-
   padding-top: 40px;
+}
 
-  .chapter-blank-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+.state-chapter-content-section {
+  padding-top: 0;
 }
 
 .chapter-blank-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
   .blank-img {
     width: 240px;
     height: 126px;
