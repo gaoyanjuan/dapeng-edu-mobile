@@ -239,6 +239,11 @@ export const mutations = {
       state.userInfo = null
     }
   },
+  appendUserMobile(state, payload) {
+    if (state.userInfo) {
+      state.userInfo.mobile = payload
+    }
+  },
   appendUserTrends (state, payload) {
     state.userTrends = payload.data
   },
@@ -488,7 +493,7 @@ export const actions = {
     })
     return res
   },
-  async getUserDetails ({ commit, state }) {
+  async getUserDetails({ commit, state }) {
     const res = await this.$axios.get('old/users/details')
     .catch((error) => {})
     if (res && res.data) {
@@ -497,7 +502,7 @@ export const actions = {
     return res
   },
   // 查询用户信息
-  async appendUserInfo ({ commit }, params) {
+  async appendUserInfo({ commit }, params) {
     commit('appendUserInfo', params)
   },
   // 修改信息
