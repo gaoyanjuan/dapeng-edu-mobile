@@ -64,11 +64,13 @@ export default {
       this.introduction = this.userInfoGetters.introduction
       this.userNameModel = this.userInfoGetters.loginName
       this.userId = this.userInfoGetters.userId
+      this.onChangeInput(this.introduction)
     } else {
       this.getUserDetails().then((res)=> {
         this.introduction = res.data.introduction
         this.userNameModel = res.data.loginName
         this.userId = res.data.userId
+        this.onChangeInput(this.introduction)
       })
     }
   },
@@ -99,7 +101,7 @@ export default {
       const params = {
         userId:this.userId,
         introduction: this.introduction,
-        
+        loginName: this.userNameModel
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
