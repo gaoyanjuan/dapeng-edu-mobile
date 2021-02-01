@@ -4,7 +4,7 @@
     <div ref="certDiv" class="honor-back" v-if="certificatesGetters">
       <div class="cer_comain">
         <img src="@/assets/icons/mine/jiekezhengshu.png" alt="" />
-        <button @click="handleUploading"></button>
+        <button @click="handleUploading" v-if="showBtn"></button>
         <div class="xy_message">
           <p>
             <strong>{{ certificatesGetters.nickname }}</strong
@@ -58,6 +58,7 @@ export default {
       certificates: {},
       img: '',
       show:false,
+      showBtn:true
     };
   },
   mounted() {
@@ -79,30 +80,34 @@ export default {
     handelClose () {
       this.show = false
     },
-    // 获取下载证书url
+    // 获取下载证书url  
     generatedImage (imgName) {
-      const _this = this
-      window.pageYOffset = 0
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
-      // eslint-disable-next-line no-undef
-      // const imageWrapper = document.getElementById('certDiv')
-      // console.log(document.getElementById('certDiv'))
-      html2canvas(this.$refs.certDiv, {
-        // scale: 1,
-        scale: 3.75, // 图片质量增大至300dpi标准
-        useCORS: true
-        // x: imageWrapper.getBoundingClientRect().left + 8
-      }).then(function (canvas) {
-        const imgUri = canvas
-          .toDataURL('image/png')
-          .replace('image/png', 'image/octet-stream') // 获取生成的图片的url
-        // 将base64转为blob
-        const blob = dataURLtoBlob(imgUri)
-        const files = new window.File([blob],imgName,{ type: blob.type })
-        // 将blob转为img
-        _this.img = window.URL.createObjectURL(files)
-      })
+      this.showBtn = false
+      setTimeout(() => {
+        const _this = this
+        window.pageYOffset = 0
+        document.documentElement.scrollTop = 0
+        document.body.scrollTop = 0
+        // eslint-disable-next-line no-undef
+        // const imageWrapper = document.getElementById('certDiv')
+        // console.log(document.getElementById('certDiv'))
+        html2canvas(this.$refs.certDiv, {
+          // scale: 1,
+          scale: 3.75, // 图片质量增大至300dpi标准
+          useCORS: true
+          // x: imageWrapper.getBoundingClientRect().left + 8
+        }).then(function (canvas) {
+          const imgUri = canvas
+            .toDataURL('image/png')
+            .replace('image/png', 'image/octet-stream') // 获取生成的图片的url
+          // 将base64转为blob
+          const blob = dataURLtoBlob(imgUri) 
+          const files = new window.File([blob],imgName,{ type: blob.type })
+          // 将blob转为img
+          _this.img = window.URL.createObjectURL(files)
+          _this.showBtn = true
+        })
+      }, 0) 
     },
   },
 }
