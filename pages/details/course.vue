@@ -73,16 +73,20 @@ export default {
   async mounted() {
     if(!this.$login()) return
 
-    // 查看是否存在录播
-    await this.appendRecordChapters({page: 1, courseId: this.courseId }).then(res => {
-      // 只做查询，清空store
-      this.clearRecordChapter()
-      
-      if(!res.data.courseVodContents.length) {
-        this.record = false
-      }
-    })
-
+    try {
+      // 查看是否存在录播
+      await this.appendRecordChapters({page: 1, courseId: this.courseId }).then(res => {
+        // 只做查询，清空store
+        this.clearRecordChapter()
+        
+        if(!res.data.courseVodContents.length) {
+          this.record = false
+        }
+      })
+    } catch (error) {
+      this.isOpenCourse = false
+    }
+  
     await this.appendCourseDetail(this.courseId).then(res => {
       this.courseDetail = res.data
     })
