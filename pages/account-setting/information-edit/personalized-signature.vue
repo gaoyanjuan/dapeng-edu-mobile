@@ -11,7 +11,7 @@
     <div class="modified-content">
       <div class="modified-name-box">
         <van-field
-          v-model.trim="introduction"
+          v-model="introduction"
           type="textarea"
           :maxlength="maxCount"
           placeholder="请输入您的签名哦~"
@@ -38,12 +38,13 @@ export default {
       /** 字数限制 */
       wordsLimit: false,
       /** 动态文字 */
-      dynamicNums:'',
+      dynamicNums:'只能输入30个字哦',
       /** 描述框大小*/
       autosize: { maxHeight: 50, minHeight: 50},
       /** 头部完成的状态*/
-      accomplishStatus:false,
-      userId: ''
+      accomplishStatus:true,
+      userId: '',
+      userNameModel: '',
     }
   },
   computed: {
@@ -61,11 +62,15 @@ export default {
     // 获取个性签名
     if (this.userInfoGetters.introduction) {
       this.introduction = this.userInfoGetters.introduction
+      this.userNameModel = this.userInfoGetters.loginName
       this.userId = this.userInfoGetters.userId
+      this.onChangeInput(this.introduction)
     } else {
       this.getUserDetails().then((res)=> {
         this.introduction = res.data.introduction
+        this.userNameModel = res.data.loginName
         this.userId = res.data.userId
+        this.onChangeInput(this.introduction)
       })
     }
   },
@@ -90,40 +95,24 @@ export default {
     // 字数监听
     onChangeInput(words) {
       this.calcContent(words ,30)
-      if (this.introduction) {
-        this.accomplishStatus = true
-      } else {
-        this.accomplishStatus = false
-      }
     },
     // 点击完成
     onSaveHandle() {
       const params = {
         userId:this.userId,
-        introduction: this.introduction
+        introduction: this.introduction,
+        loginName: this.userNameModel
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存成功')
           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast(error.data.message)
         } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存失败')
         }
       })
     }

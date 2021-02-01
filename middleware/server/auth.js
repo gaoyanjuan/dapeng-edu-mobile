@@ -37,7 +37,7 @@ export default function (req, res, next) {
       }
       if (process.env.MODE === 'dev') {
         res.setHeader('Set-Cookie', cookie.serialize(tokenName, '', {
-          expires: new Date()
+          expires: new Date(0)
         }))
       } else {
         res.setHeader('Set-Cookie', [

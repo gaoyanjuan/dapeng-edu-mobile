@@ -5,25 +5,25 @@
       <div class="form-item txt">您正在进行手机换绑操作，请输入现有手机号，并为新手机验证以完成变更:</div>
       <div class="form-item">
         <div class="tip">变更前：</div>
-        <input type="text" class="phone-number"
-        v-bind:value="userInfoGetters.mobile | maskMobile" disabled="disable">
+        <input type="text" class="phone-number" :value="userInfoGetters.mobile | maskMobile" disabled="disable">
       </div>
       <div class="form-item">
         <div class="tip">变更后：</div>
         <input type="text" class="phone-number"
-        placeholder="请输入新手机号" v-model.trim="mobile">
+        placeholder="请输入新手机号" v-model.trim="mobile" @input="inputState">
       </div>
       <div class="form-item">
         <input type="text" class="verification-code"
           placeholder="请输入短信验证码" v-model.trim="code">
-        <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">{{codeBtnInfo}}</div>
+        <div v-if="codeDisabled" class="un-send-code" >{{codeBtnInfo}}</div>
+        <div v-else class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div :class="isEmpty ? 'unfinished' : 'finish'" @click="onConfirmBtn">确认更换</div>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters,mapActions } from 'vuex'
+import { mapGetters,mapActions,mapMutations } from 'vuex'
 import { validateMobile } from '@/utils/validate.js'
 export default {
   layout:'navbar',
@@ -34,17 +34,15 @@ export default {
       codeBtnInfo: '获取验证码',
       // 倒计时基数
       countdown: 60,
-      timer: null
+      timer: null,
+      // 是否禁用按钮
+      codeDisabled: true,
     }
   },
   computed: {
     ...mapGetters('user',[
       'userInfoGetters'
     ]),
-    // 判断获取验证码是否点亮
-    showCode() {
-      return Boolean(this.mobile)
-    },
 
     // 判断确认更换是否点亮
     isEmpty() {
@@ -60,6 +58,17 @@ export default {
       'sendCode',
       'verificationMobile'
     ]),
+    ...mapMutations('user',[
+      'appendUserMobile'
+    ]),
+    inputState(val) {
+      const { value } = val.target;
+      if (value) {
+        this.codeDisabled = false
+      } else {
+        this.codeDisabled = true
+      }
+    },
     // 发送验证码校验
     async sendMobileCode() {
       // 校验输入的手机号
@@ -72,6 +81,7 @@ export default {
         return false
       }
       if (validateMobile(this.mobile)) {
+        this.codeDisabled = true
         const params = {
           mobile: this.mobile,
           codeType: 'REAL_PHONE_CODE'
@@ -94,6 +104,7 @@ export default {
               duration: 2000
             })
           }
+          this.codeDisabled = false
         })
       } else {
         this.$toast({
@@ -111,6 +122,7 @@ export default {
           if (this.countdown !== 0) {
             
             this.codeBtnInfo = `${this.countdown}s后重新发送`
+            this.codeDisabled = true
           } else {
             clearInterval(this.timer)
             this.codeBtnInfo = '获取验证码'
@@ -143,6 +155,12 @@ export default {
             message: `手机号更换成功`,
             position: 'bottom',
             duration: 2000
+          })
+          this.appendUserMobile(this.mobile)
+          const userinfo = this.userInfoGetters
+          userinfo.mobile = this.mobile
+          this.$cookiz.set('userinfo',userinfo, {
+            path: '/'
           })
           setTimeout(() => {
             this.$router.push('/setting')
@@ -187,7 +205,7 @@ export default {
     & >.form-item {
       position: relative;
       & > .tip {
-        width: 56px;
+        width: 282px;
         height: 20px;
         font-size: 14px;
         font-family: @dp-font-regular;

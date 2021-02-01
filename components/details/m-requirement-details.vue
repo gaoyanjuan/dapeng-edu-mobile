@@ -73,6 +73,7 @@
             path="/details/homework"
             squareType="作业"
             pageName="requirement"
+            :isShowMySubmit="true"
           />
         </van-list>
       </div>

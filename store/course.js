@@ -81,7 +81,7 @@ export default {
     changeCoursesStatus (state, payload) {
       state.courseList.status = payload
     },
-    addCourseDetail (state, payload) {
+    addCourseDetail(state, payload) {
       state.courseDetail = payload
     },
     appendChaptersList(state, payload) { 
@@ -147,7 +147,7 @@ export default {
         state.formalRecordChapters.status = 'load'
       }
     },
-    clearRecordChapter (state) {
+    clearRecordChapter(state) {
       state.formalRecordChapters.list = []
       state.formalRecordChapters.pageInfo.pages = 1
       state.formalRecordChapters.status = 'loading'
@@ -200,6 +200,11 @@ export default {
           return res
         }
       })
+    },
+    // 查询用户是否开课
+    async isOpenCourse ({ commit }, params) {
+      const res = await this.$axios.get(`old/courses/${params.courseId}/is-open-courses`)
+      return res
     },
 
     // 查询课程详情

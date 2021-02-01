@@ -44,13 +44,13 @@ export default {
 <style lang="less" scoped>
 
 .van-popup {
-  width: 260px !important;
+  width: 265px !important;
   min-height: 235px !important;
   overflow: hidden;
 }
 
 .popup-warp {
-  width: 260px;
+  width: 265px;
   min-height: 235px;
   border-radius: 8px;
   display: flex;
@@ -75,7 +75,8 @@ export default {
   }
 
   & .popup-body {
-    width: 224px;
+    width: 100%;
+    text-align: center;
     margin-top: 44px;
     align-items: center;
     justify-content: center;

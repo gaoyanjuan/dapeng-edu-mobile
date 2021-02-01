@@ -1,6 +1,6 @@
 
 // 校验用户名
-export function validateUserName(userName) {
+export function validateUserName(loginName) {
   var regex = /^(?!dp)(?!\d+$)[\d\u4e00-\u9fffa-zA-Z]{2,12}$/i
   if (regex.test(loginName)) {
     return true

@@ -22,6 +22,7 @@
             :path="navRoute"
             :propIndex="index"
             pageName="homework"
+            :isShowMySubmit="($route.query.courseType === 'TEST' && index === 0) ? true : false"
           />
         </template>
         <template v-if="!homeworkListGetters.list.length && finished">

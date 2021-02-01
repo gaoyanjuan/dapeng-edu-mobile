@@ -1,11 +1,11 @@
 <template>
-  <div class="learning-course-wrapper">
+  <div class="learning-course-wrapper" @click="onEnterCourseChapter">
 
     <!-- 当前在学课程封面图 -->
     <div class="course-cover-row">
       <img class="cover" :src="course.coverImage" alt="cover" />
       <div class="cover-footer">
-        <span class="teacher-name"> {{course.teacher.nickname}} </span>
+        <span class="teacher-name"> 讲师：{{course.teacher.nickname}} </span>
         <span class="course-view"> {{course.totalStudent | studentsCount}} 在看</span>
       </div>
     </div>
@@ -19,10 +19,14 @@
 
     <!-- 当前在学课程章节 -->
     <div class="course-chapters-row" v-if="course.liveChapters.length > 0">
-      <div class="chapter" v-for="item in course.liveChapters" :key="item.id" @click="enterLiveRoom(item)">
+      <div class="chapter" v-for="item in course.liveChapters" :key="item.id" @click.stop="enterLiveRoom(item)">
         <div class="left-side-wrap">
           <span class="chapter-title van-ellipsis">{{item.title}}</span>
-          <span class="chapter-date">{{ item.startTime | formatLiveTime(item.finishTime) }}</span>
+          <div class="chapter-date">
+            {{ item.startTime | formatLiveTime(item.finishTime) }}
+            <span class="percentage" v-if="item.liveStatus === 'PLAYBACK' && item.haveLearned">已看:{{ item.percentage }}%</span>
+          </div>
+
         </div>
 
         <div class="right-side-wrap">
@@ -80,6 +84,23 @@ export default {
       } else {
         window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${params.id}`
       }
+    },
+
+     // 进入课程章节列表
+    onEnterCourseChapter() {
+      
+      if(this.course.openStatus === 'UNCONFIRMED') {
+        this.$toast('页面加载异常，请稍后～')
+        return false 
+      }
+
+      this.$router.push({
+        path: '/details/course',
+        query:{
+          type: this.course.type,
+          courseId: this.course.id
+        }
+      })
     },
 
     formatTime(time) {
@@ -180,13 +201,17 @@ export default {
   }
 
   .chapter-date {
-    width: 113px;
+    width: auto;
     height: 17px;
     font-size: 12px;
     font-family: @regular;
     font-weight: 400;
     color: #A3A8AB;
     margin-top: 4px;
+
+    .percentage {
+      margin-left: 6px;
+    }
   }
 }
 
@@ -195,7 +220,7 @@ export default {
   align-items: center;
 
   .living-status {
-    width: 32px;
+    max-width: 47px;
     height: 15px;
   }
 

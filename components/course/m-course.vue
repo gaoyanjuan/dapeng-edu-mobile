@@ -16,7 +16,7 @@
         </div>
 
         <div class="course-info-teacher">
-          <span class="teacher">讲师：{{ course.teacher.nickname }}</span>
+          <span v-if="showLive" class="teacher">讲师：{{ course.teacher.nickname }}</span>
           <span v-if="showLive" class="counter">{{ course.count | studentsCount }}人在看</span>
           <span v-else class="counter">{{ course.totalStudent | studentsCount }}人看过</span>
         </div>
@@ -46,7 +46,7 @@ export default {
   
   data: ()=> ({
     live_label: require('@/assets/icons/course/living.png'),
-    defaultImg: require('@/assets/icons/common/photos-bg.png'),
+    defaultImg: require('@/assets/icons/common/course-bg.png'),
   }),
 
   computed:{
@@ -72,7 +72,7 @@ export default {
     // 进入直播间逻辑~~~~
     onEnterLiveRoom() {
       const chapterId = this.course.liveChapters[0].id
-      if (this.course.courseType === 'PC_TRIAL') {
+      if (this.course.courseType === 'TRIAL') {
         window.location.href = `${this.courseUrl}/secure/course/trial/${this.course.id}/live/${chapterId}`
       } else {
         window.location.href = `${this.courseUrl}/secure/course/${this.course.id}/live/${chapterId}`

@@ -118,7 +118,7 @@ export default {
     },
 
     enterRecordRoom(item, params) {
-      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&cid=${item.sectionId}&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
+      const url = `/secure/course/playback?courseId=${this.courseId}&stageId=&sectionId=${item.sectionId}&lectureId=${params.lectureId}&v=${params.videoContent.vid}`
       window.location.href = this.courseUrl + url
     }
   },
@@ -199,13 +199,13 @@ export default {
 
   &-title {
     font-size: 15px;
-    line-height: 14px;
+    line-height: 16px;
     color: #18252C;
   }
 
   &-title-active {
     font-size: 15px;
-    line-height: 14px;
+    line-height: 16px;
     color: #75737EFF;
   }
 

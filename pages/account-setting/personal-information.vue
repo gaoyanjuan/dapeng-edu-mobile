@@ -13,11 +13,15 @@
     <div class="form-list">
       <div class="form-item">
         <div class="left-text">大鹏号</div>
-        <span class="right-content">{{userInfo.dpAccount}}</span>
+        <span class="txt">{{userInfo.dpAccount}}</span>
       </div>
       <div class="form-item" v-if="userInfo.studentSatusId">
         <div class="left-text">学籍号</div>
-        <span class="right-content">{{userInfo.studentSatusId}}</span>
+        <span class="txt">{{userInfo.studentSatusId}}</span>
+      </div>
+      <div class="form-item" v-else>
+        <div class="left-text">学籍号</div>
+        <span class="txt">暂无</span>
       </div>
       <nuxt-link class="form-item" tag="div" to='/account-setting/information-edit/user-name'>
         <div class="left-text">用户名</div>
@@ -26,7 +30,8 @@
       </nuxt-link>
       <div class="form-item">
         <div class="left-text">绑定手机号</div>
-        <span class="right-content">{{userInfo.mobile}}</span>
+        <span v-if="userInfo.mobile" class="txt">{{userInfo.mobile | maskMobile}}</span>
+        <span v-else class="txt">尚未绑定</span>
       </div>
     </div>
     <div class="form-list">
@@ -80,17 +85,22 @@ export default {
       actions: [
         {
           name: '男',
-          identification: 'M'
+          identification: 'M',
+          color: '#18252C'
         },
         {
           name: '女',
-          identification: 'F'
+          identification: 'F',
+          color: '#18252C'
         },
         {
           name: '保密',
-          identification: 'S'
+          identification: 'S',
+          color: '#18252C'
         }
-      ]
+      ],
+      activeColor:'#0CB65B',
+      normalColor:'#18252C'
     }
   },
   mounted() {
@@ -118,6 +128,9 @@ export default {
     },
     //性别弹出层
     onGenderHandle() {
+      this.actions.map(item =>{
+        this.userInfo.gender === item.identification ? item.color = this.activeColor : item.color = this.normalColor
+      })
       this.showGender = true
     },
     // 性别选择
@@ -247,7 +260,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       & > .left-text {
-        width: 70px;
+        width: 80px;
         height: 20px;
         font-size: 14px;
         font-family: @dp-font-regular;
@@ -257,12 +270,26 @@ export default {
         display: inline-block;
       }
       & > .right-content {
+        width: 80%;
+        text-align: right;
         font-size: 14px;
         font-family: @dp-font-regular;
         font-weight: 400;
         color: #A3A8AB;
         line-height: 20px;
         margin-right: 27px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      & > .txt {
+        width: 80%;
+        text-align: right;
+        font-size: 14px;
+        font-family: @dp-font-regular;
+        font-weight: 400;
+        color: #A3A8AB;
+        line-height: 20px;
       }
       & > .right-arrow {
         position: absolute;
@@ -274,5 +301,8 @@ export default {
       }
     }
   }
+}
+.active {
+  color: #0CB65B;
 }
 </style>

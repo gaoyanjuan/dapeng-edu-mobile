@@ -3,7 +3,7 @@
     <m-navbar title="我的正式课"></m-navbar>
 
     <!-- 我的正式课学院列表 -->
-    <van-sticky offset-top="1.17333rem">
+    <van-sticky offset-top="1.17333rem" v-if="formalCollegeListGetters.length > 1">
       <m-course-menus v-if="formalCollegeListGetters.length" :menus="formalCollegeListGetters" />
     </van-sticky>
 

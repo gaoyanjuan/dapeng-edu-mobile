@@ -48,6 +48,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Avatar',
   props:{
+    isShowMySubmit: {
+      type: Boolean,
+      default: false
+    },
     avatarStyle:{
       type:String,
       default:''
@@ -128,10 +132,7 @@ export default {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
     },
     showMySubmit() {
-      let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      let flag = this.userInfo && this.userInfo.userId === currentUserId && (this.pageName === 'requirement' || this.pageName === 'homework')
-      // return this.userInfo && this.userInfo.userId === currentUserId && this.pageName === 'requirement'
-      return flag
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.isShowMySubmit
     },
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)

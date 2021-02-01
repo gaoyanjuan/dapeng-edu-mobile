@@ -1,17 +1,22 @@
 <template>
   <div class="m-vip-chapter-wrapper">
     <m-navbar :title="chapter.title"></m-navbar>
+
+    <!-- 学管推荐标识LOGO -->
+    <img v-if="chapter.learning" :src="recommend" class="navbar-recommend-logo" />
     
-    <van-tabs v-model="activeName" sticky offset-top="1.17333rem">
+    <van-tabs v-model="activeName" sticky offset-top="1.17333rem" @click="onSwitchTab">
       <van-tab title="直播课" name="living">
         <m-living-list />
       </van-tab>
       <van-tab title="直播回放" name="playback">
         <m-playback-list />
       </van-tab>
-      <van-tab title="录播课" name="record">
-        <m-record-list />
-      </van-tab>
+      <template v-if="showRecord">
+        <van-tab title="录播课" name="record">
+          <m-record-list />
+        </van-tab>
+      </template>
     </van-tabs>
   </div>
 </template>
@@ -21,14 +26,31 @@ export default {
   name:'Vip-Chapter',
   props:{
     chapter:{
-      type:Object,
-      default:{}
+      type: Object,
+      default: {}
+    },
+    showRecord: {
+      type: Boolean,
+      default: true
     }
   },
 
   data: ()=> ({
-    activeName:'living'
-  })
+    activeName:'living',
+    recommend: require('@/assets/icons/course/recommend.png')
+  }),
+
+  mounted() {
+    let route = this.$route.query.state || 'living'
+    this.activeName = route
+  },
+
+  methods: {
+    onSwitchTab(name) {
+      if(name === this.$route.query.state) return
+      this.$router.replace({ query: { ...this.$route.query, state: name } })
+    }
+  }
 }
 </script>
 
@@ -37,6 +59,15 @@ export default {
   width: 375px;
   min-height: 100vh;
   background: @dp-white;
+}
+
+.navbar-recommend-logo {
+  position: fixed;
+  top: 0;
+  right: 30px;
+  width: 45px;
+  height: 42px;
+  z-index: 2001;
 }
 
 /deep/.van-tabs {

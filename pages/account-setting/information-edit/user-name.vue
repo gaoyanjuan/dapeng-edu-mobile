@@ -30,6 +30,7 @@
 </template>
 <script>
 import { mapActions,mapGetters } from 'vuex'
+import { validateUserName } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
@@ -73,12 +74,13 @@ export default {
     },
     onSaveHandle() {
       // 修改用户名
+      if (!validateUserName(this.userNameModel)) {
+        this.$toast('用户名需为2-12位中、英文，不能包含数字或特殊符号，注意不要以dp开头哦~')
+        return false
+      }
+      this.userNameModel = this.userNameModel.trim()
       if (!this.userNameModel) {
-        this.$toast({
-          message: `请填写用户名`,
-          position: 'bottom',
-          duration: 2000
-        })
+        this.$toast('请填写用户名')
         return
       }
       const userinfo = this.$cookiz.get('userinfo')
@@ -92,26 +94,14 @@ export default {
           this.$cookiz.set('userinfo',userinfo, {
             path: '/'
           })
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存成功')
           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast(error.data.message)
         } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存失败')
         }
       })
     },
@@ -142,7 +132,7 @@ export default {
       align-items: center;
       background: @dp-white;
       & > .modified-name {
-        width: 80%;
+        width: 95%;
         line-height: 32px;
         font-size: 14px;
         outline: none;

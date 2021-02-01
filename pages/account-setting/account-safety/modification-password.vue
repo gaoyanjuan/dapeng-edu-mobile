@@ -6,6 +6,7 @@
       <div class="form-item">
         <input
           v-model.trim="mobile"
+          @input="inputState"
           class="password-input"
           type="text"
           placeholder="请输入手机号"
@@ -18,7 +19,8 @@
           type="text"
           placeholder="请输入验证码"
         />
-        <div :class="showCode ? 'send-code': 'un-send-code'" @click="sendMobileCode">{{codeBtnInfo}}</div>
+        <div v-if="codeDisabled" class="un-send-code" >{{codeBtnInfo}}</div>
+        <div v-else class="send-code" @click="sendMobileCode">{{codeBtnInfo}}</div>
       </div>
       <div class="form-item">
         <input
@@ -85,16 +87,14 @@ export default {
       mobileState: '',
       // 倒计时基数
       countdown: 60,
+      // 是否禁用按钮
+      codeDisabled: false,
     }
   },
   computed: {
     ...mapGetters('user', [
       'userStatusGetters'
     ]),
-    // 判断获取验证码是否点亮
-    showCode() {
-      return Boolean(this.mobile)
-    },
     // 判断完成按钮是否点亮
     isEmpty() {
       return Boolean(this.oldPasswd && this.newPasswd && this.aginPasswd)
@@ -122,8 +122,17 @@ export default {
       'verificationMobile'
     ]),
 
+    inputState(val) {
+      const { value } = val.target;
+      if (value) {
+        this.codeDisabled = false
+      } else {
+        this.codeDisabled = true
+      }
+    },
     async sendMobileCode() {
       if (validateMobile(this.mobile)) {
+        this.codeDisabled = true
         const params = {
           mobile: this.mobile,
           codeType: 'REAL_PHONE_CODE'
@@ -139,12 +148,14 @@ export default {
               position: 'bottom',
               duration: 2000
             })
+            this.codeDisabled = false
           } else {
             this.$toast({
               message: `获取验证码失败`,
               position: 'bottom',
               duration: 2000
             })
+            this.codeDisabled = false
           }
         })
       } else {
@@ -163,6 +174,7 @@ export default {
           if (this.countdown !== 0) {
             
             this.codeBtnInfo = `${this.countdown}s后重新发送`
+            this.codeDisabled = true
           } else {
             clearInterval(this.timer)
             this.codeBtnInfo = '获取验证码'
@@ -237,6 +249,18 @@ export default {
           })
         }
       } else {
+        if (this.newPasswd.length === 0) {
+          this.$toast('请输入密码')
+          return
+        }
+        if (this.aginPasswd.length === 0) {
+          this.$toast('请输入确认密码')
+          return
+        }
+        if (this.newPasswd !== this.aginPasswd) {
+          this.$toast('两次密码不一致')
+          return
+        }
         if (validateMobile(this.mobile)) {
           const data = {
             mobile: this.mobile,

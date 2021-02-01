@@ -21,7 +21,7 @@
         <div class="left-title">地址</div>
         <div class="detail-address">
           <van-field
-            v-model.trim="familyAddress"
+            v-model="familyAddress"
             :autosize="autosize"
             type="textarea"
             :maxlength="maxCount"
@@ -51,6 +51,7 @@
 <script>
 import { mapActions,mapGetters } from 'vuex'
 import areaList from '@/assets/emotion/area'
+import { validateEmpty } from '@/utils/validate.js'
 export default {
   layout:'navbar',
   data() {
@@ -62,11 +63,11 @@ export default {
       /** 字数限制 */
       wordsLimit: false,
       /** 动态文字 */
-      dynamicNums:'',
+      dynamicNums:'只能输入60个字哦',
       /** 描述框大小*/
       autosize: { maxHeight: 100, minHeight: 100},
       // 完成的状态
-      accomplishStatus:false,
+      accomplishStatus:true,
       userId: ''
     }
   },
@@ -87,11 +88,13 @@ export default {
       this.addressArea = this.userInfoGetters.address
       this.familyAddress = this.userInfoGetters.familyAddress
       this.userId = this.userInfoGetters.userId
+      this.onChangeInput(this.familyAddress)
     } else {
       this.getUserDetails().then((res)=> {
         this.addressArea = res.data.address
         this.familyAddress = res.data.familyAddress
         this.userId = res.data.userId
+        this.onChangeInput(this.familyAddress)
       })
     }
   },
@@ -111,7 +114,6 @@ export default {
       this.showAreaPopup = false
       const area = res[0].name + '@' + res[1].name + '@' + res[2].name
       this.addressArea = area
-      this.accomplishStatus = true
     },
     // 取消选中
     areaCancel() {
@@ -133,21 +135,15 @@ export default {
     // 字数监听
     onChangeInput(words) {
       this.calcContent(words ,60)
-      if (this.familyAddress) {
-        this.accomplishStatus = true
-      } else {
-        this.accomplishStatus = false
-      }
     },
     // 点击完成
     onSaveHandle() {
-      if (!this.familyAddress) {
-        this.$toast({
-          message: `请填写地址`,
-          position: 'bottom',
-          duration: 2000
-        })
-        return
+      if (!validateEmpty(this.familyAddress)) {
+        const address = /^[\u4e00-\u9fa5a-zA-Z0-9__,.!，。！、]+$/
+        if (!address.test(this.familyAddress)) {
+          this.$toast('地址格式不正确，符号只能为下划线，顿号，句号，逗号，感叹号')
+          return false
+        }
       }
       const params = {
         userId:this.userId,
@@ -156,26 +152,14 @@ export default {
       }
       this.editUserInfo(params).then(res=> {
         if (res.status === 200) {
-          this.$toast({
-            message: `保存成功`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存成功')
           this.getUserDetails()
         }
       }).catch((error) => {
         if (error && error.data) {
-          this.$toast({
-            message: `${error.data.message}`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast(error.data.message)
         } else {
-          this.$toast({
-            message: `保存失败`,
-            position: 'bottom',
-            duration: 2000
-          })
+          this.$toast('保存失败')
         }
       })
     }
