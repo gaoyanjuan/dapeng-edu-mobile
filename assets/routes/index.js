@@ -33,4 +33,24 @@ export const routeList = [
   { key: 'personal-center-likes', title: '我的喜欢' },
   { key: 'personal-center-collection', title: '我的收藏' },
   { key: 'personal-center-publish', title: '我的发布' },
+  { key: 'personal-center-course-formal', title: '我的正式课' },
+  { key: 'personal-center-course-trial', title: '我的体验课' },
+  { key: 'details-course', title: '我的体验/正式课程章节详情' },
+
+  // 个人资料
+  { key: 'account-setting-personal-information', title: '编辑资料' },
+  { key: 'account-setting-information-edit-user-name', title: '修改用户名' },
+  { key: 'account-setting-information-edit-true-name', title: '修改真实姓名' },
+  { key: 'account-setting-information-edit-personalized-signature', title: '修改签名' },
+  { key: 'account-setting-information-edit-area', title: '修改地址' },
+
+  // 设置
+  { key: 'setting', title: '设置' },
+  { key: 'account-setting-account-safety', title: '账号与安全' },
+  { key: 'account-setting-account-safety-replace-phone', title: '更换手机号' },
+  { key: 'account-setting-account-safety-modification-password', title: '修改密码' },
+  { key: 'account-setting-account-safety-forget-password', title: '忘记密码' },
+
+  // 其它
+  { key: 'personal-center-honor', title: '我的荣誉' },
 ]
