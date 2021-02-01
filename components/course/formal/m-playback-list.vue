@@ -2,15 +2,17 @@
   <div class="m-playback-wrapper">
     
     <!-- 当前选择期标题 -->
-    <van-sticky offset-top="2.24rem">
-      <div class="state-select-header" v-if="selected" @click="openStagePop">
-        <span class="stage-txt van-ellipsis">{{selected.title}}（{{calcState()}}）</span>
-        <img v-if="this.playbackStage.length > 1" class="icon-select" :src="select" alt="select"/>
-      </div>
-    </van-sticky>
+    <div class="state-select-header">
+      <van-sticky offset-top="2.24rem">
+        <div class="stage-row" v-if="selected" @click="openStagePop">
+          <span class="stage-txt van-ellipsis">{{selected.title}}（{{calcState()}}）</span>
+          <img v-if="this.playbackStage.length > 1" class="icon-select" :src="select" alt="select"/>
+        </div>
+      </van-sticky>
+    </div>
 
     <!-- 当前选择期下的章节列表 -->
-    <div :class="platform === 'ios' ? 'state-chapter-content':'state-chapter-content-section'">
+    <div class="state-chapter-content">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="chapters.list.length">
           <m-chapter v-for="item in chapters.list" :key="item.id" :chapter="item" :stage="selected"></m-chapter>
@@ -32,7 +34,6 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import { appSource } from '@/utils/device-type'
 export default {
   name:'M-Playback-List',
 
@@ -81,13 +82,11 @@ export default {
 
     courseId() {
       return this.$route.query.courseId
-    },
+    }
   },
 
   created() {
     this.initChapterStage()
-
-    this.platform = appSource().type
   },
 
   methods:{
@@ -184,6 +183,11 @@ export default {
 .state-select-header {
   width: 375px;
   height: 40px;
+}
+
+.state-select-header .stage-row {
+  width: 375px;
+  height: 40px;
   padding: 12px 16px;
   background: #FFF8EE;
   .l-flex-row();
@@ -203,10 +207,6 @@ export default {
 }
 
 .state-chapter-content {
-  padding-top: 40px;
-}
-
-.state-chapter-content-section {
   padding-top: 0;
 }
 
