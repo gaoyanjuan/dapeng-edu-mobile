@@ -189,7 +189,6 @@ export default {
       })
       
       this.$matomo.setCustomVariable(1, 'common#navigation_click', params, 'page')
-      this.$matomo.trackPageView()
     },
     
     // 转换tabbar Name

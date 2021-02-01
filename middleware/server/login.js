@@ -25,8 +25,10 @@ export default function (req, res, next) {
 
   //获取url中code
   const code = url.parse(req.url, true).query.code
-  const state = url.parse(req.url, true).query.state
+  let state = url.parse(req.url, true).query.state
   const host = req.headers.host
+  const login_way = decodeURIComponent(state).split('*')[1]
+  state = login_way ? login_way : 'AUTOLOGIN'
 
   //1.根据code获取认证数据(数据模拟)
   axios.post(`${dpAuthTokenUrl}/oauth/token?code=${code}&grant_type=authorization_code&redirect_uri=//${host}/callback`, {}, {
