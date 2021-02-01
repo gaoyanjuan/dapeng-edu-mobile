@@ -122,7 +122,8 @@
           :key="i"
           @click="onNavGroupItem(item)"
         >
-          <img class="nav-icon" :src="item.icon" alt="" />
+          <van-image width="32" height="32" :src="item.icon" />
+          <!-- <img class="nav-icon" :src="item.icon" alt="" /> -->
           <span class="nav-txt"> {{ item.txt }} </span>
         </van-grid-item>
       </van-grid>
