@@ -6,6 +6,8 @@ export const routeList = [
   { key: 'index-homework', title: '广场/作业' },
   { key: 'index-works', title: '广场/作品' },
   { key: 'index-dynamic', title: '广场/动态' },
+  { key: 'index-reading', title: '广场/阅读' },
+  { key: 'index-video', title: '广场/视频' },
   { key: 'index-small-video', title: '广场/小视频' },
 
   // 详情页
