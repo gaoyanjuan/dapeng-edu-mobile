@@ -3,7 +3,7 @@
   <div class="works__class--wrap">
     <span>{{ remark }} {{ college ? `· ${college.name}` : '' }}</span>
   </div>
-  <template v-for="(item, index) in labels" >
+  <template v-for="(item, index) in labels.slice(0, 3)" >
     <div
       @click.stop="toLabel(item)"
       class="label"
@@ -104,6 +104,10 @@ export default {
   font-family: @dp-font-regular;
   font-weight: 400;
   color: #0CB65B;
+  max-width: 80px;
+  text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
 }
 
 .active-label {
