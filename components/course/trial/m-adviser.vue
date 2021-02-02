@@ -19,7 +19,7 @@
         <div class="m-qr-wrap" v-if="adviserInfo.groupQr">
           <img class="qr" :src="adviserInfo.groupQr" />
         </div>
-        <div class="m-qq-wechat">QQ群/微信：{{ adviserInfo.groupCode }}</div>
+        <div class="m-qq-wechat">微信：{{ adviserInfo.groupCode }}</div>
       </template>
 
        <!-- QQ -->
@@ -27,11 +27,12 @@
         <div class="m-qr-wrap" v-if="adviserInfo.groupQr">
           <img class="qr" :src="adviserInfo.groupQr" />
         </div>
-        <div class="m-qq-wechat">QQ群/微信：{{ adviserInfo.groupCode }}</div>
+        <div class="m-qq-wechat">QQ群：{{ adviserInfo.groupCode }}</div>
       </template>
 
       <!-- 复制并打印 -->
-      <div class="m-btn" @click="onCopy">复制并打开微信/QQ</div>
+      <div class="m-btn" v-if="adviserInfo.groupType === '1'" @click="onCopy">复制并打开微信</div>
+      <div class="m-btn" v-else @click="onCopy">复制并打开QQ</div>
     </template>
 
 

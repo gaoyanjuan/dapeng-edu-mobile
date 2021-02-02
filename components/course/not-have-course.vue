@@ -2,8 +2,8 @@
   <div class="not-have-course-warp">
     <img src="@/assets/icons/blank/not-have-course.png" alt="">
     <div>
-      <p>亲爱的<span>{{ userNick }}</span>学员，</p>
-      <p>由于你暂时未开通<span>【{{ courseTitle }}】</span>听课权限，请联系班主任老师帮你开通~</p>
+      <p>亲爱的<span @click="toPersonalCenter">{{ userNick }}</span>学员，</p>
+      <p>由于你暂时未开通<span @click="toCourse">【{{ courseTitle }}】</span>听课权限，请联系班主任老师帮你开通~</p>
     </div>
     <a href="/">回到首页</a>
   </div>
@@ -38,6 +38,14 @@ export default {
       if (this.courseInfo && this.courseInfo.title) {
         return this.courseInfo.title
       }
+    }
+  },
+   methods: {
+    toCourse () {
+      window.location.replace(`${this.validateSystemHostName().COURSE_HOST}/course/${this.courseInfo.id}`)
+    },
+    toPersonalCenter () {
+      window.location.replace(`${this.validateSystemHostName().HOST}/personal-center/publish?userId=${this.userInfo.userId}`)
     }
   }
 }
