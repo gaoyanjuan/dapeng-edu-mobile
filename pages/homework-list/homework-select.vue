@@ -136,7 +136,7 @@ export default {
     })
   },
 
-  created() {
+  async created() {
     if(!this.$login()) return
 
     const _this = this
@@ -150,18 +150,26 @@ export default {
     }
 
     if(this.courseType === 'VIP') {
+      const courseExpireRes = await this.checkCourseExpire({ courseId: this.$route.query.id })
+      if (courseExpireRes && courseExpireRes.data) {
+        this.$router.replace({
+          path: '/empty',
+          query: {
+            title: this.$route.query.title
+          }
+        })
+      }
       this.appendStagesList({ courseId: this.$route.query.id }).then( res => {
-        if (res && res.data && res.data.code === 404937) {
-          this.$router.replace({
-            path: '/empty',
-            query: {
-              title: this.$route.query.title
-            }
-          })
-        }
         this.stages = res.data || []
         loadVipCourse(this.stages)
         this.stagesLoad = true
+      }).catch( err => {
+        this.$router.replace({
+          path: '/empty',
+          query: {
+            title: this.$route.query.title
+          }
+        })
       })
     }
   
@@ -182,6 +190,10 @@ export default {
       'appendVipCourses',
       'appendStagesList'
     ]),
+    ...mapActions({
+      checkOpenCourse: 'course/checkOpenCourse',
+      checkCourseExpire: 'publish/checkCourseExpire'
+    }),
 
     // 体验课
     onLoad() {
