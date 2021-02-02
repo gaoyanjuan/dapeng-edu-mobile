@@ -1,19 +1,21 @@
 <template>
-  <section class="m-call-app-wrapper">
+  <van-sticky>
+    <section class="m-call-app-wrapper">
 
-    <div class="left-side-cloumn">
-      <img class="logo" :src="logo" alt="logo" />
-      <div class="logo-info">
-        <span>大鹏教育</span>
-        <span>学我想学 找到生活的热情</span>
+      <div class="left-side-cloumn">
+        <img class="logo" :src="logo" alt="logo" />
+        <div class="logo-info">
+          <span>大鹏教育</span>
+          <span>学我想学 找到生活的热情</span>
+        </div>
       </div>
-    </div>
-    
-    <div class="right-side-cloumn">
-      <!--打开APP-->
-      <div class="btn-call-app" @click="openAppEvent"></div>
-    </div>
-  </section>
+      
+      <div class="right-side-cloumn">
+        <!--打开APP-->
+        <div class="btn-call-app" @click="openAppEvent"></div>
+      </div>
+    </section>
+  </van-sticky>
 </template>
 
 <script>
