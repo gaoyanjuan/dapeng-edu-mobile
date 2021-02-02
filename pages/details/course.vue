@@ -26,10 +26,15 @@ export default {
   data: ()=> ({
     record: true,
     showDiv: false,
+    isOpenCourse: true,
     courseDetail: null
   }),
 
   computed: {
+
+    ...mapGetters('course',[
+      'chaptersListGetters'
+    ]),
 
     type() {
       return this.$route.query.type
@@ -40,38 +45,37 @@ export default {
     }
   },
 
-  async asyncData ({route, store, error}) {
-    if(store.getters['user/userInfoGetters'] && store.getters['user/userInfoGetters'].userId) {
-      // 试学课查询章节失败,说明用户没有课程权限
-      if (route.query.type === 'TRIAL' && store.getters['course/chaptersListGetters'].length === 0) {
-        try {
-          await store.dispatch('course/appendTrialChapters', { courseId: route.query.courseId })
-          return {
-            isOpenCourse: true
-          }
-        } catch (error) {
-          return {
-            isOpenCourse: false
-          }
-        }
-      } else {
-        // 正式课查询接口,查看用户是否拥有课程权限
-        const res = await store.dispatch('course/isOpenCourse', { courseId: route.query.courseId })
-        if (res && res.data) {
-          return {
-            isOpenCourse: true
-          }
-        } else {
-          return {
-            isOpenCourse: false
-          }
-        }
-      }
-    }
-  },
-
   async mounted() {
     if(!this.$login()) return
+
+     // 试学课查询章节失败,说明用户没有课程权限
+    if (this.type === 'TRIAL' && this.chaptersListGetters.length === 0) {
+      try {
+        await this.appendTrialChapters({ courseId: this.courseId })
+      } catch (error) {
+        this.isOpenCourse = false
+      }
+
+      await this.appendCourseDetail(this.courseId).then(res => {
+        this.courseDetail = res.data
+      })
+
+    } else {
+
+      const res = await this.appendCourseDetail(this.courseId)
+      this.courseDetail = res.data
+
+      if(this.courseDetail.openStatus === 'UNCONFIRMED') {
+        this.$router.replace('/empty')
+        return
+      }
+
+      // 正式课查询接口,查看用户是否拥有课程权限
+      const result = await this.checkOpenCourse({ courseId: this.courseId })
+      if (result && !result.data) {
+        this.isOpenCourse = false
+      }
+    }
 
     try {
       // 查看是否存在录播
@@ -86,10 +90,6 @@ export default {
     } catch (error) {
       this.isOpenCourse = false
     }
-  
-    await this.appendCourseDetail(this.courseId).then(res => {
-      this.courseDetail = res.data
-    })
 
     // 解决页面加载失败问题,通过改变dom树引起页面重新渲染
     setTimeout(() => {
@@ -100,7 +100,8 @@ export default {
     ...mapActions('course', [
       'appendCourseDetail',
       'appendTrialChapters',
-      'appendRecordChapters'
+      'appendRecordChapters',
+      'checkOpenCourse'
     ]),
 
     ...mapMutations('course', [
