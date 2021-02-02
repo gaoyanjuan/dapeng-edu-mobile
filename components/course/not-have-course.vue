@@ -42,10 +42,10 @@ export default {
   },
    methods: {
     toCourse () {
-      window.location.href = `${this.validateSystemHostName().COURSE_HOST}/course/${this.courseInfo.id}`
+      window.location.replace(`${this.validateSystemHostName().COURSE_HOST}/course/${this.courseInfo.id}`)
     },
     toPersonalCenter () {
-      window.location.href = `${this.validateSystemHostName().HOST}/personal-center/publish?userId=${this.userInfo.userId}`
+      window.location.replace(`${this.validateSystemHostName().HOST}/personal-center/publish?userId=${this.userInfo.userId}`)
     }
   }
 }
