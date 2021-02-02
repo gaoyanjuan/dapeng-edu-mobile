@@ -35,7 +35,7 @@ export default {
       let params = {
         page: this.currentPage++,
         size: 5,
-        linkContentTypes: 'ACTIVITY_POST,WORKS,HOMEWORK,LIFE'
+        linkContentTypes: 'ACTIVITY_POST,WORKS,LIFE'
       }
       this.appendActivities(params)
       .then(({ data,pageInfo }) => {
