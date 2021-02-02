@@ -4,7 +4,6 @@
     <div ref="certDiv" class="honor-back" v-if="certificatesGetters">
       <div class="cer_comain">
         <img src="@/assets/icons/mine/jiekezhengshu.png" alt="" />
-        <button @click="handleUploading" v-if="showBtn"></button>
         <div class="xy_message">
           <p>
             <strong>{{ certificatesGetters.nickname }}</strong
@@ -44,6 +43,7 @@
       <img class="popup-img" :src="img" alt="">
       <h1>长按图片保存哦~</h1>
     </van-popup>
+    <button @click="handleUploading"></button>
   </div>
 </template>
 <script>
@@ -58,7 +58,6 @@ export default {
       certificates: {},
       img: '',
       show:false,
-      showBtn:true
     };
   },
   mounted() {
@@ -82,32 +81,28 @@ export default {
     },
     // 获取下载证书url  
     generatedImage (imgName) {
-      this.showBtn = false
-      setTimeout(() => {
-        const _this = this
-        window.pageYOffset = 0
-        document.documentElement.scrollTop = 0
-        document.body.scrollTop = 0
-        // eslint-disable-next-line no-undef
-        // const imageWrapper = document.getElementById('certDiv')
-        // console.log(document.getElementById('certDiv'))
-        html2canvas(this.$refs.certDiv, {
-          // scale: 1,
-          scale: 2, // 图片质量增大至300dpi标准
-          useCORS: true
-          // x: imageWrapper.getBoundingClientRect().left + 8
-        }).then(function (canvas) {
-          const imgUri = canvas
-            .toDataURL('image/png')
-            .replace('image/png', 'image/octet-stream') // 获取生成的图片的url
-          // 将base64转为blob
-          const blob = dataURLtoBlob(imgUri) 
-          const files = new window.File([blob],imgName,{ type: blob.type })
-          // 将blob转为img
-          _this.img = window.URL.createObjectURL(files)
-          _this.showBtn = true
-        })
-      }, 0) 
+      const _this = this
+      window.pageYOffset = 0
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      // eslint-disable-next-line no-undef
+      // const imageWrapper = document.getElementById('certDiv')
+      // console.log(document.getElementById('certDiv'))
+      html2canvas(this.$refs.certDiv, {
+        // scale: 1,
+        scale: 2, // 图片质量增大至300dpi标准
+        useCORS: true
+        // x: imageWrapper.getBoundingClientRect().left + 8
+      }).then(function (canvas) {
+        const imgUri = canvas
+          .toDataURL('image/png')
+          .replace('image/png', 'image/octet-stream') // 获取生成的图片的url
+        // 将base64转为blob
+        const blob = dataURLtoBlob(imgUri) 
+        const files = new window.File([blob],imgName,{ type: blob.type })
+        // 将blob转为img
+        _this.img = window.URL.createObjectURL(files)
+      })
     },
   },
 }
@@ -132,16 +127,6 @@ export default {
         width: 222px;
         height: 115px;
         margin: 30px 72px;
-      }
-      & > button {
-        background-image: url("~@/assets/icons/mine/icon_sctp.png");
-        width: 55px;
-        height: 21px;
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background-size: cover;
-        border: none;
       }
       .xy_message {
         text-align: center;
@@ -246,6 +231,16 @@ export default {
       line-height: 40px;
       font-weight: 400;
     }
+  }
+  button {
+    background-image: url("~@/assets/icons/mine/icon_sctp.png");
+    width: 55px;
+    height: 21px;
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    background-size: cover;
+    border: none;
   }
 }
 </style>
