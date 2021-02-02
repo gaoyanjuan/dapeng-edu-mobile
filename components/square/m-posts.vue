@@ -429,6 +429,7 @@ export default {
         topicId: this.mainId,
         topicType: this.propSquareType,
         content: text,
+        topicCreatedBy: this.listItemData && this.listItemData.user && this.listItemData.user.userId,
         label: {
           contentType: this.listItemData.type
         }

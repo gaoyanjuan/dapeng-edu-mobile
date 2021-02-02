@@ -225,6 +225,7 @@ export default {
         label: {
           contentType: this.contentType
         },
+        topicCreatedBy: this.detailData && this.detailData.user && this.detailData.user.userId,
         user: this.userinfo,
         commit: true
       })
