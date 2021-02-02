@@ -2,7 +2,7 @@
   <div class="app_wrap">
 
     <!--菜单导航 -->
-    <van-tabs v-model="activeName" sticky @click="onMenusClick" @scroll="onScrollEvent">
+    <van-tabs v-model="activeName" sticky @click="onMenusClick" @scroll="onScrollEvent" offset-top="1.54667rem">
       <van-tab title="关注" name="attention" to="/attention">
         <template v-if="$route.name === 'index-attention'">
           <nuxt-child />
