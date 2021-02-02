@@ -122,7 +122,8 @@
           :key="i"
           @click="onNavGroupItem(item)"
         >
-          <img class="nav-icon" :src="item.icon" alt="" />
+          <van-image width="32" height="32" :src="item.icon" />
+          <!-- <img class="nav-icon" :src="item.icon" alt="" /> -->
           <span class="nav-txt"> {{ item.txt }} </span>
         </van-grid-item>
       </van-grid>
@@ -160,11 +161,11 @@ export default {
         name: "learn-honor",
         icon: require("@/assets/icons/mine/icon-learn-honor.png"),
       },
-      {
-        txt: "快捷支付",
-        name: "fast-payment",
-        icon: require("@/assets/icons/mine/icon-fast-payment.png"),
-      },
+      // {
+      //   txt: "快捷支付",
+      //   name: "fast-payment",
+      //   icon: require("@/assets/icons/mine/icon-fast-payment.png"),
+      // },
       // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/icon-task.png')},
       {
         txt: "联系学管",
