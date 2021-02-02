@@ -42,11 +42,6 @@ export default {
 
   mounted() {
     if(!this.$login()) return
-    
-    if(this.chapter.openStatus === 'UNCONFIRMED') {
-      this.$router.push('/empty')
-      return
-    }
 
     let route = this.$route.query.state || 'living'
     this.activeName = route
