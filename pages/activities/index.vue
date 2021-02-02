@@ -19,7 +19,7 @@ export default {
     }
     try {
       await store.dispatch('activities/appendActivities', {
-        linkContentTypes: 'ACTIVITY_POST,WORKS,HOMEWORK,LIFE',
+        linkContentTypes: 'ACTIVITY_POST,WORKS,LIFE',
         page: 1,
         size: 10
       })
@@ -33,7 +33,7 @@ export default {
   created () {
     if (process.browser && !this.isServiceload) {
       this.$store.dispatch('activities/appendActivities', {
-        linkContentTypes: 'ACTIVITY_POST,WORKS,HOMEWORK,LIFE',
+        linkContentTypes: 'ACTIVITY_POST,WORKS,LIFE',
         page: 1,
         size: 10
       })
