@@ -93,7 +93,7 @@ export default {
         // console.log(document.getElementById('certDiv'))
         html2canvas(this.$refs.certDiv, {
           // scale: 1,
-          scale: 10, // 图片质量增大至300dpi标准
+          scale: 2, // 图片质量增大至300dpi标准
           useCORS: true
           // x: imageWrapper.getBoundingClientRect().left + 8
         }).then(function (canvas) {
