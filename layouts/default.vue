@@ -1,7 +1,8 @@
 <template>
   <div>
     <div v-if="$nuxt.isOnline && show">
-      <m-guide />
+      <!-- <m-guide /> -->
+      <m-call-app />
       <div class="app_wrap">
         <Nuxt />
       </div>
