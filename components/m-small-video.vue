@@ -98,11 +98,11 @@ export default {
         collegeId: this.$route.query.college,
         timestamp: newStartTime
       })
-      this._squareLoading({ 
-        page_area: '小视频',
-        page_area_sec:this.collegeType,
-        request_type: '手动上拉刷新'
-      })
+      // this._squareLoading({ 
+      //   page_area: '小视频',
+      //   page_area_sec:this.collegeType,
+      //   request_type: '手动上拉刷新'
+      // })
     },
     switchCollegeName(params) {
       this.collegeType = params.name

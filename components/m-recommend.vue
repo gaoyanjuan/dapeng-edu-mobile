@@ -119,7 +119,7 @@ export default {
       if (this.recommendListGetters.status === 'loading') return false
       const newPage = this.recommendListGetters.pageInfo.number + 1
       this.appendRecommendList({ page: newPage })
-      this._squareLoading({ page_area: '推荐', page_area_sec:'', request_type: '手动上拉刷新'})
+      // this._squareLoading({ page_area: '推荐', page_area_sec:'', request_type: '手动上拉刷新'})
     },
 
     pathType(item){
