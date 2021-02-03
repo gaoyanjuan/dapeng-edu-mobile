@@ -51,7 +51,6 @@ export default {
 
   watch:{
     'chapters.status' : function (newVal, oldVal) {
-      console.log(newVal)
       if (newVal === 'loading') {
         this.loading = true
         this.finished = false
