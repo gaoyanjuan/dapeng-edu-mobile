@@ -58,6 +58,14 @@ const activitiesDate = function (date) {
   return dayjs(date).format('YYYY/MM/DD') // 使用 dayjs 格式化时间
 }
 
+// 我的荣誉时间过滤
+const honorDate = function (date) {
+  if (!date) {
+    return '---'
+  }
+  return dayjs(date).format('YYYY年MM月DD日') // 使用 dayjs 格式化时间
+}
+
 
 /** 
  * 通用时间过滤
@@ -254,7 +262,8 @@ const filter = {
   formatHomeworkDate,
   formatLiveTime,
   formatLiveDate,
-  formatChapterTime
+  formatChapterTime,
+  honorDate
 }
 Object.keys(filter).forEach((key) => {
   Vue.filter(key, filter[key])
