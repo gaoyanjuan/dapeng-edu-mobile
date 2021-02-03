@@ -164,14 +164,14 @@ export default {
   methods:{
     // 显示发布菜单
     showPublishMenus() {
-      this.matomo('ISSUE')
+      // this.matomo('ISSUE')
       this.show = true
     },
  
     // 切换菜单时
     changeTab(name) {
       
-      this.matomo(name)
+      // this.matomo(name)
 
       if(name === 'course') {
         window.location.href = `${this.courseUrl}/course/explore`

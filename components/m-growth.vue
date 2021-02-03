@@ -101,7 +101,7 @@ export default {
         type = this.menus[0].id
       }
       this.appendGrowthList({ type,  page: newPage })
-      this._squareLoading({ page_area: '成长', page_area_sec:'', request_type: '手动上拉刷新'})
+      // this._squareLoading({ page_area: '成长', page_area_sec:'', request_type: '手动上拉刷新'})
     },
 
     /** 发帖事件 */

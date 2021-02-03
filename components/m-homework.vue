@@ -133,11 +133,11 @@ export default {
         courseType: this.$route.query.courseType,
         page: newPage
       })
-      this._squareLoading({ 
-        page_area: this.courseType,
-        page_area_sec:this.collegeType,
-        request_type: '手动上拉刷新'
-      })
+      // this._squareLoading({ 
+      //   page_area: this.courseType,
+      //   page_area_sec:this.collegeType,
+      //   request_type: '手动上拉刷新'
+      // })
     },
     switchCollegeName(params) {
       this.collegeType = params.name

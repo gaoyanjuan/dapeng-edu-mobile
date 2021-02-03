@@ -16,7 +16,7 @@ export default {
         }
         if (this.$store.getters['video/smallVideoListGetters'].list.length === 0) {
           this.$store.dispatch('video/appendSmallVideoList', { type: this.$route.query.type, collegeId: this.$route.query.college })
-          this._squareLoading({ page_area: '小视频', page_area_sec:'全部', request_type: '进入页面加载'})
+          // this._squareLoading({ page_area: '小视频', page_area_sec:'全部', request_type: '进入页面加载'})
         }
       } catch (error) {}
     }
