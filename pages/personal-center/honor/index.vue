@@ -30,7 +30,7 @@
         <div class="bott_yz">
           <img src="@/assets/icons/mine/jkzs_dpyinzhang.png" alt="" />
           <p>证书编号：{{ certificatesGetters.num }}</p>
-          <p>发证时间：{{ certificatesGetters.cerTime | commonDate }}</p>
+          <p>发证时间：{{ certificatesGetters.cerTime | honorDate }}</p>
         </div>
       </div>
     </div>
