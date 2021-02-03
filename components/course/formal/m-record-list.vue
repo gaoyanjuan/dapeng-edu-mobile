@@ -51,6 +51,7 @@ export default {
 
   watch:{
     'chapters.status' : function (newVal, oldVal) {
+      console.log(newVal)
       if (newVal === 'loading') {
         this.loading = true
         this.finished = false
@@ -85,8 +86,8 @@ export default {
     },
   },
 
-  created() {
-    this.initRecordPage()
+  mounted() {
+    // this.appendRecordChapters({page: 1, courseId:this.courseId})
   },
 
   methods: {
@@ -97,15 +98,6 @@ export default {
     ...mapActions({
       appendRecordChapters :'course/appendRecordChapters'
     }),
-
-    initRecordPage() {
-      const params = {
-        page: 1,
-        courseId:this.courseId
-      }
-
-      this.appendRecordChapters(params)
-    },
 
     onLoad() {
       if (this.chapters.status === 'over') {
