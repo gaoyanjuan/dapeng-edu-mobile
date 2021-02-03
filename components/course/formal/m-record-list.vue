@@ -85,8 +85,8 @@ export default {
     },
   },
 
-  created() {
-    this.initRecordPage()
+  mounted() {
+    // this.appendRecordChapters({page: 1, courseId:this.courseId})
   },
 
   methods: {
@@ -97,15 +97,6 @@ export default {
     ...mapActions({
       appendRecordChapters :'course/appendRecordChapters'
     }),
-
-    initRecordPage() {
-      const params = {
-        page: 1,
-        courseId:this.courseId
-      }
-
-      this.appendRecordChapters(params)
-    },
 
     onLoad() {
       if (this.chapters.status === 'over') {

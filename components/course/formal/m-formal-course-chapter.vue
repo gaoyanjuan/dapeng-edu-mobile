@@ -6,14 +6,14 @@
     <img v-if="chapter.learning" :src="recommend" class="navbar-recommend-logo" />
     
     <van-tabs v-model="activeName" sticky offset-top="1.17333rem" @click="onSwitchTab">
-      <van-tab title="直播课" name="living">
+      <van-tab title="直播课" name="LIVING">
         <m-living-list />
       </van-tab>
-      <van-tab title="直播回放" name="playback">
+      <van-tab title="直播回放" name="PLAYBACK">
         <m-playback-list />
       </van-tab>
       <template v-if="showRecord">
-        <van-tab title="录播课" name="record">
+        <van-tab title="录播课" name="VOD">
           <m-record-list />
         </van-tab>
       </template>
@@ -36,14 +36,14 @@ export default {
   },
 
   data: ()=> ({
-    activeName:'living',
+    activeName:'LIVING',
     recommend: require('@/assets/icons/course/recommend.png')
   }),
 
   mounted() {
     if(!this.$login()) return
 
-    let route = this.$route.query.state || 'living'
+    let route = this.$route.query.state || 'LIVING'
     this.activeName = route
   },
 

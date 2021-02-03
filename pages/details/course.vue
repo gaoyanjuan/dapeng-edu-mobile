@@ -81,7 +81,7 @@ export default {
       // 查看是否存在录播
       await this.appendRecordChapters({page: 1, courseId: this.courseId }).then(res => {
         // 只做查询，清空store
-        this.clearRecordChapter()
+        // this.clearRecordChapter()
         
         if(!res.data.courseVodContents.length) {
           this.record = false
