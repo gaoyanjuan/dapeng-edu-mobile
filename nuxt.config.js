@@ -17,7 +17,6 @@ export default {
     global: global,
     authUrl: env[process.env.MODE].DP_AUTH_URL, // 中台登录地址
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
-    orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
     mode: env[process.env.MODE].MODE,
     TOKEN_NAME: env[process.env.MODE].TOKEN_NAME, // token名称
     protocol: env[process.env.MODE].PROTOCOL, //协议地址
