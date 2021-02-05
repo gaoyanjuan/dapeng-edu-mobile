@@ -43,7 +43,7 @@
       <img class="popup-img" :src="img" alt="">
       <h1>长按图片保存哦~</h1>
     </van-popup>
-    <button @click="handleUploading"></button>
+    <button v-if="this.certificatesGetters" @click="handleUploading"></button>
   </div>
 </template>
 <script>
