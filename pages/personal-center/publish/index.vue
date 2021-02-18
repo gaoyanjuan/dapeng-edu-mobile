@@ -247,7 +247,7 @@ export default {
         }
       }
       & > .info-box {
-        width: 195px;
+        width: 250px;
         height: 50px;
         margin-left:16px;
         & > .user-name {
