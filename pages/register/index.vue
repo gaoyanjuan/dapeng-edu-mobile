@@ -207,35 +207,40 @@ export default {
       if(this.timer) return
 
       // 验证用户是否可以自注册
-      const { data } = await this.checkRegisterAble({account: this.mobile})
-      if (data.verifyStatus) {
-        const params = {
-          mobile: this.mobile,
-          codeType: 'REGISTER_CODE',
-          sessionId: this.ncCallBackData.csessionid,
-          sig: this.ncCallBackData.sig,
-          token: this.ncCallBackData.token,
-          scene: 'nc_message'
-        }
-        // 检查是否需要将注册按钮变换为登录按钮
-        this.registerAble = true
-        const res = await this.sendCode(params)
-        if (res.status === 200 && !this.timer) {
-          this.countDown()
+      try {
+        const { data } = await this.checkRegisterAble({account: this.mobile})
+        if (data.verifyStatus) {
+          const params = {
+            mobile: this.mobile,
+            codeType: 'REGISTER_CODE',
+            sessionId: this.ncCallBackData.csessionid,
+            sig: this.ncCallBackData.sig,
+            token: this.ncCallBackData.token,
+            scene: 'nc_message'
+          }
+          // 检查是否需要将注册按钮变换为登录按钮
+          this.registerAble = true
+          const res = await this.sendCode(params)
+          if (res.status === 200 && !this.timer) {
+            this.countDown()
+          } else {
+            this.warning.content = res.data.message ? res.data.message : ''
+            this.warning.show = true
+            this.nc.reset()
+          }
         } else {
-          this.warning.content = res.data.message ? res.data.message : ''
-          this.warning.show = true
-          this.nc.reset()
-        }
-      } else {
-        this.registerAble = false
+          this.registerAble = false
 
-        if (data.accountType === 'MOBILE') {
-          const newMobile = this.validateMobileCode(data.account)
-          this.warning.content = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
-        } else if (data.accountType === 'DPACCOUNT') {
-          this.warning.content = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
-        }
+          if (data.accountType === 'MOBILE') {
+            const newMobile = this.validateMobileCode(data.account)
+            this.warning.content = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
+          } else if (data.accountType === 'DPACCOUNT') {
+            this.warning.content = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
+          }
+          this.warning.show = true
+        } 
+      } catch (error) {
+        this.warning.content = error.data.message
         this.warning.show = true
       }
     },
