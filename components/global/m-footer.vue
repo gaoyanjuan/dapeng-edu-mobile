@@ -174,7 +174,7 @@ export default {
       // this.matomo(name)
 
       if(name === 'course') {
-        location.href = `${location.protocol}${this.courseUrl}/course/explore`
+        location.href = `${location.protocol}${this.courseUrl}/course/explore/`
         return false
       }
       
