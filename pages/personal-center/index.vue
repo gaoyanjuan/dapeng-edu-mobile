@@ -562,4 +562,9 @@ export default {
   box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.03);
   cursor: pointer;
 }
+
+/deep/ .van-image__img {
+  width: 32px;
+  height: 32px;
+}
 </style>
