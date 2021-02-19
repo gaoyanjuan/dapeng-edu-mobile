@@ -244,10 +244,11 @@ export default {
           height: 50px;
           border-radius: 50%;
           z-index: 1;
+          object-fit: cover;
         }
       }
       & > .info-box {
-        width: 195px;
+        width: 250px;
         height: 50px;
         margin-left:16px;
         & > .user-name {
