@@ -244,6 +244,7 @@ export default {
           height: 50px;
           border-radius: 50%;
           z-index: 1;
+          object-fit: cover;
         }
       }
       & > .info-box {
