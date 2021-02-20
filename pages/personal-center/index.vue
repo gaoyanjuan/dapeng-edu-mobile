@@ -563,8 +563,4 @@ export default {
   cursor: pointer;
 }
 
-/deep/ .van-image__img {
-  width: 32px;
-  height: 32px;
-}
 </style>
