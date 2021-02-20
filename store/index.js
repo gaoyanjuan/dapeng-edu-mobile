@@ -1,10 +1,7 @@
 import { get_cookie } from '@/utils/cookie-tool';
-<<<<<<< HEAD
 import logo from './modules/logo'
 import validateSystemHostName from '@/plugins/validate-system-hostname'
 import filter from '@/plugins/filters'
-=======
->>>>>>> e079b52df433dcb87f381e5985abc1eba8684972
 
 export default {
   state: () => {
