@@ -28,6 +28,7 @@ export default {
         }
         if (this.$store.getters['recommend/recommendListGetters'].list.length === 0) {
           this.$store.dispatch('recommend/appendRecommendList', { page : 1 })
+          // this._squareLoading({ page_area: '推荐', page_area_sec:'', request_type: '进入页面加载'})
         }
       } catch (error) {}
     }

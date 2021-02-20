@@ -4,7 +4,7 @@
     <m-swipe :banner="worksBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" :menus="workCollegesGetters" />
+    <m-menus menus-type="college" :menus="workCollegesGetters" @switchCollegeName="switchCollegeName"/>
 
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -12,7 +12,7 @@
           <m-posts 
             v-for="(item, index) in workListGetters.list"
             :id="item ? item.id: ''"
-            :key="index"
+            :key="item ? item.id + index : index"
             listType="work"
             :propIndex="index"
             :courseType="item.courseType"
@@ -38,9 +38,9 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'M-Works',
   data: () => ({
-    list: [],
     loading: false,
     finished: false,
+    collegeType: '全部',
     finishedTxt:'没有更多了',
     blank:require('@/assets/icons/blank/have-no-works.png')
   }),
@@ -71,10 +71,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -93,6 +94,14 @@ export default {
         categoryIds: this.$route.query.college,
         page: newPage
       })
+      // this._squareLoading({ 
+      //   page_area: '作品',
+      //   page_area_sec:this.collegeType,
+      //   request_type: '手动上拉刷新'
+      // })
+    },
+    switchCollegeName(params) {
+      this.collegeType = params.name
     }
   },
   computed:{

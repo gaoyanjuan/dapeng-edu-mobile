@@ -71,17 +71,19 @@ export const actions = {
     commit('appendReadingList', { data: res.data, pageInfo })
     return res
   },
+  async appendBrowseCount (store, params) {
+    const res = await this.$axios.put(`/articles/browse/${params.id}`)
+    return res
+  },
   /** * 查询作品详情 */
-  async appendReadingDetails({ commit }, params) {
+  async appendReadingDetails({ commit, dispatch }, params) {
     const res = await this.$axios.get(`/articles/${params.id}`)
+    try {
+      dispatch('appendBrowseCount', params)
+    } catch (error) {}
     commit('appendReadingDetails', res)
     return res
-  },
-   // 新增阅读浏览量
-  async appendReadingBrowse({ commit }, params) {
-    const res = await this.$axios.put(`/articles/${params.id}`)
-    return res
-  },
+  }
 }
 
 export const getters = {

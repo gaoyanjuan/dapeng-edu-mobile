@@ -29,7 +29,7 @@
       <div class="register-footer-protocol">
         <van-checkbox v-model="checked" shape="square" checked-color="#00B93B" icon-size="18px"/>
         <div class="protocol-txt">
-          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.2》</span>和
+          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.3》</span>和
           <span class="protocol-link" @click="onTopolicy">《隐私政策》</span>
         </div>
       </div>
@@ -41,7 +41,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-
+import jwtDecode from 'jwt-decode'
 export default {
   name:'Affirm-Password',
   layout:'navbar',
@@ -55,8 +55,7 @@ export default {
     warning: { show:false, content:''},
     passIcon: require('@/assets/icons/register/password.png'),
     safety: require('@/assets/icons/register/safety.png'),
-    mobile: '',
-    cip: ''
+    mobile: ''
   }),
   watch:{
     password(n, o) {
@@ -86,7 +85,6 @@ export default {
   },
   mounted() {
     this.mobile = this.$route.query.mobile
-    this.cip = returnCitySN['cip']
   },
   methods: {
     ...mapActions('user', [
@@ -115,29 +113,48 @@ export default {
       // 请求注册
       const data = {
         mobile: this.mobile,
-        password: this.password,
-        registerIp: this.cip
+        password: this.password
       }
       this.userRegister(data)
         .then((res) => {
           if (res.status === 200) {
-            const token = jwtDecode(res.data.refresh_token)
-            const expiresTime = new Date(token.exp * 1000)
-            if (process.env.mode === 'development') {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
-                expires: expiresTime
-              })
-            } else {
-              this.$cookiz.set(this.validateSystemHostName().token_name, res.data.access_token, {
-                expires: expiresTime,
-                path: '/',
-                domain: '.dapengjiaoyu.cn'
-              })
-            }
+            const token = jwtDecode(res.data.accessToken)
+
+            // ************* 注册埋点  Start*************
+            this.$matomo.setUserId(token.sub)
+            let userData = {'user_id':token.sub}
+            this.$matomo.setCustomVariable(1, 'ztxx#ztxx_zc', JSON.stringify(userData),'page')
+            this.$matomo.trackPageView()
+            // ************* 注册埋点 End*************
+
+            this.$axios.get('/set-token', {
+              params: {
+                jti: token.jti,
+                exp: token.exp
+              }
+            })
+
+            // const expiresTime = new Date(token.exp * 1000)
+            // if (process.env.mode === 'development') {
+            //   this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
+            //     expires: expiresTime
+            //   })
+            // } else {
+            //   this.$cookiz.set(process.env.TOKEN_NAME, res.data.accessToken, {
+            //     expires: expiresTime,
+            //     path: '/',
+            //     domain: '.dapengjiaoyu.cn'
+            //   })
+            // }
             // this.$cookiz.set('refresh_token', res.data.refresh_token)
             localStorage.setItem('login_time', new Date().getTime())
             // 完成注册
-            this.$router.push('/')
+            if(window.top) {
+              window.top.location.href = '/'
+            } else {
+              window.location.href = '/'
+            }
+            
           } else {
             this.warning.content = res.data.message
             this.warning.show = true

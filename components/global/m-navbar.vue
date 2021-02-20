@@ -6,7 +6,7 @@
     :title="title"
     :left-text="leftText"
     :right-text="rightText"
-    @click-left="onClickLeft"
+    @click-left="$goback"
     @click-right="onClickRight"
     safe-area-inset-top
   >
@@ -14,7 +14,11 @@
       <img class="navbar__arrow icon" :src="arrow" alt="arrow" />
     </template>
     <template #right>
+      <!-- 个人资料模块头部组件 -->
+      <div v-if="showInfoRightText" :class="accomplishStatus ? 'navbar__accomplish' : 'hidden__accomplish'">{{ rightText }}</div>
+      <!-- 通用头部文本组件 -->
       <div v-if="showRightText" :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">{{ rightText }}</div>
+      <!-- 通用图片（三个点）组件 -->
       <img v-if="showRightMenu" class="navbar__menu icon" :src="navMenu" alt="menu" @click="onOpenMenus" />
     </template>
   </van-nav-bar>
@@ -47,6 +51,14 @@ export default {
     showRightMenu: {
       type: Boolean,
       default: false
+    },
+    accomplishStatus: {
+      type:Boolean,
+      default:false
+    },
+    showInfoRightText: {
+      type:Boolean,
+      default:false
     }
   },
   data: () => ({
@@ -54,25 +66,6 @@ export default {
     navMenu: require('@/assets/icons/navbar/nav-menus.png')
   }),
   methods: {
-    onClickLeft() {
-      const route = 'personal-center-publish'
-      const isLogin = this.$cookiz.get('isLogin')
-      if (isLogin) {
-        const isDetails = this.$isDetails(this.$route.name)
-        this.$cookiz.set('isLogin', false, {
-          path: '/'
-        })
-        if (isDetails) {
-          this.$router.go(-4)
-        } else {
-          this.$router.go(-1)
-        }
-      } else if(this.$route.name === route) {
-        this.$router.replace('/personal-center')
-      } else {
-        this.$router.go(-1)
-      }
-    },
     onClickRight() {
       this.$emit('onClickRight')
     },
@@ -112,5 +105,19 @@ export default {
 
 .m-navbar .btn-active {
   background: #0CB65B;
+}
+
+// 个人资料头图样式
+.m-navbar .navbar__accomplish {
+  width: 38px;
+  height: 20px;
+  font-size: 14px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #0CB65B;
+  line-height: 20px;
+}
+.m-navbar .hidden__accomplish {
+  display: none;
 }
 </style>

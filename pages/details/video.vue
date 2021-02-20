@@ -1,10 +1,12 @@
 <template>
   <div>
     <!-- Header Block -->
-    <m-navbar title="视频详情" />
+    <m-navbar v-if="!$route.query.share" title="视频详情" />
+
+    <m-call-app v-else></m-call-app>
 
     <!-- Player Block -->
-    <div class="video-posts-player">
+    <div :class="$route.query.share ? '': 'video-posts-player'">
       <div id="player"></div>
     </div>
     
@@ -21,7 +23,16 @@
         {{ video.title }}
       </div>
 
-      <div class="video-posts-label">视频·{{ video.college.name.replace(/学院/, '') }}</div>
+      <div class="video-posts-box">
+        <m-posts-class
+          :remark="video.college && video.college.name ? `视频·${ video.college.name.replace(/学院/, '') }` : '视频'"
+          :labels="video.labels"
+        />
+      </div>
+
+      <div class="play-count">
+        {{ video.playCount | commonCount }}次播放
+      </div>
     </section>
 
     <!-- Footer Block -->
@@ -35,6 +46,9 @@
       />
     </section>
 
+    <!-- 悬浮唤起APP 按钮-->
+    <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
+
   </div>
 </template>
 
@@ -44,6 +58,11 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   name:'Video-Page-Details',
   layout:'navbar',
+  head () {
+    return {
+      title: '视频详情-大鹏教育-千万人的兴趣学习社区',
+    }
+  },
   data:() => ({
     player: null,
   }),
@@ -65,6 +84,11 @@ export default {
           hideSwitchPlayer: true,
           vid: res.data.video.id
         })
+
+        this.player.on('s2j_onPlayStart', () => {
+          this.appendBrowseCount({ id: this.video.id })
+        })
+
         if (res && res.data) {
           this.$store.commit('details/changeIsPraise', res.data.isPraise)
           this.$store.commit('details/changeIsCollection', res.data.isCollection)
@@ -84,6 +108,7 @@ export default {
   },
   methods:{
     ...mapActions({
+      appendBrowseCount: 'reading/appendBrowseCount',
       getDetails: 'video/appendVideoDetails',
       getComment: 'comment/queryCommentList',
       getLikes: 'comment/queryLikesList',
@@ -133,19 +158,18 @@ export default {
   margin-top: 16px;
 }
 
-.video-posts-label {
-  width: 69px;
-  height: 24px;
-  background: #F7F7F7;
-  border-radius: 12px;
+.video-posts-box {
+  margin-top: 18px;
+}
 
+.play-count {
+  margin-top: 12px;
+  height: 16px;
   font-size: 12px;
   font-family: @regular;
   font-weight: 400;
-  color: #465156;
-  line-height: 24px;
-  margin-top: 16px;
-  text-align: center;
+  color: #A3A8AB;
+  line-height: 16px;
 }
 
 </style>

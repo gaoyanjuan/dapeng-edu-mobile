@@ -43,7 +43,11 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Formal-Homework',
   layout: 'navbar',
-
+  head () {
+    return {
+      title: `${this.$route.query.courseType === 'TEST' ? '提交体验课作业' : '提交正式课作业'}-大鹏教育-千万人的兴趣学习社区`,
+    }
+  },
   data: () => ({
     loading: false,
     finished: false,
@@ -160,6 +164,11 @@ export default {
     },
 
     toTasksPage(params) {
+      if(params.openStatus === 'UNCONFIRMED') {
+        this.$toast('页面加载异常，请稍后～')
+        return false 
+      }
+
       this.$router.push({
         path: '/homework-list/homework-select',
         query: { 
@@ -212,7 +221,6 @@ export default {
   background: #0cb65b;
   color: #fff;
 }
-  
 
 .homework-wrap {
 

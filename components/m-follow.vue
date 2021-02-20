@@ -13,10 +13,31 @@
     <div class="follow-wrap">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <template v-if="attentionListGetters.list.length">
-          <div v-for="(res, i) in attentionListGetters.list" :key="i">
-            <m-posts
+          <div
+            v-for="(res, i) in attentionListGetters.list"
+            class="list-item"
+            :key="res && res.topic ? res.topic.id + i : i"
+          >
+            <m-reading-posts
+              v-if="res && res.topicType === 'ARTICLE'"
               :id="res.topic ? res.topic.id: ''"
-              v-if="res.topic"
+              listType="attention"
+              :propIndex="i"
+              :imgSmall="res.topic.coverImgSmall"
+              :key="res.topic ? res.topic.id: ''"
+              :item="res.topic"
+            />
+            <m-video-posts 
+              v-else-if="res && res.topicType === 'MOVIE'"
+              :id="res.topic ? res.topic.id: ''"
+              listType="attention"
+              :propIndex="i"
+              :key="res.topic ? res.topic.id + i : i"
+              :item="res.topic"
+            />
+            <m-posts
+              v-else
+              :id="res.topic ? res.topic.id: ''"
               listType="attention"
               :propIndex="i"
               :propSquareType="res.topicType"
@@ -80,10 +101,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -98,9 +120,8 @@ export default {
       }
       if (this.attentionListGetters.status === 'loading') return false
       const newPage = this.attentionListGetters.pageInfo.number + 1
-      this.appendAttentionList({
-        page: newPage
-      })
+      this.appendAttentionList({ page: newPage })
+      // this._squareLoading({ page_area: '关注', page_area_sec:'', request_type: '手动上拉刷新'})
     },
     pathType(item){
       switch (item.topicType) {
@@ -132,6 +153,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.list-item {
+  margin-bottom: 12px;
+}
 
 .follow-section-line {
   width: 100%;

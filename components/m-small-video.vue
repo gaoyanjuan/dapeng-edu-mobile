@@ -4,14 +4,19 @@
     <m-swipe :banner="videoBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college"/>
+    <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college" @switchCollegeName="switchCollegeName"/>
 
     <section class="works-wrapper">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="smallVideoList.list.length">
           <m-water-fall width="167px" gap="0" :data="smallVideoList.list" @complete="completeEvent">
-            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="index" :order="index">
-              <m-small-video-posts :videoItem="item" :propIndex="index" />
+            <m-water-fall-item v-for="(item, index) in smallVideoList.list" :key="item ? item.id + index : index" :order="index">
+              <m-small-video-posts
+                :propSquareType="item && item.type"
+                listType="small-video"
+                :videoItem="item"
+                :propIndex="index"
+              />
             </m-water-fall-item>
           </m-water-fall>
         </template>
@@ -36,6 +41,7 @@ export default {
     waterFallComplete: false,
     loading: false,
     finished: false,
+    collegeType: '全部',
     finishedTxt:'没有更多了',
     blank:require('@/assets/icons/blank/have-no-video.png')
   }),
@@ -92,10 +98,15 @@ export default {
         collegeId: this.$route.query.college,
         timestamp: newStartTime
       })
+      // this._squareLoading({ 
+      //   page_area: '小视频',
+      //   page_area_sec:this.collegeType,
+      //   request_type: '手动上拉刷新'
+      // })
+    },
+    switchCollegeName(params) {
+      this.collegeType = params.name
     }
-  },
-  destroyed () {
-    this.$store.commit('video/changeScrollTop', document.documentElement.scrollTop)
   }
 }
 </script>

@@ -221,8 +221,10 @@ export const state = () => ({
         pages: 1,
         size: process.env.global.pageSize
       }
-    }
+    },
   },
+  certificates: [],
+  isVerify: null
 })
 
 export const mutations = {
@@ -235,6 +237,11 @@ export const mutations = {
       state.userInfo = { ...payload, nickname: payload.nickname || payload.nickName }
     } else {
       state.userInfo = null
+    }
+  },
+  appendUserMobile(state, payload) {
+    if (state.userInfo) {
+      state.userInfo.mobile = payload
     }
   },
   appendUserTrends (state, payload) {
@@ -468,6 +475,12 @@ export const mutations = {
   changeListStatus(state, payload) {
     let type = payload
     state[type].status = 'loading'
+  },
+  appendCertificates(state, payload) {
+    state.certificates = payload.data[0]
+  },
+  geMyState(state, payload) { 
+    state.isVerify = payload.data
   }
 }
 
@@ -480,7 +493,7 @@ export const actions = {
     })
     return res
   },
-  async getUserDetails ({ commit, state }) {
+  async getUserDetails({ commit, state }) {
     const res = await this.$axios.get('old/users/details')
     .catch((error) => {})
     if (res && res.data) {
@@ -489,12 +502,12 @@ export const actions = {
     return res
   },
   // 查询用户信息
-  async appendUserInfo ({ commit }, params) {
+  async appendUserInfo({ commit }, params) {
     commit('appendUserInfo', params)
   },
   // 修改信息
   async editUserInfo ({ commit }, params) {
-    const res = await this.$axios.patch('old/users', params)
+    const res = await this.$axios.put('old/users', params)
     return res
   },
   // 检查用户是否可以注册
@@ -544,22 +557,29 @@ export const actions = {
     return res
   },
   // 用户粉丝列表
-  async appendUserFans ({ commit }, params) {
+  async appendUserFans ({ commit,dispatch }, params) {
     commit('changeUserFansStatus', 'loading')
-    const res = await this.$axios.get('/users/fans', {
+    await this.$axios.get('/users/fans', {
       params: {
         ...params
       }
-    })
-    let payload = {
-      data: res.data,
-      pageInfo: {
-        pages: params.page,
-        size: 20
+    }).then((res) => {
+      let list = []
+      res.data.forEach((item) => {
+        if (item.redDot) {
+          list.push(item.messageId)
+        }
+      })
+      dispatch('readMyMessages', list)
+      let payload = {
+        data: res.data,
+        pageInfo: {
+          pages: params.page,
+          size: 20
+        }
       }
-    }
-    commit('appendUserFans', payload)
-    return res
+      commit('appendUserFans', payload)
+    })
   },
   // 用户推荐作业列表
   async appendUserHomesRecommend ({ commit }, params) {
@@ -581,9 +601,35 @@ export const actions = {
     const res = await this.$axios.get(`/old/sms/check-code?${qs.stringify(params)}`)
     return res
   },
+  // 手机号码验证
+  async verificationMobile (state, params) {
+    const res = await this.$axios.put('/old/users/verification-mobile', params)
+    return res
+  },
+  // 修改密码
+  async modifyPassword (state, params) {
+    const res = await this.$axios.put('/old/users/password', params)
+    return res
+  },
+  // 重置密码
+  async resetPassword (state, params) {
+    const res = await this.$axios.put('/old/users/reset-password', params)
+    return res
+  },
+  // 查询当前用户账号状态
+  async geMyState ({ commit }) {
+    const res = await this.$axios.get('old/users/state')
+    commit('geMyState', res)
+    return res
+  },
+   // 意见反馈
+   async postFeedback (state, params) {
+    const res = await this.$axios.post(`/common/feedbacks?${qs.stringify(params)}`)
+    return res
+  },
   // 注册用户
   async userRegister (state, params) {
-    const res = await this.$axios.post(`/old/users/register?${qs.stringify(params)}`)
+    const res = await this.$axios.post('/old/users/register', params)
     return res
   },
   // 用户的发布作业列表
@@ -678,6 +724,11 @@ export const actions = {
     const res = await this.$axios.delete(`/posts/${params.id}`)
     return res
   },
+  // 删除阅读
+  async deleteReading ({ commit }, params) {
+    const res = await this.$axios.delete(`/articles/${params.id}`)
+    return res
+  },
   // 查询用户的喜欢列表
   async appendUserLikes ({ commit }, params) {
     let statuParams = {
@@ -762,7 +813,34 @@ export const actions = {
   },
   // 执行消息阅读操作
   async readMyMessages ({ commit }, params) {
-    const res = await this.$axios.put('/messages/read')
+    const res = await this.$axios.put('/messages/read', params)
+    return res
+  },
+   // 查询其他用户的信息
+   async queryUserData ({ commit }, params) {
+    const res = await this.$axios.get(`old/users/${params.userId}/part`)
+    return res.data
+  },
+  // 查询用户的关注状态
+  async appendFollowingStatus(store, params) {
+    const res = await this.$axios.get(`/users/${params.id}/follow-status`)
+    return res.data
+  },
+  //账号安全等级
+  async getAccountSafety({ commit }, params) {
+    const res = await this.$axios.get('old/users/user-security')
+    return res
+  },
+  // 用户ID生成老主站token
+  async userMainStationToken({state},params) {
+    const res = await this.$axios.post(
+      `tapi/token/?userId=${state.userInfo.userId}`
+    )
+    return res
+  },
+  async getCertificatesList({ commit}) {
+    const res = await this.$axios.get(`old/certificates`)
+    commit('appendCertificates', res)
     return res
   },
 }
@@ -810,4 +888,10 @@ export const getters = {
   publishVideoGetters(state) {
     return state.publishVideo
   },
+  certificatesGetters(state) {
+    return state.certificates
+  },
+  userStatusGetters(state) { 
+    return state.isVerify
+  }
 }

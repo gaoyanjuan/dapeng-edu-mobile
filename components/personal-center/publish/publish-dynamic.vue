@@ -3,7 +3,7 @@
     <template v-if="publishDynamicGetters.list.length">
       <m-posts
         v-for="(res, index) in publishDynamicGetters.list"
-        :key="index"
+        :key="res ? res.id + index : index"
         :courseType="res.courseType"
         :modifiedTime="res.lastModifiedTime"
         :listItemData="res"
@@ -16,7 +16,7 @@
     <template v-if="!publishDynamicGetters.list.length && finished">
       <div class="have-no-posts-wrap">
         <img class="icon" :src="blank" alt="" />
-        <span class="txt">暂无内容</span>
+        <div class="txt">暂无内容</div>
       </div>
     </template>
   </van-list>
@@ -98,9 +98,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-/deep/.m-works:not(:first-child) {
-  border-top: 12px solid #F7FAF8;
-}
 
 .dynamic-wrap {
   position: relative;
@@ -111,10 +108,8 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  margin-top: 50%;
+  transform: translateY(-50%);
 
   & .icon {
     width: 240px;

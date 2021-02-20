@@ -46,6 +46,7 @@ export default {
             this.$store.dispatch('dynamic/appendHotDynamicList', {})
           }
         }
+        // this._squareLoading({ page_area: '动态', page_area_sec:'', request_type: '进入页面加载'})
       } catch (error) {}
     }
   },

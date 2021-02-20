@@ -31,6 +31,7 @@ export default {
         }
         if (this.$store.getters['attention/popularUsersGetters'].length === 0) {
           this.$store.dispatch('attention/appendPopularUsers', { count: 5 })
+          // this._squareLoading({ page_area: '关注', page_area_sec:'', request_type: '进入页面加载'})
         }
         if(this.$store.getters['user/userInfoGetters']) {
           this.$store.dispatch('attention/queryFollowing', {id: process.env.global.dpUserId}).then(() => {

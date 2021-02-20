@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-list-warp">
     <m-navbar title="我的喜欢" />
 
     <div class="tabs-wrap">
@@ -16,12 +16,12 @@
         <van-tab title="活动">
           <personal-growth-posts pageName="userLike" />
         </van-tab>
-        <!-- <van-tab title="阅读">
+        <van-tab title="阅读">
           <personal-reading-posts pageName="userLike" />
         </van-tab>
         <van-tab title="视频">
           <personal-video-posts pageName="userLike" />
-        </van-tab> -->
+        </van-tab>
       </van-tabs>
     </div>
   </div>
@@ -36,6 +36,8 @@ export default {
     active: 0,
   }),
   mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
     /**
      * 路由定位
      */
@@ -64,6 +66,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+
+.user-list-warp {
+  min-height: 100vh;
+  background-color: #F8F8F8;
+}
 
 .tabs-wrap {
   padding-top: 44px;

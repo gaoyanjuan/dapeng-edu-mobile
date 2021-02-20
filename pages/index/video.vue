@@ -16,6 +16,7 @@ export default {
         }
         if (this.$store.getters['video/videoListGetters'].list.length === 0) {
           this.$store.dispatch('video/appendVideoList', { collegeId: this.$route.query.college, page: 1 })
+          // this._squareLoading({ page_area: '视频', page_area_sec:'全部', request_type: '进入页面加载'})
         } 
       } catch (error) {}
     }

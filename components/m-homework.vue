@@ -4,7 +4,7 @@
     <m-swipe :banner="homeworkBannerListGetters"/>
 
     <!-- 二级菜单 -->
-    <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="[{ id:'', name: '全部' }].concat(taskCollegesGetters)" />
+    <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="CollegesData" @switchCollegeName="switchCollegeName" />
 
     <section class="works-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -13,7 +13,7 @@
             v-for="(item, index) in homeworkListGetters.list"
             :id="item ? item.id: ''"
             listType="homework"
-            :key="item ? item.id: index"
+            :key="item ? item.id + index: index"
             propSquareType="HOMEWORK"
             :commentList="item.comments"
             :courseType="item.courseType"
@@ -21,6 +21,8 @@
             :listItemData="item"
             :path="navRoute"
             :propIndex="index"
+            pageName="homework"
+            :isShowMySubmit="($route.query.courseType === 'TEST' && index === 0) ? true : false"
           />
         </template>
         <template v-if="!homeworkListGetters.list.length && finished">
@@ -42,6 +44,8 @@ export default {
     list: [],
     loading: false,
     finished: false,
+    courseType: '作业',
+    collegeType: '全部', 
     finishedTxt: '没有更多了',
     navRoute:'/details/homework',
     blank:require('@/assets/icons/blank/have-no-homework.png')
@@ -51,11 +55,19 @@ export default {
       'homeworkBannerListGetters'
     ]),
     ...mapGetters('colleges', [
+      'squareTaskTrialCollegesGetters',
       'taskCollegesGetters'
     ]),
     ...mapGetters('homework', [
       'homeworkListGetters'
-    ])
+    ]),
+    CollegesData () {
+      if (this.$route.query.courseType === 'TEST') {
+        return this.squareTaskTrialCollegesGetters
+      } else if (this.$route.query.courseType !== 'CHILD') {
+        return this.taskCollegesGetters
+      }
+    }
   },
   watch: {
     'homeworkListGetters.status': function (newVal, oldVal) {
@@ -75,6 +87,19 @@ export default {
       } else {
         this.finishedTxt ='没有更多了'
       }
+    },
+    '$route.query':function(newVal, oldVal) {
+      switch (newVal.courseType) {
+        case 'VIP':
+          this.courseType = '正式课' 
+          break
+        case 'TEST':
+          this.courseType = '体验课' 
+          break
+        case 'CHILD':
+          this.courseType = '亲子课' 
+          break
+      }
     }
   },
   mounted(){
@@ -84,10 +109,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -107,6 +133,14 @@ export default {
         courseType: this.$route.query.courseType,
         page: newPage
       })
+      // this._squareLoading({ 
+      //   page_area: this.courseType,
+      //   page_area_sec:this.collegeType,
+      //   request_type: '手动上拉刷新'
+      // })
+    },
+    switchCollegeName(params) {
+      this.collegeType = params.name
     }
   }
 }

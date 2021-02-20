@@ -2,7 +2,9 @@ export default {
   state: () => {
     return {
       colleges: [],
-      taskColleges: [], // 作业
+      taskColleges: [
+        { id: '', name: '全部' }
+      ], // 作业
       workColleges: [
         { id: '', name: '全部' }
       ], // 作品
@@ -18,6 +20,9 @@ export default {
       smallVideoColleges: [
         { id: '', name: '全部' }
       ], // 小视频
+      squareTaskTrialColleges: [
+        { id: '', name: '全部' }
+      ],
       submitWorkColleges: [] // 提交作品
     }
   },
@@ -28,7 +33,7 @@ export default {
         element.name = element.name.replace(/学院/, '')
       })
       if (payload.collegeType === 'SQUARE_TASK') {
-        state.taskColleges = payload.data
+        state.taskColleges = state.taskColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_VIDEO') {
         state.smallVideoColleges = state.smallVideoColleges.concat(payload.data)
       } else if (payload.collegeType === 'SQUARE_MOVIE') {
@@ -39,8 +44,10 @@ export default {
         state.readingColleges = state.readingColleges.concat(payload.data)
       } else if (payload.collegeType === 'RELEASE_TASK') {
         state.homeworkColleges = state.homeworkColleges.concat(payload.data)
-      } else if (payload.collegeType === 'RELEASE_WORK') {
+      } else if (payload.collegeType === 'RELEASE_WORK' || payload.collegeType === 'RELEASE_GROW') {
         state.submitWorkColleges = payload.data
+      } else if (payload.collegeType === 'SQUARE_TASK_TRIAL') {
+        state.squareTaskTrialColleges = state.squareTaskTrialColleges.concat(payload.data)
       } else {
         state.colleges = payload.data
       }
@@ -71,6 +78,9 @@ export default {
     },
     homeworkCollegesGetters (state) {
       return state.homeworkColleges
+    },
+    squareTaskTrialCollegesGetters (state) {
+      return state.squareTaskTrialColleges
     },
     videoCollegesGetters (state) {
       return state.videoColleges

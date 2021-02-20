@@ -57,7 +57,7 @@
         <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
           <m-posts
             v-for="(item, idx) in requirementList"
-            :key="idx"
+            :key="item ? item.id + idx : idx"
             :isRequirement="true"
             :commentList="item.comments"
             :dataType="item.type"
@@ -73,6 +73,7 @@
             path="/details/homework"
             squareType="作业"
             pageName="requirement"
+            :isShowMySubmit="true"
           />
         </van-list>
       </div>
@@ -80,7 +81,7 @@
 
     <!-- Footer Button -->
     <div v-if="requirementDetails.submitStatus === 'SUBMIT'" class="requirement-btn-wrap">
-      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" :to="`/submit?type=${$route.query.type}`" />
+      <nuxt-link tag="img" class="publish" :src="submit" alt="submit" :to="`/submit?type=${submitType}&taskId=${$route.query.taskId}`" />
     </div>
   </div>
 </template>
@@ -102,7 +103,14 @@ export default {
   computed: {
     ...mapGetters('homework', [
       'requirementListGetters'
-    ])
+    ]),
+    submitType: function () {
+      if(this.$route.query.type) {
+        return this.$route.query.type
+      } else {
+        return this.requirementDetails.courseType
+      }
+    }
   },
   mounted() {
     this.appendRequirementDetails({ id: this.$route.query.taskId })
@@ -146,7 +154,8 @@ export default {
           hideSwitchPlayer: true,
           width: '100%',
           height: '198px',
-          vid: this.requirementDetails.vid
+          vid: this.requirementDetails.vid,
+          cover_display: 'scaleAspectFit'
         })
       }
     }

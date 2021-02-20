@@ -48,14 +48,15 @@
 
         <!-- classification -->
         <div class="inner-content-class">
-          <div class="inner-content-class-wrap">
-            <span>作业 {{ homework.college ? `·${homework.college.name.replace(/学院/, '')}` : '' }}</span>
-          </div>
+          <m-posts-class
+            :remark="homework.college && homework.college.name ? `作业·${homework.college.name.replace(/学院/, '')}` : '作业'"
+            :labels="homework.labels"
+          />
         </div>
 
         <!-- Label -->
         <div class="inner-content-lab">
-          <m-label label-type="作业" :label-data="homework.task" />
+          <m-topic-label label-type="作业" :label-data="homework.task" />
         </div>
       </div>
     </div>

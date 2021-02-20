@@ -2,12 +2,16 @@
   <section class="m-avatar">
 
     <!-- 左边用户信息 -->
-    <div class="avatar-left-side-wrap" @click.stop>
+    <div class="avatar-left-side-wrap" @click.stop="toPersonalCenter">
       <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
       <div class="avatar-info-wrap">
         <span class="info-nickname">{{ userNickname }}</span>
         <span class="info-date">
-          {{ submitTime | commonDate }}<span class="info-my-submit" v-if="showMySubmit">｜我发布的</span>
+          {{ submitTime | commonDate }}
+          <span
+            class="info-my-submit"
+            v-if="showMySubmit">｜{{ myPublish }}
+          </span>
         </span>
       </div>
     </div>
@@ -24,7 +28,7 @@
       <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
       <span
         @click.stop="onOpenMenus"
-        v-if="(squareType === '作业' && pageName !== 'myHomework') || (pageName === 'myHomework') || (pageName.indexOf('my') !== -1 && pageName !== 'myHomework' )"
+        v-if="showMenus"
       >
         <img
           class="avatar-menus-more"
@@ -44,6 +48,10 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   name:'Avatar',
   props:{
+    isShowMySubmit: {
+      type: Boolean,
+      default: false
+    },
     avatarStyle:{
       type:String,
       default:''
@@ -115,17 +123,26 @@ export default {
     },
     showFollowBtn () {
       let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention'
+      return this.userInfo && this.userInfo.userId !== currentUserId && this.userInfo.userId !== this.dpUserId && this.$route.path !== '/attention' && this.pageName.indexOf('my') === -1
+    },
+    showMenus () {
+      return (this.squareType === '作业' && this.pageName !== 'myHomework') || (this.pageName === 'myHomework') || (this.pageName.indexOf('my') !== -1 && this.pageName !== 'myHomework' )
     },
     showScore () {
       return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.listItemData.approvedLevel !== '0' && this.pageName.indexOf('my') !== -1
     },
     showMySubmit() {
-      let currentUserId = this.userInfoGetters ? this.userInfoGetters.userId : ''
-      return this.userInfo && this.userInfo.userId === currentUserId && this.pageName === 'requirement'
+      return this.userInfoGetters && this.userInfo && this.userInfo.userId === this.userInfoGetters.userId && this.isShowMySubmit
     },
     functionName () {
       return this.$getFunctionName(this.$store.state.listType)
+    },
+    myPublish() {
+      if (this.$route.path.includes('/homework')) {
+        return '我最近发布的'
+      } else {
+        return '我发布的'
+      }
     }
   },
   created () {
@@ -136,6 +153,15 @@ export default {
       'followingUser',
       'cancelFollowingUser'
     ]),
+    toPersonalCenter() {
+      if (!this.$login()) return
+      this.$router.push({
+        path: '/personal-center/publish',
+        query:{ 
+          userId: this.userInfo.userId
+        }
+      })
+    },
     // toPersonalCenter() {
     //   if(!this.$login()) {
     //     return 

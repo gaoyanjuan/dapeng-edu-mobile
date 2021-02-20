@@ -29,6 +29,9 @@
 
       <!-- Warning Block -->
       <div v-if="warning.show" class="register-warning-row" v-html="warning.content"></div>
+
+      <!-- Slider Block -->
+      <div id="nc-container" class="nc-container"></div>
       
       <!-- Register Button Blcok -->
       <div v-if="registerAble" class="register-button-row" @click="onRegister">快速注册</div>
@@ -38,7 +41,7 @@
       <div class="register-footer-protocol">
         <van-checkbox v-model="checked" shape="square" checked-color="#00B93B" icon-size="18px"/>
         <div class="protocol-txt">
-          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.2》</span>和
+          <span class="protocol-link" @click="onToProtocol">《大鹏教育用户服务协议v3.3》</span>和
           <span class="protocol-link" @click="onTopolicy">《隐私政策》</span>
         </div>
       </div>
@@ -49,6 +52,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+var appKey = 'FFFF0N00000000009B75'
+var nc_token = [appKey, (new Date()).getTime(), Math.random()].join(':')
 
 export default {
   name:'Register',
@@ -71,7 +76,42 @@ export default {
     registerAble: true,
     account: require('@/assets/icons/register/account.png'),
     safety: require('@/assets/icons/register/safety.png'),
+    nc: null,
+    ncCallBackData: null
   }),
+  mounted () {
+    let _this = this
+    /* eslint-disable */
+    this.nc = new noCaptcha({
+      renderTo: '#nc-container',
+      appkey: appKey,
+      scene: 'nc_message',
+      token: nc_token,
+      customWidth: '100%',
+      trans: { key1: 'code0' },
+      elementID: ['usernameID'],
+      is_Opt: 0,
+      language: 'cn',
+      isEnabled: true,
+      timeout: 3000,
+      times: 5,
+      apimap: {
+        // 'analyze': '//a.com/nocaptcha/analyze.jsonp',
+        // 'get_captcha': '//b.com/get_captcha/ver3',
+        // 'get_captcha': '//pin3.aliyun.com/get_captcha/ver3'
+        // 'get_img': '//c.com/get_img',
+        // 'checkcode': '//d.com/captcha/checkcode.jsonp',
+        // 'umid_Url': '//e.com/security/umscript/3.2.1/um.js',
+        // 'uab_Url': '//aeu.alicdn.com/js/uac/909.js',
+        // 'umid_serUrl': 'https://g.com/service/um.json'
+      },
+      callback: function (data) {
+        _this.ncCallBackData = data
+        _this.warning.show = false
+        _this.warning.content = ''
+      }
+    })
+  },
   watch:{
     mobile(n, o) {
       if (!new RegExp(/^1[3-9][0-9]\d{8}$/).test(n)) {
@@ -96,6 +136,7 @@ export default {
     checked(n, o) {
       if (!n) {
         this.warning.show = true
+        this.warning.content = '请同意 服务协议 和 隐私政策'
       } else {
         this.warning.show = false
         this.warning.content = ''
@@ -155,35 +196,51 @@ export default {
 
     // 获取验证吗码
     async getAuthCode() {
+      if (!this.ncCallBackData) {
+        this.warning.content = '请滑动滑块进行验证！'
+          this.warning.show = true
+        return
+      }
+      
       if(!this.authStatus) return
 
       if(this.timer) return
 
       // 验证用户是否可以自注册
-      const { data } = await this.checkRegisterAble({account: this.mobile})
-      if (data.verifyStatus) {
-        const params = {
-          mobile: this.mobile,
-          codeType: 'REGISTER_CODE'
-        }
-        // 检查是否需要将注册按钮变换为登录按钮
-        this.registerAble = true
-        const res = await this.sendCode(params)
-        if (res.status === 200 && !this.timer) {
-          this.countDown()
+      try {
+        const { data } = await this.checkRegisterAble({account: this.mobile})
+        if (data.verifyStatus) {
+          const params = {
+            mobile: this.mobile,
+            codeType: 'REGISTER_CODE',
+            sessionId: this.ncCallBackData.csessionid,
+            sig: this.ncCallBackData.sig,
+            token: this.ncCallBackData.token,
+            scene: 'nc_message'
+          }
+          // 检查是否需要将注册按钮变换为登录按钮
+          this.registerAble = true
+          const res = await this.sendCode(params)
+          if (res.status === 200 && !this.timer) {
+            this.countDown()
+          } else {
+            this.warning.content = res.data.message ? res.data.message : ''
+            this.warning.show = true
+            this.nc.reset()
+          }
         } else {
-          this.warning.content = res.data.message ? res.data.message : ''
-          this.warning.show = true
-        }
-      } else {
-        this.registerAble = false
+          this.registerAble = false
 
-        if (data.accountType === 'MOBILE') {
-          const newMobile = this.validateMobileCode(data.account)
-          this.warning.content = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
-        } else if (data.accountType === 'DPACCOUNT') {
-          this.warning.content = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
-        }
+          if (data.accountType === 'MOBILE') {
+            const newMobile = this.validateMobileCode(data.account)
+            this.warning.content = `<p>该手机号已经存在，无法再次注册</p><p>可使用绑定的手机号<span style="color:#00BF65;">${newMobile}</span>，获取验证码直接登录，如登录遇到问题，请联系客服</p>`
+          } else if (data.accountType === 'DPACCOUNT') {
+            this.warning.content = `<p>该手机号已经存在，听课号：<span style="color:#00BF65;">${data.account}</span></p><p>您无需再次注册，可使用手机验证码的方式直接登录</p>`
+          }
+          this.warning.show = true
+        } 
+      } catch (error) {
+        this.warning.content = error.data.message
         this.warning.show = true
       }
     },
@@ -193,6 +250,7 @@ export default {
       if (!this.timer) {
         this.count = TIME_COUNT
         this.authStatus = false
+        
         this.timer = setInterval(() => {
           if (this.count > 0 && this.count <= TIME_COUNT) {
             this.count--
@@ -229,7 +287,24 @@ export default {
   }
 }
 </script>
-
+<style lang="less">
+.nc_scale {
+  height: 34px;
+}
+.nc-container .nc_scale span {
+  height: 34px;
+  line-height: 34px;
+}
+.nc-container .nc_scale span.nc-lang-cnt {
+  height: 34px;
+  line-height: 34px;
+  font-size: 12px;
+}
+.nc-container .nc_scale .btn_ok {
+  height: 34px;
+  line-height: 34px;
+}
+</style>
 <style lang="less" scoped>
 
 .register-wrapper {
@@ -350,6 +425,10 @@ export default {
   color: #FF9466;
   line-height: 20px;
   margin-top: 20px;
+}
+
+#nc-container {
+  margin-top: 16px;
 }
 
 // 快速注册

@@ -5,7 +5,7 @@
       <template v-if="userFollowGetters.list.length > 0">
         <div v-for="(item, index) in userFollowGetters.list" :key="index" class="follow__row">
           
-          <div class="follow__cloumn--left">
+          <div class="follow__cloumn--left" @click="toPersonalCenter(item)">
             <head-image :headImg="item ? item.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
             <div class="user__wrap">
               <span class="user__nickname">{{ item.nickname }}</span>
@@ -139,6 +139,14 @@ export default {
         
       }
       
+    },
+    toPersonalCenter(item) {
+      this.$router.push({
+        path: '/personal-center/publish',
+        query: {
+          userId: item.userId
+        }
+      })
     }
   },
   computed: {

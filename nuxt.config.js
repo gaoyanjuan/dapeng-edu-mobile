@@ -15,34 +15,36 @@ export default {
   },
   env: {
     global: global,
-    zhifuUrl: env[process.env.MODE].DP_ZHIFU, // 快捷支付链接地址
-    mBaseUrl: env[process.env.MODE].DP_M_URL, // m站地址
-    courseUrl: env[process.env.MODE].DP_COURSE_URL, //4.0课程
     authUrl: env[process.env.MODE].DP_AUTH_URL, // 中台登录地址
     ossUrl: env[process.env.MODE].OSS_URL, // 静态文件地址
-    orderUrl: env[process.env.MODE].ORDER_URL, // 我的订单地址
     mode: env[process.env.MODE].MODE,
+    TOKEN_NAME: env[process.env.MODE].TOKEN_NAME, // token名称
     protocol: env[process.env.MODE].PROTOCOL, //协议地址
-    ossBucket: env[process.env.MODE].OSS_BUCKET // oss的bucket
+    ossBucket: env[process.env.MODE].OSS_BUCKET, // oss的bucket
+    leyuUrl: env[process.env.MODE].LEYU_SERVICE, // 乐语【综合服务客服】
+    leyuSignUrl: env[process.env.MODE].LEYU_SIGNUP, // 乐语【报名咨询客服】
+    userCancelUrl: env[process.env.MODE].USER_CANCEL_URL,// 用户注销地址
+    mOrderUrl: env[process.env.MODE].M_ORDER_URL, //m站我的订单地址
+    payUrl: env[process.env.MODE].PAY_URL // 快捷支付地址
   },
   head: {
-    title: '大鹏教育-高品质的设计师在线教育',
+    title: '大鹏教育-千万人的兴趣学习社区',
     meta: [
       { name: 'renderer', content:'webkit'},
       { name: 'x5-fullscreen', content: 'true' },
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover'},
-      { keywords: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
+      { keywords: '大鹏教育、成人教育、兴趣培训、在线教育、国画、书法、美术、设计、手办、篆刻、短视频、播音、开发、吉他、0基础、培训机构、在线直播、才艺秀、商城、社区' },
       {
         hid: 'description',
         name: 'description',
-        content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业'
+        content: '大鹏教育专注成人0基础才艺、兴趣线上培训，已有3000万用户选择这里。教学目标包含基础、进阶、拔高3大成长阶段，教学内容涵盖国画、美术、书法、设计、短视频、篆刻、手办、吉他、开发、播音等多个科目，直播互动式学习，让学员当堂课就能有所提升，产出完整作品。在大鹏兴趣学习社区，学员可以分享学习成果和生活动态，也能看直播，逛商城，玩转各项才艺，get老师同款画材工具。来大鹏教育，学我想学，找到生活的热情。'
       },
-      { property: 'og:title', content: ' 大鹏教育-高品质的设计师在线教育' },
-      { property: 'og:type', content: '大鹏教育,大鹏教育培训,设计师培训学校,大鹏教育职业技能培训' },
-      { property: 'og:url', content: 'http://newpc.dapengjiaoyu.cn/' },
-      { property: 'og:image', content: 'http://newpc.dapengjiaoyu.cn/dapeng/img/wx-qr.af8e7b1.jpg' },
-      { property: 'og:description', content: '大鹏教育专注于职业设计人才的技能培训，大鹏教育的课程涵盖了设计培训行业各个领域，包括UI设计，平面设计、网页设计、PS培训、电商美工、广告设计等21门课程类型,帮助数十万学员成功就业' },
+      { property: 'og:title', content: '大鹏教育-千万人的兴趣学习社区' },
+      { property: 'og:type', content: '大鹏教育、成人教育、兴趣培训、在线教育、国画、书法、美术、设计、手办、篆刻、短视频、播音、开发、吉他、0基础、培训机构、在线直播、才艺秀、商城、社区' },
+      { property: 'og:url', content: 'http://www.dapengjiaoyu.cn/' },
+      { property: 'og:image', content: 'https://image.dapengjiaoyu.cn/2021-01-14/jbez3emw/9004491950161_UEM=.jpg' },
+      { property: 'og:description', content: '大鹏教育专注成人0基础才艺、兴趣线上培训，已有3000万用户选择这里。教学目标包含基础、进阶、拔高3大成长阶段，教学内容涵盖国画、美术、书法、设计、短视频、篆刻、手办、吉他、开发、播音等多个科目，直播互动式学习，让学员当堂课就能有所提升，产出完整作品。在大鹏兴趣学习社区，学员可以分享学习成果和生活动态，也能看直播，逛商城，玩转各项才艺，get老师同款画材工具。来大鹏教育，学我想学，找到生活的热情。' },
       { property: 'og:site_name', content: '大鹏教育职业技能培训' }
     ],
     link: [
@@ -54,6 +56,11 @@ export default {
         hid: 'player',
         type: 'text/javascript',
         src: '//player.polyv.net/script/player.js'
+      },
+      {
+        hid: 'ncpc',
+        type: 'text/javascript',
+        src: 'https://g.alicdn.com/sd/ncpc/nc.js?t=2015052012'
       }
     ]
   },
@@ -88,27 +95,54 @@ export default {
     { src: '~/plugins/animate.js', ssr: true },
     { src: '~/plugins/check-login.js', ssr: true },
     { src: '~/plugins/anchor-utils.js', ssr: true },
+    { src: '~/plugins/matomo.js', ssr: true },
+    { src: '~/plugins/vconsole.js', ssr: false }
   ],
 
   components: true,
 
   buildModules: [],
 
+  serverMiddleware: [
+    { path: '/callback', handler: '~/middleware/server/login.js' },
+    { path: '/api/logout', handler: '~/middleware/server/logout.js' },
+    { path: '/api/set-token', handler: '~/middleware/server/set-token.js' },
+    '~/middleware/server/auth.js'
+  ],
+
   modules: [
+    '@nuxtjs/device',
     '@nuxtjs/style-resources',
     '@nuxtjs/axios',
-    ['cookie-universal-nuxt', { alias: 'cookiz' }]
+    ['cookie-universal-nuxt', { alias: 'cookiz' }],
+    ['nuxt-matomo', {
+      matomoUrl: env[process.env.MODE].MATOMO_URL,
+      siteId: env[process.env.MODE].MATOMO_SITEID,
+      debug: true
+    }],
   ],
+
+  router: {
+    middleware: ['matomo'],
+  },
+
   axios: {
     proxy: true, // 表示开启代理
     prefix: '/api', // 表示给请求url加个前缀 /api
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
+<<<<<<< HEAD
     '/api/part_job': {
       target: 'https://m.680.com/api',
       pathRewrite: {
         '^/api/part_job': '/',
+=======
+    '/api/buriedPoint/log': {
+      target: env[process.env.MODE].LOG_API_URL, // 日志接口调用地址
+      pathRewrite: {
+        '^/api/buriedPoint/log': '/api/buriedPoint/log',
+>>>>>>> e079b52df433dcb87f381e5985abc1eba8684972
         changeOrigin: true
       }
     },
@@ -120,7 +154,7 @@ export default {
       }
     },
     '/api/token/get_token': {
-      target: env[process.env.MODE].DP_AUTH_URL, // 目标接口域名
+      target: env[process.env.MODE].DP_AUTH_TOKEN_URL, // 目标接口域名
       pathRewrite: {
         '^/api/token/get_token': '/oauth/token',
         changeOrigin: true
@@ -130,6 +164,13 @@ export default {
       target: env[process.env.MODE].REFRESH_TOKEN_URL, // 目标接口域名
       pathRewrite: {
         '^/api/token/refresh_token': '/auth/oauth/token',
+        changeOrigin: true
+      }
+    },
+    '/api/tapi': {
+      target: env[process.env.MODE].TAPI_URL, // 目标接口域名
+      pathRewrite: {
+        '^/api/tapi': '/api/user',
         changeOrigin: true
       }
     },
@@ -299,13 +340,16 @@ export default {
           '*.videocc.net',
           '*.bdimg.com',
           '*.jiain.net',
+          '*.alicdn.com',
+          '*.aliyun.com',
           'http:'
         ],
         'font-src': [
           `data:`,
           '*.dapengjiaoyu.cn',
           '*.dapengjiaoyu.com',
-          '*.yzcdn.cn'
+          '*.yzcdn.cn',
+          '*.alicdn.com'
         ],
         'worker-src': [
           "'self'",
@@ -329,7 +373,12 @@ export default {
           '*.dapengjiaoyu.com',
           '*.sohu.com',
           "'unsafe-inline'",
-          '*.baidu.com'
+          '*.baidu.com',
+          '*.alicdn.com',
+          '*.aliyun.com',
+          '*.aliapp.org',
+          '*.alibaba.com',
+          '*.taobao.com'
         ],
         'script-src': [
           "'self'",
@@ -340,14 +389,32 @@ export default {
           '*.polyv.net',
           '*.baidu.com',
           '*.jiain.net',
-          '*.talk99.cn'
+          '*.talk99.cn',
+          '*.alicdn.com',
+          '*.aliyun.com'
         ],
-        'connect-src': ["'self'", '*.aliyuncs.com', '*.polyv.net', '*.videocc.net', '*.baidu.com', '*.talk99.cn', '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com'],
+        'connect-src': [
+          "'self'",
+          '*.aliyuncs.com',
+          '*.polyv.net',
+          '*.videocc.net',
+          '*.baidu.com',
+          '*.talk99.cn',
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          '*.alicdn.com',
+          '*.aliyun.com',
+          '*.aliapp.org'
+        ],
         'form-action': ["'self'", '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com',],
         'frame-ancestors': ['*.dapengjiaoyu.cn', '*.dapeng.lan',  '*.127.0.0.1','*.dapengjiaoyu.com', '*.talk99.cn', '*.jiain.net', '*.localhost'],
-        'object-src': ["'none'"],
+        'object-src': [
+          '*.dapengjiaoyu.cn',
+          '*.dapengjiaoyu.com',
+          'http:'
+        ],
         'base-uri': ["'self'"],
-        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com']
+        'media-src': ['*.videocc.net', '*.polyv.net', `data:`, '*.dapengjiaoyu.cn', '*.dapengjiaoyu.com', 'http:']
       }
     },
     addMeta: true

@@ -97,25 +97,25 @@ export default {
   data: () => ({
     show: false,
     active: 'square',
-    courseUrl: process.env.courseUrl,
+    courseUrl: null,
     square: {
-      active: require('@/assets/icons/tabbar/bar-square-active.png'),
-      inactive: require('@/assets/icons/tabbar/bar-square.png'),
+      active: require('@/assets/icons/newyear/bar-square-active.png'),
+      inactive: require('@/assets/icons/newyear/bar-square.png'),
     },
     course: {
-      active: require('@/assets/icons/tabbar/bar-course-active.png'),
-      inactive: require('@/assets/icons/tabbar/bar-course.png'),
+      active: require('@/assets/icons/newyear/bar-course-active.png'),
+      inactive: require('@/assets/icons/newyear/bar-course.png'),
     },
     upload: {
-      active: require('@/assets/icons/tabbar/bar-submit.png'),
+      active: require('@/assets/icons/newyear/bar-submit.png'),
     },
     activities: {
-      active: require('@/assets/icons/tabbar/bar-activity-active.png'),
-      inactive: require('@/assets/icons/tabbar/bar-activity.png'),
+      active: require('@/assets/icons/newyear/bar-activity-active.png'),
+      inactive: require('@/assets/icons/newyear/bar-activity.png'),
     },
     mine: {
-      active: require('@/assets/icons/tabbar/bar-mine-active.png'),
-      inactive: require('@/assets/icons/tabbar/bar-mine.png'),
+      active: require('@/assets/icons/newyear/bar-mine-active.png'),
+      inactive: require('@/assets/icons/newyear/bar-mine.png'),
     },
     publish: {
       close: require('@/assets/icons/tabbar/bar-close.png'),
@@ -139,12 +139,17 @@ export default {
       } else {
         return '/'
       }
-    }
+    },
+
+    ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    }),
   },
   mounted() {
     /**
      * 路由定位
      */
+    this.courseUrl = this.validateSystemHostName().COURSE_HOST
     const to = this.$route || { name: 'index' }
     if (to.name === 'index') {
       this.active = 'square'
@@ -159,17 +164,54 @@ export default {
   methods:{
     // 显示发布菜单
     showPublishMenus() {
+      // this.matomo('ISSUE')
       this.show = true
     },
-
+ 
     // 切换菜单时
     changeTab(name) {
+      
+      // this.matomo(name)
+
       if(name === 'course') {
-        window.location.href = `${this.courseUrl}?r=${Math.random()}`
+        location.href = `${location.protocol}${this.courseUrl}/course/explore/`
         return false
       }
       
       this.active = name
+    },
+
+    // 触发埋点事件
+    matomo(name) {
+      let params = JSON.stringify({
+        navigation_name: this.transitionTabName(name),
+        user_id: (this.userInfo && this.userInfo.userId) ? this.userInfo.userId : ''
+      })
+      
+      this.$matomo.setCustomVariable(1, 'common#navigation_click', params, 'page')
+    },
+    
+    // 转换tabbar Name
+    transitionTabName(name) {
+      let res = ''
+      switch (name) {
+        case 'square':
+          res = 'HOME'
+          break
+        case 'ISSUE':
+          res = 'ISSUE'
+          break
+        case 'course':
+          res = 'COURSE'
+          break
+        case 'activities':
+          res = 'ACTIVITY'
+          break
+        case 'personal-center':
+          res = 'ABOUT_US'
+          break
+      }
+      return res
     },
 
     // 进入发布页面
@@ -202,7 +244,12 @@ export default {
 /deep/ .van-tabbar-item {
   height: 50px;
   font-family: @dp-font-medium;
-  font-weight: 600;
+  // font-weight: 600;
+}
+
+/deep/ .van-tabbar-item__icon img{
+  width: 25px;
+  height: 25px;
 }
 
 .submit {
@@ -213,14 +260,16 @@ export default {
   justify-content: center;
   cursor: pointer;
   & > img {
-    width: 37px;
-    height: 37px;
+    // width: 37px;
+    // height: 37px;
+    width: 45px;
+    height: 48px;
   }
 }
 
 .tabbar-btn-text-active {
   // color: #0CB65B;
-  color: #d1d3d5;
+  color: #333333;
 }
 
 /deep/ .van-overlay {

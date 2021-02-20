@@ -21,7 +21,9 @@ export default {
   props:{
     menus:{
       type:Array,
-      default:[]
+      default: () => {
+        return []
+      }
     },
     /***
      * 【Params】college:学院
@@ -82,6 +84,8 @@ export default {
           [this.menusType] : item.id
         }
       })
+
+      this.$emit('switchCollegeName', item)
     }
   },
 }

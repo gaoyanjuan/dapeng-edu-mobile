@@ -1,7 +1,7 @@
 <template>
   <van-popup v-model="showPopup.show" round @closed="closed" :transition-appear="true">
     <div class="popup-warp">
-      <div class="popup-head">您还未有专属班主任，请复制作业号联系客服老师呦~</div>
+      <div class="popup-head">您未有此课程专属班主任，请先复制作业号，然后联系客服老师为您安排专属班主任批改作业哦~</div>
       <div class="popup-body">作业号：{{ showPopup.jobNummer }}</div>
       <div class="popup-footer btn-active" @click.stop="onCustomer">联系客服</div>
       <div class="popup-copy-row" @click.stop="onCopy">复制作业号</div>
@@ -21,8 +21,7 @@ export default {
   methods:{
     /** 联系客服 */
     onCustomer() {
-      const href = 'http://chat.looyuoms.com/chat/chat/p.do?c=20004236&f=10110937&g=10085073&refer=M站'
-      window.open(href, '_blank')
+      window.open(process.env.leyuUrl, '_blank')
     },
 
     /** 复制作业号 */
@@ -45,14 +44,14 @@ export default {
 <style lang="less" scoped>
 
 .van-popup {
-  width: 260px !important;
-  height: 235px !important;
+  width: 265px !important;
+  min-height: 235px !important;
   overflow: hidden;
 }
 
 .popup-warp {
-  width: 260px;
-  height: 235px;
+  width: 265px;
+  min-height: 235px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -66,28 +65,26 @@ export default {
 
   & .popup-head {
     width: 220px;
-    height: 48px;
-    font-size: 18px;
+    height: 60px;
+    font-size: 14px;
     font-family: @semibold;
     font-weight: 600;
     color: #FFFFFF;
-    line-height: 24px;
-    margin-top: 18px;
+    line-height: 20px;
+    margin-top: 12px;
   }
 
   & .popup-body {
-    width: 224px;
-    height: 24px;
+    width: 100%;
+    text-align: center;
     margin-top: 44px;
-    display: flex;
     align-items: center;
     justify-content: center;
-
+    word-break: break-all;
     font-size: 16px;
     font-family: @regular;
     font-weight: 400;
     color: #36404A;
-    .text-ellipsis()
   }
 
   & .popup-footer {
@@ -113,6 +110,7 @@ export default {
 
   & .popup-copy-row {
     margin-top: 12px;
+    padding-bottom: 12px;
     font-size: 12px;
     font-family: @regular;
     font-weight: 400;

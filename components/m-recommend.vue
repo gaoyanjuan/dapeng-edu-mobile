@@ -6,19 +6,35 @@
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
         <template v-if="recommendListGetters.list.length">
-          <m-posts
-            v-for="(res, i) in recommendListGetters.list"
-            :key="i"
-            :id="res.recommendTopic ? res.recommendTopic.id : ''"
-            :propSquareType="res.hotType"
-            listType="recommend"
-            :propIndex="i"
-            :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
-            :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
-            :listItemData="res.recommendTopic ? res.recommendTopic : {}"
-            :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
-            :path="`/details/${pathType(res)}`"
-          />
+          <div class="recommend-item" v-for="(res, i) in recommendListGetters.list" :key="res && res.recommendTopic ? res.recommendTopic.id + i: i">
+            <m-reading-posts
+              v-if="res && res.hotType === 'ARTICLE'"
+              :id="res.recommendTopic ? res.recommendTopic.id: ''"
+              listType="recommend"
+              :propIndex="i"
+              :imgSmall="res.recommendTopic.coverImgSmall"
+              :item="res.recommendTopic"
+            />
+            <m-video-posts
+              v-else-if="res && res.hotType === 'MOVIE'"
+              :id="res.recommendTopic ? res.recommendTopic.id: ''"
+              listType="recommend"
+              :propIndex="i"
+              :item="res.recommendTopic"
+            />
+            <m-posts
+              v-else
+              :id="res.recommendTopic ? res.recommendTopic.id : ''"
+              :propSquareType="res.hotType"
+              listType="recommend"
+              :propIndex="i"
+              :courseType="res.recommendTopic ? res.recommendTopic.courseType : ''"
+              :modifiedTime="res.recommendTopic ? res.recommendTopic.createTime : 0"
+              :listItemData="res.recommendTopic ? res.recommendTopic : {}"
+              :commentList="res.recommendTopic ? res.recommendTopic.comments : null"
+              :path="`/details/${pathType(res)}`"
+            />
+          </div>
         </template>
         <template v-if="!recommendListGetters.list.length && finished">
           <div class="works-blank-wrap">
@@ -50,7 +66,10 @@ export default {
     ]),
     ...mapGetters('recommend', [
       'recommendListGetters'
-    ])
+    ]),
+    ...mapGetters({
+      userInfo: 'user/userInfoGetters'
+    }),
   },
   watch: {
     'recommendListGetters.status': function (newVal, oldVal) {
@@ -80,10 +99,11 @@ export default {
     this.$nextTick(() => {
       if (this.$store.state.anchorId) {
         const element = document.getElementById(this.$store.state.anchorId)
-        if (element)
-        element.scrollIntoView({
-          behavior: 'auto'
-        })
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'auto'
+          })
+        }
       }
     })
   },
@@ -98,10 +118,10 @@ export default {
       }
       if (this.recommendListGetters.status === 'loading') return false
       const newPage = this.recommendListGetters.pageInfo.number + 1
-      this.appendRecommendList({
-        page: newPage
-      })
+      this.appendRecommendList({ page: newPage })
+      // this._squareLoading({ page_area: '推荐', page_area_sec:'', request_type: '手动上拉刷新'})
     },
+
     pathType(item){
       switch (item.hotType) {
         case 'HOMEWORK':
@@ -139,6 +159,13 @@ export default {
   background-color: #f8f8f8;
 }
 
+.recommend-item:first-child {
+  margin-top: 0px;
+}
+
+.recommend-item {
+  margin-top: 12px;
+}
 
 .recommend-wrap .works-blank-wrap {
   display: flex;

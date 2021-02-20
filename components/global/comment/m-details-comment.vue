@@ -1,7 +1,7 @@
 <template>
   <div class="comment" @click="onShowMenus" >
     <div class="comment-header">
-      <div class="comment-header-left">
+      <div class="comment-header-left" @click.stop="toPersonalCenter(user)">
         <headImage
           :headImg="user ? user.avatar : ''"
           imgWidth="33px"
@@ -34,7 +34,7 @@
       audioType="mobile-list"
       :audioCount="audioCount" 
       :audioUrl="audioUrl"
-        >
+    >
     </the-audio>
     <div class="content" v-else>
       <template v-if="parentUser && replyUser && (parentUser.userId !== replyUser.userId)"><span class="black-text">回复</span><span class="reply-text">{{ parentUser.nickname }}：</span></template>
@@ -138,7 +138,10 @@ export default {
     ...mapGetters({
       commentDetailsGetters: 'comment/commentDetailsGetters',
       userinfo: 'user/userInfoGetters'
-    })
+    }),
+    functionName () {
+      return this.$getFunctionName(this.$store.state.listType)
+    }
   },
   created () {
     this.isPraise = this.commentItem.isPraise
@@ -233,31 +236,35 @@ export default {
         commit: true
       })
       .then(({status, data}) => {
-        if (status === 201) {
-          this.commentFlag = true
-          this.$refs.commentPopup.resetPopup()
-          if (!data.highRisk) {
-            this.commitNewRepliesComment({
-              ...data,
-              isPraise: false,
-              isRecommend: false,
-              praiseCount: 0,
-              parentId: this.commentDetailsGetters.id,
-              parentUser: {
-                ...this.commentDetailsGetters.user
-              },
-              user: {
-                ...this.userinfo
-              }
-            })
-            this.changeReplyCount(1)
-            this.$toast('评论成功')
-          }
-        } else {
-          this.commentFlag = true
-          if (data && data.message) {
-            this.$toast(data.message)
-          }
+        this.commentFlag = true
+        this.$refs.commentPopup.resetPopup()
+        if (!data.highRisk && data.id) {
+          this.commitNewRepliesComment({
+            ...data,
+            isPraise: false,
+            isRecommend: false,
+            praiseCount: 0,
+            parentId: this.commentDetailsGetters.id,
+            parentUser: {
+              ...this.commentDetailsGetters.user
+            },
+            user: {
+              ...this.userinfo
+            }
+          })
+          this.changeReplyCount(1)
+          this.$store.commit(`${this.functionName}`, {
+            index: this.$store.state.propIndex,
+            type: 'comment',
+            value: 1
+          })
+          this.$toast('评论成功')
+        }
+      })
+      .catch((error) => {
+        this.commentFlag = true
+        if (error && error.data && error.data.message) {
+          this.$toast(error.data.message)
         }
       })
     },
@@ -270,6 +277,19 @@ export default {
     },
     showDialogEvent (img) {
       this.ImagePreview([img])
+    },
+    toPersonalCenter(item) {
+      if (!this.$login()) return
+      if (item) {
+        this.$router.push({
+          path: '/personal-center/publish',
+          query:{ 
+            userId: item.userId
+          }
+        })
+      } else {
+         this.$toast('该用户已注销')
+      }
     }
   }
 }

@@ -41,7 +41,7 @@ export default {
     },
     appendNewComment (state, payload) {
       if (payload.userData) {
-        if (!payload.data.highRisk) {
+        if (!payload.data.highRisk  && payload.data.id) {
           const newComment = {
             ...payload.data,
             user: {
