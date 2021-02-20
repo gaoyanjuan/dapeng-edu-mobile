@@ -132,17 +132,17 @@ export default {
     credentials: true // 表示跨域请求时是否需要使用凭证
   },
   proxy: {
-<<<<<<< HEAD
     '/api/part_job': {
       target: 'https://m.680.com/api',
       pathRewrite: {
-        '^/api/part_job': '/',
-=======
+        '^/api/part_job': '/'
+      }
+    },
+
     '/api/buriedPoint/log': {
       target: env[process.env.MODE].LOG_API_URL, // 日志接口调用地址
       pathRewrite: {
         '^/api/buriedPoint/log': '/api/buriedPoint/log',
->>>>>>> e079b52df433dcb87f381e5985abc1eba8684972
         changeOrigin: true
       }
     },
