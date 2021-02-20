@@ -77,6 +77,9 @@ const honorDate = function (date) {
  * 259200000 三天
  */
 const commonDate = function (data) {
+  if (!data) {
+    return '---'
+  }
   const now = new dayjs()
   const date = new dayjs(data)
   const nowTimestamp = new dayjs().valueOf()
@@ -84,7 +87,7 @@ const commonDate = function (data) {
   if (delta < (60000)) {
     return '刚刚'
   } else if (delta < 3600000) {
-    return dayjs(delta).format('mm分钟前').replace(/0/, '')
+    return dayjs(delta).format('m分钟前')
   } else if (delta < 43200000) {
     const hour = Math.floor(delta / 3600000)
     return `${hour}小时前`
