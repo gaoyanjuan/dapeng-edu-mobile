@@ -58,7 +58,9 @@ import { mapGetters } from "vuex";
 export default {
   name: "FollowGallery",
   computed: {
-    ...mapGetters(["getTagsList", "getSortList"]),
+    ...mapGetters('logo', 
+      ["getTagsList", "getSortList"]
+    )
   },
   data: () => ({
     btnLimited: false,
