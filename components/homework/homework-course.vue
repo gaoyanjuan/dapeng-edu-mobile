@@ -56,6 +56,7 @@ export default {
       display: flex;
       align-items: center;
       .course-college {
+        max-width: 70px;
         padding: 0 6px 0 7px;
         background: rgba(12, 182, 91, 0.1);
         border-radius: 9px;
@@ -63,6 +64,7 @@ export default {
         font-weight: 500;
         color: #0cb65b;
         font-family: @dp-font-medium;
+        .text-ellipsis();
       }
       .course-name {
         max-width: 160px;
