@@ -87,5 +87,13 @@ export default {
         }
       ]
     }
+  },
+  getters: {
+    getTagsList: (state) => {
+      return state.logo.tagsList
+    },
+    getSortList: (state) => {
+      return state.logo.sortList
+    }
   }
 }
