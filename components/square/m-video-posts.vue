@@ -127,7 +127,7 @@ export default {
 
 .video-posts-wrap {
   width: 100%;
-  height: 289px;
+  min-height: 289px;
   padding: 16px;
   background-color: @dp-white;
 }
