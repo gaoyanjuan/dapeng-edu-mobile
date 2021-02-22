@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="footer">
-      <p>Copyright © 2013-2020 大鹏教育</p>
+      <p>Copyright © 2013-{{ new Date().getFullYear() }} 大鹏教育</p>
     </div>
   </div>
 </template>
