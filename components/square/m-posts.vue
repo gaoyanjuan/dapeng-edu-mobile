@@ -807,7 +807,7 @@ export default {
 // classification
 .m-works > .works__class {
   margin-top: 12px;
-  height: 24px;
+  min-height: 24px;
 }
 
 // Label

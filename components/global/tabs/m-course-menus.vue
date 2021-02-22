@@ -1,7 +1,9 @@
 <template>
   <div class="course-menus-wrapper">
     <van-tabs v-model="activeName" @click="changeMenus">
-      <van-tab v-for="(item, index) in menus" :key="index" :title="item.name" :name="item.id" ></van-tab>
+      <van-tab v-for="(item, index) in menus" :key="index" :title="item.name"
+        :name="item.id" :title-style="item.name.length === 4 ? tabStyle :''"
+      />
     </van-tabs>
   </div>
 </template>
@@ -19,6 +21,7 @@ export default {
 
   data: () => ({
     activeName: '',
+    tabStyle: 'margin-right: 10px;margin-left: 10px;'
   }),
 
   computed:{
@@ -82,8 +85,8 @@ export default {
 
 /deep/ .van-tab__text {
   display: block;
-  max-width: 65px;
-  min-width: 55px;
+  max-width: 75px;
+  min-width: 75px;
 }
 
 /deep/ .van-tabs__nav--line {
