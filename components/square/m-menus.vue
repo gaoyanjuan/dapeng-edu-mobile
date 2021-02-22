@@ -2,10 +2,7 @@
    <section class="menus-wrap">
     <client-only>
       <swiper class="swiper" :options="swiperOption">
-        <swiper-slide
-          v-for="(item, index) in menus"
-          :key="index"
-          :class="cindex === index ? 'menus-item-active' : 'menus-item'"
+        <swiper-slide v-for="(item, index) in menus" :key="index" :class="menusClass(index, item)" 
           @click.native="changeCollege(index, item)"
         >
           {{ item.name }}
@@ -86,6 +83,21 @@ export default {
       })
 
       this.$emit('switchCollegeName', item)
+    },
+    menusClass(index, item) {
+      if(this.cindex === index) {
+        if(item.name.length === 4) {
+          return 'menus-item-active menus-item-active-four-len'
+        } else {
+          return 'menus-item-active'
+        }
+      } else {
+        if(item.name.length === 4) {
+          return 'menus-item menus-item-four-len'
+        } else {
+          return 'menus-item'
+        }
+      }
     }
   },
 }
@@ -127,6 +139,12 @@ export default {
     text-align: center;
     font-family: @dp-font-medium;
     cursor: pointer;
+  }
+  & .menus-item-four-len {
+    max-width: 60px;
+  }
+  & .menus-item-active-four-len {
+    max-width: 76px;
   }
 }
 </style>
