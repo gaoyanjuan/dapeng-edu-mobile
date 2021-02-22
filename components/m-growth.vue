@@ -91,7 +91,7 @@ export default {
       if (this.growthListGetters.status === 'over') {
         this.finished = true
         return false
-      }
+      } 
       if (this.growthListGetters.status === 'loading') return false
       const newPage = this.growthListGetters.pageInfo.pages + 1
       let type

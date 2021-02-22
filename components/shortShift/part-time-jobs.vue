@@ -7,12 +7,14 @@
         <img :src="change" alt="" />
       </div>
       <div class="nav-change">
-        <span
-          @click="changeLimited"
-          :class="btnLimited === true ? 'newest' : ''"
-          >不限</span
-        >
-        <span class="newest">最新</span>
+        <div 
+            v-for="(item, i) in menus"
+            :class="menusIndex === i ? 'menus-item-active' : 'menus-item'"
+            :key="i"
+            @click="changeMenus(i, item)"
+          >
+            {{ item.name }}
+          </div>
       </div>
     </div>
     <!-- LOGO设计弹窗 -->
@@ -60,19 +62,38 @@ export default {
   },
   data: () => ({
     btnLimited: false,
-    show: false,
+    menusIndex: 0,
+    menus:[{id:'HOTTEST',name:'不限'},{id:'NEWEST',name:'最新'}],
+    show: false, 
     active: 2,
     change: require("@/assets/icons/common/drop.png"),
   }),
-
+  mounted() {
+    this.menus.forEach( (item, inx) => {
+      if(item.id === this.$route.query.type) {
+        this.menusIndex = inx
+      }
+    })
+  },
   methods: {
     showPopup() {
       this.show = true;
     },
     handlePart() {},
-    changeLimited() {
-      this.btnLimited = true;
+      /** 切换菜单事件 */
+    changeMenus(index, item) {
+      // 禁止路由重复点击
+      if (this.$route.query.type === item.id) return
+      this.menusIndex = index
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+        }
+      })
     },
+    // changeLimited() {
+    //   this.btnLimited = true;
+    // },
   },
 };
 </script>
@@ -109,16 +130,41 @@ export default {
       display: flex;
       align-items: center;
       cursor: pointer;
-      & > .nav-change span {
+      & > .menus-item-active {
+        width: fit-content;
+        padding: 0px 10px;
+        height: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #0cb65b;
+        line-height: 20px;
+        background: #e6f7ee;
+        border-radius: 14px;
+        text-align: center;
+        font-family: @dp-font-medium;
+        margin-right: 16px;
+        cursor: pointer;
+      }
+       & > .menus-item {
+        min-width: 28px;
+        max-width: 42px;
+        height: 20px;
         font-size: 14px;
         font-weight: 400;
-        color: #18252c;
-        line-height: 14px;
+        color: #a3a8ab;
+        line-height: 20px;
+        text-align: center;
+        font-family: @dp-font-regular;
+        margin-right: 16px;
+        cursor: pointer;
       }
-      .newest {
-        margin-left: 20px;
-        color: #0cb65b;
-      }
+      // .unlimited {
+      //   color: #18252c;
+      // }
+      // .newest {
+      //   margin-left: 20px;
+      //   color: #0cb65b;
+      // }
     }
   }
   .van-popup {

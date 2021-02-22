@@ -1,17 +1,17 @@
 <template>
   <div class="task-part-details">
     <van-nav-bar title="任务详情" left-arrow @click-left="onClickLeft" />
-    <div class="task-hander" v-for="item in taskList">
-      <p>{{ item.title }}</p>
+    <div class="task-hander">
+      <p>{{ taskList.item_name }}</p>
       <div class="details-time">
         <img src="../../assets/icons/common/time.png" alt="" />
-        <span>{{ item.day }}</span>
+        <span>{{ taskList. item_endtime }}</span>
         <img src="../../assets/icons/common/edit.png" alt="" />
-        <span>{{ item.limite }}</span>
+        <span>{{ taskList.item_state }}</span>
         <img src="../../assets/icons/common/sand-clock.png" alt="" />
-        <span>{{ item.time }}</span>
+        <span>{{ taskList.item_fbtime }}</span>
       </div>
-      <h3 class="task-money">￥{{ item.money }}</h3>
+      <h3 class="task-money">￥{{ taskList.item_money }}</h3>
     </div>
     <div class="task-content">
       <h3>任务要求</h3>
@@ -49,7 +49,6 @@
       <img src="../../assets/icons/common/green-bj.png" alt="" />
       <span>我要申请此任务</span>
     </div>
-    <!-- <m-park-dialog  :visible.sync="visible"></m-park-dialog> -->
     <van-overlay :show="show" @click="handClose">
       <van-popup v-model="showPopup" style="border-radius: 8px">
         <div class="footer-popup">
@@ -128,10 +127,16 @@
 </template>
 <script>
 import parkDialog from "../global/m-park-dialog";
+import { mapGetters,mapActions } from "vuex";
 export default {
   components: {
     parkDialog,
   },
+   computed: {
+    ...mapGetters('task-part', [
+      'taskPartDetailsGetters'
+    ])
+   },
   data() {
     return {
       showPopup: false,
@@ -141,33 +146,28 @@ export default {
       popupClose: false,
       service: require("@/assets/icons/common/service.png"),
       isShow: false,
-      taskList: [
-        {
-          title: "做一个甲烷的公司LOGO，主要得好看,",
-          day: "20分钟前",
-          limite: "进行中",
-          time: "剩余 3 天 22 小时",
-          money: "1000元-1.5万",
-        },
-      ],
+      taskList:{},
     };
   },
   mounted() {
-    // this.appendTaskPartList().then((res) => {
-    //   this.taskList = res.data.list;
-    // });
+    let itemId = this.$route.query.itemId
+      this.appendTaskPartDetails(itemId).then((res) => {
+      this.taskList = res.data;
+      console.log( this.taskList);
+    });
   },
   methods: {
+     ...mapActions("task-part", ["appendTaskPartDetails"]),
     onClickLeft() {
       this.$router.push({ path: "/part-time-task" });
     },
     handerApply() {
       // this.visible = true;
       this.show = true;
-      this.showPopup = true;
-      this.popupClose = true;
-      this.popupShow = true;
-      // this.$router.push({ path: "/task-centered/task-part-centered" });
+      // this.showPopup = true;
+      // this.popupClose = true;
+      // this.popupShow = true;
+      this.$router.push({ path: "/task-centered/task-part-centered" });
     },
     dialogChange() {
       this.popupShow = true;

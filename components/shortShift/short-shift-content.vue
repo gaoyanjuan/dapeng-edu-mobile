@@ -1,42 +1,99 @@
 <template>
   <div class="part-short">
-    <div
-      class="short-shift"
-      v-for="(item, i) in list"
-      :key="i"
-      @click="handelDetals"
-    >
-      <h1>{{ item.itemname }}</h1>
-      <div class="shift-box">
-        <p class="box-left">{{ item.addtime }}</p>
-        <p>{{ item.yanqi }}</p>
+    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+      <div class="short-shift" v-for="(item, i) in taskPartListGetters.list" :key="i" @click="handelDetals(item.itemid)">
+        <h1>{{ item.itemname }}</h1>
+        <div class="shift-box">
+          <p class="box-left">{{ item.addtime }}</p>
+          <p>{{ item.yanqi }}</p>
+        </div>
+        <div class="shift-right">
+          <template v-if="item.state">
+             <p class="box-left">{{ evaluateState(item.state) }}</p>
+          </template>
+          <p>￥{{ item.money }}</p>
+        </div>
       </div>
-      <div class="shift-right">
-        <p class="box-left">{{ item.state }}</p>
-        <p>￥{{ item.money }}</p>
-      </div>
-    </div>
+    </van-list>
   </div>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
+    computed: {
+    ...mapGetters('task-part', [
+      'taskPartListGetters'
+    ])
+  },
   data() {
     return {
       list: [],
       loading: false,
+      finished: false,
+      page:0,
     };
   },
-
+  watch:{
+    'taskPartListGetters.status' : function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    }
+  },
   mounted() {
-    this.appendTaskPartList().then((res) => {
-      this.list = res.data.list;
-    });
+    this.appendTaskPartList({page: 1 })
   },
   methods: {
     ...mapActions("task-part", ["appendTaskPartList"]),
-    handelDetals() {
-      this.$router.push({ path: "/details/part-task" });
+    evaluateState(state) {
+      let str = ''
+      switch (state) {
+        case '0':
+          str = '未评标'
+          break;
+         case '1':
+          str = '已评标'
+          break;
+           case '2':
+          str = '投票中标'
+          break;
+           case '3':
+          str = '威客奖金'
+          break;
+           case '4':
+          str = '未评标'
+          break;
+           case '5':
+          str = '表示招标项目已选标'
+          break; case '-1':
+          str = '退款'
+          break;
+           case '-3':
+          str = '招标项目已流标'
+          break;
+        default:
+          break;
+      }
+      return str
+    },
+    onLoad() {
+      if (this.taskPartListGetters.status === 'over') {
+        this.finished = true
+        return false
+      } 
+      if (this.taskPartListGetters.status === 'loading') return false
+      const newPage = this.taskPartListGetters.pageInfo.pages + 1
+      console.log(this.taskPartListGetters.pageInfo);
+      this.appendTaskPartList({page: newPage })
+    },
+    handelDetals(itemid) {
+      this.$router.push({ path: "/details/part-task" ,query: { itemId : itemid}});
     },
   },
 };
