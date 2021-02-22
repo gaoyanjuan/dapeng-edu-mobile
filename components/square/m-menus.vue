@@ -107,7 +107,7 @@ export default {
 .menus-wrap {
   width: 100%;
   height: 56px;
-  padding: 16px 0 16px 16px;
+  padding: 16px 16px 16px 16px;
   background-color: @dp-white;
 }
 
