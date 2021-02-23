@@ -40,7 +40,7 @@
     "nuxt-matomo": "^1.2.3",
     "root-font-size": "^1.0.4",
     "swiper": "^5.4.5",
-    "vant": "^2.10.14",
+    "vant": "^2.11.0",
     "vconsole": "^3.4.0",
     "vue-awesome-swiper": "^4.1.1",
     "vue-clipboard2": "^0.3.1",
