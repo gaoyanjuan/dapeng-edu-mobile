@@ -9,12 +9,12 @@
       <span class="search-txt">搜索</span>
     </div>
     
-    <img class="guide-service" :src="service" alt="service" />
+    <img class="guide-service" :src="service" alt="service" @click="openServicePop"/>
 
     <van-badge :content="100" max="99" color="#FF3510">
       <img class="guide-notice" :src="notice" alt="notice" />
     </van-badge>
-    
+
   </section>
 </template>
 
@@ -31,6 +31,10 @@ export default {
   methods:{
     openAppEvent(){
       openInApp()
+    },
+
+    openServicePop() {
+      this.$emit('openServicePop')
     }
   }
 }

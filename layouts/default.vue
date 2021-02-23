@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="$nuxt.isOnline && show">
-      <m-guide />
+      <m-guide @openServicePop="openServicePop"/>
       <div class="app_wrap">
         <Nuxt />
       </div>
@@ -11,6 +11,9 @@
       <span class="off-line-txt"> 您的网络已断开 </span>
       <span class="off-line-txt"> 请检查后刷新一下哦~ </span>
     </div>
+
+    <!-- 客服 -->
+    <m-service :service="service"></m-service>
   </div>
 </template>
 
@@ -19,6 +22,7 @@ import { mapActions } from "vuex"
 export default {
   data: () => ({
     show: false,
+    service: {show: false}
   }),
   mounted() {
     // ************* 登录埋点  Start*************
@@ -49,6 +53,9 @@ export default {
   methods: {
     ...mapActions("banner", ["appendAdverList"]),
    
+   openServicePop() {
+     this.service.show = true
+   },
   }
 }
 </script>
