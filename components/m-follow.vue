@@ -44,7 +44,8 @@
               :courseType="res.topic ? res.topic.courseType : ''"
               :modifiedTime="res.topic ? res.topic.createTime : 0"
               :path="`/details/${pathType(res)}`"
-              :listItemData="res.topic"
+              :listItemData="res.topic ? res.topic : {}"
+              :commentList="res.topic ? res.topic.comments : null"
             />
           </div>
         </template>

@@ -254,8 +254,8 @@ export default {
 
 .details-inner-content-wrap .inner-content-class {
   width:intrinsic;
-  width: -moz-max-content;
-  width: -webkit-max-content;
+  // width: -moz-max-content;
+  // width: -webkit-max-content;
   margin-top: 12px;
 }
 

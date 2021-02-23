@@ -42,17 +42,19 @@
     </div>
 
     <!-- comment 体验课不展示讲师评论 -->
-    <div class="works__comment" v-if="showComment" @click.stop="">
-      <m-teacher-audio
-        :teacherName="commentList.user ? commentList.user.nickname : ''"
-        :teacherType="courseType"
-        :time="commentList.createTime"
-        :audioUrl="commentList.ext ? commentList.ext.approvedAudioUrl : ''"
-        :content="commentList.content"
-        :audioCount="commentList.ext ? commentList.ext.approvedAudioLength : 0"
-        :isAudio="commentList.ext ? commentList.ext.approvedType === 'AUDIO' : false"
-        :propIndex="propIndex"
-      />
+    <div class="works__comment" v-if="showComment">
+      <template v-if="commentList">
+        <m-teacher-audio
+          :teacherName="commentList.user ? commentList.user.nickname : ''"
+          :teacherType="courseType"
+          :time="commentList.createTime"
+          :audioUrl="commentList.ext ? commentList.ext.approvedAudioUrl : ''"
+          :content="commentList.content"
+          :audioCount="commentList.ext ? commentList.ext.approvedAudioLength : 0"
+          :isAudio="commentList.ext ? commentList.ext.approvedType === 'AUDIO' : false"
+          :propIndex="propIndex"
+        />
+      </template>
     </div>
     
     <!-- footer -->
@@ -312,20 +314,23 @@ export default {
     showComment() {
       if(this.commentList && this.courseType && this.courseType !=='TEST') {
         return true
-      }else if(this.commentList && this.courseType && this.courseType ==='TEST') {
-        if(!this.userinfo || !this.userinfo.userId) {
+      } else if(this.commentList && this.courseType && this.courseType ==='TEST') {
+        if(this.userinfo) {
+          if (this.$route.path.includes('/personal-center')) {
+            return true
+          } else {
+            if (this.userinfo && this.listItemData && this.listItemData.user && this.userinfo.userId === this.listItemData.user.userId) {
+              return true
+            } else {
+              return false
+            }
+            return true
+          }
+        } else {
           return false
         }
-        if(this.pageName === 'homework' || this.pageName === 'requirement') {
-          if(this.userinfo && this.userinfo.userId && this.userinfo.userId === this.listItemData.user.userId) {
-            return true
-          }else {
-            return false
-          }
-        }else {
-          return true
-        }
-        
+      } else {
+        return false
       }
     }
   },
@@ -802,7 +807,7 @@ export default {
 // classification
 .m-works > .works__class {
   margin-top: 12px;
-  height: 24px;
+  min-height: 24px;
 }
 
 // Label

@@ -189,7 +189,7 @@ export default {
 
 .reading-body-row {
   width: 100%;
-  height: 24px;
+  min-height: 24px;
   margin-top: 12px;
   .l-flex-row-def();
 
