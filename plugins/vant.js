@@ -26,6 +26,7 @@ import {
   RadioGroup,
   Radio,
   GridItem,
+  Icon ,
   Dialog,
   Cell,
   CellGroup,
@@ -69,6 +70,7 @@ Vue.use(Button)
   .use(Checkbox)
   .use(Area)
   .use(Tag)
+  .use(Icon)
   .use(Collapse)
   .use(CollapseItem)
   .use(Image)

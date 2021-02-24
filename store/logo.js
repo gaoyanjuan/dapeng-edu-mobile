@@ -90,10 +90,10 @@ export default {
   },
   getters: {
     getTagsList: (state) => {
-      return state.logo.tagsList
+      return state.tagsList
     },
     getSortList: (state) => {
-      return state.logo.sortList
+      return state.sortList
     }
   }
 }

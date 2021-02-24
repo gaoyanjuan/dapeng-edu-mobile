@@ -20,6 +20,8 @@
       <div v-if="showRightText" :class="submitStatus ? 'navbar__submit btn-active':'navbar__submit'">{{ rightText }}</div>
       <!-- 通用图片（三个点）组件 -->
       <img v-if="showRightMenu" class="navbar__menu icon" :src="navMenu" alt="menu" @click="onOpenMenus" />
+       <!-- 我的任务-顶部模块组件 -->
+      <div v-if="showTaskRightText" :class="taskStatus ? 'navbar__task' : 'hidden__task'">{{ rightText }}</div>
     </template>
   </van-nav-bar>
 </template>
@@ -56,7 +58,15 @@ export default {
       type:Boolean,
       default:false
     },
+    taskStatus:{
+      type:Boolean,
+      default:false
+    },
     showInfoRightText: {
+      type:Boolean,
+      default:false
+    },
+    showTaskRightText:{
       type:Boolean,
       default:false
     }
@@ -120,4 +130,18 @@ export default {
 .m-navbar .hidden__accomplish {
   display: none;
 }
+// 我的任务头图样式
+.m-navbar .navbar__task {
+  width: 28px;
+  height: 20px;
+  font-size: 14px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #18252C;
+  line-height: 20px;
+}
+.m-navbar .hidden__task {
+  display: none;
+}
+
 </style>

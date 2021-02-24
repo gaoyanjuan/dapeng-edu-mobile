@@ -274,7 +274,6 @@ export default {
               courseType: params.type
             }
           }).then(res => {
-            
             // 两个数据结构，拼装为需要的数据结构，有更好方法可以优化
             for (let i = 0; i < res.data.length; i++) {
               for (let j = 0; j < course.data.length; j++) { 

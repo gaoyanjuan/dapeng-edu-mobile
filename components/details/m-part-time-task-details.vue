@@ -1,14 +1,21 @@
 <template>
   <div class="task-part-details">
-    <van-nav-bar title="任务详情" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar title="任务详情" left-arrow @click-left="onClickLeft" @click-right="onClickRight">
+        <template #left>
+        <img src="@/assets/icons/common/left.png" alt="">
+      </template>
+      <template #right>
+        <div :class="isHight ? 'show-icon' : 'hide-icon'"></div>
+      </template>
+    </van-nav-bar>
     <div class="task-hander">
       <p>{{ taskList.item_name }}</p>
       <div class="details-time">
-        <img src="../../assets/icons/common/time.png" alt="" />
+        <img src="@/assets/icons/common/time.png" alt="" />
         <span>{{ taskList. item_endtime }}</span>
-        <img src="../../assets/icons/common/edit.png" alt="" />
+        <img src="@/assets/icons/common/edit.png" alt="" />
         <span>{{ taskList.item_state }}</span>
-        <img src="../../assets/icons/common/sand-clock.png" alt="" />
+        <img src="@/assets/icons/common/sand-clock.png" alt="" />
         <span>{{ taskList.item_fbtime }}</span>
       </div>
       <h3 class="task-money">￥{{ taskList.item_money }}</h3>
@@ -29,11 +36,11 @@
       <p>现LOGO或参考</p>
       <template>
         <div class="contentImg">
-          <img src="../../assets/icons/common/birdie.png" alt="" />
-          <img src="../../assets/icons/common/shadow.png" alt="" />
+          <img src="@/assets/icons/common/birdie.png" alt="" />
+          <img src="@/assets/icons/common/shadow.png" alt="" />
         </div>
         <!-- <div v-else>
-          <img src="../../assets/icons/common/birdiery.png" alt="" srcset="">
+          <img src="@/assets/icons/common/birdiery.png" alt="" srcset="">
         </div> -->
       </template>
 
@@ -46,7 +53,7 @@
       <p>3.稿件中标需要等到任务中标公示期之后</p>
     </div>
     <div class="footer" @click="handerApply">
-      <img src="../../assets/icons/common/green-bj.png" alt="" />
+      <img src="@/assets/icons/common/green-bj.png" alt="" />
       <span>我要申请此任务</span>
     </div>
     <van-overlay :show="show" @click="handClose">
@@ -60,33 +67,33 @@
       </van-popup>
       <img
         class="popup-close"
-        src="../../assets/icons/common/toast-success.png"
+        src="@/assets/icons/common/toast-success.png"
         alt=""
         @click="handClose"
       />
     </van-overlay>
     <van-popup v-model="showTeacher" style="border-radius: 8px">
       <div class="footer-teacher">
-        <img src="../../assets/icons/common/teacher.png" alt="" srcset="" />
+        <img src="@/assets/icons/common/teacher.png" alt="" srcset="" />
         <h2>同学您好</h2>
         <p>
           咱们的兼职任务服务是面向正式课程学员的！如果您想开通正式课程，可以联系您的班主任~
         </p>
         <img
           class="teach-rectang"
-          src="../../assets/icons/common/rectang.png"
+          src="@/assets/icons/common/rectang.png"
           alt=""
         />
         <img
           class="teach-bitmap"
-          src="../../assets/icons/common/bitmap.png"
+          src="@/assets/icons/common/bitmap.png"
           alt=""
           srcset=""
         />
         <p class="class-teacher">请您加入班主任QQ群：2384619287</p>
         <img
           class="teach-orthogon"
-          src="../../assets/icons/common/orthogon.png"
+          src="@/assets/icons/common/orthogon.png"
           alt=""
           srcset=""
         />
@@ -96,26 +103,26 @@
     </van-popup>
     <van-popup v-model="isShow" style="border-radius: 8px">
       <div class="footer-teacher">
-        <img src="../../assets/icons/common/teacher.png" alt="" srcset="" />
+        <img src="@/assets/icons/common/teacher.png" alt="" srcset="" />
         <h2>同学您好</h2>
         <p>
           咱们的兼职任务服务是面向正式课程学员的！如果您想开通正式课程，可以联系您的班主任~
         </p>
         <img
           class="teach-rectang"
-          src="../../assets/icons/common/rectang.png"
+          src="@/assets/icons/common/rectang.png"
           alt=""
         />
         <img
           class="teach-bitmap"
-          src="../../assets/icons/common/bitmap.png"
+          src="@/assets/icons/common/bitmap.png"
           alt=""
           srcset=""
         />
         <p class="wx-teacher">班主任微信：dpjyzxkf</p>
         <img
           class="teach-orthogon"
-          src="../../assets/icons/common/orthogon.png"
+          src="@/assets/icons/common/orthogon.png"
           alt=""
           srcset=""
         />
@@ -140,6 +147,7 @@ export default {
   data() {
     return {
       showPopup: false,
+      isHight:false,
       showTeacher: false,
       visible: false,
       show: false,
@@ -151,15 +159,44 @@ export default {
   },
   mounted() {
     let itemId = this.$route.query.itemId
-      this.appendTaskPartDetails(itemId).then((res) => {
-      this.taskList = res.data;
-      console.log( this.taskList);
+    this.appendTaskPartDetails(itemId).then((res) => {
+    this.taskList = res.data;
     });
+    this.verifyCollect({id: itemId}).then((res) => {
+      if(res.data) {
+        this.isHight= true;
+      }
+    })
   },
   methods: {
-     ...mapActions("task-part", ["appendTaskPartDetails"]),
+     ...mapActions("task-part", ["appendTaskPartDetails","appendCollect","delCollect","verifyCollect"]),
     onClickLeft() {
       this.$router.push({ path: "/part-time-task" });
+    },
+    /* 收藏事件 */
+    onClickRight() {
+      let itemId = this.$route.query.itemId
+       if(!this.$login()) {
+        return 
+      }
+      if(this.isHight) {
+        this.delCollect({id: itemId}).then((res) => {
+          if(res.status === 204) {
+            this.isHight= false;
+            this.$toast({
+              message: '取消成功',
+              icon: 'close',
+            })
+          }
+        })
+      }else {
+        this.appendCollect({id: itemId}).then((res) => {
+          if(res.status === 201) {
+             this.isHight= true;
+            this.$toast.success('收藏成功');
+          }
+        })
+      }
     },
     handerApply() {
       // this.visible = true;
@@ -167,7 +204,7 @@ export default {
       // this.showPopup = true;
       // this.popupClose = true;
       // this.popupShow = true;
-      this.$router.push({ path: "/task-centered/task-part-centered" });
+      
     },
     dialogChange() {
       this.popupShow = true;
@@ -189,6 +226,18 @@ export default {
 <style lang="less" scoped>
 .task-part-details {
   background: #f5f5f5;
+  .show-icon {
+    width: 22px;
+    height: 21px;
+    background-image: url(~@/assets/icons/common/collect.png);
+    background-size: 22px 21px;
+  }
+  .hide-icon {
+    width: 22px;
+    height: 21px;
+    background-image: url(~@/assets/icons/common/star.png);
+     background-size: 22px 21px;
+  }
   .task-hander {
     height: 149px;
     background: #ffffff;

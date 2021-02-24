@@ -1,173 +1,142 @@
 <template>
   <div class="task-centered">
-    <van-nav-bar
-      title="我的任务"
-      right-text="清空"
-      left-arrow
-      fixed
-      @click-left="onClickLeft"
-      @click-right="onClickRight"
-    />
+    <m-navbar title="我的任务" right-text="清空" :show-task-right-text="true" :task-status="taskStatus" @onClickRight="onClickRight" />
     <div>
       <template>
-        <van-tabs v-model="active" sticky :offset-top="'1.1733rem'">
-          <van-tab title="我的浏览">
-            <van-swipe-cell>
-              <van-card class="short-shift" v-for="(item, index) in shortList">
-                <template #title>
-                  <h1 class="shift-title">{{ item.title }}</h1>
+       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <van-tabs v-model="active" sticky :offset-top="'1.1733rem'" @click="onTabsClick">
+            <van-tab title="我的浏览">
+              <van-swipe-cell>
+                <van-card v-if="activeUserGetters" class="short-shift" v-for="(item, item_name) in activeUserGetters">
+                  <template #title>
+                    <h1 class="shift-title">{{ item.item_endtime }}</h1>
+                  </template>
+                  <template #desc>
+                    <div class="shift-box">
+                      <p class="box-left">{{ item.item_ispay  }}</p>
+                      <p>{{ item.item_endtime }}</p>
+                    </div>
+                    <div class="shift-right">
+                      <p class="box-left">{{ item.item_type }}</p>
+                      <p>￥{{ item.item_money }}</p>
+                    </div>
+                  </template>
+                </van-card>
+                  <template v-else>
+                    <van-empty
+                      class="custom-image"
+                      image="https://img.yzcdn.cn/vant/custom-empty-image.png"
+                      description="暂无浏览的任务哦~"
+                    />
+                  </template>
+                <template #right>
+                  <van-button
+                    squarej
+                    text="删除"
+                    type="danger"
+                    class="delete-button"
+                  />
                 </template>
-                <template #desc>
-                  <div class="shift-box">
-                    <p class="box-left">{{ item.day }}</p>
-                    <p>{{ item.time }}</p>
-                  </div>
-                  <div class="shift-right">
-                    <p class="box-left">{{ item.underway }}</p>
-                    <p>￥{{ item.money }}</p>
-                  </div>
+              </van-swipe-cell>
+            </van-tab>
+            <van-tab title="我的收藏">
+              <van-swipe-cell>
+                <van-card v-if="activeUserGetters.list" class="short-shift" v-for="(item, index) in activeUserGetters.list">
+                  <template #title>
+                    <h1 class="shift-title">{{ item.item_name }}</h1>
+                  </template>
+                  <template #desc>
+                    <div class="shift-box">
+                      <p class="box-left">{{ item.item_state }}</p>
+                      <p>{{ item.item_type }}</p>
+                    </div>
+                    <div class="shift-right">
+                      <p class="box-left">{{ item.item_ispay }}</p>
+                      <p>￥{{ item.item_money }}</p>
+                    </div>
+                  </template>
+                </van-card>
+                 <template v-else>
+                    <van-empty
+                      class="custom-image"
+                      image="https://img.yzcdn.cn/vant/custom-empty-image.png"
+                      description="暂无收藏的任务哦~"
+                    />
+                  </template>
+                <template #right>
+                  <van-button square class="delete-button">删除</van-button>
                 </template>
-              </van-card>
-              <template #right>
-                <van-button
-                  squarej
-                  text="删除"
-                  type="danger"
-                  class="delete-button"
-                />
-              </template>
-            </van-swipe-cell>
-          </van-tab>
-          <van-tab title="我的收藏">
-            <van-swipe-cell>
-              <van-card class="short-shift" v-for="(item, index) in shortList">
-                <template #title>
-                  <h1 class="shift-title">{{ item.title }}</h1>
-                </template>
-                <template #desc>
-                  <div class="shift-box">
-                    <p class="box-left">{{ item.day }}</p>
-                    <p>{{ item.time }}</p>
-                  </div>
-                  <div class="shift-right">
-                    <p class="box-left">{{ item.underway }}</p>
-                    <p>￥{{ item.money }}</p>
-                  </div>
-                </template>
-              </van-card>
-              <template #right>
-                <van-button square class="delete-button">删除</van-button>
-              </template>
-            </van-swipe-cell>
-          </van-tab>
-        </van-tabs>
+              </van-swipe-cell>
+            </van-tab>
+          </van-tabs>
+        </van-list>
       </template>
-      <!-- <template>
-        <van-empty
-          class="custom-image"
-          image="https://img.yzcdn.cn/vant/custom-empty-image.png"
-          description="暂无浏览的任务哦~"
-        />
-      </template> -->
+    
     </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
+  computed: {
+    ...mapGetters('task-part', [
+      'activeUserGetters'
+    ])
+  },
   data() {
     return {
-      active: "2",
-      shortList: [
-        {
-          title: "做一个名为格润博道德公司logo",
-          day: " 前天",
-          time: " 剩余 3 天 23 小时",
-          underway: "进行中",
-          money: "1000-3000",
-        },
-        {
-          title: "做一个名为格润博道德公司",
-          day: " 8-10",
-          time: " 已截止提交方案",
-          underway: "已结束",
-          money: "1.5万",
-        },
-        {
-          title: "做一个名为格润博道德公司logo纠结纠结",
-          day: " 昨天",
-          time: " 已中标",
-          underway: "已结束",
-          money: "1000",
-        },
-        {
-          title: "做一个名为格润博道德公司logo",
-          day: " 前天",
-          time: " 剩余 3 天 23 小时",
-          underway: "进行中",
-          money: "1000-3000",
-        },
-        {
-          title: "做一个名为格润博道德公司",
-          day: " 8-10",
-          time: " 已截止提交方案",
-          underway: "已结束",
-          money: "1.5万",
-        },
-        {
-          title: "做一个名为格润博道德公司logo纠结纠结",
-          day: " 昨天",
-          time: " 已中标",
-          underway: "已结束",
-          money: "1000",
-        },
-         {
-          title: "做一个名为格润博道德公司logo",
-          day: " 前天",
-          time: " 剩余 3 天 23 小时",
-          underway: "进行中",
-          money: "1000-3000",
-        },
-        {
-          title: "做一个名为格润博道德公司",
-          day: " 8-10",
-          time: " 已截止提交方案",
-          underway: "已结束",
-          money: "1.5万",
-        },
-        {
-          title: "做一个名为格润博道德公司logo纠结纠结",
-          day: " 昨天",
-          time: " 已中标",
-          underway: "已结束",
-          money: "1000",
-        },
-        {
-          title: "做一个名为格润博道德公司logo",
-          day: " 前天",
-          time: " 剩余 3 天 23 小时",
-          underway: "进行中",
-          money: "1000-3000",
-        },
-        {
-          title: "做一个名为格润博道德公司",
-          day: " 8-10",
-          time: " 已截止提交方案",
-          underway: "已结束",
-          money: "1.5万",
-        },
-        {
-          title: "做一个名为格润博道德公司logo纠结纠结",
-          day: " 昨天",
-          time: " 已中标",
-          underway: "已结束",
-          money: "1000",
-        },
-      ],
+      loading: false,
+      finished: false,
+      taskStatus:true,
+      page:0,
+      active: 0,
+      shortList: [],
     };
   },
+    watch:{
+    'activeUserGetters.status' : function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    }
+  },
+   mounted() {
+    // 链接访问时判断是否登录
+    if(!this.$login()) return
+    /**
+     * 路由定位
+     */
+    let query = this.$route.query.type || 'browser'
+    let tabs = ['browser','favorite']
+    this.active = tabs.findIndex(tab => tab === query)
+    this.appendActiveUser({page: 1 })
+  },
   methods: {
-    onClickLeft() {
-      this.$router.push({ path: "/details/part-task" });
+    ...mapActions("task-part", ["appendActiveUser","delBrowse"]),
+     /**
+     * 监听菜单切换事件，
+     * 挂载Type参数给路由
+     */
+    onTabsClick(index) {
+      let tabs = ['browser','favorite']
+      if(this.$route.query.type === tabs[index]) return
+      this.$router.replace({ query: { ...this.$route.query, type: tabs[index] } })
+    },
+     onLoad() {
+      if (this.activeUserGetters.status === 'over') {
+        this.finished = true
+        return false
+      } 
+      if (this.activeUserGetters.status === 'loading') return false
+      const newPage = this.activeUserGetters.pageInfo.pages + 1
+      console.log(this.activeUserGetters.pageInfo);
+      this.appendActiveUser({page: newPage })
     },
     onClickRight() {
       this.$dialog.alert({
@@ -176,13 +145,23 @@ export default {
         theme: "round",
         confirmButtonColor: "#0CB65B",
         message: "确定清空我的浏览吗？",
-      });
+      }).then(() => {
+          this.delBrowse().then((res) => {
+          if(res.status === 204) {
+            this.$toast.success('删除成功');
+            // this.appendActiveUser()
+          }
+        })
+      })
     },
   },
 };
 </script>
 <style lang="less" scoped>
 .task-centered {
+  .van-swipe-cell {
+    margin-top: 33px;
+  }
   .short-shift {
     width: 343px;
     height: 105px;
