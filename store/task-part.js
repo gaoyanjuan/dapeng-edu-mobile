@@ -4,20 +4,28 @@ export default {
       taskPartList: {
         list: [],
         status: 'loading',
-        pagerInfo: {
+        pageInfo: {
           page: 1,
           size:10
         }
       },
       taskPartDetails: null,
-      activeUserList: {
+      browserList: {
         list: [],
         status: 'loading',
-        pagerInfo: {
+        pageInfo: {
           page: 1,
           size:10
         }
       },
+      favoriteList: {
+        list: [],
+        status: 'loading',
+        pageInfo: {
+          page: 1,
+          size:10
+        }
+      }
     }
   },
   mutations: {
@@ -36,14 +44,31 @@ export default {
     appendTaskPartDetails(state, payload) {
       state.taskPartDetails = payload.data
     },
-    appendActiveUser(state, payload) {
-      state.activeUserList.list = state.activeUserList.list.concat(payload.data)
-      state.activeUserList.pageInfo = payload.pageInfo
-      if (payload.data.length < state.activeUserList.pageInfo.size) {
-        state.activeUserList.status = 'over'
+    appendBrowser(state, payload) {
+      state.browserList.list = state.browserList.list.concat(payload.data)
+      state.browserList.pageInfo = payload.pageInfo
+      if (payload.data.length < state.browserList.pageInfo.size) {
+        state.browserList.status = 'over'
       } else {
-        state.activeUserList.status = 'load'
+        state.browserList.status = 'load'
       }
+    },
+    appendFavorite(state, payload) {
+      state.favoriteList.list = state.favoriteList.list.concat(payload.data)
+      state.favoriteList.pageInfo = payload.pageInfo
+      if (payload.data.length < state.favoriteList.pageInfo.size) {
+        state.favoriteList.status = 'over'
+      } else {
+        state.favoriteList.status = 'load'
+      }
+    },
+    clearTwoList (state) {
+      state.favoriteList.list = []
+      state.favoriteList.pageInfo.page = 1
+       state.favoriteList.status = 'loading'
+      state.browserList.list = []
+      state.browserList.pageInfo.page = 1
+      state.browserList.status = 'loading'
     },
   },
   actions: {
@@ -73,9 +98,14 @@ export default {
       commit('appendTaskPartDetails', res)
       return res
     },
+    // 新增当前用户浏览的兼职任务
+    async appendBrowses({ commit }, params) {
+      const res = await this.$axios.post(`/users/part-jobs/browses/${params.id}`)
+      return res
+    },
     /** 当前用户浏览的兼职任务列表**/
-    async appendActiveUser({ commit, state }, params) {
-      const res = await this.$axios.get(`/users/part-jobs/collects`, {
+    async appendBrowser({ commit, state }, params) {
+      const res = await this.$axios.get(`/users/part-jobs/browses`, {
         params: {
           size: 10,
           page: params.page
@@ -91,20 +121,52 @@ export default {
                 course.data[index].item_state = res.data.item_state
                 course.data[index].item_type = res.data.item_type
                 course.data[index].item_ispay = res.data.item_ispay
+                if (index === course.data.length - 1) {
+                  const pageInfo = { pages: params.page, size: 10 }
+                  commit('appendBrowser', { data: course.data, pageInfo })
+                }
               })
             }
           }
           const pageInfo = { pages: params.page, size: 10 }
-          commit('appendActiveUser', { data: course.data, pageInfo })
-          return course.data
+          commit('appendBrowser', { data: course.data, pageInfo })
         } else {
           const pageInfo = { pages: params.page, size: 10 }
-          commit('appendActiveUser', { data: course.data, pageInfo })
-          return course.data
+          commit('appendBrowser', { data: course.data, pageInfo })
         }
       })
     },
-    
+      /** 当前用户收藏的兼职任务列表**/
+    async appendFavorite({ commit }, params) {
+        const res = await this.$axios.get(`/users/part-jobs/collects`, {
+          params: {
+            size: 10,
+            page: params.page
+          }
+        }).then((course) => {
+          if (course.status === 200 && course.data.length) {
+            for (let index = 0; index < course.data.length; index++) {
+              if (course.data[index].id !== 'undefined') { 
+                let id = course.data[index].id
+                this.$axios.get('part_job/get_item.ashx', { params: { itemid: id } }).then(res => {
+                  course.data[index].item_name = res.data.item_name
+                  course.data[index].item_money = res.data.item_money
+                  course.data[index].item_state = res.data.item_state
+                  course.data[index].item_type = res.data.item_type
+                  course.data[index].item_ispay = res.data.item_ispay
+                  if (index === course.data.length - 1) {
+                    const pageInfo = { pages: params.page, size: 10 }
+                    commit('appendFavorite', { data: course.data, pageInfo })
+                  }
+                })
+              }
+            }
+          } else {
+            const pageInfo = { pages: params.page, size: 10 }
+            commit('appendFavorite', { data: course.data, pageInfo })
+          }
+        })
+      },
     // 新增当前用户收藏的兼职任务
     async appendCollect({ commit }, params) {
       const res = await this.$axios.post(`/users/part-jobs/collects/${params.id}`)
@@ -125,14 +187,22 @@ export default {
       const res = await this.$axios.delete(`/users/part-jobs/browses`)
       return res
     },
+    // 删除当前用户浏览的兼职任务
+    async cleartBrowse({ commit }, params) {
+      const res = await this.$axios.delete(`/users/part-jobs/browses/${params.id}`)
+      return res
+    },
   },
   getters: {
     taskPartListGetters(state) {
       return state.taskPartList
     },
-    activeUserGetters(state) {
-      console.log(state.activeUserList);
-      return state.activeUserList
+    browserGetters(state) {
+      return state.browserList
+    },
+    favoriteGetters(state) {
+      console.log(state.favoriteList);
+      return state.favoriteList
     }
   }
 }

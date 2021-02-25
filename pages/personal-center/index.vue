@@ -166,7 +166,11 @@ export default {
       //   name: "fast-payment",
       //   icon: require("@/assets/icons/mine/icon-fast-payment.png"),
       // },
-      {txt:'任务',name:'task',icon: require('@/assets/icons/mine/icon-task.png')},
+      {
+        txt:'任务',
+        name:'task', 
+        icon: require('@/assets/icons/mine/icon-task.png')
+      },
       {
         txt: "联系学管",
         name: "teacher",

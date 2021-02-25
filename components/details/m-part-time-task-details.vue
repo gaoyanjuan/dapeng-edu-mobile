@@ -162,6 +162,11 @@ export default {
     this.appendTaskPartDetails(itemId).then((res) => {
     this.taskList = res.data;
     });
+    this.appendBrowses({id: itemId}).then((res) => {
+      if(res.status === 201) {
+        this.$toast.success('已浏览');
+      }
+    });
     this.verifyCollect({id: itemId}).then((res) => {
       if(res.data) {
         this.isHight= true;
@@ -169,7 +174,8 @@ export default {
     })
   },
   methods: {
-     ...mapActions("task-part", ["appendTaskPartDetails","appendCollect","delCollect","verifyCollect"]),
+     ...mapActions("task-part", 
+     ["appendTaskPartDetails","appendCollect","delCollect","verifyCollect","appendBrowses"]),
     onClickLeft() {
       this.$router.push({ path: "/part-time-task" });
     },
@@ -184,7 +190,7 @@ export default {
           if(res.status === 204) {
             this.isHight= false;
             this.$toast({
-              message: '取消成功',
+              message: '取消收藏',
               icon: 'close',
             })
           }
@@ -193,7 +199,7 @@ export default {
         this.appendCollect({id: itemId}).then((res) => {
           if(res.status === 201) {
              this.isHight= true;
-            this.$toast.success('收藏成功');
+            this.$toast.success('已收藏');
           }
         })
       }

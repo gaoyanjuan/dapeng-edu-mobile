@@ -18,7 +18,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapMutations } from "vuex";
 export default {
     computed: {
     ...mapGetters('task-part', [
@@ -49,7 +49,11 @@ export default {
   mounted() {
     this.appendTaskPartList({page: 1 })
   },
+  destroyed() {
+     this.clearTwoList()
+  },
   methods: {
+    ...mapMutations('task-part', ['clearTwoList']),
     ...mapActions("task-part", ["appendTaskPartList"]),
     evaluateState(state) {
       let str = ''

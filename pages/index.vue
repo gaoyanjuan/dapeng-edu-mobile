@@ -280,9 +280,9 @@ export default {
       else if (to.name === 'index-video') {
         this.activeName = 'video'
       } 
-      // else if (to.name === 'index-part-time-task') {
-      //   this.activeName = 'part-time-task'
-      // }
+      else if (to.name === 'index-part-time-task') {
+        this.activeName = 'part-time-task'
+      }
     },
 
     /***下拉菜单选择定位 */
