@@ -33,6 +33,7 @@ import {
   Collapse,
   CollapseItem,
   Image,
+  Badge
 } from 'vant'
 
 Vue.use(Button)
@@ -67,6 +68,7 @@ Vue.use(Button)
   .use(Collapse)
   .use(CollapseItem)
   .use(Image)
+  .use(Badge)
   .use(Lazyload, {
     // 懒加载默认图片
     loading: require('@/assets/icons/common/photos-bg.png')

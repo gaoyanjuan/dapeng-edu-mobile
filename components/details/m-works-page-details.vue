@@ -2,13 +2,16 @@
   <div v-if="works" class="p-details">
     <!-- Back last page -->
     <m-navbar
+      v-if="!$route.query.share"
       :show-right-menu="showRightMenuFlag"
       @onOpenMenus="onShowMenus"
       :title="works.type === 'TEXT' ? '作品详情' : '小视频详情'"
     />
 
+    <m-call-app v-else></m-call-app>
+
     <!-- Main Block -->
-    <div class="details-content-wrap">
+    <div :class="$route.query.share ? '': 'details-content-wrap'">
 
       <!-- Gallery TEXT:图文-->
       <m-gallery
@@ -63,6 +66,9 @@
 
     <!-- Middle Block -->
     <div class="details-split-line"></div>
+
+    <!-- 悬浮唤起APP 按钮-->
+    <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">

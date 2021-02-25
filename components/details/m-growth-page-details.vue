@@ -1,10 +1,12 @@
 <template>
   <div v-if="growth" class="p-details">
     <!-- Back last page -->
-    <m-navbar :title="title" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+    <m-navbar v-if="!$route.query.share" :title="title" :show-right-menu="showRightMenuFlag" @onOpenMenus="onShowMenus"/>
+
+    <m-call-app v-else></m-call-app>
 
     <!-- Main Block -->
-    <div class="details-content-wrap">
+    <div :class="$route.query.share ? '': 'details-content-wrap'">
       <!-- Gallery -->
       <m-gallery
         :photos="growth.img"
@@ -46,6 +48,9 @@
 
     <!-- Middle Block -->
     <div class="details-split-line"></div>
+
+    <!-- 悬浮唤起APP 按钮-->
+    <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
 
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">

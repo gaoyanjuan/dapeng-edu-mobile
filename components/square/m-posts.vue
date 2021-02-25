@@ -42,7 +42,7 @@
     </div>
 
     <!-- comment 体验课不展示讲师评论 -->
-    <div class="works__comment" v-if="showComment" @click.stop="">
+    <div class="works__comment" v-if="showComment">
       <template v-if="commentList">
         <m-teacher-audio
           :teacherName="commentList.user ? commentList.user.nickname : ''"
