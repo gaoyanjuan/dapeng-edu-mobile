@@ -77,26 +77,16 @@
         </div>
       </div>
     </div>
-
+    
+    <template v-if="ShowMenusList">
+      <hover-point-btn
+        :btnList="homeworkList"
+        @chooseItem="chooseItem"
+      />
+    </template>
     <div @click.stop="">
-      <!-- 帖子 菜单弹层 -->
-      <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-        <div v-if="showCopyFlag" class="menus__popup__item" @click.stop="toCopyForm">Ta抄作业</div>
-        <div class="menus__popup__item" @click.stop="handleCopyJobNummer">作业号</div>
-        <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
-      </van-popup>
-
       <!-- 复制作业号 -->
       <m-copy-code :show-popup="showCopyCode" @closed="onClosed"/>
-
-      <!-- 顶部Navbar  菜单弹层 -->
-      <van-popup v-model="showPublishMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-        <div v-if="canEdit" class="menus__popup__item" @click.stop="editHomework">编辑</div>
-        <div v-if="showonCollect" class="menus__popup__item" @click.stop="onCollect">{{ isCollection ? '取消收藏' : '收藏' }}</div>
-        <div v-if="canDelete" class="menus__popup__item" @click.stop="deleteItem">删除</div>
-        <div v-if="pageName === 'myHomework' && listItemData.type !== 'VIDEO'" class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
-        <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
-      </van-popup>
     </div>
 
     <!--Image preview -->
@@ -187,7 +177,6 @@ export default {
     popIsCollection: false,
     popCommentCount: 0,
     commentPop: { show: false },
-    showMenusPopup:false,
     showCopyCode: { show: false, jobNummer: null },
     // 图片预览
     imagePreview: {
@@ -206,11 +195,12 @@ export default {
     star: require('@/assets/icons/posts/posts-star.png'),
     unLove: require('@/assets/icons/posts/posts-unlove.png'),
     unStar: require('@/assets/icons/posts/posts-unstar.png'),
-    showPublishMenusPopup: false,
     deleteDialogParams: {
       show: false
     },
-    commentFlag: true
+    commentFlag: true,
+    ShowMenusList:false,
+    homeworkList:[]
   }),
   computed: {
     ...mapGetters({
@@ -374,8 +364,6 @@ export default {
       }
       this.showCopyCode.show = true
       this.showCopyCode.jobNummer = this.listItemData.identificationCode
-      this.showMenusPopup = false
-      this.showPublishMenusPopup = false
     },
     /** 关闭弹窗 */
     onClosed() {
@@ -411,21 +399,98 @@ export default {
 
     /** 打开/关闭菜单 */
     onShowMenus() {
-      if(this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
-        // 是否是作业
-        if (this.listItemData.approvedLevel) {
-          if (this.userinfo && this.userinfo.userId === this.listItemData.user.userId) {
-            this.showPublishMenusPopup = !this.showPublishMenusPopup
-            return
-          } else {
-            this.showMenusPopup = !this.showMenusPopup
-            return
+      this.ShowMenusList = true
+      this.$nextTick(()=>{
+        if (this.pageName.indexOf('my')!== -1 && this.pageName !== 'myRecommend') {
+          //个人中心
+          if (this.pageName === 'myHomework') {
+            //作业列表
+            if (this.userinfo.userId === this.listItemData.user.userId) {
+              // 我发布的作业
+              if (this.listItemData.approvedLevel && this.listItemData.approvedLevel === '0') {
+                // 分数为0时
+                this.homeworkList = [
+                  { name: '编辑', functionName: 'edit' },
+                  { name: '删除', functionName: 'delete' },
+                  { name: '作业号', functionName: 'copy' }
+                ]
+              } else {
+                this.homeworkList = [
+                  { name: '作业号', functionName: 'copy' }
+                ]
+              }
+            } else {
+              // TA发布的作业
+              this.homeworkList = [
+                { name: 'TA抄作业', functionName: 'report' },
+                { name: '作业号', functionName: 'copy' }
+              ]
+            }
+          } else if (this.pageName !== 'myHomework') {
+            // 非作业列表
+            if (this.userinfo.userId === this.listItemData.user.userId) {
+              // 我发布的
+              this.homeworkList = [
+                { name: '删除', functionName: 'delete' }
+              ]
+            } else {
+              // TA发布的
+              this.homeworkList = [
+                { name: this.isCollection ? '取消收藏' : '收藏', functionName: 'attention' },
+              ]
+            }
+          }
+        } else {
+          //广场区
+          if (this.userinfo) {
+            // 已登录
+            if (this.userinfo.userId === this.listItemData.user.userId) {
+              // 我发布的
+              this.homeworkList = [
+                { name: '作业号', functionName: 'copy' }
+              ]
+            } else {
+              // TA发布的作业
+              this.homeworkList = [
+                { name: 'TA抄作业', functionName: 'report' },
+                { name: '作业号', functionName: 'copy' }
+              ]
+            }
+          } else if (!this.userinfo) {
+            // 未登录
+            this.homeworkList = [
+              { name: 'TA抄作业', functionName: 'report' },
+              { name: '作业号', functionName: 'copy' }
+            ]
           }
         }
-        this.showPublishMenusPopup = !this.showPublishMenusPopup
-        return
+      })
+    },
+    // 选择弹窗面板内容
+    chooseItem (val) {
+      this.ShowMenusList = false
+       switch (val) {
+        case "收藏":
+          this.onCollect()
+          break;
+        case "取消收藏":
+          this.onCollect()
+          break;
+        case "编辑":
+          this.editHomework()
+          break;
+        case "删除":
+          this.deleteItem()
+          break;
+        case "TA抄作业":
+          this.toCopyForm()
+          break;
+        case "作业号":
+          this.handleCopyJobNummer()
+          break;
+        default:
+          break;
       }
-      this.showMenusPopup = !this.showMenusPopup
     },
     sendComment (text) {
       if(!this.commentFlag) return false
@@ -516,7 +581,6 @@ export default {
             isCollection: this.isCollection
           }
         })
-        this.showPublishMenusPopup = false
       } else {
         if (this.$isSave(this.$route.name)) {
           this.$store.commit(`${this.functionName}`, {
@@ -537,7 +601,6 @@ export default {
           createdId: this.listItemData.user.userId,
           contentType: this.listItemData.type
         })
-        this.showPublishMenusPopup = false
       }
     },
     //喜欢操作
@@ -662,7 +725,6 @@ export default {
     // 删除
     deleteItem() {
       this.deleteDialogParams.show = true
-      this.showPublishMenusPopup = false
     },
     confirmDelete() {
       if(this.propSquareType === 'HOMEWORK') {
@@ -873,36 +935,4 @@ export default {
   margin-left: 4px;
 }
 
-/** menus-popup */
-.m-works /deep/.van-popup {
-  width: 284px;
-  // height: 138px;
-  overflow: hidden;
-}
-
-/deep/.van-popup--center.van-popup--round {
-  border-radius: 8px;
-}
-
-.van-popup .menus__popup__item {
-  width: 100%;
-  height: 46px;
-  line-height: 46px;
-  font-size: 16px;
-  font-family: @dp-font-regular;
-  font-weight: 400;
-  color: #18252C;
-  text-align: center;
-  border-bottom: 1px solid #F7F7F7;
-  cursor: pointer;
-}
-
-.van-popup .menus__popup__item:active {
-  background-color:#f2f3f5;
-}
-
-.van-popup .menus-popup__item:last-child{
-  border-bottom:none;
-}
-/** Style End */
 </style>

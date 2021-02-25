@@ -50,10 +50,12 @@
       @sendComment="sendComment"
     />
     <!-- 删除 菜单弹层 -->
-    <van-popup v-model="showPopup" round overlay-class="menus__popup" :transition-appear="true" :close-on-click-overlay="false">
-      <div class="menus__popup__item" @click.stop="deleteItem">删除</div>
-      <div class="menus__popup__item" @click.stop="onShowMenus">取消</div>
-    </van-popup>
+    <template v-if="showPopup">
+      <hover-point-btn
+        :btnList="deleteBtn"
+        @chooseItem="chooseItem"
+      />
+    </template>
     <!-- 删除确认弹层 -->
     <van-popup v-model="showConfirmPopup" round class="confirm__menus__popup" :transition-appear="true" @click.stop>
       <div class="popup__item__title">确定删除该评论吗？</div>
@@ -131,7 +133,10 @@ export default {
       audio: null,
       praiseCount: 0,
       isPraise: false,
-      commentFlag: true
+      commentFlag: true,
+      deleteBtn:[
+        { name: '删除', functionName: 'delete' }
+      ]
     }
   },
   computed: {
@@ -183,6 +188,12 @@ export default {
     onShowMenus () {
       if (this.userinfo && this.user && this.user.userId === this.userinfo.userId) {
         this.showPopup = !this.showPopup
+      }
+    },
+    chooseItem(val) {
+      this.showPopup = false
+      if (val === '删除') {
+        this.deleteItem()
       }
     },
     onLove () {
@@ -425,11 +436,11 @@ export default {
 
 
 /** menus-popup */
-.comment /deep/.van-popup {
-  width: 284px;
-  height: 92px;
-  overflow: hidden;
-}
+// .comment /deep/.van-popup {
+//   width: 284px;
+//   height: 92px;
+//   overflow: hidden;
+// }
 
 /deep/.van-popup--center.van-popup--round {
   border-radius: 8px;

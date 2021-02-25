@@ -43,11 +43,13 @@
     <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
 
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div class="menus__popup__item" @click="deleteRead">删除</div>
-      <div class="menus__popup__item" @click="onShowMenus">取消</div>
-    </van-popup>
-    
+
+    <template v-if="showMenusPopup">
+      <hover-point-btn
+        :btnList="deleteBtn"
+        @chooseItem="chooseItem"
+      />
+    </template>
     <!-- 删除二次确认弹窗 -->
     <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
@@ -68,7 +70,10 @@ export default {
     showMenusPopup: false,
     deleteDialogParams: {
       show: false
-    }
+    },
+    deleteBtn:[
+      { name: '删除', functionName: 'delete' }
+    ]
   }),
 
   computed:{
@@ -157,6 +162,12 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
+    },
+    chooseItem(val) {
+      this.showMenusPopup = false
+      if (val === '删除') {
+        this.deleteRead()
+      }
     },
     // 删除作品
     deleteRead() {
@@ -261,11 +272,11 @@ export default {
 }
 
 /** menus-popup */
-.p-details /deep/.van-popup {
-  width: 284px;
-  // height: 92px;
-  overflow: hidden;
-}
+// .p-details /deep/.van-popup {
+//   width: 284px;
+//   // height: 92px;
+//   overflow: hidden;
+// }
 /deep/.van-popup--center.van-popup--round {
   border-radius: 8px;
 }
