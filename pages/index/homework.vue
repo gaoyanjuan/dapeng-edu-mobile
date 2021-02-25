@@ -29,6 +29,9 @@ export default {
         if(this.$store.getters['banner/homeworkBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'HOMEWORK' })
         }
+        if(this.$store.getters['topic/homeworkGetters'].list.length === 0) {
+          this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'HOMEWORK' })
+        }
         if (this.$store.getters['colleges/taskCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_TASK' })
         }

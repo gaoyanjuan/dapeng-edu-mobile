@@ -29,6 +29,9 @@ export default {
         if(this.$store.getters['banner/articleBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'ARTICLE' })
         }
+        if(this.$store.getters['topic/articleGetters'].list.length === 0) {
+          this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'ARTICLE' })
+        }
         if (this.$store.getters['colleges/readingCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_ARTICLE' })
         }

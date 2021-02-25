@@ -3,6 +3,11 @@
     <!-- Swiper -->
     <m-swipe :banner="worksBannerListGetters"/>
 
+    <!-- 话题 -->
+    <transition name="component-fade" mode="out-in">
+      <m-topic-card v-if="showTopic" :topic="worksGetters" channel="WORKS"/>
+    </transition>
+
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="workCollegesGetters" @switchCollegeName="switchCollegeName"/>
 
@@ -113,7 +118,14 @@ export default {
     ]),
     ...mapGetters('work', [
       'workListGetters'
-    ])
+    ]),
+    ...mapGetters('topic', [
+      'worksGetters'
+    ]),
+
+    showTopic() {
+      return this.worksGetters.list.length > 0
+    }
   }
 }
 </script>
@@ -148,5 +160,12 @@ export default {
   font-weight: 600;
   color: #8D8E8E;
   line-height: 20px;
+}
+
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .5s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -3,6 +3,11 @@
     <!-- Swiper -->
     <m-swipe :banner="movieBannerListGetters"/>
 
+    <!-- 话题 -->
+    <transition name="component-fade" mode="out-in">
+      <m-topic-card v-if="showTopic" :topic="movieGetters" channel="MOVIE"/>
+    </transition>
+
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="videoCollegesGetters" @switchCollegeName="switchCollegeName"/>
 
@@ -69,7 +74,14 @@ export default {
     ]),
     ...mapGetters('video', [
       'videoListGetters'
-    ])
+    ]),
+    ...mapGetters('topic', [
+      'movieGetters'
+    ]),
+
+    showTopic() {
+      return this.movieGetters.list.length > 0
+    }
   },
   mounted () {
     this.$nextTick(() => {
@@ -143,5 +155,12 @@ export default {
   font-weight: 600;
   color: #8D8E8E;
   line-height: 20px;
+}
+
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .5s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
 }
 </style>

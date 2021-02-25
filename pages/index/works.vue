@@ -30,6 +30,9 @@ export default {
         if(this.$store.getters['banner/worksBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'WORKS' })
         }
+        if(this.$store.getters['topic/worksGetters'].list.length === 0) {
+          this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'WORKS' })
+        }
         if (this.$store.getters['colleges/workCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_WORK' })
         }
