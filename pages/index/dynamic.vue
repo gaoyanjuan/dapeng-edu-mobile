@@ -33,6 +33,9 @@ export default {
         if(this.$store.getters['banner/lifeBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'LIFE' })
         }
+        // if(this.$store.getters['topic/dynamicGetters'].list.length === 0) {
+        //   this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'LIFE' })
+        // }
         if (this.$route.query.type === 'new') {
           if (this.$store.getters['dynamic/newDynamicListGetters'].list.length === 0) {
             this.$store.dispatch('dynamic/appendNewDynamicList', {})

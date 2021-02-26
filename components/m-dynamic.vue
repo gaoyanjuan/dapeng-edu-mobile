@@ -2,6 +2,11 @@
   <div>
     <!-- Swiper -->
     <m-swipe :banner="lifeBannerListGetters"/>
+
+    <!-- 话题 -->
+    <!-- <transition name="component-fade" mode="out-in">
+      <m-topic-card v-if="showTopic" :topic="dynamicGetters" channel="LIFE"/>
+    </transition> -->
     
     <!-- 二级菜单 -->
     <m-menus menus-type="type" :menus="menus" :automatic="true"/>
@@ -148,7 +153,13 @@ export default {
     ...mapGetters('dynamic', [
       'newDynamicListGetters',
       'hotDynamicListGetters'
-    ])
+    ]),
+    // ...mapGetters('topic', [
+    //   'dynamicGetters'
+    // ]),
+    // showTopic() {
+    //   return this.dynamicGetters.list.length > 0
+    // }
   }
 }
 </script>
@@ -159,5 +170,12 @@ export default {
   min-height: calc(100vh - 133px);
   padding-bottom: 65px;
   background-color: #f8f8f8;
+}
+
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .5s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
 }
 </style>

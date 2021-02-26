@@ -28,6 +28,9 @@ export default {
         if(this.$store.getters['banner/postBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'POST' })
         }
+        // if(this.$store.getters['topic/growthGetters'].list.length === 0) {
+        //   this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'POST' })
+        // }
         if (this.$route.query.type) {
           this.$store.dispatch('growth/appendGrowthList', { type: this.$route.query.type, page: 1 })
         } else {
