@@ -4,9 +4,9 @@
     <m-swipe :banner="recommendBannerListGetters"/>
 
     <!-- 话题 -->
-    <transition name="component-fade" mode="out-in">
+    <!-- <transition name="component-fade" mode="out-in">
       <m-topic-card v-if="showTopic" :topic="recommendGetters" channel="RECOMMEND"/>
-    </transition>
+    </transition> -->
 
     <section class="recommend-wrap">
       <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
@@ -75,13 +75,13 @@ export default {
     ...mapGetters({
       userInfo: 'user/userInfoGetters'
     }),
-    ...mapGetters('topic', [
-      'recommendGetters'
-    ]),
+    // ...mapGetters('topic', [
+    //   'recommendGetters'
+    // ]),
 
-    showTopic() {
-      return this.recommendGetters.list.length > 0
-    }
+    // showTopic() {
+    //   return this.recommendGetters.list.length > 0
+    // }
   },
   watch: {
     'recommendListGetters.status': function (newVal, oldVal) {

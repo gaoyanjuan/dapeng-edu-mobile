@@ -4,9 +4,9 @@
     <m-swipe :banner="postBannerListGetters"/>
 
     <!-- 话题 -->
-    <transition name="component-fade" mode="out-in">
+    <!-- <transition name="component-fade" mode="out-in">
       <m-topic-card v-if="showTopic" :topic="growthGetters" channel="POST"/>
-    </transition>
+    </transition> -->
 
     <!-- 二级菜单 -->
     <van-sticky :offset-top="`1.1733rem`">
@@ -135,13 +135,13 @@ export default {
     ...mapGetters('growth', [
       'growthListGetters'
     ]),
-    ...mapGetters('topic', [
-      'growthGetters'
-    ]),
+    // ...mapGetters('topic', [
+    //   'growthGetters'
+    // ]),
 
-    showTopic() {
-      return this.growthGetters.list.length > 0
-    }
+    // showTopic() {
+    //   return this.growthGetters.list.length > 0
+    // }
   }
 }
 </script>

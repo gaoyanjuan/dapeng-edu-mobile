@@ -4,9 +4,9 @@
     <m-swipe :banner="articleBannerListGetters"/>
 
     <!-- 话题 -->
-    <transition name="component-fade" mode="out-in">
+    <!-- <transition name="component-fade" mode="out-in">
       <m-topic-card v-if="showTopic" :topic="articleGetters" channel="ARTICLE"/>
-    </transition>
+    </transition> -->
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="readingCollegesGetters" @switchCollegeName="switchCollegeName"/>
@@ -57,13 +57,13 @@ export default {
     ...mapGetters('reading', [
       'readingListGetters'
     ]),
-    ...mapGetters('topic', [
-      'articleGetters'
-    ]),
+    // ...mapGetters('topic', [
+    //   'articleGetters'
+    // ]),
 
-    showTopic() {
-      return this.articleGetters.list.length > 0
-    }
+    // showTopic() {
+    //   return this.articleGetters.list.length > 0
+    // }
   },
   watch: {
     'readingListGetters.status': function (newVal, oldVal) {

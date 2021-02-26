@@ -4,9 +4,9 @@
     <m-swipe :banner="videoBannerListGetters"/>
 
     <!-- 话题 -->
-    <transition name="component-fade" mode="out-in">
+    <!-- <transition name="component-fade" mode="out-in">
       <m-topic-card v-if="showTopic" :topic="videoGetters" channel="VIDEO"/>
-    </transition>
+    </transition> -->
 
     <!-- 二级菜单 -->
     <m-menus v-if="$route.query.type !== 'LIFE'" :menus="colleges" menus-type="college" @switchCollegeName="switchCollegeName"/>
@@ -58,13 +58,13 @@ export default {
       colleges: 'colleges/smallVideoCollegesGetters',
       smallVideoList: 'video/smallVideoListGetters'
     }),
-    ...mapGetters('topic', [
-      'videoGetters'
-    ]),
+    // ...mapGetters('topic', [
+    //   'videoGetters'
+    // ]),
 
-    showTopic() {
-      return this.videoGetters.list.length > 0
-    }
+    // showTopic() {
+    //   return this.videoGetters.list.length > 0
+    // }
   },
   watch: {
     'smallVideoList.status': function (newVal, oldVal) {

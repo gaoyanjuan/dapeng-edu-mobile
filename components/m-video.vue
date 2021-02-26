@@ -4,9 +4,9 @@
     <m-swipe :banner="movieBannerListGetters"/>
 
     <!-- 话题 -->
-    <transition name="component-fade" mode="out-in">
+    <!-- <transition name="component-fade" mode="out-in">
       <m-topic-card v-if="showTopic" :topic="movieGetters" channel="MOVIE"/>
-    </transition>
+    </transition> -->
 
     <!-- 二级菜单 -->
     <m-menus menus-type="college" :menus="videoCollegesGetters" @switchCollegeName="switchCollegeName"/>
@@ -75,13 +75,13 @@ export default {
     ...mapGetters('video', [
       'videoListGetters'
     ]),
-    ...mapGetters('topic', [
-      'movieGetters'
-    ]),
+    // ...mapGetters('topic', [
+    //   'movieGetters'
+    // ]),
 
-    showTopic() {
-      return this.movieGetters.list.length > 0
-    }
+    // showTopic() {
+    //   return this.movieGetters.list.length > 0
+    // }
   },
   mounted () {
     this.$nextTick(() => {
