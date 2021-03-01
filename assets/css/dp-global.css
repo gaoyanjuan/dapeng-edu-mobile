@@ -24,3 +24,18 @@
 .page-enter, .page-leave-active {
   opacity: 0;
 }
+
+/**
+  乐语客服
+*/
+#doyoo_panel,
+#doyoo_monitor,
+#doyoo_mobile_chat_hint,
+#doyoo_early {
+  display: none !important;
+}
+
+/* #doyoo_f_main {
+  top: 0 !important;
+  height: 100vh !important;
+} */

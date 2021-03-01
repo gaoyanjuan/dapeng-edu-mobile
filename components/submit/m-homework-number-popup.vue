@@ -21,7 +21,9 @@ export default {
   methods:{
     /** 联系客服 */
     onCustomer() {
-      window.open(process.env.leyuUrl, '_blank')
+      // 综合客服
+      doyoo.util.openChat('g=10085073')
+      return false
     },
 
     /** 复制作业号 */
