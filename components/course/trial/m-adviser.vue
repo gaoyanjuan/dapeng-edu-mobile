@@ -68,6 +68,7 @@ export default {
     ]),
 
     onContact() {
+      // 报名咨询
       doyoo.util.openChat('g=10085048')
       return false
     },

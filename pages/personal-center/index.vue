@@ -261,10 +261,12 @@ export default {
         case "task":
           break;
         case "teacher":
-          doyoo.util.openChat('g=10085048')
+          // 联系学管
+          doyoo.util.openChat('g=10085049')
           break;
         case "suggest-complaint":
-           doyoo.util.openChat('g=10085048')
+          // 建议与投诉
+           doyoo.util.openChat('g=10084845')
           break;
         case "setting":
           this.$router.push({

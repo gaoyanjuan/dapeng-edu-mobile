@@ -21,7 +21,8 @@ export default {
   methods:{
     /** 联系客服 */
     onCustomer() {
-      doyoo.util.openChat('g=10085048')
+      // 综合客服
+      doyoo.util.openChat('g=10085073')
       return false
     },
 
