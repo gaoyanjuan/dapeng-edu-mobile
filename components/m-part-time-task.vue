@@ -14,10 +14,26 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "M-Part-Time-Task",
+   computed: {
+    ...mapGetters('logo', 
+      ["getTagsList", "getSortList"]
+    ),
+  },
   data: () => ({}),
-  methods: {},
+    mounted() {
+    let params = {
+      class1id:1,
+      class2id:this.getTagsList[0].id,
+      px:''
+    }
+    this.appendTaskPartList({page: 1,params })
+  },
+  methods: {
+     ...mapActions("task-part", ["appendTaskPartList"]),
+  },
 };
 </script>
 

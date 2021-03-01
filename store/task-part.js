@@ -77,6 +77,7 @@ export default {
       commit('changeTaskPartListStatus', 'loading')
       const res = await this.$axios.get('part_job/get_item_list.ashx', {
         params: {
+          ...params.params,
           size: 10,
           page: params.page
         }
@@ -201,7 +202,6 @@ export default {
       return state.browserList
     },
     favoriteGetters(state) {
-      console.log(state.favoriteList);
       return state.favoriteList
     }
   }

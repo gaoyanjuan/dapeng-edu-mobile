@@ -45,7 +45,7 @@
       </template>
 
       <p>网址：<span>www.dapengjiaoyu.</span></p>
-    </div>
+    </div>  
     <div class="task-footer">
       <h2>温馨说明</h2>
       <p>1.此任务由第三方提供</p>

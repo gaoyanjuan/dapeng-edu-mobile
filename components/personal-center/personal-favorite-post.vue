@@ -24,6 +24,7 @@
               text="删除"
               type="danger"
               class="delete-button"
+              @click="deletrBut(item.id)"
             />
           </template>
         </van-swipe-cell>
@@ -77,7 +78,7 @@ export default {
     this.appendFavorite({page: 1,type:'favorite'})
   },
   methods: {
-    ...mapActions("task-part", ["appendFavorite"]),
+    ...mapActions("task-part", ["appendFavorite","delCollect"]),
      onLoad() {
       if (this.favoriteGetters.status === 'over') {
         this.finished = true
@@ -87,6 +88,14 @@ export default {
       const newPage = this.favoriteGetters.pageInfo.pages + 1
       this.appendFavorite({page: newPage,type:'favorite' })
     },
+    deletrBut(id) {
+      this.delCollect({id}).then((res) => {
+        if(res.status === 204) {
+          this.$toast.success('删除成功');
+          this.appendFavorite({page: 1,type:'favorite'})
+        }
+      })
+    }
   },
 }
 </script>

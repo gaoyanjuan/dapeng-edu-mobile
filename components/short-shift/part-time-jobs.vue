@@ -2,8 +2,8 @@
   <section class="part-time">
     <!--LOGO设计 操作 -->
     <div class="fg-nav">
-      <div class="navLogo">
-        <p @click="showPopup">LOGO设计</p>
+      <div class="navLogo" @click="showPopup">
+        <p>{{ this.name }}</p>
         <img :src="change" alt="" />
       </div>
       <div class="nav-change">
@@ -31,7 +31,7 @@
               size="small"
               v-for="(item, index) in getTagsList"
               :key="index"
-              @click="handlePart()"
+              @click="handlePart(index)"
             >
               <p>{{ item.name }}</p>
             </van-button>
@@ -43,6 +43,7 @@
               size="small"
               v-for="(item, index) in getSortList"
               :key="index"
+               @click="handleIT(index)"
             >
               <p>{{ item.name }}</p>
             </van-button>
@@ -54,13 +55,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   name: "FollowGallery",
   computed: {
     ...mapGetters('logo', 
       ["getTagsList", "getSortList"]
-    )
+    ),
+    ...mapGetters('task-part', [
+      'taskPartListGetters'
+    ])
   },
   data: () => ({
     btnLimited: false,
@@ -68,8 +72,22 @@ export default {
     menus:[{id:'HOTTEST',name:'不限'},{id:'NEWEST',name:'最新'}],
     show: false, 
     active: 2,
+    name:'LOGO设计',
     change: require("@/assets/icons/common/drop.png"),
   }),
+   watch:{
+    'taskPartListGetters.status' : function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    }
+  },
   mounted() {
     this.menus.forEach( (item, inx) => {
       if(item.id === this.$route.query.type) {
@@ -78,24 +96,57 @@ export default {
     })
   },
   methods: {
+    ...mapActions("task-part", ["appendTaskPartList"]),
+    onLoad() {
+      if (this.taskPartListGetters.status === 'over') {
+        this.finished = true
+        return false
+      } 
+      if (this.taskPartListGetters.status === 'loading') return false
+      const newPage = this.taskPartListGetters.pageInfo.pages + 1
+      this.appendTaskPartList({page: newPage})
+    },
     showPopup() {
       this.show = true;
     },
-    handlePart() {},
+    handlePart(i) {
+     this.name = this.getTagsList[i].name;
+     let params = {
+      class1id:1,
+      class2id:this.getTagsList[i].id,
+      px:''
+    }
+    this.show = false;
+    this.appendTaskPartList({page: 1,params})
+    },
+    handleIT(i){
+      this.name = this.getSortList[i].name;
+      let params = {
+      class1id:38,
+      class2id:this.getTagsList[i].id,  
+      px:''
+    }
+    this.show = false;
+    this.appendTaskPartList({page: 1,params})
+    },
       /** 切换菜单事件 */
     changeMenus(index, item) {
       // 禁止路由重复点击
       if (this.$route.query.type === item.id) return
+      //  let params = {
+      //   class1id:1,
+      //   class2id:this.getTagsList[i].id,
+      //   px:'4'
+      // }
       this.menusIndex = index
       this.$router.replace({
         query: {
           ...this.$route.query,
+          type : item.id
         }
-      })
+      }),
+      this.appendTaskPartList({page: 1 })
     },
-    // changeLimited() {
-    //   this.btnLimited = true;
-    // },
   },
 };
 </script>

@@ -47,7 +47,7 @@ export default {
     }
   },
   mounted() {
-    this.appendTaskPartList({page: 1 })
+    // this.appendTaskPartList({page: 1 })
   },
   destroyed() {
      this.clearTwoList()
@@ -93,7 +93,6 @@ export default {
       } 
       if (this.taskPartListGetters.status === 'loading') return false
       const newPage = this.taskPartListGetters.pageInfo.pages + 1
-      console.log(this.taskPartListGetters.pageInfo);
       this.appendTaskPartList({page: newPage })
     },
     handelDetals(itemid) {
