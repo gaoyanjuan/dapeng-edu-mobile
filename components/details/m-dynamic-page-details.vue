@@ -2,13 +2,16 @@
   <div v-if="dynamic" class="p-details">
     <!-- Back last page -->
     <m-navbar
+      v-if="!$route.query.share"
       :show-right-menu="showRightMenuFlag"
       @onOpenMenus="onShowMenus"
       :title="dynamic.type === 'TEXT' ? '动态详情' : '小视频详情'"
     />
 
+    <m-call-app v-else></m-call-app>
+
     <!-- Main Block -->
-    <div class="details-content-wrap">
+    <div :class="$route.query.share ? '': 'details-content-wrap'">
       <!-- Gallery TEXT:图文-->
       <m-gallery
         v-if="dynamic.type === 'TEXT'"
@@ -61,6 +64,9 @@
     <!-- Middle Block -->
     <div class="details-split-line"></div>
 
+    <!-- 悬浮唤起APP 按钮-->
+    <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
+
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
@@ -71,10 +77,12 @@
       />
     </div>
      <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      <div class="menus__popup__item" @click="deleteDynamic">删除</div>
-      <div class="menus__popup__item" @click="onShowMenus">取消</div>
-    </van-popup>
+      <template v-if="showMenusPopup">
+      <hover-point-btn
+        :btnList="deleteBtn"
+        @chooseItem="chooseItem"
+      />
+    </template>
     <!-- 删除二次确认弹窗 -->
     <m-delete-dialog :deleteDialogParams="deleteDialogParams" @confirmDelete="confirmDelete"></m-delete-dialog>
   </div>
@@ -90,7 +98,10 @@ export default {
     showMenusPopup: false,
     deleteDialogParams: {
       show: false
-    }
+    },
+    deleteBtn:[
+      { name: '删除', functionName: 'delete' }
+    ]
   }),
   computed:{
     ...mapGetters({
@@ -123,6 +134,12 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
+    },
+    chooseItem(val) {
+      this.showMenusPopup = false
+      if (val === '删除') {
+        this.deleteDynamic()
+      }
     },
     // 评论操作
     openComment () {
@@ -219,37 +236,5 @@ export default {
   width: 100%;
   position: relative;
   margin-top: 12px;
-}
-
-/** menus-popup */
-.p-details /deep/.van-popup {
-  width: 284px;
-  // height: 92px;
-  overflow: hidden;
-}
-
-/deep/.van-popup--center.van-popup--round {
-  border-radius: 8px;
-}
-
-.van-popup .menus__popup__item {
-  width: 100%;
-  height: 46px;
-  line-height: 46px;
-  font-size: 16px;
-  font-family: @dp-font-regular;
-  font-weight: 400;
-  color: #18252C;
-  text-align: center;
-  border-bottom: 1px solid #F7F7F7;
-  cursor: pointer;
-}
-
-.van-popup .menus__popup__item:active {
-  background-color:#f2f3f5;
-}
-
-.van-popup .menus-popup__item:last-child{
-  border-bottom:none;
 }
 </style>

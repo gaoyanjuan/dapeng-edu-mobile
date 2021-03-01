@@ -11,6 +11,9 @@ export default {
         if(this.$store.getters['banner/videoBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'VIDEO' })
         }
+        // if(this.$store.getters['topic/videoGetters'].list.length === 0) {
+        //   this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'VIDEO' })
+        // }
         if (this.$store.getters['colleges/smallVideoCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_VIDEO' })
         }

@@ -2,13 +2,16 @@
   <div v-if="homework" class="p-details">
     <!-- Back last page -->
     <m-navbar
+      v-if="!$route.query.share"
       :show-right-menu="true"
       @onOpenMenus="onShowMenus"
       :title="homework.type === 'TEXT' ? '作业详情' : '小视频详情'"
     />
 
+    <m-call-app v-else></m-call-app>
+
     <!-- Main Block -->
-    <div class="details-content-wrap">
+    <div :class="$route.query.share ? '': 'details-content-wrap'">
       <!-- Gallery TEXT:图文-->
       <m-gallery
         v-if="homework.type === 'TEXT' && homework.imgInfo"
@@ -64,6 +67,9 @@
     <!-- Middle Block -->
     <div class="details-split-line"></div>
 
+    <!-- 悬浮唤起APP 按钮-->
+    <m-call-app-btn v-if="$route.query.share"></m-call-app-btn>
+
     <!-- Footer Block -->
     <div class="details-footer-wrap" id="report">
       <m-details-footer
@@ -74,31 +80,13 @@
         ref="detailsFooter"
       />
     </div>
-    
     <!-- 菜单弹层 -->
-    <van-popup v-model="showMenusPopup" round overlay-class="menus__popup" :transition-appear="true">
-      
-      <template v-if="homework.approvedLevel && homework.approvedLevel === '0' && homework.user.userId === ( userInfo ? userInfo.userId : '') ">
-        <div class="menus__popup__item" @click="editHomework">编辑</div>
-        <div class="menus__popup__item" @click="deleteHomeWork">删除</div>
-        <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
-        <div class="menus__popup__item" @click="onShowMenus">取消</div>
-      </template>
-
-      <template v-else>
-        <template v-if="userInfo">
-          <div v-if="userInfo && homework.user && userInfo.userId !== homework.user.userId" class="menus__popup__item" @click="toCopyForm">Ta抄作业</div>
-        </template>
-
-        <template v-else>
-          <div class="menus__popup__item" @click="toCopyForm" >Ta抄作业</div>
-        </template>
-
-        <div class="menus__popup__item" @click="handleCopyJobNummer">作业号</div>
-        <div class="menus__popup__item" @click="onShowMenus">取消</div>
-      </template>
-    </van-popup>
-
+    <template v-if="showMenusPopup">
+      <hover-point-btn
+        :btnList="homeworkList"
+        @chooseItem="chooseItem"
+      />
+    </template>
     <!-- 复制作业号 -->
     <m-copy-code :show-popup="showCopyCode" @closed="onClosed"/>
 
@@ -117,7 +105,9 @@ export default {
     showCopyCode: { show: false, jobNummer: null },
     deleteDialogParams: {
       show: false
-    }
+    },
+    homeworkList:[],
+    showMenusPopup:false
   }),
   computed:{
     ...mapGetters({
@@ -141,8 +131,58 @@ export default {
     /** 打开/关闭菜单 */
     onShowMenus() {
       this.showMenusPopup = !this.showMenusPopup
+      this.$nextTick(()=>{
+        if (this.userInfo) {
+          // 已登录
+          if (this.homework.user.userId === this.userInfo.userId) {
+            // 我发布的
+            if (this.homework.approvedLevel && this.homework.approvedLevel === '0') {
+              // 分数为0时
+              this.homeworkList = [
+                { name: '编辑', functionName: 'edit' },
+                { name: '删除', functionName: 'delete' },
+                { name: '作业号', functionName: 'copy' }
+              ]
+            } else {
+              this.homeworkList = [
+                { name: '作业号', functionName: 'copy' }
+              ]
+            }
+          } else {
+            // TA发布的作业
+            this.homeworkList = [
+              { name: 'TA抄作业', functionName: 'report' },
+              { name: '作业号', functionName: 'copy' }
+            ]
+          }
+        } else if (!this.userinfo) {
+          // 未登录
+          this.homeworkList = [
+            { name: 'TA抄作业', functionName: 'report' },
+            { name: '作业号', functionName: 'copy' }
+          ]
+        }
+      })
     },
-
+    chooseItem(val) {
+      this.showMenusPopup = false
+      switch (val) {
+        case "编辑":
+          this.editHomework()
+          break;
+        case "删除":
+          this.deleteHomeWork()
+          break;
+        case "TA抄作业":
+          this.toCopyForm()
+          break;
+        case "作业号":
+          this.handleCopyJobNummer()
+          break;
+        default:
+          break;
+      }
+    },
     // 删除作业
     deleteHomeWork() {
       this.showMenusPopup = false
@@ -281,35 +321,4 @@ export default {
   margin-top: 12px;
 }
 
-/** menus-popup */
-.p-details /deep/.van-popup {
-  width: 284px;
-  // height: 138px;
-  overflow: hidden;
-}
-
-/deep/.van-popup--center.van-popup--round {
-  border-radius: 8px;
-}
-
-.van-popup .menus__popup__item {
-  width: 100%;
-  height: 46px;
-  line-height: 46px;
-  font-size: 16px;
-  font-family: @regular;
-  font-weight: 400;
-  color: #18252C;
-  text-align: center;
-  border-bottom: 1px solid #F7F7F7;
-  cursor: pointer;
-}
-
-.van-popup .menus__popup__item:active {
-  background-color:#f2f3f5;
-}
-
-.van-popup .menus-popup__item:last-child{
-  border-bottom:none;
-}
 </style>
