@@ -68,7 +68,8 @@ export default {
     ]),
 
     onContact() {
-      window.open(process.env.leyuUrl, '_blank')
+      doyoo.util.openChat('g=10085048')
+      return false
     },
 
     onCopy() {

@@ -261,10 +261,10 @@ export default {
         case "task":
           break;
         case "teacher":
-           window.open(process.env.leyuUrl, '_blank')
+          doyoo.util.openChat('g=10085048')
           break;
         case "suggest-complaint":
-           window.open(process.env.leyuUrl, '_blank')
+           doyoo.util.openChat('g=10085048')
           break;
         case "setting":
           this.$router.push({
