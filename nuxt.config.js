@@ -61,6 +61,11 @@ export default {
         hid: 'ncpc',
         type: 'text/javascript',
         src: 'https://g.alicdn.com/sd/ncpc/nc.js?t=2015052012'
+      },
+      {
+        hid: 'doyoo',
+        type: 'text/javascript',
+        src: 'https://op.jiain.net/20004236/10110937.js'
       }
     ]
   },

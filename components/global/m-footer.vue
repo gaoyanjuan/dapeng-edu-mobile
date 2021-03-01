@@ -99,23 +99,23 @@ export default {
     active: 'square',
     courseUrl: null,
     square: {
-      active: require('@/assets/icons/newyear/bar-square-active.png'),
-      inactive: require('@/assets/icons/newyear/bar-square.png'),
+      active: require('@/assets/icons/tabbar/bar-square-active.png'),
+      inactive: require('@/assets/icons/tabbar/bar-square.png'),
     },
     course: {
-      active: require('@/assets/icons/newyear/bar-course-active.png'),
-      inactive: require('@/assets/icons/newyear/bar-course.png'),
+      active: require('@/assets/icons/tabbar/bar-course-active.png'),
+      inactive: require('@/assets/icons/tabbar/bar-course.png'),
     },
     upload: {
-      active: require('@/assets/icons/newyear/bar-submit.png'),
+      active: require('@/assets/icons/tabbar/bar-submit.png'),
     },
     activities: {
-      active: require('@/assets/icons/newyear/bar-activity-active.png'),
-      inactive: require('@/assets/icons/newyear/bar-activity.png'),
+      active: require('@/assets/icons/tabbar/bar-activity-active.png'),
+      inactive: require('@/assets/icons/tabbar/bar-activity.png'),
     },
     mine: {
-      active: require('@/assets/icons/newyear/bar-mine-active.png'),
-      inactive: require('@/assets/icons/newyear/bar-mine.png'),
+      active: require('@/assets/icons/tabbar/bar-mine-active.png'),
+      inactive: require('@/assets/icons/tabbar/bar-mine.png'),
     },
     publish: {
       close: require('@/assets/icons/tabbar/bar-close.png'),
@@ -244,7 +244,7 @@ export default {
 /deep/ .van-tabbar-item {
   height: 50px;
   font-family: @dp-font-medium;
-  // font-weight: 600;
+  font-weight: 600;
 }
 
 /deep/ .van-tabbar-item__icon img{
@@ -260,16 +260,15 @@ export default {
   justify-content: center;
   cursor: pointer;
   & > img {
-    // width: 37px;
-    // height: 37px;
-    width: 45px;
-    height: 48px;
+    width: 37px;
+    height: 37px;
+    // width: 45px;
+    // height: 48px;
   }
 }
 
 .tabbar-btn-text-active {
-  // color: #0CB65B;
-  color: #333333;
+  color: #D1D3D5;
 }
 
 /deep/ .van-overlay {
