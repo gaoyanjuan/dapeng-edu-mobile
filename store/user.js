@@ -224,7 +224,11 @@ export const state = () => ({
     },
   },
   certificates: [],
-  isVerify: null
+  isVerify: null,
+  userList: {
+    list: [],
+    pageInfo: null
+  }
 })
 
 export const mutations = {
@@ -481,6 +485,11 @@ export const mutations = {
   },
   geMyState(state, payload) { 
     state.isVerify = payload.data
+  },
+  // 查询用户列表
+  appendUserList (state, payload) {
+    state.userList.list = payload.data
+    state.userList.pageInfo = payload.pageInfo
   }
 }
 
@@ -843,6 +852,12 @@ export const actions = {
     commit('appendCertificates', res)
     return res
   },
+  // 根据名称查询用户列表
+  async appendUserList ({ commit }, params) {
+    const users = await this.$axios.get('old/users', {params})
+    commit('appendUserList', users)
+    return users
+  }
 }
 
 export const getters = {
@@ -893,5 +908,8 @@ export const getters = {
   },
   userStatusGetters(state) { 
     return state.isVerify
+  },
+  userGetters (state) {
+    return state.userList
   }
 }

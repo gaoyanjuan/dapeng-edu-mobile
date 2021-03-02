@@ -4,7 +4,7 @@
 
     <div class="guide-btn-open-app" @click="openAppEvent">打开APP</div>
 
-    <div class="guide-inp-search">
+    <div class="guide-inp-search" @click="onSearch">
       <img class="search-icon" :src="search" alt="search" />
       <span class="search-txt">搜索</span>
     </div>
@@ -35,6 +35,11 @@ export default {
 
     openServicePop() {
       this.$emit('openServicePop')
+    },
+    onSearch() {
+      this.$router.push({
+        path :'search/user'
+      })
     }
   }
 }
