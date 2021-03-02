@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- Swiper -->
-    <m-swipe />
+    <!-- <m-swipe /> -->
+    <div class="top-banner">
+      <img src="http://testimage.dapengjiaoyu.com/2021-02-04/jxtuqmsukv/8855938042161_T1BFUkFURQ==.png" alt="">
+    </div>
 
     <!-- 二级菜单 -->
     <part-time-jobs />
@@ -18,8 +21,8 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "M-Part-Time-Task",
    computed: {
-    ...mapGetters('logo', 
-      ["getTagsList", "getSortList"]
+    ...mapGetters('logo',
+      ["getTagsList", "getSortList","getTabsList"]
     ),
   },
   data: () => ({}),
@@ -38,6 +41,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.top-banner {
+  margin-top: 10px;
+  & > img {
+    margin-top: 10px;
+    margin-left: 16px;
+    width: 340px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+} 
+
 .works-wrap {
   width: 100%;
   min-height: calc(100vh - 139px);

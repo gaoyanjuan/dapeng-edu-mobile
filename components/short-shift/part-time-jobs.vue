@@ -25,8 +25,8 @@
       :style="{ height: '47%' }"
     >
       <van-tabs v-model="active">
-        <van-tab title="设计类">
-          <div class="box">
+        <van-tab v-for="(item, index) in getTabsList" :title="item.name" :key="item.id">
+          <div class="box" v-if="item.id===1">
             <van-button
               size="small"
               v-for="(item, index) in getTagsList"
@@ -36,14 +36,12 @@
               <p>{{ item.name }}</p>
             </van-button>
           </div>
-        </van-tab>
-        <van-tab title="IT/软件类">
-          <div class="box">
+          <div class="box" v-else>
             <van-button
               size="small"
               v-for="(item, index) in getSortList"
               :key="index"
-               @click="handleIT(index)"
+              @click="handleIT(index)"
             >
               <p>{{ item.name }}</p>
             </van-button>
@@ -60,7 +58,7 @@ export default {
   name: "FollowGallery",
   computed: {
     ...mapGetters('logo', 
-      ["getTagsList", "getSortList"]
+      ["getTagsList", "getSortList","getTabsList"]
     ),
     ...mapGetters('task-part', [
       'taskPartListGetters'
@@ -71,11 +69,13 @@ export default {
     menusIndex: 0,
     menus:[{id:'HOTTEST',name:'不限'},{id:'NEWEST',name:'最新'}],
     show: false, 
-    active: 2,
+    active: 0,
+    px:'',
     name:'LOGO设计',
     change: require("@/assets/icons/common/drop.png"),
+    menuId:'1'
   }),
-   watch:{
+  watch:{
     'taskPartListGetters.status' : function (newVal, oldVal) {
       if (newVal === 'loading') {
         this.loading = true
@@ -86,7 +86,7 @@ export default {
       } else if (newVal === 'over') {
         this.finished = true
       }
-    }
+    },
   },
   mounted() {
     this.menus.forEach( (item, inx) => {
@@ -106,24 +106,27 @@ export default {
       const newPage = this.taskPartListGetters.pageInfo.pages + 1
       this.appendTaskPartList({page: newPage})
     },
+    // 外部切换按钮
     showPopup() {
       this.show = true;
     },
+    /* 设计类按钮 */
     handlePart(i) {
      this.name = this.getTagsList[i].name;
      let params = {
-      class1id:1,
+      class1id:this.getTabsList[this.active].id,
       class2id:this.getTagsList[i].id,
       px:''
     }
     this.show = false;
     this.appendTaskPartList({page: 1,params})
     },
+    /* IT/软件类按钮 */
     handleIT(i){
       this.name = this.getSortList[i].name;
       let params = {
-      class1id:38,
-      class2id:this.getTagsList[i].id,  
+      class1id:this.getTabsList[this.active].id,
+      class2id:this.getSortList[i].id,
       px:''
     }
     this.show = false;
@@ -131,13 +134,19 @@ export default {
     },
       /** 切换菜单事件 */
     changeMenus(index, item) {
+      let class1id = this.getTabsList[this.active].id
       // 禁止路由重复点击
       if (this.$route.query.type === item.id) return
-      //  let params = {
-      //   class1id:1,
-      //   class2id:this.getTagsList[i].id,
-      //   px:'4'
-      // }
+      if(item.id ==='HOTTEST') {
+        this.px = ''
+      }else {
+        this.px = '4'
+      }
+       let params = {
+        class1id:class1id,
+        // class2id:this.getTagsList[i].id,
+        px:this.px
+      }
       this.menusIndex = index
       this.$router.replace({
         query: {
@@ -145,7 +154,7 @@ export default {
           type : item.id
         }
       }),
-      this.appendTaskPartList({page: 1 })
+      this.appendTaskPartList({page: 1,params })
     },
   },
 };
