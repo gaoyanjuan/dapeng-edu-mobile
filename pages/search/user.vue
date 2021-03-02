@@ -26,24 +26,26 @@
         </van-tabs>
       </div>
       <div class="user-content" v-if="this.$route.query.keywords">
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          :finished-text="finishedTxt"
-          @load="onLoad"
-          :immediate-check="false"
-        >
-          <div class="user-item"
-            v-for="(item, index) in userList"
-            :key="index"
-            @click="toPersonalInfo(item)">
-            <div class="user-avatar" >
-              <img ref="headerImg" v-if="item.avatar" :src="item.avatar" alt="头像">
-              <img ref="headerImg" v-if="!item.avatar" :src="defaultImg" alt="头像">
+        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            :finished-text="finishedTxt"
+            @load="onLoad"
+            :immediate-check="false"
+          >
+            <div class="user-item"
+              v-for="(item, index) in userList"
+              :key="index"
+              @click="toPersonalInfo(item)">
+              <div class="user-avatar" >
+                <img ref="headerImg" v-if="item.avatar" :src="item.avatar" alt="头像">
+                <img ref="headerImg" v-if="!item.avatar" :src="defaultImg" alt="头像">
+              </div>
+              <div class="user-name">{{item.nickname}}</div>
             </div>
-            <div class="user-name">{{item.nickname}}</div>
-          </div>
-        </van-list>
+          </van-list>
+        </van-pull-refresh>
       </div>
     </div>
   </div>
@@ -64,6 +66,7 @@ export default {
       ],
       loading: false,
       finished: false,
+      refreshing: false,
       activeName: 1,
       currentPage:1,
       finishedTxt: '没有更多了'
@@ -82,6 +85,11 @@ export default {
       this.searchData = this.$route.query.keywords
       this.appendUserList(params).then(({data,pageInfo}) =>{
         this.userList = data
+        if (data.length === 0) {
+          this.finishedTxt = '没有找到相关用户'
+        } else {
+          this.finishedTxt = '没有更多了'
+        }
       })
     }
   },
@@ -108,6 +116,11 @@ export default {
         }
         this.appendUserList(params).then(({data,pageInfo}) =>{
           this.userList = data
+          if (data.length === 0) {
+            this.finishedTxt = '没有找到相关用户'
+          } else {
+            this.finishedTxt = '没有更多了'
+          }
         })
       }
     },
@@ -119,6 +132,15 @@ export default {
         })
       }
     },
+    onRefresh() {
+      // 清空列表数据
+      this.finished = false;
+
+      // 重新加载数据
+      // 将 loading 设置为 true，表示处于加载状态
+      this.loading = true;
+      this.onLoad();
+    },
     onLoad() {
       let params = {
         page: ++this.currentPage,
@@ -126,11 +148,11 @@ export default {
         nickname: this.searchData
       }
       this.appendUserList(params).then(({data,pageInfo}) =>{
-        
         this.userList = this.userList.concat(data).map((item, index) => ({ ...item, index }))
         this.loading = false
         if (data < 10) {
           this.finished = true
+          return false
         }
       })
     },
@@ -149,6 +171,9 @@ export default {
 
       // 路由变化从第一页开始搜索
       this.currentPage = 1
+      this.finished = false;
+      this.loading = true;
+      this.onLoad();
     }
   }
 }
@@ -168,6 +193,7 @@ export default {
     display: flex;
     justify-content: space-between;
     padding: 0 16px;
+    z-index: 1;
     & > .left-arrow {
       
       img{
@@ -215,6 +241,7 @@ export default {
       padding-left: 23px;
       background: #fff;
       box-shadow: 0px 1px 0px 0px #EAEAEA;
+      z-index: 1;
       & > .tab {
         font-size: 14px;
         font-family: @dp-font-regular;
@@ -232,33 +259,38 @@ export default {
     }
     & > .user-content {
       height: 550px;
-      & > .van-list {
+      & > .van-pull-refresh {
         margin-top: 105px;
-        & > .user-item{
-          height: 55px;
-          line-height: 55px;
-          display: flex;
-          justify-content: flex-start;
-          margin-left: 16px;
-          & > .user-avatar {
-            & > img {
-              width: 40px;
-              height: 40px;
-              line-height: 40px;
-              border-radius: 50%;
-              z-index: 1;
-              object-fit: cover;
+        & >.van-pull-refresh__track{
+          position: none;
+          & > .van-list {
+            & > .user-item{
+              height: 55px;
+              line-height: 55px;
+              display: flex;
+              justify-content: flex-start;
+              margin-left: 16px;
+              & > .user-avatar {
+                & > img {
+                  width: 40px;
+                  height: 40px;
+                  line-height: 40px;
+                  border-radius: 50%;
+                  z-index: 1;
+                  object-fit: cover;
+                }
+              }
+              & > .user-name {
+                width: 250px;
+                height: 40px;
+                line-height: 40px;
+                margin-left:16px;
+                font-size: 14px;
+                font-weight: 500;
+                font-family: @dp-font-semibold;
+                color: #18252C;
+              }
             }
-          }
-          & > .user-name {
-            width: 250px;
-            height: 40px;
-            line-height: 40px;
-            margin-left:16px;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: @dp-font-semibold;
-            color: #18252C;
           }
         }
       }
