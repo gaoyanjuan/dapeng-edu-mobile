@@ -4,7 +4,7 @@
 
     <div class="guide-btn-open-app" @click="openAppEvent">打开APP</div>
 
-    <div class="guide-inp-search">
+    <div class="guide-inp-search" @click="onSearch">
       <img class="search-icon" :src="search" alt="search" />
       <span class="search-txt">搜索</span>
     </div>
@@ -24,9 +24,9 @@ export default {
   name: "AppGuide",
 
   data:() =>({
-    search: require('@/assets/icons/newyear/guide-input-search.png'),
-    notice: require('@/assets/icons/newyear/guide-notice.png'),
-    service: require('@/assets/icons/newyear/guide-service.png'),
+    search: require('@/assets/icons/common/guide-input-search.png'),
+    notice: require('@/assets/icons/common/guide-notice.png'),
+    service: require('@/assets/icons/common/guide-service.png'),
   }),
   methods:{
     openAppEvent(){
@@ -35,6 +35,11 @@ export default {
 
     openServicePop() {
       this.$emit('openServicePop')
+    },
+    onSearch() {
+      this.$router.push({
+        path :'search/user'
+      })
     }
   }
 }
@@ -48,14 +53,13 @@ export default {
   padding: 6px 16px;
   position: relative;
   z-index: 20;
-  // background: @dp-white;
-  background: transparent;
-  background-image: url('~@/assets/icons/newyear/guide-bg.png');
-  background-repeat: no-repeat;
-  background-size: 375px 44px;
-  background-position: center;
-  // .l-flex-row()
-  .l-flex-row-def()
+  background: @dp-white;
+  // background: transparent;
+  // background-image: url('~@/assets/icons/newyear/guide-bg.png');
+  // background-repeat: no-repeat;
+  // background-size: 375px 44px;
+  // background-position: center;
+  .l-flex-row()
 }
 
 .guide-logo {
@@ -69,32 +73,32 @@ export default {
 }
 
 .guide-btn-open-app {
-  width: 80px;
-  height: 35px;
-  // height: 26px;
-  font-size: 10px;
+  width: 59px;
+  // height: 35px;
+  height: 26px;
+  font-size: 12px;
   // font-size: 14px;
   font-weight: 500;
   color: #FFFFFF;
-  // line-height: 26px;
-  line-height: 33px;
+  line-height: 26px;
+  // line-height: 33px;
   text-align: center;
   font-family: @dp-font-medium;
-  margin-right: 9px;
-  background-image: url('~@/assets/icons/newyear/guide-btn-bg.png');
-  // background-image: url('~@/assets/icons/common/guide-btn-bg.png');
+  // background-image: url('~@/assets/icons/newyear/guide-btn-bg.png');
+  background-image: url('~@/assets/icons/common/guide-btn-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  margin-right: 10px;
   cursor: pointer;
 }
 
 .guide-inp-search {
   width: 92px;
-  height: 27px;
-  background-image: url('~@/assets/icons/newyear/guide-input-bg.png');
+  height: 24px;
+  background-image: url('~@/assets/icons/common/guide-input-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: 3px 8px 3px 12px;
+  padding: 3px 12px;
   margin-right: 10px;
   .l-flex-row();
 
@@ -107,7 +111,7 @@ export default {
     font-size: 12px;
     font-family: @regular;
     font-weight: 400;
-    color: #E2BAB7;
+    color: #D1D3D5;
   }
 }
 

@@ -271,10 +271,12 @@ export default {
           });
           break;
         case "teacher":
-           window.open(process.env.leyuUrl, '_blank')
+          // 联系学管
+          doyoo.util.openChat('g=10085049')
           break;
         case "suggest-complaint":
-           window.open(process.env.leyuUrl, '_blank')
+          // 建议与投诉
+           doyoo.util.openChat('g=10084845')
           break;
         case "setting":
           this.$router.push({
