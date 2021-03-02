@@ -82,9 +82,6 @@ export default {
       this.searchData = this.$route.query.keywords
       this.appendUserList(params).then(({data,pageInfo}) =>{
         this.userList = data
-        data.map((item,index) =>{
-          this.userId = item.userId
-        }) 
       })
     }
   },
