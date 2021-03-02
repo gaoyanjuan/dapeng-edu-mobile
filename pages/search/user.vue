@@ -71,9 +71,6 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['userGetters']),
-    courseUrl() {
-      return this.validateSystemHostName().COURSE_HOST 
-    }
   },
   mounted() {
     if(this.$route.query.keywords) {
