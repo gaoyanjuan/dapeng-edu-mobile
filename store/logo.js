@@ -85,6 +85,16 @@ export default {
           "name": "网络开发",
           "id": 449
         }
+      ],
+      tabslist: [
+        {
+          name: '设计类',
+          id:1
+        },
+        {
+          name: 'IT/软件类',
+          id:38
+        }
       ]
     }
   },
@@ -94,6 +104,9 @@ export default {
     },
     getSortList: (state) => {
       return state.sortList
+    },
+    getTabsList: (state) => {
+      return state.tabslist
     }
   }
 }

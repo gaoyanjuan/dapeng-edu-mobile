@@ -35,7 +35,7 @@ export default {
     this.active = tabs.findIndex(tab => tab === query)
   },
   destroyed() {
-     this.clearTwoList()
+    this.clearTwoList()
   },
   methods: {
      ...mapActions("task-part", ["delBrowse"]),

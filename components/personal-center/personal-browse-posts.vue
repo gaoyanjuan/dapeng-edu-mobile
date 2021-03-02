@@ -76,7 +76,7 @@ export default {
     }
   },
   mounted() {
-     this.appendBrowser({page: 1,type:'browser'})
+    this.appendBrowser({page: 1,type:'browser'})
   },
   methods: {
     ...mapActions("task-part", ["appendBrowser","cleartBrowse"]),

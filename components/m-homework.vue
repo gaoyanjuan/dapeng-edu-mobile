@@ -3,6 +3,11 @@
     <!-- Swiper -->
     <m-swipe :banner="homeworkBannerListGetters"/>
 
+    <!-- 话题 -->
+    <!-- <transition name="component-fade" mode="out-in">
+      <m-topic-card v-if="showTopic" :topic="homeworkGetters" channel="HOMEWORK"/>
+    </transition> -->
+
     <!-- 二级菜单 -->
     <m-menus menus-type="college" v-show="$route.query.courseType !== 'CHILD'" :menus="CollegesData" @switchCollegeName="switchCollegeName" />
 
@@ -61,6 +66,14 @@ export default {
     ...mapGetters('homework', [
       'homeworkListGetters'
     ]),
+    // ...mapGetters('topic', [
+    //   'homeworkGetters'
+    // ]),
+
+    // showTopic() {
+    //   return this.homeworkGetters.list.length > 0
+    // },
+
     CollegesData () {
       if (this.$route.query.courseType === 'TEST') {
         return this.squareTaskTrialCollegesGetters
@@ -176,5 +189,12 @@ export default {
   font-weight: 600;
   color: #8D8E8E;
   line-height: 20px;
+}
+
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .5s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -11,6 +11,9 @@ export default {
         if(this.$store.getters['banner/movieBannerListGetters'].length === 0) {
           this.$store.dispatch('banner/appendBannerList', { channel: 'MOVIE' })
         }
+        // if(this.$store.getters['topic/movieGetters'].list.length === 0) {
+        //   this.$store.dispatch('topic/appendTopicList', {page : 1 ,topicType: 'MOVIE' })
+        // }
         if (this.$store.getters['colleges/videoCollegesGetters'].length === 1) {
           this.$store.dispatch('colleges/appendColleges', { collegeType : 'SQUARE_MOVIE' })
         }
