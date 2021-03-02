@@ -24,9 +24,9 @@ export default {
   name: "AppGuide",
 
   data:() =>({
-    search: require('@/assets/icons/newyear/guide-input-search.png'),
-    notice: require('@/assets/icons/newyear/guide-notice.png'),
-    service: require('@/assets/icons/newyear/guide-service.png'),
+    search: require('@/assets/icons/common/guide-input-search.png'),
+    notice: require('@/assets/icons/common/guide-notice.png'),
+    service: require('@/assets/icons/common/guide-service.png'),
   }),
   methods:{
     openAppEvent(){
@@ -73,10 +73,10 @@ export default {
 }
 
 .guide-btn-open-app {
-  width: 80px;
+  width: 59px;
   // height: 35px;
   height: 26px;
-  font-size: 10px;
+  font-size: 12px;
   // font-size: 14px;
   font-weight: 500;
   color: #FFFFFF;
@@ -88,16 +88,17 @@ export default {
   background-image: url('~@/assets/icons/common/guide-btn-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  margin-right: 10px;
   cursor: pointer;
 }
 
 .guide-inp-search {
   width: 92px;
-  height: 27px;
-  background-image: url('~@/assets/icons/newyear/guide-input-bg.png');
+  height: 24px;
+  background-image: url('~@/assets/icons/common/guide-input-bg.png');
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  padding: 3px 8px 3px 12px;
+  padding: 3px 12px;
   margin-right: 10px;
   .l-flex-row();
 
@@ -110,7 +111,7 @@ export default {
     font-size: 12px;
     font-family: @regular;
     font-weight: 400;
-    color: #E2BAB7;
+    color: #D1D3D5;
   }
 }
 
