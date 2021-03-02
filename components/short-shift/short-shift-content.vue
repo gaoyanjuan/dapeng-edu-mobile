@@ -20,10 +20,8 @@
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
 export default {
-    computed: {
-    ...mapGetters('task-part', [
-      'taskPartListGetters'
-    ])
+  computed: {
+    ...mapGetters('task-part', ['taskPartListGetters']),
   },
   data() {
     return {
@@ -47,13 +45,12 @@ export default {
     }
   },
   mounted() {
-    // this.appendTaskPartList({page: 1 })
   },
   destroyed() {
-     this.clearTwoList()
+     this.clearNewTaskList()
   },
   methods: {
-    ...mapMutations('task-part', ['clearTwoList']),
+    ...mapMutations('task-part', ['clearNewTaskList']),
     ...mapActions("task-part", ["appendTaskPartList"]),
     evaluateState(state) {
       let str = ''
@@ -93,7 +90,7 @@ export default {
       } 
       if (this.taskPartListGetters.status === 'loading') return false
       const newPage = this.taskPartListGetters.pageInfo.pages + 1
-      this.appendTaskPartList({page: newPage })
+      this.$emit('changePage',newPage)
     },
     handelDetals(itemid) {
       this.$router.push({ path: "/details/part-task" ,query: { itemId : itemid}});

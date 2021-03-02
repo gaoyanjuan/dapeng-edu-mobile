@@ -70,6 +70,11 @@ export default {
       state.browserList.pageInfo.page = 1
       state.browserList.status = 'loading'
     },
+    clearNewTaskList(state) {
+      state.taskPartList.list = []
+      state.taskPartList.page = 1
+      state.taskPartList.status = 'loading'
+    }
   },
   actions: {
     /* 当前兼职任务列表 */
@@ -77,7 +82,7 @@ export default {
       commit('changeTaskPartListStatus', 'loading')
       const res = await this.$axios.get('part_job/get_item_list.ashx', {
         params: {
-          ...params.params,
+          ...params.query,
           size: 10,
           page: params.page
         }

@@ -3,14 +3,14 @@
     <!-- Swiper -->
     <!-- <m-swipe /> -->
     <div class="top-banner">
-      <img src="http://testimage.dapengjiaoyu.com/2021-02-04/jxtuqmsukv/8855938042161_T1BFUkFURQ==.png" alt="">
+      <img src="@/assets/icons/common/banner.png" alt="">
     </div>
 
     <!-- 二级菜单 -->
-    <part-time-jobs />
+    <part-time-jobs @setParams='setParams' />
     <section class="works-wrap">
       <template>
-      <short-shift-content />
+      <short-shift-content @changePage='changePage'/>
       </template>
     </section>
   </div>
@@ -20,22 +20,41 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "M-Part-Time-Task",
-   computed: {
-    ...mapGetters('logo',
-      ["getTagsList", "getSortList","getTabsList"]
+  computed: {
+    ...mapGetters('logo',["getTagsList", "getSortList","getTabsList"]
     ),
   },
-  data: () => ({}),
-    mounted() {
-    let params = {
-      class1id:1,
-      class2id:this.getTagsList[0].id,
-      px:''
+  data: () => ({
+    class1id:1,
+    class2id:null,
+    px: ''
+  }),
+  mounted() {
+    this.class1id=this.$route.query.class1id || 1
+    this.class2id=this.$route.query.class2id || this.getTagsList[0].id
+    this.px=this.$route.query.px || ''
+    let query = {
+      class1id:this.class1id,
+      class2id:this.class2id,
+      px:this.px
     }
-    this.appendTaskPartList({page: 1,params })
+    this.appendTaskPartList({page: 1,query })
   },
   methods: {
-     ...mapActions("task-part", ["appendTaskPartList"]),
+    ...mapActions("task-part", ["appendTaskPartList"]),
+    changePage(page){
+    let query = {
+      class1id:this.class1id,
+      class2id:this.class2id,
+      px:this.px
+    }
+    this.appendTaskPartList({page: page,query })
+     },
+    setParams(class1id,class2id,px){
+      this.class1id = class1id
+      this.class2id = class2id
+      this.px = px
+    }
   },
 };
 </script>
