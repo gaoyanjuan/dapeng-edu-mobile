@@ -26,26 +26,24 @@
         </van-tabs>
       </div>
       <div class="user-content" v-if="this.$route.query.keywords">
-        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-          <van-list
-            v-model="loading"
-            :finished="finished"
-            :finished-text="finishedTxt"
-            @load="onLoad"
-            :immediate-check="false"
-          >
-            <div class="user-item"
-              v-for="(item, index) in userList"
-              :key="index"
-              @click="toPersonalInfo(item)">
-              <div class="user-avatar" >
-                <img ref="headerImg" v-if="item.avatar" :src="item.avatar" alt="头像">
-                <img ref="headerImg" v-if="!item.avatar" :src="defaultImg" alt="头像">
-              </div>
-              <div class="user-name">{{item.nickname}}</div>
+         <van-list
+          v-model="loading"
+          :finished="finished"
+          :finished-text="finishedTxt"
+          @load="onLoad"
+          :immediate-check="false"
+        >
+          <div class="user-item"
+            v-for="(item, index) in userList"
+            :key="index"
+            @click="toPersonalInfo(item)">
+            <div class="user-avatar" >
+              <img ref="headerImg" v-if="item.avatar" :src="item.avatar" alt="头像">
+              <img ref="headerImg" v-if="!item.avatar" :src="defaultImg" alt="头像">
             </div>
-          </van-list>
-        </van-pull-refresh>
+            <div class="user-name">{{item.nickname}}</div>
+          </div>
+        </van-list>
       </div>
     </div>
   </div>
@@ -66,7 +64,6 @@ export default {
       ],
       loading: false,
       finished: false,
-      refreshing: false,
       activeName: 1,
       currentPage:1,
       finishedTxt: '没有更多了'
@@ -126,26 +123,17 @@ export default {
     },
     // tab切换
     tabClick(index) {
-      if (index === 0 ) {
-        this.$router.push({
-          path:'/search/course'
-        })
-      }
-    },
-    onRefresh() {
-      // 清空列表数据
-      this.finished = false;
-
-      // 重新加载数据
-      // 将 loading 设置为 true，表示处于加载状态
-      this.loading = true;
-      this.onLoad();
+      // if (index === 0 ) {
+      //   this.$router.push({
+      //     path:'/search/course'
+      //   })
+      // }
     },
     onLoad() {
       let params = {
         page: ++this.currentPage,
         size: 10,
-        nickname: this.searchData
+        nickname: this.$route.query.keywords
       }
       this.appendUserList(params).then(({data,pageInfo}) =>{
         this.userList = this.userList.concat(data).map((item, index) => ({ ...item, index }))
@@ -259,38 +247,33 @@ export default {
     }
     & > .user-content {
       height: 550px;
-      & > .van-pull-refresh {
+      & > .van-list {
         margin-top: 105px;
-        & >.van-pull-refresh__track{
-          position: none;
-          & > .van-list {
-            & > .user-item{
-              height: 55px;
-              line-height: 55px;
-              display: flex;
-              justify-content: flex-start;
-              margin-left: 16px;
-              & > .user-avatar {
-                & > img {
-                  width: 40px;
-                  height: 40px;
-                  line-height: 40px;
-                  border-radius: 50%;
-                  z-index: 1;
-                  object-fit: cover;
-                }
-              }
-              & > .user-name {
-                width: 250px;
-                height: 40px;
-                line-height: 40px;
-                margin-left:16px;
-                font-size: 14px;
-                font-weight: 500;
-                font-family: @dp-font-semibold;
-                color: #18252C;
-              }
+        & > .user-item{
+          height: 55px;
+          line-height: 55px;
+          display: flex;
+          justify-content: flex-start;
+          margin-left: 16px;
+          & > .user-avatar {
+            & > img {
+              width: 40px;
+              height: 40px;
+              line-height: 40px;
+              border-radius: 50%;
+              z-index: 1;
+              object-fit: cover;
             }
+          }
+          & > .user-name {
+            width: 250px;
+            height: 40px;
+            line-height: 40px;
+            margin-left:16px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: @dp-font-semibold;
+            color: #18252C;
           }
         }
       }

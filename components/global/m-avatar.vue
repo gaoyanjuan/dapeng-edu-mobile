@@ -1,45 +1,52 @@
 <template>
-  <section class="m-avatar">
-
-    <!-- 左边用户信息 -->
-    <div class="avatar-left-side-wrap" @click.stop="toPersonalCenter">
-      <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
-      <div class="avatar-info-wrap">
-        <span class="info-nickname">{{ userNickname }}</span>
-        <span class="info-date">
-          {{ submitTime | commonDate }}
-          <span
-            class="info-my-submit"
-            v-if="showMySubmit">｜{{ myPublish }}
+  <section>
+    <div class="m-avatar">
+      <!-- 左边用户信息 -->
+      <div class="avatar-left-side-wrap" @click.stop="toPersonalCenter">
+        <head-image :headImg="userInfo ? userInfo.avatar : ''" imgWidth="40px" imgHeight="40px"></head-image>
+        <div class="avatar-info-wrap">
+          <span class="info-nickname">{{ userNickname }}</span>
+          <span class="info-date">
+            {{ submitTime | commonDate }}
+            <span
+              class="info-my-submit"
+              v-if="showMySubmit">｜{{ myPublish }}
+            </span>
           </span>
+        </div>
+      </div>
+
+      <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
+      <div class="avatar-right-side-wrap">
+        <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click.stop="handleFollow"/>
+        <template v-if="showScore">
+          <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
+          <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
+          <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
+          <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
+        </template>
+        <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
+        <span
+          @click.stop="onOpenMenus"
+          v-if="showMenus"
+        >
+          <img
+            class="avatar-menus-more"
+            :src="more"
+            alt="更多"
+          />
         </span>
       </div>
+      <div class="doubt-content" v-if="doubtContentShow">
+        此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
+      </div>
     </div>
-
-    <!-- 右边关注等操作 (【...更多】仅作业类型存在)-->
-    <div class="avatar-right-side-wrap">
-      <img class="avatar-menus-follow" v-if="showFollowBtn" :src="isAttention ? unfollow : follow" alt="" @click.stop="handleFollow"/>
-      <template v-if="showScore">
-        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '90'" src="@/assets/icons/posts/posts-good.png" alt="优" />
-        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '80'" src="@/assets/icons/posts/posts-liang.png" alt="良" />
-        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '70'" src="@/assets/icons/posts/posts-zhong.png" alt="中" />
-        <img class="avatar-menus-score" v-if="listItemData.approvedLevel=== '60'" src="@/assets/icons/posts/posts-cha.png" alt="差" />
-      </template>
-      <img class="avatar-menus-doubt" v-if="listItemData.isDoubt && pageName === 'myHomework'" :src="doubtImg" alt="疑" @click.stop="showDoubt" />
-      <span
-        @click.stop="onOpenMenus"
-        v-if="showMenus"
-      >
-        <img
-          class="avatar-menus-more"
-          :src="more"
-          alt="更多"
-        />
-      </span>
-    </div>
-    <div class="doubt-content" v-if="doubtContentShow">
-      此作业被其他用户投诉涉嫌抄袭，有疑义请联系大鹏客服QQ:706559568
-    </div>
+    <!-- 取消关注二次确认 -->
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+      title="确定取消关注吗？"
+    />
   </section>
 </template>
 
@@ -108,7 +115,10 @@ export default {
     doubtContentShow: false,
     isDoubt: false,
     dpUserId: process.env.global.dpUserId,
-    isAttention: false
+    isAttention: false,
+    deleteDialogParams: {
+      show: false
+    }
   }),
   computed:{
     ...mapGetters('user',[
@@ -193,15 +203,7 @@ export default {
         return 
       }
       if (this.isAttention) {
-        this.isAttention = false
-        this.$store.commit(`${this.functionName}`, {
-          index: this.$store.state.propIndex,
-          type: 'attention',
-          value: false
-        })
-        this.cancelFollowingUser({
-          id: this.userInfo.userId
-        })
+        this.deleteDialogParams.show = true
       } else {
         this.isAttention = true
         this.$store.commit(`${this.functionName}`, {
@@ -213,6 +215,19 @@ export default {
           id: this.userInfo.userId
         })
       }
+    },
+    // 取消关注二次确认
+    confirmDelete() {
+      this.isAttention = false
+      this.$store.commit(`${this.functionName}`, {
+        index: this.$store.state.propIndex,
+        type: 'attention',
+        value: false
+      })
+      this.cancelFollowingUser({
+        id: this.userInfo.userId
+      })
+      this.deleteDialogParams.show = false
     },
     /**打开菜单 */
     onOpenMenus() {

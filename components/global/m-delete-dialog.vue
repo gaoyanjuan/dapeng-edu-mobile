@@ -1,7 +1,7 @@
 <template>
   <div class="delete-confirm-pop">
     <van-popup v-model="deleteDialogParams.show" round overlay-class="menus__popup" :transition-appear="true">
-      <div class="delete-tips">确定删除本条数据吗？</div>
+      <div class="delete-tips">{{title}}</div>
       <div class="button-group">
         <div class="cancel-button" @click.stop="cancelDelete">取消</div>
         <div class="confirm-button" @click.stop="confirmDelete">确定</div>
@@ -19,6 +19,10 @@ export default {
           show: false
         }
       }
+    },
+    title: {
+      type: String,
+      default: '确定删除本条数据吗？'
     }
   },
   methods: {

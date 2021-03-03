@@ -64,6 +64,12 @@
 
     <!-- 我的喜欢弹层 -->
     <m-love-popup :show-popup="lovePopup"/>
+    <!-- 取消关注二次确认 -->
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+      title="确定取消关注吗？"
+    />
   </div>
 </template>
 <script>
@@ -83,7 +89,10 @@ export default {
       loadAvatar: true,
       showAttention: false,
       attentionState: null,
-      showPersonal: true
+      showPersonal: true,
+      deleteDialogParams: {
+        show: false
+      }
     }
   },
   computed: {
@@ -167,13 +176,18 @@ export default {
     // 右侧关注按钮切换事件
     handelAttention() {
       if (this.attentionState) {
-        this.attentionState = false
-        this.cancelFollowingUser({ id: this.$route.query.userId })
+        this.deleteDialogParams.show = true
       } else {
         this.attentionState = true
         this.followingUser({ id: this.$route.query.userId })
       }
-    }
+    },
+    // 取消关注二次确认
+    confirmDelete() {
+      this.attentionState = false
+      this.cancelFollowingUser({ id: this.$route.query.userId })
+      this.deleteDialogParams.show = false
+    },
   },
   mounted() {
     if(!this.$login()) return
@@ -237,7 +251,7 @@ export default {
     & > .user-info {
       display: flex;
       justify-content: flex-start;
-      margin: 28px 0 0 16px;
+      margin: 28px 16px 0 16px;
       & > .user-avatar {
         & > img {
           width: 50px;

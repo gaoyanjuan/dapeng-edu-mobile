@@ -39,7 +39,7 @@ export default {
       arrow: require('@/assets/icons/course/icon-back-arrow.png'),
       searchData:'',
       tabs: [
-        { title: '课程', index: 1 },
+        // { title: '课程', index: 1 },
         { title: '用户', index: 2 }
       ],
       activeName: 0
@@ -50,11 +50,11 @@ export default {
       this.$router.go(-1)
     },
     tabClick(index) {
-      if (index === 1 ) {
-        this.$router.push({
-          path:'/search/user'
-        })
-      }
+      // if (index === 1 ) {
+      //   this.$router.push({
+      //     path:'/search/user'
+      //   })
+      // }
     }
   }
 }
