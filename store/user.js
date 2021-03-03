@@ -224,7 +224,10 @@ export const state = () => ({
     },
   },
   certificates: [],
-  isVerify: null
+  isVerify: null,
+
+  // 弹屏广告
+  screenList: [],
 })
 
 export const mutations = {
@@ -843,6 +846,20 @@ export const actions = {
     commit('appendCertificates', res)
     return res
   },
+  async appendScreenList() {
+    const res = await this.$axios.get(`/bomb-screens/`, {
+      params: {
+        terminalType: 'H5'
+      }
+    })
+    return res
+  },
+  async deleteScreenList({ commit } ,params) {
+    await this.$axios.request(`/bomb-screens`, {
+      data: params,
+      method: 'delete'
+    })
+  }
 }
 
 export const getters = {
