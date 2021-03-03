@@ -1,0 +1,151 @@
+<template>
+  <div class="taskFavorite">    
+    <template v-if="favoriteGetters.list.length > 0 ">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+        <van-swipe-cell class="short-shift" v-for="(item, index) in favoriteGetters.list" :key='`${item.id}`'>
+          <van-card>
+            <template #title>
+              <h1 class="shift-title">{{ item.item_name }}</h1>
+            </template>
+            <template #desc>
+              <div class="shift-box">
+                <p class="box-left">{{ item.item_state }}</p>
+                <p>{{ item.item_type }}</p>
+              </div>
+              <div class="shift-right">
+                <p class="box-left">{{ item.item_ispay }}</p>
+                <p>￥{{ item.item_money }}</p>
+              </div>
+            </template>
+          </van-card>
+          <template #right>
+            <van-button
+              squarej
+              text="删除"
+              type="danger"
+              class="delete-button"
+              @click="deletrBut(item.id)"
+            />
+          </template>
+        </van-swipe-cell>
+      </van-list>
+    </template>
+    <template v-else>
+      <van-emptyclass="custom-image"
+        image="https://img.yzcdn.cn/vant/custom-empty-image.png"
+        description="暂无收藏的任务哦~"
+      />
+    </template>
+  </div>
+</template>
+<script>
+import { mapGetters, mapActions } from "vuex";
+export default {
+  name:'taskPart',
+  props: {
+    pageName: {
+      type: String,
+      default: ''
+    }
+  },
+   computed: {
+    ...mapGetters('task-part', [
+      'favoriteGetters'
+    ])
+  },
+  data() {
+    return {
+      loading: false,
+      finished: false,
+      taskStatus:true,
+      page:0,
+    }
+  },
+    watch:{
+    'favoriteGetters.status' : function (newVal, oldVal) {
+      if (newVal === 'loading') {
+        this.loading = true
+        this.finished = false
+      } else if (newVal === 'load') {
+        this.loading = false
+        this.finished = false
+      } else if (newVal === 'over') {
+        this.finished = true
+      }
+    }
+  },
+  mounted() {
+    this.appendFavorite({page: 1,type:'favorite'})
+  },
+  methods: {
+    ...mapActions("task-part", ["appendFavorite","delCollect"]),
+     onLoad() {
+      if (this.favoriteGetters.status === 'over') {
+        this.finished = true
+        return false
+      } 
+      if (this.favoriteGetters.status === 'loading') return false
+      const newPage = this.favoriteGetters.pageInfo.pages + 1
+      this.appendFavorite({page: newPage,type:'favorite' })
+    },
+    deletrBut(id) {
+      this.delCollect({id}).then((res) => {
+        if(res.status === 204) {
+          this.$toast.success('删除成功');
+          this.appendFavorite({page: 1,type:'favorite'})
+        }
+      })
+    }
+  },
+}
+</script>
+<style lang="less" scoped>
+.taskFavorite {
+  margin-top: 40px;
+  .short-shift {
+    width: 343px;
+    height: 105px;
+    background: #ffffff;
+    box-shadow: 0px 0px 10px 0px rgba(160, 160, 160, 0.1);
+    border-radius: 8px;
+    margin: 12px 16px;
+    .shift-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #18252c;
+      margin-bottom: 12px;
+    }
+  }
+  .delete-button {
+    height: 105px;
+  }
+  .shift-box {
+    display: flex;
+    font-size: 12px;
+    font-weight: 400;
+    color: #a3a8ab;
+    margin-bottom: 16px;
+    & > .box-left {
+      flex: 1;
+    }
+  }
+  .shift-right {
+    display: flex;
+    & > .box-left {
+      flex: 1;
+      color: green;
+      border-radius: 4px;
+    }
+    & > p + p {
+      font-size: 22px;
+      font-weight: 600;
+      color: #ff3510;
+      line-height: 18px;
+    }
+  }
+  .custom-image .van-empty__image {
+    width: 90px;
+    height: 90px;
+  }
+}
+</style>

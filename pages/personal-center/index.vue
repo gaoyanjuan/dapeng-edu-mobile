@@ -166,7 +166,11 @@ export default {
       //   name: "fast-payment",
       //   icon: require("@/assets/icons/mine/icon-fast-payment.png"),
       // },
-      // {txt:'任务',name:'task',icon: require('@/assets/icons/mine/icon-task.png')},
+      {
+        txt:'任务',
+        name:'task', 
+        icon: require('@/assets/icons/mine/icon-task.png')
+      },
       {
         txt: "联系学管",
         name: "teacher",
@@ -259,6 +263,12 @@ export default {
           window.location.href = `${process.env.payUrl}`
           break;
         case "task":
+          if (!this.$login()) return;
+          this.$router.push({ path: "/task-centered/task-part-centered",
+            query: {
+              userId: this.userInfoGetters.userId,
+              }, 
+          });
           break;
         case "teacher":
           // 联系学管

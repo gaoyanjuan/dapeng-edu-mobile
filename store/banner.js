@@ -17,8 +17,10 @@ export const state = () => ({
   videoBannerList: [],
   // MOVIE | 长视频
   movieBannerList: [],
+  // MOVIE | 兼职任务
+  taskPartList:[],
   // 广告占位图
-  advertisBanner:[]
+  advertisBanner: []
 })
 
 export const mutations = {

@@ -13,10 +13,12 @@ import {
   Tabs,
   Uploader,
   ImagePreview,
+  Card ,
   Toast,
   Sticky,
   Overlay,
   Swipe,
+  SwipeCell,
   SwipeItem,
   Lazyload,
   Field,
@@ -24,6 +26,7 @@ import {
   RadioGroup,
   Radio,
   GridItem,
+  Icon ,
   Dialog,
   Cell,
   CellGroup,
@@ -49,11 +52,14 @@ Vue.use(Button)
   .use(Tab)
   .use(Tabs)
   .use(Uploader)
-  .use(ImagePreview)
+  .use(SwipeCell)
+  .use(Card )
   .use(Toast)
   .use(Sticky)
   .use(Overlay)
   .use(Swipe)
+  .use(ImagePreview)
+  .use(Uploader)
   .use(SwipeItem)
   .use(Field)
   .use(Grid)
@@ -66,6 +72,7 @@ Vue.use(Button)
   .use(Checkbox)
   .use(Area)
   .use(Tag)
+  .use(Icon)
   .use(Collapse)
   .use(CollapseItem)
   .use(Image)

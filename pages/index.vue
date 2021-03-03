@@ -60,11 +60,11 @@
           <nuxt-child />
         </template>
       </van-tab>
-      <!-- <van-tab title="兼职任务" name="part-time-task" to="/part-time-task">
+      <van-tab title="兼职任务" name="part-time-task" to="/part-time-task">
         <template v-if="$route.name === 'index-part-time-task'">
           <nuxt-child />
         </template>
-      </van-tab> -->
+      </van-tab>
     </van-tabs>
 
     <!-- 作业栏目-下拉菜单筛选 -->
@@ -280,9 +280,9 @@ export default {
       else if (to.name === 'index-video') {
         this.activeName = 'video'
       } 
-      // else if (to.name === 'index-part-time-task') {
-      //   this.activeName = 'part-time-task'
-      // }
+      else if (to.name === 'index-part-time-task') {
+        this.activeName = 'part-time-task'
+      }
     },
 
     /***下拉菜单选择定位 */
