@@ -37,7 +37,10 @@
     >
     </the-audio>
     <div class="content" v-else>
-      <template v-if="parentUser && replyUser && (parentUser.userId !== replyUser.userId)"><span class="black-text">回复</span><span class="reply-text">{{ parentUser.nickname }}：</span></template>
+      <template v-if="parentUser && replyUser && (parentUser.userId !== replyUser.userId)">
+        <span class="black-text">回复</span>
+        <span class="reply-text">{{ parentUser.nickname }}：</span>
+      </template>
       <span v-html="$options.filters.formatEmotions(commentItem.content)"></span>
     </div>
     <div v-if="contentImages" class="content-img" @click.stop="showDialogEvent(contentImages)">
@@ -126,7 +129,7 @@ export default {
   },
   data () {
     return {
-      commentPop: { show: false },
+      commentPop: { show: false,id:this.commentItem },
       showPopup: false,
       showConfirmPopup: false,
       audioImg: audio,
@@ -234,7 +237,7 @@ export default {
         this.$toast('不可以对自己回复哦')
       }
     },
-    sendComment (text) {
+    sendComment (text,val) {
       if(!this.commentFlag) return false
       this.commentFlag = false
       this.appendNewRepliesComment({
@@ -242,7 +245,7 @@ export default {
           contentType: this.$route.query.contentType
         },
         content: text,
-        id: this.commentDetailsGetters.id,
+        id: val.id,
         user: this.userinfo,
         commit: true
       })
