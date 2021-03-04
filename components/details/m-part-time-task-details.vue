@@ -162,11 +162,7 @@ export default {
     this.appendTaskPartDetails(itemId).then((res) => {
     this.taskList = res.data;
     });
-    this.appendBrowses({id: itemId}).then((res) => {
-      if(res.status === 201) {
-        this.$toast.success('已浏览');
-      }
-    });
+    this.appendBrowses({id: itemId});
     this.verifyCollect({id: itemId}).then((res) => {
       if(res.data) {
         this.isHight= true;

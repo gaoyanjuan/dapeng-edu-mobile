@@ -90,12 +90,12 @@ export default {
     },
   },
   mounted() {
-    this.menusIndex =this.$route.query.px==='4'? 1:0
-    this.active =this.$route.query.class1id==='38'? 1:0
-    this.name=this.$route.query.name || 'LOGO设计'
-    this.class1id=this.$route.query.class1id || 1
-    this.class2id=this.$route.query.class2id || this.getTagsList[0].id
-    this.px=this.$route.query.px || ''
+    this.menusIndex = this.$route.query.px === '4'? 1:0
+    this.active =this.$route.query.class1id === '38'? 1:0
+    this.name = this.$route.query.name || 'LOGO设计'
+    this.class1id = this.$route.query.class1id || 1
+    this.class2id = this.$route.query.class2id || this.getTagsList[0].id
+    this.px = this.$route.query.px || ''
   },
   methods: {
     ...mapActions("task-part", ["appendTaskPartList"]),
@@ -123,7 +123,7 @@ export default {
           class1id:this.class1id,
           class2id:this.class2id,
           px : this.px,
-          name:this.name 
+          name:this.name
         }
       })
     },
@@ -174,6 +174,7 @@ export default {
           name:this.name 
         }
       }),
+      this.clearNewTaskList()
       this.appendTaskPartList({page: 1,query })
     },
   },

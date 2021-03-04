@@ -30,8 +30,8 @@ export default {
     px: ''
   }),
   mounted() {
-    this.class1id=this.$route.query.class1id || 1
-    this.class2id=this.$route.query.class2id || this.getTagsList[0].id
+    this.class1id = this.$route.query.class1id || 1
+    this.class2id = this.$route.query.class2id || this.getTagsList[0].id
     this.px=this.$route.query.px || ''
     let query = {
       class1id:this.class1id,

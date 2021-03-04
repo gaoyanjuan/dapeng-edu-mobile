@@ -33,12 +33,18 @@ export default {
     let query = this.$route.query.type || 'browser'
     let tabs = ['browser','favorite']
     this.active = tabs.findIndex(tab => tab === query)
+      if( this.active === 'browser') {
+        console.log(tabs);
+        this.taskStatus = true
+      }else {
+        this.taskStatus = false
+      }
   },
   destroyed() {
     this.clearTwoList()
   },
   methods: {
-     ...mapActions("task-part", ["delBrowse"]),
+    ...mapActions("task-part", ["delBrowse"]),
     ...mapMutations('task-part', ['clearTwoList']),
      /**
      * 监听菜单切换事件，
@@ -55,12 +61,14 @@ export default {
           showCancelButton: true,
           confirmButtonText: "确定",
           theme: "round",
-          confirmButtonColor: "#0CB65B",
+          confirmButtonColor: "#363D35",
+          confirmButtonColor:"#0CB65B",
           message: "确定清空我的浏览吗？",
         }).then(() => {
             this.delBrowse().then((res) => {
             if(res.status === 204) {
               this.$toast.success('清空成功');
+              this.taskStatus = false
               this.clearTwoList()
             }
           })
@@ -120,9 +128,10 @@ export default {
       line-height: 18px;
     }
   }
-  .custom-image .van-empty__image {
-    width: 90px;
-    height: 90px;
+  .van-tabs__line {
+    width: 24px;
+height: 4px;
+background: #0CB65B;
   }
 }
 </style>

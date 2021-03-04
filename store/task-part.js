@@ -65,7 +65,7 @@ export default {
     clearTwoList (state) {
       state.favoriteList.list = []
       state.favoriteList.pageInfo.page = 1
-       state.favoriteList.status = 'loading'
+      state.favoriteList.status = 'loading'
       state.browserList.list = []
       state.browserList.pageInfo.page = 1
       state.browserList.status = 'loading'

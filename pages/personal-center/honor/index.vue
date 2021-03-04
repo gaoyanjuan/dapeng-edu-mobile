@@ -35,8 +35,8 @@
       </div>
     </div>
     <div class="blank-endorsed" v-else>
-      <img src="@/assets/icons/mine/ip-deep.png">
-      <p>未取得证书，加油学习吧~</p>
+      <img class="blank-img" src="@/assets/icons/mine/ip-deep.png">
+      <span class="blank-txt">未取得证书，加油学习吧~</span>
     </div>
     <van-popup v-model="show">
       <img class="close-img" @click="handelClose" src="@/assets/icons/mine/close.png" alt="">
@@ -193,21 +193,23 @@ export default {
     }
   }
   .blank-endorsed {
-    position: relative;
-   & > img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     position: absolute;
-    top: 230px;
-    left: 80px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    & > .blank-img {
+    width: 216px;
+    height: 113px;
    }
-   & > p {
+   & > .blank-txt {
+     height: 20px;
     font-size: 14px;
-    font-family: PingFangSC-Semibold, PingFang SC;
+    font-family: @semibold;
     font-weight: 600;
     color: #989899;
-    position: absolute;
-    top: 370px;
-    left: 108px;
-    // line-height: 20px;
    }
   }
   .van-popup {

@@ -4,8 +4,11 @@
       <div class="short-shift" v-for="(item, i) in taskPartListGetters.list" :key="i" @click="handelDetals(item.itemid)">
         <h1>{{ item.itemname }}</h1>
         <div class="shift-box">
-          <p class="box-left">{{ item.addtime }}</p>
-          <p>{{ item.yanqi }}</p>
+          <p class="box-left">{{ item.addtime | taskDate }}</p>
+          <template>
+            <p v-if="item.state==='1'">{{ item.endtime | dateCount(item.endtime,item.fbtime) }}</p>
+             <p v-else-if="item.state==='0'" style="color:green">已中标</p>
+          </template>
         </div>
         <div class="shift-right">
           <template v-if="item.state">

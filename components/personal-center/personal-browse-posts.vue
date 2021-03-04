@@ -2,7 +2,7 @@
   <div class="taskBrowser">
     <template v-if="browserGetters.list.length > 0">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-        <van-swipe-cell v-if="browserGetters" class="short-shift" v-for="(item,index ) in browserGetters.list" :key='`${item.id}`'>
+        <van-swipe-cell v-if="browserGetters" class="short-shift" v-for="(item,index ) in browserGetters.list" :key='index'>
           <van-card>
             <template #title>
               <h1 class="shift-title">{{ item.item_name }}</h1>
@@ -26,21 +26,21 @@
               class="delete-button"
               @click="deletrBut(item.id)"
             />
+            <img class="del-img" src="@/assets/icons/common/delete.png" alt="" />
           </template>
         </van-swipe-cell>
       </van-list>
     </template>
     <template v-else>
-      <van-empty
-        class="custom-image"
-        image="https://img.yzcdn.cn/vant/custom-empty-image.png"
-        description="暂无浏览的任务哦~"
-      />
+      <div class="browser-activity">
+        <img src="@/assets/icons/common/no-activity.png" alt="">
+      <p>暂无浏览的任务哦~</p>
+      </div>
     </template>
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions,mapMutations } from "vuex";
 export default {
   name:'taskPart',
   props: {
@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     ...mapActions("task-part", ["appendBrowser","cleartBrowse"]),
+    ...mapMutations('task-part', ['clearNewTaskList']),
      onLoad() {
       if (this.browserGetters.status === 'over') {
         this.finished = true
@@ -91,6 +92,7 @@ export default {
     },
     deletrBut(id) {
       this.cleartBrowse({id}).then((res) => {
+        this.clearNewTaskList()
         if(res.status === 204) {
           this.$toast.success('删除成功');
           this.appendBrowser({page: 1,type:'browser'})
@@ -102,7 +104,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .taskBrowser {
-  margin-top: 40px;
+  margin-top: 45px;
   .short-shift {
     width: 343px;
     height: 105px;
@@ -117,8 +119,16 @@ export default {
       margin-bottom: 12px;
     }
   }
+  .van-button__content {
+    margin-top: 10px;
+  }
   .delete-button {
     height: 105px;
+  }
+  .del-img {
+    position: absolute;
+    top: 28px;
+    left: 20px;
   }
   .shift-box {
     display: flex;
@@ -144,12 +154,16 @@ export default {
       line-height: 18px;
     }
   }
-  .van-empty {
-      margin-top: 150px;
-   }
-  .custom-image .van-empty__image {
-    width: 90px;
-    height: 90px;
+  .browser-activity {
+    margin: 156px auto;
+    text-align: center;
+    & > p {
+      margin-top: 6px;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #8D8E8E;
+    }
   }
 }
 </style>
