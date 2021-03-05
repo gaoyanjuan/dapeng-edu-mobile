@@ -32,7 +32,7 @@
                 size="small"
                 v-for="(item, index) in getTagsList"
                 :key="index"
-                :class="class2id===index ?'highlight':'no-highlight'"
+                :class=" class2id==item.id?'highlight':''"
                 @click="handlePart(index)"
               >
                 <p>{{ item.name }}</p>
@@ -43,6 +43,7 @@
                 size="small"
                 v-for="(item, index) in getSortList"
                 :key="index"
+                :class=" class2id==item.id?'highlight':''"
                 @click="handleIT(index)"
               >
                 <p>{{ item.name }}</p>
@@ -98,6 +99,7 @@ export default {
     this.name = this.$route.query.name || 'LOGO设计'
     this.class1id = this.$route.query.class1id || 1
     this.class2id = this.$route.query.class2id || this.getTagsList[1].id
+    console.log(this.class2id);
     this.px = this.$route.query.px || ''
   },
   methods: {
@@ -272,14 +274,10 @@ export default {
   }
 }
 .highlight {
-  background: #E6F7EE;
-  color: #0CB65B;
-  border: 1px solid #0CB65B;
-}
-.no-highlight {
-    background: #ffffff;
-    border: 1px solid #f0f0f0;
-    color: #465156;
+  border: 1px solid #0CB65B !important;
+   & > .van-button__content {
+    color: #0CB65B !important;
+   }
 }
 /deep/.van-tabs {
   font-size: 14px;
