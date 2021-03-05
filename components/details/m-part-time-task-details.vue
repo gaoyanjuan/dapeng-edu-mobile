@@ -12,13 +12,27 @@
       <p>{{ taskList.item_name }}</p>
       <div class="details-time">
         <img src="@/assets/icons/common/time.png" alt="" />
-        <span>{{ taskList. item_endtime }}</span>
+        <span>{{ taskList.item_addtime | taskDate }}</span>
         <img src="@/assets/icons/common/edit.png" alt="" />
-        <span>{{ taskList.item_state }}</span>
+        <span>已结束</span>
         <img src="@/assets/icons/common/sand-clock.png" alt="" />
-        <span>{{ taskList.item_fbtime }}</span>
+        <template v-if="taskList.item_state==='1' ||taskList.item_state==='5'">
+          <span style="color:green">已中标</span>
+        </template>
+        <template v-else>
+          <template v-if="taskList.item_state==='0'">
+            <span>{{ taskList.item_endtime | dateCount(taskList.item_fbtime) }}</span>
+          </template>
+          <template v-else>
+            <span v-if="taskList.item_type==='0'">已截止提交方案</span>
+            <span v-else>已截止提交报价</span>
+          </template>
+        </template>
       </div>
-      <h3 class="task-money">￥{{ taskList.item_money }}</h3>
+      <template v-if="taskList.item_type">
+        <h3 class="task-money" v-if="taskList.item_type==='1'">￥{{ taskList.item_yusuan1 | formatNumber}} - {{ taskList.item_yusuan2 | formatNumber}}元</h3>
+        <h3 class="task-money" v-else>￥{{ taskList.item_money }}元</h3>
+      </template>
     </div>
     <div class="task-content">
       <h3>任务要求</h3>
@@ -56,80 +70,7 @@
       <img src="@/assets/icons/common/green-bj.png" alt="" />
       <span>我要申请此任务</span>
     </div>
-    <van-overlay :show="show" @click="handClose">
-      <van-popup v-model="showPopup" style="border-radius: 8px">
-        <div class="footer-popup">
-          <img :src="service" alt="" @click="handService" />
-          <p>
-            兼职任务面向正式课程学员！如果您想开通正式课程，请联系客服老师！
-          </p>
-        </div>
-      </van-popup>
-      <img
-        class="popup-close"
-        src="@/assets/icons/common/toast-success.png"
-        alt=""
-        @click="handClose"
-      />
-    </van-overlay>
-    <van-popup v-model="showTeacher" style="border-radius: 8px">
-      <div class="footer-teacher">
-        <img src="@/assets/icons/common/teacher.png" alt="" srcset="" />
-        <h2>同学您好</h2>
-        <p>
-          咱们的兼职任务服务是面向正式课程学员的！如果您想开通正式课程，可以联系您的班主任~
-        </p>
-        <img
-          class="teach-rectang"
-          src="@/assets/icons/common/rectang.png"
-          alt=""
-        />
-        <img
-          class="teach-bitmap"
-          src="@/assets/icons/common/bitmap.png"
-          alt=""
-          srcset=""
-        />
-        <p class="class-teacher">请您加入班主任QQ群：2384619287</p>
-        <img
-          class="teach-orthogon"
-          src="@/assets/icons/common/orthogon.png"
-          alt=""
-          srcset=""
-        />
-        <span @click="handbtn">点击进入班主任QQ群</span>
-      </div>
-      <!-- <div class="ellipse"></div> -->
-    </van-popup>
-    <van-popup v-model="isShow" style="border-radius: 8px">
-      <div class="footer-teacher">
-        <img src="@/assets/icons/common/teacher.png" alt="" srcset="" />
-        <h2>同学您好</h2>
-        <p>
-          咱们的兼职任务服务是面向正式课程学员的！如果您想开通正式课程，可以联系您的班主任~
-        </p>
-        <img
-          class="teach-rectang"
-          src="@/assets/icons/common/rectang.png"
-          alt=""
-        />
-        <img
-          class="teach-bitmap"
-          src="@/assets/icons/common/bitmap.png"
-          alt=""
-          srcset=""
-        />
-        <p class="wx-teacher">班主任微信：dpjyzxkf</p>
-        <img
-          class="teach-orthogon"
-          src="@/assets/icons/common/orthogon.png"
-          alt=""
-          srcset=""
-        />
-        <span>点击联系班主任微信</span>
-      </div>
-      <!-- <div class="ellipse"></div> -->
-    </van-popup>
+    <m-support-staff :showPopup="auditionPop"></m-support-staff>
   </div>
 </template>
 <script>
@@ -146,14 +87,8 @@ export default {
    },
   data() {
     return {
-      showPopup: false,
       isHight:false,
-      showTeacher: false,
-      visible: false,
-      show: false,
-      popupClose: false,
-      service: require("@/assets/icons/common/service.png"),
-      isShow: false,
+      auditionPop: { show: false },
       taskList:{},
     };
   },
@@ -163,6 +98,7 @@ export default {
     this.taskList = res.data;
     });
     this.appendBrowses({id: itemId});
+    // 校验当前用户是否收藏兼职任务
     this.verifyCollect({id: itemId}).then((res) => {
       if(res.data) {
         this.isHight= true;
@@ -201,26 +137,7 @@ export default {
       }
     },
     handerApply() {
-      // this.visible = true;
-      this.show = true;
-      // this.showPopup = true;
-      // this.popupClose = true;
-      // this.popupShow = true;
-      
-    },
-    dialogChange() {
-      this.popupShow = true;
-    },
-    handService() {
-      this.showTeacher = true;
-    },
-    handbtn() {
-      this.isShow = true;
-    },
-    handClose() {
-      this.show = false;
-      this.popupClose = false;
-      this.showPopup = false;
+      this.auditionPop.show = true
     },
   },
 };
@@ -351,89 +268,6 @@ export default {
       bottom: 20px;
       left: 130px;
     }
-  }
-  .footer-popup {
-    position: relative;
-    & > p {
-      position: absolute;
-      top: 116px;
-      margin: 0 20px;
-      font-size: 16px;
-      font-weight: 600;
-      color: #36404a;
-      line-height: 24px;
-    }
-  }
-  .popup-close {
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    bottom: 100px;
-    left: 160px;
-  }
-  .footer-teacher {
-    position: relative;
-    top: 10px;
-    & > h2 {
-      position: absolute;
-      top: 10px;
-      left: 70px;
-      font-size: 28px;
-      font-weight: 600;
-      color: #36404a;
-    }
-    & > p {
-      position: absolute;
-      top: 50px;
-      margin: 0 30px;
-      font-size: 14px;
-      font-weight: 400;
-      color: #5a5a5a;
-    }
-    & > .teach-rectang {
-      position: absolute;
-      bottom: 90px;
-      left: 46px;
-    }
-    & > .teach-bitmap {
-      position: absolute;
-      bottom: 114px;
-      left: 67px;
-    }
-    & > .class-teacher {
-      position: absolute;
-      top: 290px;
-      font-size: 12px;
-      font-weight: 400;
-      color: #f5f5f5;
-    }
-    & > .wx-teacher {
-      position: absolute;
-      top: 292px;
-      left: 35px;
-      font-size: 12px;
-      font-weight: 400;
-      color: #f5f5f5;
-    }
-    & > .teach-orthogon {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-    }
-    & > span {
-      position: absolute;
-      bottom: 30px;
-      left: 55px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #36404a;
-    }
-  }
-  .ellipse {
-    width: 50px;
-    height: 50px;
-    background-color: #ff3510;
-    border-radius: 50%;
   }
 }
 </style>

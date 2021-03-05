@@ -124,8 +124,9 @@ export default {
               this.$axios.get('part_job/get_item.ashx', { params: { itemid: id } }).then(res => {
                 course.data[index].item_name = res.data.item_name
                 course.data[index].item_money = res.data.item_money
-                course.data[index].item_state = res.data.item_state
-                course.data[index].item_type = res.data.item_type
+                course.data[index].item_addtime = res.data.item_addtime
+                course.data[index].item_endtime = res.data.item_endtime
+                course.data[index].item_fbtime = res.data.item_fbtime
                 course.data[index].item_ispay = res.data.item_ispay
                 if (index === course.data.length - 1) {
                   const pageInfo = { pages: params.page, size: 10 }
@@ -134,8 +135,6 @@ export default {
               })
             }
           }
-          const pageInfo = { pages: params.page, size: 10 }
-          commit('appendBrowser', { data: course.data, pageInfo })
         } else {
           const pageInfo = { pages: params.page, size: 10 }
           commit('appendBrowser', { data: course.data, pageInfo })
@@ -157,8 +156,9 @@ export default {
                 this.$axios.get('part_job/get_item.ashx', { params: { itemid: id } }).then(res => {
                   course.data[index].item_name = res.data.item_name
                   course.data[index].item_money = res.data.item_money
-                  course.data[index].item_state = res.data.item_state
-                  course.data[index].item_type = res.data.item_type
+                  course.data[index].item_addtime = res.data.item_addtime
+                  course.data[index].item_endtime = res.data.item_endtime
+                  course.data[index].item_fbtime = res.data.item_fbtime
                   course.data[index].item_ispay = res.data.item_ispay
                   if (index === course.data.length - 1) {
                     const pageInfo = { pages: params.page, size: 10 }

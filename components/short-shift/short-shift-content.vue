@@ -1,20 +1,31 @@
 <template>
   <div class="part-short">
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+    <van-list v-model="loading" :finished="finished" :finished-text="finishedTxt" @load="onLoad">
       <div class="short-shift" v-for="(item, i) in taskPartListGetters.list" :key="i" @click="handelDetals(item.itemid)">
         <h1>{{ item.itemname }}</h1>
         <div class="shift-box">
           <p class="box-left">{{ item.addtime | taskDate }}</p>
-          <template>
-            <p v-if="item.state==='1'">{{ item.endtime | dateCount(item.endtime,item.fbtime) }}</p>
-             <p v-else-if="item.state==='0'" style="color:green">已中标</p>
+          <template v-if="item.state==='1' ||item.state==='5'">
+            <p style="color:green">已中标</p>
           </template>
+          <template v-else>
+            <template v-if="item.state==='0'">
+              <p>{{ item.endtime | dateCount(item.fbtime) }}</p>
+            </template>
+            <template v-else>
+              <p v-if="item.zab_do==='0'">已截止提交方案</p>
+              <p v-else>已截止提交报价</p>
+            </template>
+           </template>
         </div>
         <div class="shift-right">
           <template v-if="item.state">
-             <p class="box-left">{{ evaluateState(item.state) }}</p>
+            <p class="box-left">已结束</p>
           </template>
-          <p>￥{{ item.money }}</p>
+          <template v-if="item.zab_do">
+            <p v-if="item.zab_do==='1'">￥{{ item.zab_yusuan1 | formatNumber}} - {{ item.zab_yusuan2 | formatNumber}}元</p>
+            <p v-else>￥{{ item.money }}元</p>
+          </template>
         </div>
       </div>
     </van-list>
@@ -31,6 +42,7 @@ export default {
       list: [],
       loading: false,
       finished: false,
+      finishedTxt: '没有更多了',
       page:0,
     };
   },
@@ -45,47 +57,23 @@ export default {
       } else if (newVal === 'over') {
         this.finished = true
       }
+    },
+    'taskPartListGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.finishedTxt = ''
+      } else {
+        this.finishedTxt ='没有更多了'
+      }
     }
   },
   mounted() {
   },
   destroyed() {
-     this.clearNewTaskList()
+    this.clearNewTaskList()
   },
   methods: {
     ...mapMutations('task-part', ['clearNewTaskList']),
     ...mapActions("task-part", ["appendTaskPartList"]),
-    evaluateState(state) {
-      let str = ''
-      switch (state) {
-        case '0':
-          str = '未评标'
-          break;
-         case '1':
-          str = '已评标'
-          break;
-           case '2':
-          str = '投票中标'
-          break;
-           case '3':
-          str = '威客奖金'
-          break;
-           case '4':
-          str = '未评标'
-          break;
-           case '5':
-          str = '表示招标项目已选标'
-          break; case '-1':
-          str = '退款'
-          break;
-           case '-3':
-          str = '招标项目已流标'
-          break;
-        default:
-          break;
-      }
-      return str
-    },
     onLoad() {
       if (this.taskPartListGetters.status === 'over') {
         this.finished = true

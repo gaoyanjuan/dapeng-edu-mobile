@@ -1,23 +1,26 @@
 <template>
   <div class="task-centered">
     <m-navbar title="我的任务" right-text="清空" :show-task-right-text="true" :task-status="taskStatus" @onClickRight="onClickRight" />
-    <div>
-      <template>
-        <van-tabs v-model="active" sticky :offset-top="'1.1733rem'" @click="onTabsClick">
-          <van-tab title="我的浏览">
-            <personal-browse-posts pageName="taskPart" />
-          </van-tab>
-          <van-tab title="我的收藏">
-            <personal-favorite-post pageName="taskPart" />
-          </van-tab>
-        </van-tabs>
-      </template>
+    <div class="tabs-wrap">
+      <van-tabs v-model="active" sticky :offset-top="'1.1733rem'" @click="onTabsClick">
+        <van-tab title="我的浏览">
+          <personal-browse-posts pageName="taskPart" />
+        </van-tab>
+        <van-tab title="我的收藏">
+          <personal-favorite-post pageName="taskPart" />
+        </van-tab>
+      </van-tabs>
     </div>
   </div>
 </template>
 <script>
-import { mapMutations,mapActions } from "vuex";
+import { mapMutations, mapActions, mapGetters } from "vuex";
 export default {
+   computed: {
+    ...mapGetters('task-part', [
+      'browserGetters'
+    ])
+  },
   data() {
     return {
       taskStatus:true,
@@ -33,12 +36,22 @@ export default {
     let query = this.$route.query.type || 'browser'
     let tabs = ['browser','favorite']
     this.active = tabs.findIndex(tab => tab === query)
-      if( this.active === 'browser') {
-        console.log(tabs);
+  },
+   watch:{
+    '$route.query' : function (newVal, oldVal) {
+      if (newVal.type==='browser') {
         this.taskStatus = true
       }else {
         this.taskStatus = false
       }
+    },
+    'browserGetters.list':function (newVal, oldVal) {
+      if(!newVal.length) {
+        this.taskStatus = false
+      } else {
+        this.taskStatus = true
+      }
+    }
   },
   destroyed() {
     this.clearTwoList()
@@ -55,83 +68,78 @@ export default {
       if(this.$route.query.type === tabs[index]) return
       this.$router.replace({ query: { ...this.$route.query, type: tabs[index] } })
     },
+    // 点击清空
     onClickRight() {
-       if(this.$route.query.type !== "favorite") {
-        this.$dialog.alert({
-          showCancelButton: true,
-          confirmButtonText: "确定",
-          theme: "round",
-          confirmButtonColor: "#363D35",
-          confirmButtonColor:"#0CB65B",
-          message: "确定清空我的浏览吗？",
-        }).then(() => {
-            this.delBrowse().then((res) => {
-            if(res.status === 204) {
-              this.$toast.success('清空成功');
-              this.taskStatus = false
-              this.clearTwoList()
-            }
-          })
+      this.$dialog.alert({
+        showCancelButton: true,
+        confirmButtonText: "确定",
+        theme: "round",
+        confirmButtonColor: "#363D35",
+        confirmButtonColor:"#0CB65B",
+        message: "确定清空我的浏览吗？",
+      }).then(() => {
+          this.delBrowse().then((res) => {
+          if(res.status === 204) {
+            this.clearTwoList()
+          }
         })
-       }
-       else {
-        return
-       }
-      
+      })
     },
   }
 };
 </script>
 <style lang="less" scoped>
 .task-centered {
-  .van-swipe-cell {
-    margin-top: 33px;
+  .tabs-wrap {
+   padding-top: 44px;
+}
+  /deep/ .van-dialog__content--isolated {
+    font-size: 16px;
+    font-family: @semibold;
+    font-weight: 600;
+    color: #363D35;
   }
-  .short-shift {
-    width: 343px;
-    height: 105px;
-    background: #ffffff;
-    box-shadow: 0px 0px 10px 0px rgba(160, 160, 160, 0.1);
-    border-radius: 8px;
-    margin: 12px 16px;
-    .shift-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #18252c;
-      margin-bottom: 12px;
-    }
-  }
-  .delete-button {
-    height: 105px;
-  }
-  .shift-box {
-    display: flex;
-    font-size: 12px;
+  /deep/.van-tabs {
+    font-size: 14px;
+    font-family: @dp-font-regular;
     font-weight: 400;
-    color: #a3a8ab;
-    margin-bottom: 16px;
-    & > .box-left {
-      flex: 1;
+    color: #747C80;
+    line-height: 20px;
+  }
+
+  /deep/.van-tabs__wrap {
+    // border-bottom: 1px solid #EAEAEA;
+
+    .van-tab {
+      padding: 0 10px;
+      color: #18252C;
     }
   }
-  .shift-right {
-    display: flex;
-    & > .box-left {
-      flex: 1;
-      color: green;
-      border-radius: 4px;
-    }
-    & > p + p {
-      font-size: 22px;
-      font-weight: 600;
-      color: #ff3510;
-      line-height: 18px;
-    }
+
+  /deep/ .van-tabs__nav {
+    padding-left: 40px;
+    padding-right: 40px;
+    box-shadow: 0px 1px 0px 0px #EAEAEA;
   }
-  .van-tabs__line {
-    width: 24px;
-height: 4px;
-background: #0CB65B;
+
+  /deep/.van-tab--active {
+    font-size: 16px;
+    font-family: @dp-font-medium;
+    font-weight: 600;
+    color: #18252C;
+    animation: 0.5s appear;
+  }
+
+  /deep/.van-tabs__line {
+    width: 26px;
+    height: 4px;
+    bottom: 15px;
+    background: #0CB65B;
+    border-radius: 2px;
+    background-image: none;
+  }
+  /deep/.van-sticky--fixed {
+    transform: translateX(-50%)!important;
   }
 }
 </style>

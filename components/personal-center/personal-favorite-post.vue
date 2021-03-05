@@ -3,18 +3,32 @@
     <template v-if="favoriteGetters.list.length > 0 ">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <van-swipe-cell class="short-shift" v-for="(item, index) in favoriteGetters.list" :key='index'>
-          <van-card>
+          <van-card @click="taskBtn(item.id)">
             <template #title>
               <h1 class="shift-title">{{ item.item_name }}</h1>
             </template>
             <template #desc>
               <div class="shift-box">
-                <p class="box-left">{{ item.item_state }}</p>
-                <p>{{ item.item_type }}</p>
+                <p class="box-left">{{ item.item_addtime | taskDate }}</p>
+                <template v-if="item.item_state==='1' ||item.item_state==='5'">
+                  <p style="color:green">已中标</p>
+                </template>
+                <template v-else>
+                  <template v-if="item.item_state==='0'">
+                    <p>{{ item.item_endtime | dateCount(item.item_fbtime) }}</p>
+                  </template>
+                  <template v-else>
+                    <p v-if="item.item_type==='0'">已截止提交方案</p>
+                    <p v-else>已截止提交报价</p>
+                  </template>
+                </template>
               </div>
               <div class="shift-right">
                 <p class="box-left">{{ item.item_ispay }}</p>
-                <p>￥{{ item.item_money }}</p>
+                 <template>
+                  <p v-if="item.item_type==='1'">￥{{ item.item_yusuan1 | formatNumber}} - {{ item.item_yusuan2 | formatNumber}}元</p>
+                  <p v-else>￥{{ item.item_money }}元</p>
+                </template>
               </div>
             </template>
           </van-card>
@@ -40,7 +54,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions,mapMutations } from "vuex";
 export default {
   name:'taskPart',
   props: {
@@ -75,12 +89,16 @@ export default {
       }
     }
   },
+  destroyed() {
+    this.clearTwoList()
+  },
   mounted() {
     this.appendFavorite({page: 1,type:'favorite'})
   },
   methods: {
     ...mapActions("task-part", ["appendFavorite","delCollect"]),
-     onLoad() {
+    ...mapMutations('task-part', ['clearNewTaskList','clearTwoList']),
+    onLoad() {
       if (this.favoriteGetters.status === 'over') {
         this.finished = true
         return false
@@ -93,16 +111,23 @@ export default {
       this.delCollect({id}).then((res) => {
         if(res.status === 204) {
           this.$toast.success('删除成功');
+          this.clearNewTaskList()
+          this.clearTwoList()
           this.appendFavorite({page: 1,type:'favorite'})
         }
       })
+    },
+    taskBtn(id) {
+      this.$router.push({ path: "/details/part-task" ,query: { itemId : id}});
     }
   },
 }
 </script>
 <style lang="less" scoped>
 .taskFavorite {
-  margin-top: 40px;
+  .van-card  {
+    background-color: #ffffff;
+  }
   .short-shift {
     width: 343px;
     height: 105px;

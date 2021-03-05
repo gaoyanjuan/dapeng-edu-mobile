@@ -120,29 +120,30 @@ const taskDate = function (data) {
     return dayjs(data).format('YYYY-M-D')
   }
 }
-const dateCount = function (endtime, fbtime) {
-  console.log(endtime);
-  console.log(fbtime);
+const dateCount = function (start, end) {
   // 现在时间
-  // var now = new Date(fbtime);
-  // console.log(now);
-  // //截止时间
-  // var until= new Date(endtime);
-  // // 计算时会发生隐式转换，调用valueOf()方法，转化成时间戳的形式
-  // var days = (until - now) / 1000 / 3600 / 24; 
-  // // 下面都是简单的数学计算 
-  // var day = Math.floor(days);
-  // var hours = (days - day)*24;
-  // var hour = Math.floor(hours);
-  // var back = '剩余' + day + '天' + hour + '小时';
-  // return back;
-  var  aDate,  oDate1,  oDate2,  iDays
-    aDate  =  endtime.split("-")
-    oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])    //转换为03-11-2019格式  
-    aDate  =  fbtime.split("-")  
-    oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])  
-    iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
-    return  iDays
+  var now = new Date(end);
+  //截止时间
+  var until= new Date(start);
+  // 计算时会发生隐式转换，调用valueOf()方法，转化成时间戳的形式
+  var days = (until - now) / 1000 / 3600 / 24; 
+  // 下面都是简单的数学计算 
+  var day = Math.floor(days);
+  var hours = (days - day)*24;
+  var hour = Math.floor(hours);
+  var back = '剩余' + day + '天' + hour + '小时';
+  return back;
+}
+// 数字转换为万单位
+const formatNumber = function (num) {
+  num = Number(num);
+  if (num == 0) {
+    return num + '';
+  } else if (num > 1 && num < 10000) {
+    return num + '';
+  } else {
+    return (num / 10000).toFixed(1) + '万';
+  }
 }
 //作业要求时间戳
 const requireData = function (data) {
@@ -300,6 +301,7 @@ const filter = {
   commonDate,
   taskDate,
   dateCount,
+  formatNumber,
   lecturerCommentDate,
   studentsCount,
   commonCount,

@@ -24,30 +24,33 @@
       closeable
       :style="{ height: '47%' }"
     >
-      <van-tabs v-model="active">
-        <van-tab v-for="(item, index) in getTabsList" :title="item.name" :key="item.id">
-          <div class="box" v-if="item.id===1">
-            <van-button
-              size="small"
-              v-for="(item, index) in getTagsList"
-              :key="index"
-              @click="handlePart(index)"
-            >
-              <p>{{ item.name }}</p>
-            </van-button>
-          </div>
-          <div class="box" v-else>
-            <van-button
-              size="small"
-              v-for="(item, index) in getSortList"
-              :key="index"
-              @click="handleIT(index)"
-            >
-              <p>{{ item.name }}</p>
-            </van-button>
-          </div>
-        </van-tab>
-      </van-tabs>
+     <div class="tabs-wrap">
+        <van-tabs v-model="active">
+          <van-tab v-for="(item, index) in getTabsList" :title="item.name" :key="item.id">
+            <div class="box" v-if="item.id===1">
+              <van-button
+                size="small"
+                v-for="(item, index) in getTagsList"
+                :key="index"
+                :class="class2id===index ?'highlight':'no-highlight'"
+                @click="handlePart(index)"
+              >
+                <p>{{ item.name }}</p>
+              </van-button>
+            </div>
+            <div class="box" v-else>
+              <van-button
+                size="small"
+                v-for="(item, index) in getSortList"
+                :key="index"
+                @click="handleIT(index)"
+              >
+                <p>{{ item.name }}</p>
+              </van-button>
+            </div>
+          </van-tab>
+        </van-tabs>
+      </div>
     </van-popup>
   </section>
 </template>
@@ -72,7 +75,7 @@ export default {
     px:'',
     class1id:'1',
     class2id:'1',
-    name:'LOGO设计',
+    name:'',
     change: require("@/assets/icons/common/drop.png"),
     menuId:'1'
   }),
@@ -94,7 +97,7 @@ export default {
     this.active =this.$route.query.class1id === '38'? 1:0
     this.name = this.$route.query.name || 'LOGO设计'
     this.class1id = this.$route.query.class1id || 1
-    this.class2id = this.$route.query.class2id || this.getTagsList[0].id
+    this.class2id = this.$route.query.class2id || this.getTagsList[1].id
     this.px = this.$route.query.px || ''
   },
   methods: {
@@ -241,13 +244,6 @@ export default {
         margin-right: 16px;
         cursor: pointer;
       }
-      // .unlimited {
-      //   color: #18252c;
-      // }
-      // .newest {
-      //   margin-left: 20px;
-      //   color: #0cb65b;
-      // }
     }
   }
   .van-popup {
@@ -258,7 +254,7 @@ export default {
 .part-time .box {
   box-sizing: border-box;
   overflow: hidden;
-  margin-left: 25px;
+  margin:20px 0 0 25px;
   .van-button--small {
     width: 100px;
     height: 32px;
@@ -274,5 +270,51 @@ export default {
       line-height: 14px;
     }
   }
+}
+.highlight {
+  background: #E6F7EE;
+  color: #0CB65B;
+  border: 1px solid #0CB65B;
+}
+.no-highlight {
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    color: #465156;
+}
+/deep/.van-tabs {
+  font-size: 14px;
+  font-family: @dp-font-regular;
+  font-weight: 400;
+  color: #747C80;
+  line-height: 20px;
+}
+
+/deep/.van-tabs__wrap {
+  margin-right: 180px;
+
+}
+
+/deep/ .van-popup__close-icon--top-right {
+  top: 4px;
+}
+
+/deep/.van-tab--active {
+  font-size: 16px;
+  font-family: @semibold;
+  font-weight: 600;
+  color: #18252C;
+  animation: 0.5s appear;
+}
+
+/deep/.van-tabs__line {
+  width: 26px;
+  height: 4px;
+  bottom: 20px;
+  background: #0CB65B;
+  border-radius: 2px;
+  background-image: none;
+}
+/deep/.van-sticky--fixed {
+  transform: translateX(-50%)!important;
 }
 </style>
