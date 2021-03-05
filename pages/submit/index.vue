@@ -747,11 +747,11 @@ export default {
         const img = window.URL.createObjectURL(file)
         const imgObj = new Image()
         imgObj.onload = () => {
-          if(imgObj.width > 4096 || imgObj.height > 4096) {
-            this.$toast('图片长度超过4096，上传失败！')
+          if(imgObj.width > 16384 || imgObj.height > 16384) {
+            this.$toast('图片像素过大，请重新上传哦~')
             reject()
           } else if ((imgObj.width * imgObj.height) > (4096 * 4096)) {
-            this.$toast('图片超过4096*4096，上传失败！')
+            this.$toast('图片像素过大，请重新上传哦~')
             reject()
           } else {
             if ((this.totalImgSize + file.size) <= this.maxImgLimit) {

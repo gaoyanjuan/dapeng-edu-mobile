@@ -233,7 +233,7 @@ export default {
 .posts-content .posts-inner-text {
   /deep/ & img {
     width: 343px;
-    height: 220px;
+    // height: 220px;
     border-radius: 8px;
     margin-top: 12px;
     margin-bottom: 12px;

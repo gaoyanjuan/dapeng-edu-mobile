@@ -156,7 +156,7 @@ export default {
 
 .selected-labels-wrap .label-body-row {
   width: 100%;
-  max-height: 112px;
+  max-height: 125px;
   min-height: 30px;
   display: flex;
   align-items: center;
@@ -192,10 +192,13 @@ export default {
   }
 
   .label-body-row {
+    width: 100%;
+    max-height: 295px;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     margin-top: 10px;
+    overflow-y: scroll;
 
     .tag {
       display: inline-block;
@@ -216,6 +219,10 @@ export default {
 
       margin-right: 8px;
       margin-top: 15px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       cursor: pointer;
     }
 
