@@ -3,16 +3,12 @@ export default {
     return {
       tagsList: [
         {
-          "name": "设计类",
-          "id": 1,
-        },
-        {
-          "name": "LOGO设计",
-          "id": 2
-        }, {
           "name": "名片设计",
           "id": 1
         }, {
+          "name": "LOGO设计",
+          "id": 2
+        },{
           "name": "VI设计",
           "id": 4
         }, {

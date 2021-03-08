@@ -28,6 +28,12 @@
       </template>
 
     </van-list>
+    <!-- 取消关注二次确认 -->
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+      title="确定取消关注吗？"
+    />
   </div>
 </template>
 
@@ -44,6 +50,11 @@ export default {
     finishedText: '没有更多了',
     dpUserId: process.env.global.dpUserId,
     blank: require('@/assets/icons/blank/have-no-fans.png'),
+    deleteDialogParams: {
+      show: false
+    },
+    userInfo:{},
+    userIndex:null
   }),
   mounted() {
     if(!this.userFollowGetters.list.length) {
@@ -106,39 +117,44 @@ export default {
     },
     /** 关注事件 */
     handleFollow(item, index){
+      this.userInfo = item
+      this.userIndex = index
       if(!this.$login()) {
         return 
       }
-      if(item.isAttention) {
-        this.setUserFollowStatus({
-          index: index,
-          flag: false,
-          data: 'userFollow'
-        })
-        this.cancelFollowingUser({ id: item.userId }).catch(()=>{
-          this.setUserFollowStatus({
-          index: index,
-          flag: true,
-          data: 'userFollow'
-          })
-        })
+      if(this.userInfo.isAttention) {
+        this.deleteDialogParams.show = true
         
       }else {
         this.setUserFollowStatus({
-          index: index,
+          index: this.userIndex,
           flag: true,
           data: 'userFollow'
         })
-        this.followingUser({ id: item.userId }).catch(()=>{
+        this.followingUser({ id: this.userInfo.userId }).catch(()=>{
           this.setUserFollowStatus({
-          index: index,
+          index: this.userIndex,
           flag: false,
           data: 'userFollow'
           })
         })
-        
       }
-      
+    },
+    // 取消关注二次确认
+    confirmDelete() {
+      this.setUserFollowStatus({
+        index: this.userIndex,
+        flag: false,
+        data: 'userFollow'
+      })
+      this.cancelFollowingUser({ id: this.userInfo.userId }).catch(()=>{
+        this.setUserFollowStatus({
+        index: this.userIndex,
+        flag: true,
+        data: 'userFollow'
+        })
+      })
+      this.deleteDialogParams.show = false
     },
     toPersonalCenter(item) {
       this.$router.push({

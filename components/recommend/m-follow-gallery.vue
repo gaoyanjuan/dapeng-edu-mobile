@@ -26,6 +26,12 @@
         </swiper>
       </client-only>
     </div>
+    <!-- 取消关注二次确认 -->
+    <m-delete-dialog
+      :deleteDialogParams="deleteDialogParams"
+      @confirmDelete="confirmDelete"
+      title="确定取消关注吗？"
+    />
   </section>
 </template>
 
@@ -41,6 +47,11 @@ export default {
     },
     avatar: require('@/assets/icons/common/avatar.png'),
     more: require('@/assets/icons/square/more.png'),
+    deleteDialogParams: {
+      show: false
+    },
+    userInfo:{},
+    userIndex:null
   }),
   computed: {
     ...mapGetters({
@@ -57,18 +68,26 @@ export default {
     }),
     /** 关注事件 */
     handleFollow (item, index) {
+      this.userInfo = item
+      this.userIndex = index
       if(!this.$login()) { return }
-      if (item.isFlower) {
-        this.changeFollowing(index)
-        this.deleteFollowing({
-          id: item.userId
-        })
+      if (this.userInfo.isFlower) {
+        this.deleteDialogParams.show = true
+        
       } else {
         this.changeFollowing(index)
         this.queryFollowing({
-          id: item.userId
+          id: this.userInfo.userId
         })
       }
+    },
+    // 取消关注二次确认
+    confirmDelete() {
+      this.changeFollowing(this.userIndex)
+        this.deleteFollowing({
+          id: this.userInfo.userId
+        })
+      this.deleteDialogParams.show = false
     },
     toPersonalCenter(item) {
       if (!this.$login()) return

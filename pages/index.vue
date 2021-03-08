@@ -101,11 +101,14 @@
       @click="showHomeworkMenu = false;showVideoMenu = false"
       z-index='11'
     />
+
+    <!-- 广告弹屏 -->
+    <m-screen-popup v-if="screen.show" :screen="screen" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Square',
   data: () => ({
@@ -116,6 +119,7 @@ export default {
     dropMenusName: '作业',
     homeworkMenuValue: '',
     videoMenuValue: '',
+    screen: { show: false, list: [] },
     homeworkDownMenus: [
       { text: '全部', value: '' },
       { text: '体验课', value: 'TEST' },
@@ -161,9 +165,18 @@ export default {
     if (to.query.courseType || to.query.type) {
       this.setDownMenusPosition(to)
     }
+
+    /***
+     * 初始化弹屏
+     */
+    this.initScreen()
   },
 
   methods:{
+    ...mapActions({
+      getScreenList: 'user/appendScreenList'
+    }),
+
     /** 打开作业下拉菜单 */
     openHomeworkMenu(){
       this.showHomeworkMenu = !this.showHomeworkMenu
@@ -306,6 +319,19 @@ export default {
             }
           }
         })
+      }
+    },
+
+    /** 初始化弹屏广告 */
+    async initScreen() {
+      if(!this.userInfo) return
+
+      const res = await this.getScreenList()
+      if(res.data.length === 0) {
+        this.screen.show = false
+      } else {
+        this.screen.list = res.data
+        this.screen.show = true
       }
     },
   }

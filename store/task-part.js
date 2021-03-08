@@ -65,11 +65,16 @@ export default {
     clearTwoList (state) {
       state.favoriteList.list = []
       state.favoriteList.pageInfo.page = 1
-       state.favoriteList.status = 'loading'
+      state.favoriteList.status = 'loading'
       state.browserList.list = []
       state.browserList.pageInfo.page = 1
       state.browserList.status = 'loading'
     },
+    clearNewTaskList(state) {
+      state.taskPartList.list = []
+      state.taskPartList.page = 1
+      state.taskPartList.status = 'loading'
+    }
   },
   actions: {
     /* 当前兼职任务列表 */
@@ -77,7 +82,7 @@ export default {
       commit('changeTaskPartListStatus', 'loading')
       const res = await this.$axios.get('part_job/get_item_list.ashx', {
         params: {
-          ...params.params,
+          ...params.query,
           size: 10,
           page: params.page
         }
@@ -119,8 +124,9 @@ export default {
               this.$axios.get('part_job/get_item.ashx', { params: { itemid: id } }).then(res => {
                 course.data[index].item_name = res.data.item_name
                 course.data[index].item_money = res.data.item_money
-                course.data[index].item_state = res.data.item_state
-                course.data[index].item_type = res.data.item_type
+                course.data[index].item_addtime = res.data.item_addtime
+                course.data[index].item_endtime = res.data.item_endtime
+                course.data[index].item_fbtime = res.data.item_fbtime
                 course.data[index].item_ispay = res.data.item_ispay
                 if (index === course.data.length - 1) {
                   const pageInfo = { pages: params.page, size: 10 }
@@ -129,8 +135,6 @@ export default {
               })
             }
           }
-          const pageInfo = { pages: params.page, size: 10 }
-          commit('appendBrowser', { data: course.data, pageInfo })
         } else {
           const pageInfo = { pages: params.page, size: 10 }
           commit('appendBrowser', { data: course.data, pageInfo })
@@ -152,8 +156,9 @@ export default {
                 this.$axios.get('part_job/get_item.ashx', { params: { itemid: id } }).then(res => {
                   course.data[index].item_name = res.data.item_name
                   course.data[index].item_money = res.data.item_money
-                  course.data[index].item_state = res.data.item_state
-                  course.data[index].item_type = res.data.item_type
+                  course.data[index].item_addtime = res.data.item_addtime
+                  course.data[index].item_endtime = res.data.item_endtime
+                  course.data[index].item_fbtime = res.data.item_fbtime
                   course.data[index].item_ispay = res.data.item_ispay
                   if (index === course.data.length - 1) {
                     const pageInfo = { pages: params.page, size: 10 }
@@ -181,6 +186,11 @@ export default {
     // 校验当前用户是否收藏兼职任务
     async verifyCollect({ commit }, params) {
       const res = await this.$axios.get(`/users/part-jobs/collects/check/${params.id}`)
+      return res
+    },
+     // 查询展翅课程顾问二维码
+     async getCourse({ commit }, params) {
+      const res = await this.$axios.get(`old/platforms/zc/advisers/code`)
       return res
     },
     // 清空当前用户浏览的兼职任务

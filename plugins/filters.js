@@ -97,7 +97,54 @@ const commonDate = function (data) {
     return dayjs(data).format('YYYY年MM月DD日 HH:mm')
   }
 }
-
+const taskDate = function (data) {
+  if (!data) {
+    return '---'
+  }
+  const now = new dayjs()
+  const date = new dayjs(data)
+  const nowTimestamp = new dayjs().valueOf()
+  const delta = nowTimestamp - data
+  if (delta < (60000)) {
+    return '刚刚'
+  } else if (delta < 3600000) {
+    return dayjs(delta).format('m分钟前')
+  }else if (delta < 86400000) {
+    const hour = Math.floor(delta / 3600000)
+    return `${hour}小时前`
+  } else if (delta < 259200000) {
+    return dayjs(data).format('D天前')
+  }else if (now.year() === date.year()) {
+    return dayjs(data).format('M-D')
+  } else if (now.year() > date.year()) {
+    return dayjs(data).format('YYYY-M-D')
+  }
+}
+const dateCount = function (start, end) {
+  // 现在时间
+  var now = new Date(end);
+  //截止时间
+  var until= new Date(start);
+  // 计算时会发生隐式转换，调用valueOf()方法，转化成时间戳的形式
+  var days = (until - now) / 1000 / 3600 / 24; 
+  // 下面都是简单的数学计算 
+  var day = Math.floor(days);
+  var hours = (days - day)*24;
+  var hour = Math.floor(hours);
+  var back = '剩余' + day + '天' + hour + '小时';
+  return back;
+}
+// 数字转换为万单位
+const formatNumber = function (num) {
+  num = Number(num);
+  if (num == 0) {
+    return num + '';
+  } else if (num > 1 && num < 10000) {
+    return num + '';
+  } else {
+    return (num / 10000).toFixed(1) + '万';
+  }
+}
 //作业要求时间戳
 const requireData = function (data) {
   return dayjs(data).format('YYYY年MM月DD日 HH:mm')
@@ -252,6 +299,9 @@ const filter = {
   formatDate,
   activitiesDate,
   commonDate,
+  taskDate,
+  dateCount,
+  formatNumber,
   lecturerCommentDate,
   studentsCount,
   commonCount,

@@ -31,6 +31,7 @@
             <div class="replies-comment-box" v-for="(item, index) in repliesGetters.data" :key="item.id">
               <m-details-comment
                 :user="item.user"
+                :canReply="true"
                 :commentIndex="index"
                 :parentUser="item.parentUser"
                 :replyUser="commentDetailsGetters.user"
@@ -104,7 +105,7 @@ export default {
       }
       this.commentPop.show = true
     },
-    sendComment (text) {
+    sendComment (text,val) {
       if(!this.commentFlag) return false
       this.commentFlag = false
       this.appendNewRepliesComment({
@@ -112,7 +113,7 @@ export default {
           contentType: this.$route.query.contentType
         },
         content: text,
-        id: this.commentDetailsGetters.id,
+        id: val.id,
         user: this.userinfo,
         commit: true
       })
