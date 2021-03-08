@@ -121,7 +121,7 @@ export default {
     onSendClick() {
       this.content = this.content.trim()
       if(this.content.length) {
-        this.$emit('sendComment', this.content)
+        this.$emit('sendComment', this.content,this.comment.id)
       } else {
         this.$toast('评论内容不可为空')
         return false
