@@ -35,7 +35,7 @@
 import { mapGetters, mapActions, mapMutations } from "vuex";
 export default {
   computed: {
-    ...mapGetters('task-part', ['taskPartListGetters']),
+    ...mapGetters('task-part', ['taskPartListGetters'])
   },
   data() {
     return {
@@ -74,6 +74,7 @@ export default {
   methods: {
     ...mapMutations('task-part', ['clearNewTaskList']),
     ...mapActions("task-part", ["appendTaskPartList"]),
+
     onLoad() {
       if (this.taskPartListGetters.status === 'over') {
         this.finished = true

@@ -14,21 +14,22 @@
               src="@/assets/icons/common/rectang.png"
               alt=""
             />
-            <img
-              class="teach-bitmap"
-              src="@/assets/icons/common/bitmap.png"
-              alt=""
-              srcset=""
-            />
-            <p class="wx-teacher" v-if="visity">班主任微信：dpjyzxkf</p>
+            <template v-if="adviserInfo.groupQr">
+              <template v-if="adviserInfo.groupType==='1'">
+                <img class="teach-bitmap" :src="adviserInfo.groupQr" />
+              </template>
+              <template v-else>
+                <img class="teach-bitmap" :src="adviserInfo.groupQr" />
+              </template>
+            </template>
+           
+            <p class="wx-teacher" v-if="adviserInfo.groupType==='1'">班主任微信：dpjyzxkf</p>
             <p class="class-teacher" v-else>请您加入班主任QQ群：2384619287</p>
             <img  
               class="teach-orthogon"
               src="@/assets/icons/common/orthogon.png"
-              alt=""
-              srcset=""
             />
-            <span v-if="visity">点击联系班主任微信</span>
+            <span v-if="adviserInfo.groupType==='1'">点击联系班主任微信</span>
             <span v-else>点击进入班主任QQ群</span>
           </div>
         </van-popup>
@@ -43,6 +44,7 @@
   </div>
 </template>
 <script>
+import {mapActions } from "vuex";
 export default {
  props:{
     showPopup:{
@@ -54,11 +56,18 @@ export default {
   },
   data() {
     return {
-      visity:false, 
+      adviserInfo:{},
       auditionPop: { show: false },
     };
   },
+  mounted() {
+    // this.getZcAdviser().then( res => {
+    //   this.adviserInfo = res.data
+    // })
+    
+  },
   methods: {
+    ...mapActions("publish",["getZcAdviser"]),
     handClose() {
       this.showPopup.show = false
     }
@@ -72,44 +81,51 @@ export default {
     top: 10px;
     & > h2 {
       position: absolute;
-      top: 10px;
-      left: 70px;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, -80%);
       font-size: 28px;
       font-weight: 600;
       color: #36404a;
     }
     & > p {
       position: absolute;
-      top: 50px;
-      margin: 0 30px;
+      top: 20%;
+      transform: translateY(-50%);
+      padding: 0 30px;
       font-size: 14px;
       font-weight: 400;
       color: #5a5a5a;
     }
     & > .teach-rectang {
       position: absolute;
-      bottom: 90px;
-      left: 46px;
+      width: 180px;
+      height: 180px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-53%, -35%);
     }
-    & > .teach-bitmap {
-      position: absolute;
-      bottom: 114px;
-      left: 67px;
-    }
+   
     & > .class-teacher {
       position: absolute;
-      top: 290px;
+      top: 50%;
+      transform: translateY(10%);
+      margin-top: 108px;
       font-size: 12px;
       font-weight: 400;
       color: #f5f5f5;
     }
     & > .wx-teacher {
       position: absolute;
-      top: 292px;
-      left: 35px;
+      top: 50%;
+      transform: translateY(10%);
+      left: 14%;
       font-size: 12px;
+      font-family: @regular;
       font-weight: 400;
-      color: #f5f5f5;
+      color: #fff;
+      line-height: 16px;
+      margin-top: 108px;
     }
     & > .teach-orthogon {
       position: absolute;
@@ -125,6 +141,17 @@ export default {
       color: #36404a;
     }
   }
+   .footer-teacher .teach-bitmap {
+    position: absolute;
+    top: 50%;
+    transform: translate(-55%, -32%);
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 134px;
+    height: 134px;
+    }
   .popup-close {
     width: 40px;
     height: 40px;

@@ -27,6 +27,7 @@
   </div>
 </template>
 <script>
+import {mapActions,mapGetters } from "vuex";
 export default {
   props:{
     showPopup:{
@@ -36,6 +37,9 @@ export default {
       }
     },
   },
+   computed: {
+    ...mapGetters("user", ["userInfoGetters", "userTrendsGetters"])
+  },
   data() {
     return {
       auditionPop: { show: false },
@@ -43,12 +47,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions("publish",["getZcAdviser"]),
     handClose() {
       this.showPopup.show = false
     },
     handelApplication() {
+     const res = this.getZcAdviser()
+     console.log(res);
+     if(res.status !== 200) {
+       // 报名咨询
+      doyoo.util.openChat('g=10085048')
+     }else {
       this.showPopup.show = false
       this.auditionPop.show = true
+     }
     }
   }
 }

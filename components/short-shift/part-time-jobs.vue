@@ -99,7 +99,6 @@ export default {
     this.name = this.$route.query.name || 'LOGO设计'
     this.class1id = this.$route.query.class1id || 1
     this.class2id = this.$route.query.class2id || this.getTagsList[1].id
-    console.log(this.class2id);
     this.px = this.$route.query.px || ''
   },
   methods: {

@@ -107,7 +107,8 @@ export default {
   },
   methods: {
      ...mapActions("task-part", 
-     ["appendTaskPartDetails","appendCollect","delCollect","verifyCollect","appendBrowses"]),
+     ["appendTaskPartDetails","appendCollect","delCollect",
+     "verifyCollect","appendBrowses"]),
     onClickLeft() {
       this.$router.push({ path: "/part-time-task" });
     },
@@ -137,6 +138,9 @@ export default {
       }
     },
     handerApply() {
+       if(!this.$login()) {
+        return 
+      }
       this.auditionPop.show = true
     },
   },

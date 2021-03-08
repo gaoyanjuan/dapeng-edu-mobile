@@ -188,6 +188,11 @@ export default {
       const res = await this.$axios.get(`/users/part-jobs/collects/check/${params.id}`)
       return res
     },
+     // 查询展翅课程顾问二维码
+     async getCourse({ commit }, params) {
+      const res = await this.$axios.get(`old/platforms/zc/advisers/code`)
+      return res
+    },
     // 清空当前用户浏览的兼职任务
     async delBrowse({ commit }, params) {
       const res = await this.$axios.delete(`/users/part-jobs/browses`)

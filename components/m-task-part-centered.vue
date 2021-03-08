@@ -93,12 +93,13 @@ export default {
   .tabs-wrap {
    padding-top: 44px;
 }
-  /deep/ .van-dialog__content--isolated {
+  /deep/.van-dialog__message {
     font-size: 16px;
     font-family: @semibold;
     font-weight: 600;
     color: #363D35;
   }
+
   /deep/.van-tabs {
     font-size: 14px;
     font-family: @dp-font-regular;
@@ -109,7 +110,6 @@ export default {
 
   /deep/.van-tabs__wrap {
     // border-bottom: 1px solid #EAEAEA;
-
     .van-tab {
       padding: 0 10px;
       color: #18252C;
