@@ -61,9 +61,9 @@ export default {
     };
   },
   mounted() {
-    // this.getZcAdviser().then( res => {
-    //   this.adviserInfo = res.data
-    // })
+    this.getZcAdviser().then( res => {
+      this.adviserInfo = res.data
+    })
     
   },
   methods: {

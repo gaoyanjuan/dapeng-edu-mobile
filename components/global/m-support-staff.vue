@@ -51,16 +51,16 @@ export default {
     handClose() {
       this.showPopup.show = false
     },
-    handelApplication() {
-     const res = this.getZcAdviser()
-     console.log(res);
-     if(res.status !== 200) {
-       // 报名咨询
-      doyoo.util.openChat('g=10085048')
-     }else {
-      this.showPopup.show = false
-      this.auditionPop.show = true
-     }
+    async handelApplication() {
+      await this.getZcAdviser().then( res => {
+        this.showPopup.show = false
+        this.auditionPop.show = true
+      }).catch(err => {
+        if(err.data && err.data.code === 409) {
+          // 报名咨询
+          doyoo.util.openChat('g=10085048')
+        }
+      })
     }
   }
 }
